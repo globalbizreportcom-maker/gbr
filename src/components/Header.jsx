@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import Link from 'next/link'
 
 const Header = () => {
@@ -7,9 +8,21 @@ const Header = () => {
             <div className="drawer-content">
                 {/* Navbar */}
                 <div className="navbar bg-white">
+
                     <div className="flex-1">
-                        <Link className="btn btn-base text-xl" href='/'>GBR</Link>
+                        <Link href="/" className="inline-block">
+                            <Image
+                                src="/images/logo-01.png" // Path relative to the public directory
+                                alt="GBR Logo"
+                                width={120}
+                                height={10}
+                                className="object-contain h-[70px] w-[200px]"
+                                priority  // optional: loads faster
+                            />
+                        </Link>
                     </div>
+
+
                     <div className="hidden md:flex flex-none">
                         <ul className="menu menu-horizontal px-1 text-black gap-1">
                             {[
@@ -75,7 +88,17 @@ const Header = () => {
 
                         {/* Logo */}
                         <div className="text-2xl font-semibold">
-                            <Link className="btn btn-base text-xl" href='/'>GBR</Link>
+                            <Link href='/'>
+                                <Image
+                                    src="/images/logo-01.png" // Path relative to the public directory
+                                    alt="GBR Logo"
+                                    width={120}
+                                    height={10}
+                                    className="object-contain h-[70px] w-[200px]"
+                                    priority  // optional: loads faster
+                                />
+
+                            </Link>
                         </div>
 
                         {/* Close Icon */}

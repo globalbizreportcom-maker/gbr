@@ -77,7 +77,7 @@ const Pricing = () => {
                         {/* Right Column */}
                         <div className=" p-6 rounded-xl border border-blue-100">
                             <h2 className="text-2xl md:text-2xl font-bold text-black mb-4">
-                                Your Trusted Credit Reporting Partner
+                                Choose GBR as your Credit Reporting PARTNER and Save MAXIMUM Countries
                             </h2>
 
                             <ul className="list-disc text-md list-inside space-y-2 text-gray-500">

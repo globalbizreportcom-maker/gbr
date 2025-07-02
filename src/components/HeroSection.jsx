@@ -1,6 +1,6 @@
 const HeroSection = () => {
     return (
-        <div className="relative flex flex-col justify-between bg-gradient-to-br from-blue-100 via-white to-orange-100 p-10 overflow-hidden">
+        <div className="relative flex flex-col justify-between bg-gradient-to-br from-blue-100 via-white to-orange-100 p-10 overflow-hidden h-auto 2xl:h-150">
             {/* Background Image Layer */}
             {/* Background Image Layer */}
             <img
