@@ -5,7 +5,7 @@ const Footer = () => {
     return (
         <>
             {/* Main Footer */}
-            <footer className="bg-base-200 text-base-content text-sm border-t border-base-300">
+            <footer className="bg-gradient-to-r from-[#0f172a] via-[#1b2636] to-[#0f172a] text-white text-sm border-t border-gray-700">
                 <div className="max-w-7xl mx-auto px-6 py-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
 
                     {/* About */}
@@ -62,7 +62,7 @@ const Footer = () => {
             </footer>
 
             {/* Bottom Footer */}
-            <footer className="bg-base-300 text-center text-xs py-5 px-4 text-gray-500">
+            <footer className="bg-gradient-to-r from-[#0f172a] via-[#1b2636] to-[#0f172a] border-t border-gray-700 text-center text-xs py-5 px-4 text-gray-500">
                 <div className="max-w-6xl mx-auto space-y-2">
                     <p>
                         Copyright © 2025 <span className="font-semibold">GlobalBizReport.com</span>. All Rights Reserved.

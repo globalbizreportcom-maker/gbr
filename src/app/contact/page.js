@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { FaPhoneAlt, FaEnvelope, FaMapMarkerAlt } from "react-icons/fa";
 
 export default function Contact() {
@@ -11,7 +12,7 @@ export default function Contact() {
                 </button>
 
                 <h2 className=" max-w-2xl mx-auto text-3xl md:text-4xl font-bold mb-6 text-center">
-                    <span className="text-primary">We'd love to hear from you.</span>   Our teams are here to help.
+                    <span className="text-primary">We would love to hear from you.</span>   Our teams are here to help.
                 </h2>
                 <p className="text-gray-600 text-center max-w-2xl mx-auto">
                     Trust in our reliable reports to gain valuable insights into potential partners, customers and vendors, ensuring a secure and thriving business future.
@@ -23,19 +24,15 @@ export default function Contact() {
 
                 <div className="grid gap-6 md:grid-cols-1 bg-white p-6 md:p-10 rounded-2xl ">
 
-                    {/* Left Image */}
-                    <div className="rounded-xl overflow-hidden hidden md:block">
-                        <img
-                            src="https://www.globalbizreport.com/assets/contactus_img.webp"
-                            alt="Contact Us"
-                            className="w-full h-full object-cover"
-                        />
-                    </div>
-
+                    <img
+                        src="https://img.freepik.com/free-photo/beautiful-biophilic-scene_23-2151897506.jpg?uid=R133306793&ga=GA1.1.1773690977.1730112906&semt=ais_hybrid&w=740"
+                        alt="About Global Biz Report"
+                        className="w-full h-[400px] object-cover rounded-xl"
+                    />
                     {/* Right Content */}
                     <div className="flex flex-col justify-center">
                         <h2 className="text-xl md:text-xl font-bold mb-2">
-                            Need assistance? We're here to help.
+                            Need assistance? We are here to help.
                         </h2>
                         <p className="text-gray-400 text-sm mb-10 max-w-md">
                             Please send us your message and we would be happy to help you.
