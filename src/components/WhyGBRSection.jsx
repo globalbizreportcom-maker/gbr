@@ -39,27 +39,29 @@ const WhyGBRSection = () => {
                 </h3>
 
                 <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
-                    {/* Left - Image block */}
-                    <div className="md:col-span-2 rounded-xl overflow-hidden shadow-lg">
-                        <img
-                            src="https://img.freepik.com/free-photo/dynamic-data-visualization-3d_23-2151904311.jpg?w=740"
-                            alt="Credit Report"
-                            className="object-cover h-full w-full"
-                        />
-                    </div>
 
-                    {/* Right - Feature blocks */}
+
+                    {/* Left - Feature blocks */}
                     <div className="md:col-span-3 grid grid-cols-1 sm:grid-cols-2 gap-6">
                         {features.map((feature, idx) => (
                             <div
                                 key={idx}
-                                className="bg-white p-6 rounded-md shadow-xs hover:shadow-lg transition-all border border-gray-100"
+                                className="bg-white p-6 rounded-md border border-gray-100"
                             >
                                 <div className="mb-3">{feature.icon}</div>
                                 <h4 className="text-lg font-semibold mb-1">{feature.title}</h4>
                                 <p className="text-sm text-gray-600">{feature.description}</p>
                             </div>
                         ))}
+                    </div>
+
+                    {/* Right - Image block */}
+                    <div className="md:col-span-2 rounded-xl">
+                        <img
+                            src="https://img.freepik.com/free-photo/close-up-business-person-s-hand-drawing-increasing-arrow-graph-clipboard_23-2147972782.jpg"
+                            alt="Credit Report"
+                            className="w-full h-[300px] sm:h-[500px] sm:object-contain md:object-cover rounded-xl"
+                        />
                     </div>
                 </div>
 

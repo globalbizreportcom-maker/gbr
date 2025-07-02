@@ -42,7 +42,8 @@ const featureList = [
 const Features = () => {
     return (
         <section className="py-16 bg-zinc-100 text-gray-800">
-            <div className=" mx-auto px-4 text-center w-full max-w-4xl">
+            <div className="max-w-5xl mx-auto px-4 text-center w-full">
+
                 <h2 className="text-md border-0 bg-violet-100 p-2 text-center rounded-md w-full max-w-xs font-bold text-primary mb-10 mx-auto">
                     Features
                 </h2>
@@ -55,13 +56,13 @@ const Features = () => {
                     {featureList.map((feature, index) => (
                         <div
                             key={index}
-                            className="card bg-white shadow-xs p-6 hover:shadow-lg transition rounded-lg"
+                            className="card bg-white shadow-xs p-6 hover:shadow-xs transition rounded-lg hover:bg-primary group"
                         >
-                            <div className="text-primary text-3xl mb-4">
+                            <div className="text-primary text-3xl mb-4 group-hover:text-white ">
                                 {feature.icon}
                             </div>
-                            <h3 className="font-semibold text-lg mb-2">{feature.title}</h3>
-                            <p className="text-sm text-zinc-500">{feature.desc}</p>
+                            <h3 className="font-semibold text-lg mb-2 group-hover:text-white">{feature.title}</h3>
+                            <p className="text-sm text-zinc-500 group-hover:text-white">{feature.desc}</p>
                         </div>
                     ))}
                 </div>

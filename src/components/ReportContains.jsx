@@ -3,7 +3,7 @@ import { FaArrowRight, FaCheckCircle } from "react-icons/fa";
 
 const ReportContains = () => {
     return (
-        <section className="py-10 bg-violet-100 ">
+        <section className="py-10 px-2 bg-violet-50 ">
             <div className="max-w-5xl mx-auto px-4 flex flex-col md:flex-row items-center gap-10">
 
                 {/* Left: Image */}

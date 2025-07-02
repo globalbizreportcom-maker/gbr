@@ -6,7 +6,7 @@ const Header = () => {
             <input id="my-drawer" type="checkbox" className="drawer-toggle" />
             <div className="drawer-content">
                 {/* Navbar */}
-                <div className="navbar bg-white shadow-xs">
+                <div className="navbar bg-white">
                     <div className="flex-1">
                         <Link className="btn btn-base text-xl" href='/'>GBR</Link>
                     </div>
@@ -15,10 +15,12 @@ const Header = () => {
                             {[
                                 { href: "/", label: "Home" },
                                 { href: "/about", label: "About" },
+                                { href: "/services", label: "Services" },
+                                { href: "/pricing", label: "Pricing" },
                                 { href: "/contact", label: "Contact" },
                             ].map(({ href, label }) => (
                                 <li key={href}>
-                                    <Link href={href} className="font-semibold relative group">
+                                    <Link href={href} className="font-semibold text-[16px]  relative group">
                                         <span className="after:content-[''] after:absolute after:left-0 after:-bottom-1 after:w-0 after:h-[2px] after:bg-primary after:transition-all after:duration-400 group-hover:after:w-full">
                                             {label}
                                         </span>
@@ -26,7 +28,7 @@ const Header = () => {
                                 </li>
                             ))}
 
-                            <li>
+                            {/* <li>
                                 <div className="dropdown dropdown-hover dropdown-end">
                                     <div tabIndex={0} role="button" className="text-black font-semibold px-2">
                                         Info
@@ -38,10 +40,13 @@ const Header = () => {
                                         <li><a className="hover:bg-gray-100 px-3 py-2 rounded-md">Item 4</a></li>
                                     </ul>
                                 </div>
-                            </li>
+                            </li> */}
 
+                            <li className='ml-2 mr-2'>
+                                <button className="btn btn-primary">Order Business Credit Report</button>
+                            </li>
                             <li>
-                                <button className="btn btn-primary">Log In</button>
+                                <button className="btn btn-outline">Log In</button>
                             </li>
                         </ul>
 
@@ -62,25 +67,48 @@ const Header = () => {
             {/* Drawer Side */}
             <div className="drawer-side z-50">
                 <label htmlFor="my-drawer" className="drawer-overlay"></label>
-                <ul className="menu p-4 w-72 min-h-full bg-white text-black relative">
+                <ul className="menu p-4 w-full min-h-full bg-white text-black relative">
 
-                    {/* Close Icon */}
-                    <label
-                        htmlFor="my-drawer"
-                        className="btn btn-sm btn-ghost btn-circle absolute right-4 top-4 z-10"
-                    >
-                        ✕
-                    </label>
 
-                    {/* Logo */}
-                    <div className="mb-5 pl-1">
-                        <a className="btn btn-ghost text-sm">GBR</a>
+
+                    <div className="relative flex items-center justify-between px-2 py-2 mb-6">
+
+                        {/* Logo */}
+                        <div className="text-2xl font-semibold">
+                            <Link className="btn btn-base text-xl" href='/'>GBR</Link>
+                        </div>
+
+                        {/* Close Icon */}
+                        <label
+                            htmlFor="my-drawer"
+                            className="btn btn-md btn-ghost btn-circle text-2xl"
+                        >
+                            ✕
+                        </label>
+
                     </div>
 
-                    <li><a>Home</a></li>
+
+                    {[
+                        { href: "/", label: "Home" },
+                        { href: "/about", label: "About" },
+                        { href: "/services", label: "Services" },
+                        { href: "/pricing", label: "Pricing" },
+                        { href: "/contact", label: "Contact" },
+                    ].map(({ href, label }) => (
+                        <li key={href} >
+                            <a href={href} className=" text-lg relative group">
+                                <span className="after:content-[''] after:absolute after:left-0 after:-bottom-1 after:w-0 after:h-[2px] after:bg-primary after:transition-all after:duration-400 group-hover:after:w-full">
+                                    {label}
+                                </span>
+                            </a>
+                        </li>
+                    ))}
+
+                    {/* <li><a href='/home'>Home</a></li>
                     <li><a>About</a></li>
-                    <li><a>Contact</a></li>
-                    <li>
+                    <li><a>Contact</a></li> */}
+                    <li className=" text-lg ">
                         <details>
                             <summary>Dropdown</summary>
                             <ul>
@@ -90,7 +118,19 @@ const Header = () => {
                             </ul>
                         </details>
                     </li>
-                    <li><button className="btn btn-primary mt-4">Log In</button></li>
+
+
+                    <div className="absolute bottom-4 left-0 w-full px-4">
+                        <div className="flex flex-row gap-4 items-center justify-center">
+                            <button className="btn btn-primary font-bold text-lg">
+                                Order Business Credit Report
+                            </button>
+                            <button className="btn btn-outline font-semibold text-lg">
+                                Login
+                            </button>
+                        </div>
+                    </div>
+
                 </ul>
             </div>
 
