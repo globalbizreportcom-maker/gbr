@@ -17,9 +17,7 @@ export default function App() {
     }, []);
 
     return (
-        <>
-            <List items={items} onItemClick={handleClick} />
-            <button onClick={() => setCount(count + 1)}>Re-render</button>
-        </>
+        <p>Test deployment from GitHub Actions 🚀</p>
+
     );
 }
