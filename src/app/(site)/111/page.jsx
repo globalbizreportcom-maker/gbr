@@ -17,7 +17,7 @@ export default function App() {
     }, []);
 
     return (
-        <p>Test deployment from GitHub ActionsS 🚀</p>
+        <p>Test deployment from GitHub ActionsSs 🚀</p>
 
     );
 }
