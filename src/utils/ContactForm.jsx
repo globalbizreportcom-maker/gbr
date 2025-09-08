@@ -21,6 +21,9 @@ const subjectOptions = [
 
 // ✅ Inner form (only rendered once recaptcha client is available)
 const ContactFormInner = () => {
+
+    const NEXT_PUBLIC_RECAPTCHA_SITE_KEY = '6Lf55XsrAAAAAK6_xe_Lc8EvOj80__az-p8i1uuQ';
+
     const { executeRecaptcha } = useGoogleReCaptcha();
     const [formData, setFormData] = useState({
         fullName: '',
@@ -159,7 +162,7 @@ const ContactFormInner = () => {
 // ✅ Wrapper with Provider
 const ContactForm = () => (
     <GoogleReCaptchaProvider
-        reCaptchaKey='6Lf55XsrAAAAAK6_xe_Lc8EvOj80__az-p8i1uuQ'
+        reCaptchaKey={NEXT_PUBLIC_RECAPTCHA_SITE_KEY}
         scriptProps={{ async: true, defer: true }}
     >
         <ContactFormInner />
