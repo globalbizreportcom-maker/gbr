@@ -45,6 +45,7 @@ const ContactFormInner = () => {
     const handleSelectChange = (selectedOption) => {
         setFormData((prev) => ({ ...prev, subject: selectedOption }));
     };
+    console.log('RECAPTCHA KEY:', process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
