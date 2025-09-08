@@ -2,6 +2,7 @@ import Image from 'next/image';
 import Link from 'next/link'
 
 const Header = () => {
+
     return (
         <div className="drawer z-50">
             <input id="my-drawer" type="checkbox" className="drawer-toggle" />
@@ -16,7 +17,7 @@ const Header = () => {
                                 alt="GBR Logo"
                                 width={120}
                                 height={10}
-                                className="object-contain w-[140px] h-[50px] sm:w-[180px] sm:h-[60px] md:w-[200px] md:h-[70px]"
+                                className="object-contain w-[140px] h-[50px] sm:w-[180px] sm:h-[60px] lg:w-[180px] lg:h-[50px] xl:w-[200px] xl:h-[70px]"
                                 priority  // optional: loads faster
                             />
                         </Link>
@@ -56,10 +57,22 @@ const Header = () => {
                             </li> */}
 
                             <li className='ml-2 mr-2'>
-                                <button className="btn btn-primary">Order Business Credit Report</button>
+                                <button
+                                    className="btn btn-primary"
+                                >
+                                    <Link href='/order-business-credit-report'>
+                                        Order Business Credit Report
+                                    </Link>
+                                </button>
                             </li>
                             <li>
-                                <button className="btn btn-outline">Log In</button>
+                                <button
+                                    className="btn btn-outline"
+                                >
+                                    <Link href='/login'>
+                                        Log In
+                                    </Link>
+                                </button>
                             </li>
                         </ul>
 
@@ -78,9 +91,9 @@ const Header = () => {
             </div>
 
             {/* Drawer Side */}
-            <div className="drawer-side z-50">
+            <div className="drawer-side z-50 h-screen overflow-y-auto">
                 <label htmlFor="my-drawer" className="drawer-overlay"></label>
-                <ul className="menu p-4 w-full min-h-full bg-white text-black relative">
+                <ul className="menu p-4 w-full min-h-full bg-white text-black relative ">
 
 
 
@@ -94,7 +107,7 @@ const Header = () => {
                                     alt="GBR Logo"
                                     width={120}
                                     height={10}
-                                    className="object-contain h-[70px] w-[200px]"
+                                    className="object-contain w-[140px] h-[50px] sm:w-[180px] sm:h-[60px] md:w-[200px] md:h-[70px]"
                                     priority  // optional: loads faster
                                 />
 
@@ -128,9 +141,6 @@ const Header = () => {
                         </li>
                     ))}
 
-                    {/* <li><a href='/home'>Home</a></li>
-                    <li><a>About</a></li>
-                    <li><a>Contact</a></li> */}
                     <li className=" text-lg ">
                         <details>
                             <summary>Dropdown</summary>
@@ -144,12 +154,16 @@ const Header = () => {
 
 
                     <div className="absolute bottom-4 left-0 w-full px-4">
-                        <div className="flex flex-row gap-4 items-center justify-center">
-                            <button className="btn btn-primary font-bold text-lg">
-                                Order Business Credit Report
+                        <div className="flex flex-row gap-1 items-center justify-center">
+                            <button className="btn btn-primary font-bold text-lg" >
+                                <a href='/order-business-credit-report'>
+                                    Order Business Credit Report
+                                </a>
                             </button>
                             <button className="btn btn-outline font-semibold text-lg">
-                                Login
+                                <a href='/login'>
+                                    Login
+                                </a>
                             </button>
                         </div>
                     </div>

@@ -1,0 +1,43 @@
+/* Container setup */
+.scroll-container {
+    overflow: auto;
+    max-height: 300px;
+    /* or whatever fits your design */
+    scrollbar-width: none;
+    /* Firefox */
+}
+
+/* Hide scrollbar for WebKit browsers */
+.scroll-container::-webkit-scrollbar {
+    width: 0px;
+    height: 0px;
+    background: transparent;
+}
+
+/* On hover, show the scrollbar */
+.scroll-container:hover {
+    scrollbar-width: thin;
+    /* Firefox */
+}
+
+/* On hover: WebKit show scrollbar */
+.scroll-container:hover::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
+}
+
+/* Style the scrollbar */
+.scroll-container:hover::-webkit-scrollbar-track {
+    background: #f0f0f0;
+    border-radius: 10px;
+}
+
+.scroll-container:hover::-webkit-scrollbar-thumb {
+    background-color: #888;
+    border-radius: 10px;
+    border: 3px solid #f0f0f0;
+}
+
+.scroll-container:hover::-webkit-scrollbar-thumb:hover {
+    background-color: #555;
+}

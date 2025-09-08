@@ -17,6 +17,9 @@ const geistMono = Geist_Mono({
 export const metadata = {
   title: "Global Biz Report",
   description: "Global Leader in Business Credit Reports",
+  icons: {
+    icon: '/favicon.svg', // <-- this is your SVG favicon
+  },
 };
 
 export default function RootLayout({ children }) {

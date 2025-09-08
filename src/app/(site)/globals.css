@@ -1,0 +1,26 @@
+@import "tailwindcss";
+@plugin "daisyui";
+
+:root {
+  --background: #ffffff;
+}
+
+html {
+  background-color: white;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  background-color: #ffffff !important;
+  /* Tailwind's bg-green-100 */
+  color: #1f2937 !important;
+  /* Tailwind's text-gray-800 */
+  transition: background-color 9999s ease-out 0s;
+  -webkit-text-fill-color: #1f2937 !important;
+}

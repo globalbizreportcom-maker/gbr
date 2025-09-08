@@ -1,13 +1,14 @@
 import Subscription from "@/components/Subscription";
 import { FaCheckCircle, FaFileAlt, FaGlobe, FaHeadset, FaSearch, FaShieldAlt, FaTools } from "react-icons/fa";
 
-
-
-
 const AboutPage = () => {
     return (
-        <section className="py-16 px-1 bg-zinc-50  text-gray-800">
+        <section className="py-14 px-1 bg-zinc-50  text-gray-800">
             <div className="max-w-6xl mx-auto rounded-2xl bg-gradient-to-br from-blue-100 via-white to-orange-100 p-10 mb-3">
+
+                <div className="bg-primary text-md text-white font-semibold rounded-md mb-5 max-w-fit px-2 py-1 mx-auto uppercase">
+                    About Us
+                </div>
 
                 <h2 className="text-3xl md:text-4xl font-bold mb-6 text-center max-w-2xl mx-auto">
                     Worldwide Business Credit Reports at   <span className="text-primary">Cost-Effective Price</span>
@@ -136,58 +137,60 @@ const AboutPage = () => {
 
 
                 </div>
+
+                <section className="py-20 text-gray-800">
+
+                    <h2 className="mx-auto text-md border-0 bg-violet-100 p-2 text-center rounded-md w-[400px] font-bold text-primary mb-5">
+                        BUSINESS CREDIT REPORTS
+                    </h2>
+
+                    {/* Heading */}
+                    <div className="text-center mb-12">
+                        <h2 className=" max-w-4xl mx-auto text-3xl md:text-4xl font-semibold mb-4 text-primary">
+                            Verify Your Business Partners, Vendors, Buyers, Suppliers and More
+                        </h2>
+                    </div>
+
+                    <div className="max-w-7xl mx-auto px-4 grid md:grid-cols-2 gap-12 items-center">
+
+                        {/* Right: Content */}
+
+                        <div className="space-y-4 text-sm">
+                            {[
+                                "Today's global economy and ease of doing business across the globe has thrown open a plethora of business opportunities in the Manufacturing and Service sector. With newer opportunities, comes newer challenges by the way of competition and newer risks by the way of reliability of business partners.",
+                                "Offering attractive credit terms may increase your competitiveness, but will also expose you to higher credit risks. Several factors influence your decision to partner with a company when you want to expand your company. To minimise the risk and turn it into a positive business advantage, assessing and monitoring the credibility has become a global necessity.",
+                                "Getting to know the fact behind the claims made by your potential partner / business trader is the key to make the right decision. At GLOBAL BIZ REPORTS we help you make the right call by providing the latest updates about a company's background vis a vis its physical and financial strength.",
+                                "We understand the need for accurate and reliable information by providing Business Information Reports (or Credit Reports as they are popularly known).",
+                                "An unparalleled network and the best knowledge management systems in use allow us to collate information from a myriad of sources and compile the most comprehensive business information reports, which are sure to be your trustworthy tools in mitigating trade risks.",
+                            ].map((point, idx) => (
+                                <div key={idx} className="flex items-start gap-3">
+                                    <FaCheckCircle className="text-primary text-lg shrink-0 mt-1 mr-2" />
+                                    <p className="text-gray-700 text-sm leading-relaxed">
+                                        {point}
+                                    </p>
+                                </div>
+
+
+                            ))}
+                        </div>
+
+                        {/* Left: Image */}
+                        <div className="w-full h-full">
+                            <div className="w-full">
+                                <img
+                                    src="https://img.freepik.com/free-photo/happy-coworkers-making-decision-move_329181-20197.jpg"
+                                    alt="About Global Biz Report"
+                                    className="w-full h-[500px] object-cover rounded-xl"
+                                />
+                            </div>
+                        </div>
+
+                    </div>
+                </section>
             </div>
 
 
-            <section className="py-20 text-gray-800">
 
-                <h2 className="mx-auto text-md border-0 bg-violet-100 p-2 text-center rounded-md w-[400px] font-bold text-primary mb-5">
-                    BUSINESS CREDIT REPORTS
-                </h2>
-
-                {/* Heading */}
-                <div className="text-center mb-12">
-                    <h2 className=" max-w-4xl mx-auto text-3xl md:text-4xl font-semibold mb-4 text-primary">
-                        Verify Your Business Partners, Vendors, Buyers, Suppliers and More
-                    </h2>
-                </div>
-
-                <div className="max-w-7xl mx-auto px-4 grid md:grid-cols-2 gap-12 items-center">
-
-                    {/* Right: Content */}
-
-                    <div className="space-y-4 text-sm">
-                        {[
-                            "Today's global economy and ease of doing business across the globe has thrown open a plethora of business opportunities in the Manufacturing and Service sector. With newer opportunities, comes newer challenges by the way of competition and newer risks by the way of reliability of business partners.",
-                            "Offering attractive credit terms may increase your competitiveness, but will also expose you to higher credit risks. Several factors influence your decision to partner with a company when you want to expand your company. To minimise the risk and turn it into a positive business advantage, assessing and monitoring the credibility has become a global necessity.",
-                            "Getting to know the fact behind the claims made by your potential partner / business trader is the key to make the right decision. At GLOBAL BIZ REPORTS we help you make the right call by providing the latest updates about a company's background vis a vis its physical and financial strength.",
-                            "We understand the need for accurate and reliable information by providing Business Information Reports (or Credit Reports as they are popularly known).",
-                            "An unparalleled network and the best knowledge management systems in use allow us to collate information from a myriad of sources and compile the most comprehensive business information reports, which are sure to be your trustworthy tools in mitigating trade risks.",
-                        ].map((point, idx) => (
-                            <div key={idx} className="flex items-start gap-3">
-                                <FaCheckCircle className="text-primary text-lg shrink-0 mt-1 mr-2" />
-                                <p className="text-gray-700 text-sm leading-relaxed">
-                                    {point}
-                                </p>
-                            </div>
-
-
-                        ))}
-                    </div>
-
-                    {/* Left: Image */}
-                    <div className="w-full h-full">
-                        <div className="w-full">
-                            <img
-                                src="https://img.freepik.com/free-photo/happy-coworkers-making-decision-move_329181-20197.jpg"
-                                alt="About Global Biz Report"
-                                className="w-full h-[500px] object-cover rounded-xl"
-                            />
-                        </div>
-                    </div>
-
-                </div>
-            </section>
 
             <Subscription />
 
