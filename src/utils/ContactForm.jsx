@@ -32,6 +32,22 @@ const ContactFormInner = () => {
     const [isReady, setIsReady] = useState(false);
 
     // wait until executeRecaptcha is available
+
+    useEffect(() => {
+        try {
+            const res = axios.get(`${apiUrl}/test`);
+            console.log(res);
+        } catch (err) {
+            console.error(err);
+            alert('Something went wrong.');
+        }
+    }, []);
+
+
+
+
+
+
     useEffect(() => {
         if (executeRecaptcha) {
             setIsReady(true);
@@ -45,6 +61,7 @@ const ContactFormInner = () => {
     const handleSelectChange = (selectedOption) => {
         setFormData((prev) => ({ ...prev, subject: selectedOption }));
     };
+
     console.log('RECAPTCHA KEY:', process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY);
 
     const handleSubmit = async (e) => {
