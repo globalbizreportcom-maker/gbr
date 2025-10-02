@@ -1,13 +1,9 @@
-"use client";
-import { useDashboard } from "../DashboardContext";
+import React from 'react'
 
-export default function DownloadsPage() {
-    const { user } = useDashboard();
-
+const page = () => {
     return (
-        <div>
-            <h1 className="text-md font-bold">Downloads</h1>
-            <p className="text-gray-600">Hello {user.name}, here are your downloads.</p>
-        </div>
-    );
+        <div>page</div>
+    )
 }
+
+export default page
