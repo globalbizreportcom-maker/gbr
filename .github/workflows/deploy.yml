@@ -2,7 +2,7 @@ name: Deploy to VPS
 
 on:
   push:
-    branches: [ "main" ]  # deploy on main branch
+    branches: [ "main" ]
 
 jobs:
   deploy:
@@ -18,18 +18,11 @@ jobs:
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.SSH_KEY }}
           port: ${{ secrets.PORT }}
-          # script: |
-          #   cd /var/www/app
-          #   git reset --hard
-          #   git pull origin main
-          #   npm install
-          #   npm run build
-          #   pm2 restart globalbizreport
-   script: |
-  cd /var/www/app
-  git fetch origin main
-  git reset --hard origin/main
-  npm ci --only=production
-  npm run build
-  pm2 restart globalbizreport || pm2 start npm --name "globalbizreport" -- start
-  pm2 save
+          script: |
+            cd /var/www/app
+            git fetch origin main
+            git reset --hard origin/main
+            npm ci --only=production
+            npm run build
+            pm2 restart globalbizreport || pm2 start npm --name "globalbizreport" -- start
+            pm2 save
