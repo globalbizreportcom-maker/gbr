@@ -141,7 +141,7 @@ const ContactFormInner = () => {
                 <textarea
                     rows="4"
                     name="message"
-                    placeholder="Write your message here..."
+                    placeholder="Write your message here.."
                     className="textarea textarea-bordered w-full bg-white border border-gray-300 focus:border-black focus:ring-0"
                     required
                     value={formData.message}
