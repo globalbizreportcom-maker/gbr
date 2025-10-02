@@ -390,7 +390,7 @@ const CompanyPage = async ({ params }) => {
                 </p>
 
                 {/* Second Paragraph */}
-                <p className="leading-relaxed">
+                <p className="leading-relaxed break-words">
                     The company is engaged in{" "}
                     <span className="font-medium">{companyData.CompanyIndustrialClassification || "N/A"}</span>,
                     with its primary operations identified under NIC code{" "}

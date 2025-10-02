@@ -47,11 +47,11 @@ const OrderConfirmContent = () => {
                                 </tr>
                                 <tr className="border-b border-gray-100">
                                     <td className="py-3 pr-4 text-primary">{formData.companyName}</td>
-                                    <td className="py-3 text-right text-base font-semibold">₹449.82</td>
+                                    <td className="py-3 text-right text-base font-semibold">₹4720.00</td>
                                 </tr>
                                 <tr className="border-t border-gray-300 font-semibold">
                                     <td className="py-3 pr-4 text-xl">Total Amount</td>
-                                    <td className="py-3 text-right text-xl">₹449.82</td>
+                                    <td className="py-3 text-right text-xl">₹4720.00</td>
                                 </tr>
                             </tbody>
                         </table>

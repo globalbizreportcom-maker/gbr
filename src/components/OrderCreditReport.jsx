@@ -480,7 +480,7 @@ const OrderCreditReport = () => {
                         />
 
                         <Input
-                            label="Your Email (Credit report will be sent to this email)"
+                            label="Your Email (Report will be sent to this email)"
                             name="contactEmail"
                             value={user?.email || formData.contactEmail}
                             onChange={(e) =>

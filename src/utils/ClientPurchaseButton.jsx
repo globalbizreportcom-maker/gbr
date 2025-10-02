@@ -70,7 +70,7 @@ const ClientPurchaseButton = ({ companyData }) => {
             </div>
             <button
                 onClick={handlePurchaseReport}
-                className="cursor-pointer flex items-center gap-2 bg-orange-500 px-4 py-2 rounded-lg hover:bg-orange-600 transition"
+                className="z-9999 cursor-pointer flex items-center gap-2 bg-orange-500 px-4 py-2 rounded-lg hover:bg-orange-600 transition"
             >
                 <FaLock />
                 Purchase
