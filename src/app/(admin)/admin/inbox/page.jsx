@@ -21,13 +21,14 @@ const AdminInbox = () => {
     };
 
     return (
-        <div className="max-w-6xl mx-auto">
+        <div className="max-w-6xl mx-auto p-4">
             <h2 className="text-xl font-semibold mb-4">Inbox</h2>
 
-            <div className="overflow-x-auto">
-                <table className="table w-full">
+            {/* Medium+ screens: table */}
+            <div className="hidden md:block overflow-x-auto">
+                <table className="table w-full border border-gray-200 rounded-md">
                     <thead>
-                        <tr className="text-black">
+                        <tr className="bg-gray-100 text-black">
                             <th>#</th>
                             <th>Name</th>
                             <th>Email</th>
@@ -39,89 +40,114 @@ const AdminInbox = () => {
                     </thead>
                     <tbody>
                         {contacts
-                            .slice() // create a shallow copy so original state isn't mutated
+                            .slice()
                             .sort((a, b) => {
                                 const aLastMsg = a.messages[a.messages.length - 1];
                                 const bLastMsg = b.messages[b.messages.length - 1];
-
-                                // prioritize unread messages from user
                                 const aUnread = aLastMsg?.sender === "user" && !aLastMsg?.read;
                                 const bUnread = bLastMsg?.sender === "user" && !bLastMsg?.read;
-
-                                if (aUnread && !bUnread) return -1; // a comes first
-                                if (!aUnread && bUnread) return 1;  // b comes first
-                                return new Date(bLastMsg?.createdAt) - new Date(aLastMsg?.createdAt); // otherwise sort by latest date
+                                if (aUnread && !bUnread) return -1;
+                                if (!aUnread && bUnread) return 1;
+                                return new Date(bLastMsg?.createdAt) - new Date(aLastMsg?.createdAt);
                             })
-                            .map((c, idx) => (
-                                <tr key={c._id}>
-                                    <td>{idx + 1}</td>
-                                    <td>{c.fullName}</td>
-                                    <td>{c.email}</td>
-                                    <td>
-                                        {c.messages && c.messages.length > 0
-                                            ? c.messages[c.messages.length - 1].subject || "-"
-                                            : "-"}
-                                    </td>
-                                    <td className="max-w-sm flex items-center gap-2 relative">
-                                        {c.messages && c.messages.length > 0 ? (() => {
-                                            const lastMsg = c.messages[c.messages.length - 1];
-                                            const truncatedMsg = lastMsg.message.length > 30
-                                                ? lastMsg.message.slice(0, 30) + "..."
-                                                : lastMsg.message;
+                            .map((c, idx) => {
+                                const lastMsg = c.messages[c.messages.length - 1];
+                                const truncatedMsg = lastMsg
+                                    ? lastMsg.message.length > 30
+                                        ? lastMsg.message.slice(0, 30) + "..."
+                                        : lastMsg.message
+                                    : "-";
 
-                                            return (
-                                                <>
-                                                    {lastMsg.sender === "user" ? (
-                                                        <div className="relative group">
-                                                            <span className="cursor-pointer">{truncatedMsg}</span>
-                                                            {!lastMsg.read ? (
-                                                                <span className="ml-2 px-1 text-xs py-1 bg-red-500 text-white rounded-sm">new !</span>
-                                                            ) : (
-                                                                <span className="ml-2 text-green-600">✓✓</span>
-                                                            )}
-
-                                                            {/* Tooltip */}
-                                                            <div className="absolute bottom-full left-0 mb-2 hidden group-hover:block w-max max-w-xs bg-gray-800 text-white text-xs p-2 rounded shadow-lg z-10 break-words">
-                                                                {lastMsg.message}
-                                                            </div>
-                                                        </div>
+                                return (
+                                    <tr key={c._id} className="border-b border-gray-200">
+                                        <td>{idx + 1}</td>
+                                        <td>{c.fullName}</td>
+                                        <td>{c.email}</td>
+                                        <td>{lastMsg?.subject || "-"}</td>
+                                        <td className="max-w-sm">
+                                            {lastMsg ? (
+                                                <div className="relative group">
+                                                    <span className="cursor-pointer">{truncatedMsg}</span>
+                                                    {!lastMsg.read ? (
+                                                        <span className="ml-2 px-1 text-xs py-0.5 bg-red-500 text-white rounded-sm">
+                                                            new !
+                                                        </span>
                                                     ) : (
-                                                        <div className="relative group">
-                                                            <span className="px-2 py-1 bg-gray-100 text-gray-700 rounded-lg cursor-pointer">{truncatedMsg}</span>
-                                                            <span className="ml-2 px-1 text-xs py-1 bg-green-700 text-white rounded-sm">You !</span>
-
-                                                            {/* Tooltip */}
-                                                            <div className="absolute bottom-full left-0 mb-2 hidden group-hover:block w-max max-w-xs bg-gray-800 text-white text-xs p-2 rounded shadow-lg z-10 break-words">
-                                                                {lastMsg.message}
-                                                            </div>
-                                                        </div>
+                                                        <span className="ml-2 text-green-600">✓✓</span>
                                                     )}
-                                                </>
-                                            );
-                                        })() : "-"}
-                                    </td>
-
-                                    <td>
-                                        {new Date(c.createdAt).toLocaleString()}
-                                    </td>
-                                    <td>
-                                        <Link
-                                            href={`/admin/inbox-reply/${c._id}`}
-                                            className="btn btn-sm btn-primary"
-                                            onClick={() => {
-                                                sessionStorage.setItem("threadEmail", c.email);
-                                            }}
-                                        >
-                                            View / Reply
-                                        </Link>
-                                    </td>
-                                </tr>
-                            ))}
+                                                    <div className="absolute bottom-full left-0 mb-2 hidden group-hover:block w-max max-w-xs bg-gray-800 text-white text-xs p-2 rounded shadow z-10 break-words">
+                                                        {lastMsg.message}
+                                                    </div>
+                                                </div>
+                                            ) : (
+                                                "-"
+                                            )}
+                                        </td>
+                                        <td>{new Date(c.createdAt).toLocaleString()}</td>
+                                        <td>
+                                            <Link
+                                                href={`/admin/inbox-reply/${c._id}`}
+                                                className="btn btn-sm btn-primary"
+                                                onClick={() => sessionStorage.setItem("threadEmail", c.email)}
+                                            >
+                                                View / Reply
+                                            </Link>
+                                        </td>
+                                    </tr>
+                                );
+                            })}
                     </tbody>
-
                 </table>
             </div>
+
+            {/* Small screens: card list */}
+            <div className="md:hidden flex flex-col gap-3">
+                {contacts
+                    .slice()
+                    .sort((a, b) => {
+                        const aLastMsg = a.messages[a.messages.length - 1];
+                        const bLastMsg = b.messages[b.messages.length - 1];
+                        const aUnread = aLastMsg?.sender === "user" && !aLastMsg?.read;
+                        const bUnread = bLastMsg?.sender === "user" && !bLastMsg?.read;
+                        if (aUnread && !bUnread) return -1;
+                        if (!aUnread && bUnread) return 1;
+                        return new Date(bLastMsg?.createdAt) - new Date(aLastMsg?.createdAt);
+                    })
+                    .map((c, idx) => {
+                        const lastMsg = c.messages[c.messages.length - 1];
+                        const truncatedMsg = lastMsg
+                            ? lastMsg.message.length > 50
+                                ? lastMsg.message.slice(0, 50) + "..."
+                                : lastMsg.message
+                            : "-";
+
+                        return (
+                            <div
+                                key={c._id}
+                                className="bg-white border border-gray-200 rounded-md p-4 shadow-sm flex flex-col gap-2"
+                            >
+                                <div className="flex justify-between items-center">
+                                    <span className="font-semibold">{c.fullName}</span>
+                                    <span className="text-gray-500 text-xs">{new Date(c.createdAt).toLocaleString()}</span>
+                                </div>
+                                <div className="text-gray-500 text-sm">{c.email}</div>
+                                <div className="text-gray-700 text-sm font-medium">{lastMsg?.subject || "-"}</div>
+                                <div className="text-gray-600 text-sm">{truncatedMsg}</div>
+                                <div className="flex justify-end">
+                                    <Link
+                                        href={`/admin/inbox-reply/${c._id}`}
+                                        className="btn btn-sm btn-primary"
+                                        onClick={() => sessionStorage.setItem("threadEmail", c.email)}
+                                    >
+                                        View / Reply
+                                    </Link>
+                                </div>
+                            </div>
+                        );
+                    })}
+            </div>
         </div>
+
     );
 };
 

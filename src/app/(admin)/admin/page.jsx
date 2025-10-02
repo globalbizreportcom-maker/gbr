@@ -19,7 +19,7 @@ export default function AdminLogin() {
 
                 {/* Login Form (Client Component) */}
                 <div className="w-full lg:w-1/2 flex justify-center">
-                    <div className="p-10 w-full max-w-md">
+                    <div className="p-5 w-full max-w-md">
                         <AdminLoginForm />
                     </div>
                 </div>

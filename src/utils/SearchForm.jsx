@@ -468,15 +468,19 @@ export default function SearchForm({ initialCountry = "", initialCompany = "" })
                                         {/* <div><span className="font-medium">Country:</span> {c["CompanyIndian/Foreign Company"]}</div> */}
                                     </div>
 
-                                    <div className="flex flex-row gap-2 mt-3">
+                                    <div className="flex flex-row w-full gap-2 mt-3 justify-end">
                                         {/* <button className="cursor-pointer px-3 py-1.5 rounded-md bg-[#4838c9ed] text-white text-xs font-medium hover:bg-indigo-700 transition w-auto">
-                                            Buy Report
-                                        </button>
-                                        <LoginModalButton /> */}
-                                        <button className="cursor-pointer flex items-center gap-1  py-2 rounded-md px-2 bg-indigo-500 text-white text-xs font-semibold hover:bg-black hover:shadow-md transition-all duration-300">
+        Buy Report
+    </button>
+    <LoginModalButton /> */}
+                                        <button
+                                            className="cursor-pointer flex items-center gap-1 py-2 rounded-md px-2 bg-indigo-500 text-white text-xs font-semibold hover:bg-black hover:shadow-md transition-all duration-300"
+                                            onClick={() => handleClick(c)}
+                                        >
                                             View <FaArrowRight className="text-white" />
                                         </button>
                                     </div>
+
                                 </div>
                             ))}
                         </div>

@@ -189,13 +189,25 @@ const AdminHeader = () => {
                 <div className="flex flex-col gap-2">
 
 
-                    <Link href="/admin/dashboard" className="hover:text-primary">Home</Link>
+                    <Link href="/admin/dashboard" className="hover:text-primary">
+                        <span onClick={() => setDrawerOpen(false)}>Home</span>
+                    </Link>
 
-                    <Link href="/admin/inbox" className="hover:text-primary">Inbox</Link>
+                    <Link href="/admin/inbox" className="hover:text-primary">
+                        <span onClick={() => setDrawerOpen(false)}>Inbox</span>
+                    </Link>
 
-                    <Link href="/admin/order-request/all" className="hover:text-primary">Orders</Link>
+                    <Link href="/admin/order-request/all" className="hover:text-primary">
+                        <span onClick={() => setDrawerOpen(false)}>Orders</span>
+                    </Link>
 
-                    <Link href="/admin/payments" className="hover:text-primary">Payments</Link>
+                    <Link href="/admin/payments" className="hover:text-primary">
+                        <span onClick={() => setDrawerOpen(false)}>Payments</span>
+                    </Link>
+
+                    <Link href="/admin" role="button" className="btn btn-soft py-2 hover:text-primary">
+                        <span onClick={() => setDrawerOpen(false)}>Log Out</span>
+                    </Link>
 
 
                     {/* <CollapseMenu
@@ -206,7 +218,6 @@ const AdminHeader = () => {
                         ]}
                     /> */}
 
-                    <Link href="/admin" role='button' className="btn btn-soft py-2 hover:text-primary">Log Out</Link>
                 </div>
             </div>
         </>
