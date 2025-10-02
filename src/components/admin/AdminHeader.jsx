@@ -90,6 +90,8 @@ const AdminHeader = () => {
                             </div>
                         </div>
 
+                        <Link href="/admin/inbox" className="hover:text-primary">Inbox</Link>
+
                         <div className="relative group">
                             <button className=" cursor-pointer flex items-center gap-1 hover:text-primary">
                                 Visitors
@@ -185,33 +187,24 @@ const AdminHeader = () => {
                 </div>
 
                 <div className="flex flex-col gap-2">
-                    <CollapseMenu
-                        label="Services"
-                        items={[
-                            { label: "Consulting", href: "/services/consulting" },
-                            { label: "Development", href: "/services/development" },
-                            { label: "Design", href: "/services/design" },
-                            { label: "SEO", href: "/services/seo" },
-                        ]}
-                    />
 
-                    <CollapseMenu
-                        label="Products"
-                        items={[
-                            { label: "CRM Suite", href: "/products/crm" },
-                            { label: "Analytics", href: "/products/analytics" },
-                            { label: "AI Tools", href: "/products/ai-tools" },
-                            { label: "Security", href: "/products/security" },
-                        ]}
-                    />
 
-                    <CollapseMenu
+                    <Link href="/admin/dashboard" className="hover:text-primary">Home</Link>
+
+                    <Link href="/admin/inbox" className="hover:text-primary">Inbox</Link>
+
+                    <Link href="/admin/order-request/all" className="hover:text-primary">Orders</Link>
+
+                    <Link href="/admin/payments" className="hover:text-primary">Payments</Link>
+
+
+                    {/* <CollapseMenu
                         label="Account"
                         items={[
                             { label: "Settings", href: "/products/crm" },
                             { label: "Analytics", href: "/products/analytics" },
                         ]}
-                    />
+                    /> */}
 
                     <Link href="/admin" role='button' className="btn btn-soft py-2 hover:text-primary">Log Out</Link>
                 </div>
