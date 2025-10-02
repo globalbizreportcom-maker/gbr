@@ -18,6 +18,7 @@ const PhoneInputWithCountry = ({ value, onChange }) => {
                 containerStyle={{ width: '100%' }}
                 inputClass="bg-white"
                 enableSearch
+                RE
             />
         </div>
     );

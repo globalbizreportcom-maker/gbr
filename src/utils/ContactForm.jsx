@@ -34,21 +34,6 @@ const ContactFormInner = () => {
     // wait until executeRecaptcha is available
 
     useEffect(() => {
-        try {
-            const res = axios.get(`${apiUrl}/test`);
-            console.log(res);
-        } catch (err) {
-            console.error(err);
-            alert('Something went wrong.');
-        }
-    }, []);
-
-
-
-
-
-
-    useEffect(() => {
         if (executeRecaptcha) {
             setIsReady(true);
         }
@@ -88,13 +73,13 @@ const ContactFormInner = () => {
         };
 
         try {
-            const res = await axios.post(`${apiUrl}/contact/form-submit`, payload);
+            const res = await apiUrl.post(`/contact/form-submit`, payload);
 
             if (res.data.success) {
                 alert('✅ Message sent successfully');
                 setFormData({ fullName: '', email: '', subject: null, message: '' });
             } else {
-                alert('❌ Failed to send message');
+                alert(' Failed to send message');
             }
         } catch (err) {
             console.error(err);

@@ -41,3 +41,39 @@
 .scroll-container:hover::-webkit-scrollbar-thumb:hover {
     background-color: #555;
 }
+
+.react-tel-input .country-list .country {
+    color: black !important;
+}
+
+/* Cross-browser placeholder styling */
+input::placeholder,
+textarea::placeholder {
+    color: #9ca3af !important;
+    /* Tailwind gray-400 */
+    opacity: 1 !important;
+    /* Ensure it's not faded */
+    font-style: italic;
+}
+
+input::-webkit-input-placeholder,
+textarea::-webkit-input-placeholder {
+    color: #9ca3af !important;
+    opacity: 1 !important;
+}
+
+input:-ms-input-placeholder,
+textarea:-ms-input-placeholder {
+    color: #9ca3af !important;
+    opacity: 1 !important;
+}
+
+input::-ms-input-placeholder,
+textarea::-ms-input-placeholder {
+    color: #9ca3af !important;
+    opacity: 1 !important;
+}
+
+.input:is(:disabled, [disabled]) {
+    background-color: #efefef !important;
+}

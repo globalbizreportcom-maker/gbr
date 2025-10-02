@@ -1,9 +1,15 @@
 'use client';
 import React, { useEffect, useState } from 'react';
 import { FaEye } from 'react-icons/fa';
+import PayPalCheckout from './PayPalCheckout';
+import { useDashboard } from '@/app/(site)/dashboard/DashboardContext';
+import RazorpayCheckout from './RazorpayCheckout';
 
 const OrderConfirmContent = () => {
     const [formData, setFormData] = useState([]);
+    const { user } = useDashboard();
+
+    const [selected, setSelected] = useState("paypal");
 
     useEffect(() => {
         const storedData = localStorage.getItem('gbr_form');
@@ -13,6 +19,8 @@ const OrderConfirmContent = () => {
     }, []);
 
     if (!formData) return <p className="text-sm text-gray-600">Loading...</p>;
+
+
 
     return (
         < div>
@@ -49,24 +57,81 @@ const OrderConfirmContent = () => {
                         </table>
                     </div>
 
-                    <div className="flex justify-center mt-6">
-                        <button className="btn btn-primary w-[120px]">Pay Now</button>
+                    {/* <div className="w-full mx-auto mt-6 flex flex-col md:flex-col md:gap-4 space-y-4 md:space-y-0">
+                        <label className="flex-1 flex flex-col md:flex-row items-center justify-between p-4 border border-gray-200 rounded-xl cursor-pointer hover:bg-gray-50">
+                            <span className="font-medium text-gray-600 mb-2 md:mb-0 md:mr-4 text-center md:text-left">
+                                Pay via PayPal
+                            </span>
+                            <div className="w-full md:w-auto flex justify-center">
+                                <PayPalCheckout amount="1" />
+                            </div>
+                        </label>
+
+                        <label className="flex-1 flex flex-col md:flex-row items-center justify-between p-4 border border-gray-200 rounded-xl cursor-pointer hover:bg-gray-50">
+                            <span className="font-medium text-gray-600 mb-2 md:mb-0 md:mr-4 text-center md:text-left">
+                                Pay via Razorpay{" "}
+                                <span className='text-xs'>(For payments in INR from India )</span>
+                            </span>
+                            <div className="w-full md:w-auto flex justify-center">
+                                <RazorpayCheckout amount="1" userId={user?._id || ''} />
+                            </div>
+                        </label>
+                    </div> */}
+
+                    <div className="w-full mx-auto mt-6 flex flex-col md:flex-col md:gap-4 space-y-4 md:space-y-0">
+                        {(() => {
+                            const country = typeof formData?.contactCountry === "string"
+                                ? formData.contactCountry
+                                : formData?.contactCountry?.label;
+
+                            // If India, show Razorpay
+                            if (country?.toLowerCase() === "india") {
+                                return (
+                                    <label className="flex-1 flex flex-col md:flex-row items-center justify-between p-4 border border-gray-200 rounded-xl cursor-pointer hover:bg-gray-50">
+                                        <span className="font-medium text-gray-600 mb-2 md:mb-0 md:mr-4 text-center md:text-left">
+                                            Pay via Razorpay <span className="text-xs">(For payments in INR from India)</span>
+                                        </span>
+                                        <div className="w-full md:w-auto flex justify-center">
+                                            <RazorpayCheckout amount="1" userId={user?._id || ""} />
+                                        </div>
+                                    </label>
+                                );
+                            }
+
+                            // Otherwise, show PayPal
+                            return (
+                                <label className="flex-1 flex flex-col md:flex-row items-center justify-between p-4 border border-gray-200 rounded-xl cursor-pointer hover:bg-gray-50">
+                                    <span className="font-medium text-gray-600 mb-2 md:mb-0 md:mr-4 text-center md:text-left">
+                                        Pay via PayPal
+                                    </span>
+                                    <div className="w-full md:w-auto flex justify-center">
+                                        <PayPalCheckout amount="1" userId={user?._id || ""} />
+                                    </div>
+                                </label>
+                            );
+                        })()}
                     </div>
+
+
+
+
+
+
+
+
 
                     <h6 className="text-xs text-center text-gray-600 mb-4 pb-4 border-b border-gray-300 mt-5">WE ACCEPT</h6>
 
                     <div className="flex flex-wrap justify-center items-center gap-4">
-                        <img src="/images/payments/visa.png" alt="Visa" className="h-6 object-contain" />
-                        <img src="/images/payments/mastercard.png" alt="Mastercard" className="h-6 object-contain" />
-                        <img src="/images/payments/paypal.png" alt="PayPal" className="h-6 object-contain" />
-                        <img src="/images/payments/amex.png" alt="Amex" className="h-6 object-contain" />
-                        <img src="/images/payments/rupay.png" alt="Rupay" className="h-6 object-contain" />
-                        <img src="/images/payments/upi.png" alt="UPI" className="h-6 object-contain" />
+                        <img src="https://badges.razorpay.com/badge-light.png" alt="Visa" className="h-6 object-contain" />
+                        <img src="https://www.paypalobjects.com/webstatic/mktg/logo/bdg_now_accepting_pp_2line_w.png" alt="Mastercard" className="h-6 object-contain" />
+                        <img src="https://www.paypalobjects.com/webstatic/mktg/logo/AM_mc_vs_dc_ae.jpg" alt="PayPal" className="h-6 object-contain" />
+                        <img src="https://cdn.iconscout.com/icon/free/png-512/free-upi-logo-icon-svg-download-png-1747946.png?f=webp&w=512" alt="UPI" className="h-6 object-contain" />
                     </div>
                 </div>
 
                 {/* Right: Billing Summary */}
-                <div className="lg:col-span-4 p-6 border border-gray-200 rounded-xl shadow-sm">
+                <div className="lg:col-span-4 p-6 border border-gray-200 rounded-xl">
                     <h3 className="text-lg font-semibold">Billing Detail</h3>
                     <h6 className="text-xs mb-4 pb-4 border-b border-gray-300">Billing info solely for payment, not shared.</h6>
 
@@ -82,7 +147,11 @@ const OrderConfirmContent = () => {
                             </tr>
                             <tr className="border-b border-gray-200 font-medium">
                                 <td className="py-2 pr-4 font-semibold" >Country</td>
-                                <td className="py-2 text-right">{formData.contactCountry?.label}</td>
+                                <td className="py-2 text-right">
+                                    {typeof formData?.contactCountry === "string"
+                                        ? formData.contactCountry
+                                        : formData?.contactCountry?.label}
+                                </td>
                             </tr>
                             <tr className="border-b border-gray-200 font-medium">
                                 <td className="py-2 pr-4 font-semibold">Email</td>
@@ -136,7 +205,7 @@ const OrderConfirmContent = () => {
                                     <tr className='border-b-gray-200'>
 
                                         <td className="font-bold">STATE</td>
-                                        <td align='right'>{formData.state?.label}</td>
+                                        <td align='right'>{formData.state}</td>
                                     </tr>
                                     <tr className='border-b-gray-200'>
 

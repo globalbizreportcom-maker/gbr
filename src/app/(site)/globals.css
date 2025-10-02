@@ -24,3 +24,7 @@ input:-webkit-autofill:active {
   transition: background-color 9999s ease-out 0s;
   -webkit-text-fill-color: #1f2937 !important;
 }
+
+input:disabled {
+  @apply bg-gray-100 text-gray-700 italic cursor-not-allowed border-gray-200;
+}

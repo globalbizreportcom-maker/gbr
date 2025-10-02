@@ -1,13 +1,12 @@
-import AdminHeader from '@/components/admin/AdminHeader';
 import "./globals.css";
+import AdminAuth from "@/adminUtils/AdminAuth";
 
 export default function AdminLayout({ children }) {
     return (
         <html lang="en">
             <body className="text-gray-900">
-                <AdminHeader />
-                <main >{children}</main>
+                <AdminAuth>{children}</AdminAuth>
             </body>
-        </html >
+        </html>
     );
 }

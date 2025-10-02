@@ -19,42 +19,7 @@ const Table = () => {
     };
 
     return (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 bg-white shadow rounded-xl overflow-x-auto">
-            <table className=" table-md text-sm text-left">
-                <thead className="bg-gray-100 text-gray-600 font-semibold uppercase text-xs tracking-wider">
-                    <tr>
-                        <th className="px-6 py-4">User</th>
-                        <th className="px-6 py-4">Email</th>
-                        <th className="px-6 py-4">Role</th>
-                        <th className="px-6 py-4">Status</th>
-                    </tr>
-                </thead>
-                <tbody className="text-gray-700">
-                    {users.map((user, index) => (
-                        <tr
-                            key={index}
-                            className=" hover:bg-gray-50 transition duration-150"
-                        >
-                            <td className="px-6 py-4 whitespace-nowrap font-medium">{user.name}</td>
-                            <td className="px-6 py-4 whitespace-nowrap">{user.email}</td>
-                            <td className="px-6 py-4">
-                                <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-700">
-                                    {user.role}
-                                </span>
-                            </td>
-                            <td className="px-6 py-4">
-                                <span
-                                    className={`inline-block px-2 py-1 rounded-full text-xs font-semibold ${getStatusStyle(
-                                        user.status
-                                    )}`}
-                                >
-                                    {user.status}
-                                </span>
-                            </td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
+        <div className="grid grid-cols-1 xl:grid-cols-1 gap-5 bg-white shadow rounded-xl overflow-x-auto">
             <table className=" table-md text-sm text-left">
                 <thead className="bg-gray-100 text-gray-600 font-semibold uppercase text-xs tracking-wider">
                     <tr>

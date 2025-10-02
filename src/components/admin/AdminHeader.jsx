@@ -1,9 +1,11 @@
 'use client';
 
 import React, { useState } from 'react';
+import { useRouter } from "next/navigation";
 import Link from 'next/link';
 import { FaChevronDown, FaBars, FaTimes, FaUser } from 'react-icons/fa';
 import { usePathname } from 'next/navigation';
+import { adminUrl } from '@/api/api';
 
 const CollapseMenu = ({ label, items }) => {
 
@@ -31,30 +33,48 @@ const CollapseMenu = ({ label, items }) => {
     );
 };
 
+
+
 const AdminHeader = () => {
 
-
-
+    const router = useRouter();
     const path = usePathname();
     const hideHeader = path === '/admin';
 
     const [drawerOpen, setDrawerOpen] = useState(false);
 
+    const handleLogout = async () => {
+        try {
+            await adminUrl.post("/logout", {}, { withCredentials: true });
+            router.push("/admin"); // redirect to login
+        } catch (err) {
+            console.error("Logout failed:", err);
+        }
+    };
+
+    const items = [
+        { label: "Settings", href: "/products/analytics" },
+        { label: "Log Out", onClick: handleLogout },
+    ];
+
     return (
         <>
             <header className={`bg-white sticky top-0 z-50 shadow-xs ${hideHeader ? 'hidden' : ''}`}>
                 <div className="max-w-7xl mx-auto px-4 lg:px-8 flex justify-between items-center h-16">
-                    <Link href="/admin" className="text-xl font-bold text-gray-900">
-                        Admin
+                    <Link href="/admin/dashboard" className="text-md font-bold text-blue-900">
+                        Admin Panel
                     </Link>
 
                     <nav className="hidden md:flex space-x-6 items-center text-sm font-medium">
+
+                        <Link href="/admin/order-request/all" className="hover:text-primary">Order Requests</Link>
+
                         <div className="relative group">
                             <button className="cursor-pointer flex items-center gap-1 hover:text-primary">
                                 Users
-                                <FaChevronDown className="h-3 w-3" />
+                                <FaChevronDown className="h-3 w-3 mt-1" />
                             </button>
-                            <div className="absolute top-3 right-5 mt-2 hidden group-hover:block z-50">
+                            <div className="absolute top-3 right-1 mt-2 hidden group-hover:block z-50">
                                 <div className="bg-white shadow-lg rounded-md p-6 min-w-[300px] grid grid-cols-2 gap-4 text-sm text-gray-700">
                                     {[
                                         { label: "Consulting", href: "/services/consulting" },
@@ -62,7 +82,7 @@ const AdminHeader = () => {
                                         { label: "Design", href: "/services/design" },
                                         { label: "SEO", href: "/services/seo" },
                                     ].map((item, idx) => (
-                                        <Link key={idx} href={item.href} className="hover:text-primary">
+                                        <Link key={idx} href={item.href} className="hover:text-primary cursor-pointer">
                                             {item.label}
                                         </Link>
                                     ))}
@@ -73,9 +93,9 @@ const AdminHeader = () => {
                         <div className="relative group">
                             <button className=" cursor-pointer flex items-center gap-1 hover:text-primary">
                                 Visitors
-                                <FaChevronDown className="h-3 w-3" />
+                                <FaChevronDown className="h-3 w-3 mt-1" />
                             </button>
-                            <div className="absolute top-3 right-5 mt-2 hidden group-hover:block z-50">
+                            <div className="absolute top-3 right-1 mt-2 hidden group-hover:block z-50">
                                 <div className="bg-white shadow-lg rounded-md p-6 min-w-[300px] grid grid-cols-2 gap-4 text-sm text-gray-700">
                                     {[
                                         { label: "CRM Suite", href: "/products/crm" },
@@ -83,7 +103,7 @@ const AdminHeader = () => {
                                         { label: "AI Tools", href: "/products/ai-tools" },
                                         { label: "Security", href: "/products/security" },
                                     ].map((item, idx) => (
-                                        <Link key={idx} href={item.href} className="hover:text-primary">
+                                        <Link key={idx} href={item.href} className="hover:text-primary cursor-pointer">
                                             {item.label}
                                         </Link>
                                     ))}
@@ -94,9 +114,9 @@ const AdminHeader = () => {
                         <div className="relative group">
                             <button className=" cursor-pointer flex items-center gap-1 hover:text-primary">
                                 Reports
-                                <FaChevronDown className="h-3 w-3" />
+                                <FaChevronDown className="h-3 w-3 mt-1" />
                             </button>
-                            <div className="absolute top-3 right-5 mt-2 hidden group-hover:block z-50">
+                            <div className="absolute top-3 right-1 mt-2 hidden group-hover:block z-50">
                                 <div className="bg-white shadow-lg rounded-md p-6 min-w-[300px] grid grid-cols-2 gap-4 text-sm text-gray-700">
                                     {[
                                         { label: "CRM Suite", href: "/products/crm" },
@@ -104,7 +124,7 @@ const AdminHeader = () => {
                                         { label: "AI Tools", href: "/products/ai-tools" },
                                         { label: "Security", href: "/products/security" },
                                     ].map((item, idx) => (
-                                        <Link key={idx} href={item.href} className="hover:text-primary">
+                                        <Link key={idx} href={item.href} className="hover:text-primary cursor-pointer">
                                             {item.label}
                                         </Link>
                                     ))}
@@ -117,17 +137,24 @@ const AdminHeader = () => {
                         <div className="relative group">
                             <button className=" cursor-pointer flex items-center gap-1 hover:text-primary">
                                 Account  <FaUser className="h-3 w-3" />
-                                {/* <FaChevronDown className="h-3 w-3" /> */}
+                                {/* <FaChevronDown className="h-3 w-3 mt-1" /> */}
                             </button>
                             <div className="absolute top-2 right-1 mt-2 hidden group-hover:block z-50">
                                 <div className="bg-white shadow-lg rounded-md p-6 min-w-[200px] grid grid-cols-1 gap-4 text-sm text-gray-700">
-                                    {[
-                                        { label: "Settings", href: "/products/analytics" },
-                                        { label: "Log Out", href: "/products/crm" },
-                                    ].map((item, idx) => (
-                                        <Link key={idx} href={item.href} className="hover:text-primary">
-                                            {item.label}
-                                        </Link>
+                                    {items.map((item, idx) => (
+                                        item.href ? (
+                                            <Link key={idx} href={item.href} className="hover:text-primary cursor-pointer">
+                                                {item.label}
+                                            </Link>
+                                        ) : (
+                                            <button
+                                                key={idx}
+                                                onClick={item.onClick}
+                                                className="text-left hover:text-primary cursor-pointer"
+                                            >
+                                                {item.label}
+                                            </button>
+                                        )
                                     ))}
                                 </div>
                             </div>
@@ -148,7 +175,7 @@ const AdminHeader = () => {
                 onClick={() => setDrawerOpen(false)}
             />
             <div
-                className={`fixed top-0 left-0 w-72 bg-white overflow-auto h-full z-50 shadow-xl p-5 transform transition-transform duration-300 ${drawerOpen ? 'translate-x-0' : '-translate-x-full'}`}
+                className={`fixed top-0 left-0 w-[100%] bg-white overflow-auto h-full z-50 shadow-xl p-5 transform transition-transform duration-300 ${drawerOpen ? 'translate-x-0' : '-translate-x-full'}`}
             >
                 <div className="flex justify-between items-center mb-4">
                     <span className="text-lg font-bold">Menu</span>
