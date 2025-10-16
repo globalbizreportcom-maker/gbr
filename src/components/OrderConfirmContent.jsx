@@ -19,6 +19,132 @@ const OrderConfirmContent = () => {
     }, []);
 
     if (!formData) return <p className="text-sm text-gray-600">Loading...</p>;
+    const country = typeof formData?.contactCountry === "string"
+        ? formData.contactCountry
+        : formData?.contactCountry?.label;
+
+    // 🇮🇳 INR pricing (with GST)
+    const inrPricing = [
+        { country: "USA", total: 7080 },
+        { country: "Canada", total: 7080 },
+        { country: "India", total: 4720 },
+        { country: "China", total: 7670 },
+        { country: "Asia (excluding India & China)", total: 7670 },
+        { country: "Europe", total: 7670 },
+        { country: "Middle East", total: 7670 },
+        { country: "Australia & New Zealand", total: 8850 },
+        { country: "Africa", total: 8260 },
+        { country: "Oceania", total: 8850 },
+        { country: "Latin America", total: 9440 },
+        { country: "Other Countries", total: 9440 },
+    ];
+
+    // 💵 USD pricing
+    const usdPricing = {
+        "USA": 69,
+        "Canada": 69,
+        "India": 49,
+        "China": 79,
+        "Asia (excluding India & China)": 79,
+        "Europe": 79,
+        "Middle East": 79,
+        "Australia & New Zealand": 89,
+        "Africa": 89,
+        "Oceania": 89,
+        "Latin America": 99,
+        "Other Countries": 99,
+    };
+
+    // 🌏 Asian countries (excluding India & China)
+    const asianCountries = [
+        "Afghanistan",
+        "Armenia",
+        "Azerbaijan",
+        "Bahrain",
+        "Bangladesh",
+        "Bhutan",
+        "Brunei",
+        "Cambodia",
+        "Cyprus",
+        "Georgia",
+        "Indonesia",
+        "Iran",
+        "Iraq",
+        "Israel",
+        "Japan",
+        "Jordan",
+        "Kazakhstan",
+        "Kuwait",
+        "Kyrgyzstan",
+        "Laos",
+        "Lebanon",
+        "Malaysia",
+        "Maldives",
+        "Mongolia",
+        "Myanmar",
+        "Nepal",
+        "North Korea",
+        "Oman",
+        "Pakistan",
+        "Palestine",
+        "Philippines",
+        "Qatar",
+        "Saudi Arabia",
+        "Singapore",
+        "South Korea",
+        "Sri Lanka",
+        "Syria",
+        "Tajikistan",
+        "Thailand",
+        "Timor-Leste",
+        "Turkmenistan",
+        "United Arab Emirates",
+        "Uzbekistan",
+        "Vietnam",
+        "Yemen",
+    ];
+
+
+    // 🧭 Normalize country input
+    const normalizedCountry = country?.trim()?.toLowerCase();
+    let priceKey = "Other Countries"; // Default fallback
+
+    // ✅ Region-based mapping logic
+    if (normalizedCountry === "india") {
+        priceKey = "India";
+    } else if (normalizedCountry === "china") {
+        priceKey = "China";
+    } else if (asianCountries.some(c => c.toLowerCase() === normalizedCountry)) {
+        priceKey = "Asia (excluding India & China)";
+    } else if (["usa", "united states", "united states of america"].includes(normalizedCountry)) {
+        priceKey = "USA";
+    } else if (normalizedCountry === "canada") {
+        priceKey = "Canada";
+    } else if (normalizedCountry.includes("australia") || normalizedCountry.includes("new zealand")) {
+        priceKey = "Australia & New Zealand";
+    } else if (["uae", "united arab emirates", "saudi arabia", "qatar", "oman", "bahrain", "kuwait"].includes(normalizedCountry)) {
+        priceKey = "Middle East";
+    } else if (["england", "france", "germany", "italy", "spain", "netherlands", "uk", "united kingdom"].includes(normalizedCountry)) {
+        priceKey = "Europe";
+    } else if (["nigeria", "south africa", "kenya", "egypt", "ghana"].includes(normalizedCountry)) {
+        priceKey = "Africa";
+    } else if (["fiji", "samoa", "tonga", "papua new guinea"].includes(normalizedCountry)) {
+        priceKey = "Oceania";
+    } else if (["brazil", "argentina", "mexico", "chile", "peru"].includes(normalizedCountry)) {
+        priceKey = "Latin America";
+    }
+
+    // 💰 Get matching prices
+    const inrMatch = inrPricing.find(item => item.country === priceKey);
+    const inrAmount = inrMatch ? inrMatch.total : inrPricing.find(i => i.country === "Other Countries").total;
+    const usdAmount = usdPricing[priceKey] ?? usdPricing["Other Countries"];
+
+    // 🇮🇳 or 💵 Final display
+    const isIndia = normalizedCountry === "india";
+    const displayPrice = isIndia ? `₹${inrAmount}.00` : `USD ${usdAmount}`;
+
+    console.log({ priceKey, displayPrice });
+
 
 
 
@@ -47,36 +173,15 @@ const OrderConfirmContent = () => {
                                 </tr>
                                 <tr className="border-b border-gray-100">
                                     <td className="py-3 pr-4 text-primary">{formData.companyName}</td>
-                                    <td className="py-3 text-right text-base font-semibold">₹4720.00</td>
+                                    <td className="py-3 text-right text-base font-semibold">{displayPrice}</td>
                                 </tr>
                                 <tr className="border-t border-gray-300 font-semibold">
                                     <td className="py-3 pr-4 text-xl">Total Amount</td>
-                                    <td className="py-3 text-right text-xl">₹4720.00</td>
+                                    <td className="py-3 text-right text-xl">{displayPrice}</td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
-
-                    {/* <div className="w-full mx-auto mt-6 flex flex-col md:flex-col md:gap-4 space-y-4 md:space-y-0">
-                        <label className="flex-1 flex flex-col md:flex-row items-center justify-between p-4 border border-gray-200 rounded-xl cursor-pointer hover:bg-gray-50">
-                            <span className="font-medium text-gray-600 mb-2 md:mb-0 md:mr-4 text-center md:text-left">
-                                Pay via PayPal
-                            </span>
-                            <div className="w-full md:w-auto flex justify-center">
-                                <PayPalCheckout amount="1" />
-                            </div>
-                        </label>
-
-                        <label className="flex-1 flex flex-col md:flex-row items-center justify-between p-4 border border-gray-200 rounded-xl cursor-pointer hover:bg-gray-50">
-                            <span className="font-medium text-gray-600 mb-2 md:mb-0 md:mr-4 text-center md:text-left">
-                                Pay via Razorpay{" "}
-                                <span className='text-xs'>(For payments in INR from India )</span>
-                            </span>
-                            <div className="w-full md:w-auto flex justify-center">
-                                <RazorpayCheckout amount="1" userId={user?._id || ''} />
-                            </div>
-                        </label>
-                    </div> */}
 
                     <div className="w-full mx-auto mt-6 flex flex-col md:flex-col md:gap-4 space-y-4 md:space-y-0">
                         {(() => {
