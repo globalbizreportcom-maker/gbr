@@ -20,109 +20,70 @@ const OrderConfirmContent = () => {
 
     if (!formData) return <p className="text-sm text-gray-600">Loading...</p>;
 
-    // Normalize country input
-    const countryInput = formData?.contactCountry;
-    const country = typeof countryInput === "string" ? countryInput : countryInput?.label;
-    const normalizedCountry = country?.trim()?.toLowerCase() || "";
-
-    // ✅ Define listed countries/regions
-    const listedCountries = {
-        "usa": "USA",
-        "united states": "USA",
-        "united states of america": "USA",
-        "canada": "Canada",
-        "india": "India",
-        "china": "China",
-        "england": "Europe",
-        "france": "Europe",
-        "germany": "Europe",
-        "italy": "Europe",
-        "spain": "Europe",
-        "netherlands": "Europe",
-        "uk": "Europe",
-        "united kingdom": "Europe",
-        "uae": "Middle East",
-        "united arab emirates": "Middle East",
-        "saudi arabia": "Middle East",
-        "qatar": "Middle East",
-        "oman": "Middle East",
-        "bahrain": "Middle East",
-        "kuwait": "Middle East",
-        "australia": "Australia & New Zealand",
-        "new zealand": "Australia & New Zealand",
-        "nigeria": "Africa",
-        "south africa": "Africa",
-        "kenya": "Africa",
-        "egypt": "Africa",
-        "ghana": "Africa",
-        "fiji": "Oceania",
-        "samoa": "Oceania",
-        "tonga": "Oceania",
-        "papua new guinea": "Oceania",
-        "brazil": "Latin America",
-        "argentina": "Latin America",
-        "mexico": "Latin America",
-        "chile": "Latin America",
-        "peru": "Latin America"
-    };
-
-    // 🌏 Asian countries (excluding India & China)
-    const asianCountries = [
-        "afghanistan", "armenia", "azerbaijan", "bahrain", "bangladesh", "bhutan", "brunei", "cambodia", "cyprus",
-        "georgia", "indonesia", "iran", "iraq", "israel", "japan", "jordan", "kazakhstan", "kuwait", "kyrgyzstan",
-        "laos", "lebanon", "malaysia", "maldives", "mongolia", "myanmar", "nepal", "north korea", "oman", "pakistan",
-        "palestine", "philippines", "qatar", "saudi arabia", "singapore", "south korea", "sri lanka", "syria",
-        "tajikistan", "thailand", "timor-leste", "turkmenistan", "united arab emirates", "uzbekistan", "vietnam", "yemen"
-    ];
-
-    // Determine priceKey
-    let priceKey = "Other Countries";
-
-    if (listedCountries[normalizedCountry]) {
-        priceKey = listedCountries[normalizedCountry];
-    } else if (asianCountries.includes(normalizedCountry)) {
-        priceKey = "Asia (excluding India & China)";
-    }
-
-    // 💰 Pricing tables
-    const inrPricing = {
-        "USA": 7080,
-        "Canada": 7080,
-        "India": 4720,
-        "China": 7670,
+    const pricingINR = {
+        India: 4720,
+        China: 7670,
         "Asia (excluding India & China)": 7670,
-        "Europe": 7670,
+        USA: 7080,
+        Canada: 7080,
+        Europe: 7670,
         "Middle East": 7670,
         "Australia & New Zealand": 8850,
-        "Africa": 8260,
-        "Oceania": 8850,
+        Africa: 8260,
+        Oceania: 8850,
         "Latin America": 9440,
-        "Other Countries": 9440
+        "Other Countries": 9440,
     };
 
-    const usdPricing = {
-        "USA": 69,
-        "Canada": 69,
-        "India": 49,
-        "China": 79,
+    const pricingUSD = {
+        India: 49,
+        China: 79,
         "Asia (excluding India & China)": 79,
-        "Europe": 79,
+        USA: 69,
+        Canada: 69,
+        Europe: 79,
         "Middle East": 79,
         "Australia & New Zealand": 89,
-        "Africa": 89,
-        "Oceania": 89,
+        Africa: 89,
+        Oceania: 89,
         "Latin America": 99,
-        "Other Countries": 99
+        "Other Countries": 99,
     };
 
-    // Display price
-    const isIndia = priceKey === "India";
-    const displayPrice = isIndia ? `₹${inrPricing[priceKey]}.00` : `USD ${usdPricing[priceKey]}`;
+    const getRegion = (country) => {
+        const asiaExcludingIndiaChina = [
+            "Japan", "South Korea", "Singapore", "Thailand", "Malaysia", "Indonesia", "Philippines", "Vietnam", "Nepal",
+            "Sri Lanka", "Bangladesh", "Pakistan", "Myanmar", "Bhutan", "Cambodia", "Laos", "Brunei", "Maldives"
+        ];
 
-    console.log({ country, priceKey, displayPrice });
+        const australiaNZ = ["Australia", "New Zealand"];
+        const middleEast = ["UAE", "Saudi Arabia", "Qatar", "Kuwait", "Bahrain", "Oman"];
+        const latinAmerica = ["Brazil", "Mexico", "Argentina", "Colombia", "Chile", "Peru"];
+        const africa = ["South Africa", "Nigeria", "Egypt", "Kenya", "Morocco", "Ethiopia"];
+        const oceania = ["Fiji", "Papua New Guinea", "Samoa", "Tonga"];
 
+        if (country.toLowerCase() === "india") return "India";
+        if (country.toLowerCase() === "china") return "China";
+        if (asiaExcludingIndiaChina.map(c => c.toLowerCase()).includes(country.toLowerCase())) return "Asia (excluding India & China)";
+        if (australiaNZ.map(c => c.toLowerCase()).includes(country.toLowerCase())) return "Australia & New Zealand";
+        if (middleEast.map(c => c.toLowerCase()).includes(country.toLowerCase())) return "Middle East";
+        if (latinAmerica.map(c => c.toLowerCase()).includes(country.toLowerCase())) return "Latin America";
+        if (africa.map(c => c.toLowerCase()).includes(country.toLowerCase())) return "Africa";
+        if (oceania.map(c => c.toLowerCase()).includes(country.toLowerCase())) return "Oceania";
+        if (["usa", "united states"].includes(country.toLowerCase())) return "USA";
+        if (["canada"].includes(country.toLowerCase())) return "Canada";
+        if (["europe", "uk", "germany", "france", "italy", "spain"].includes(country.toLowerCase())) return "Europe";
 
+        return "Other Countries";
+    };
 
+    const countryName =
+        typeof formData?.contactCountry === "string"
+            ? formData.contactCountry
+            : formData?.country?.label;
+
+    const region = getRegion(countryName || "");
+    const displayPrice = region === "India" ? `₹${pricingINR[region]}` : `$${pricingUSD[region]}`;
 
 
     return (
