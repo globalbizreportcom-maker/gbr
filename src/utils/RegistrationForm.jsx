@@ -12,8 +12,11 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import axios from "axios";
 import CompanyInput from "./CompanyInput";
 import { apiUrl } from "@/api/api";
+import { useRouter } from "next/navigation";
 
 const RegistrationForm = () => {
+
+    const router = useRouter();
     const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
     const [company, setCompany] = useState("");
@@ -26,6 +29,7 @@ const RegistrationForm = () => {
     const [rePassword, setRePassword] = useState("");
     const [showPassword, setShowPassword] = useState(false);
     const [showRePassword, setShowRePassword] = useState(false);
+
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -41,7 +45,7 @@ const RegistrationForm = () => {
         }
 
         const formData = {
-            name: username, // backend expects "name"
+            name: username,
             email,
             phone,
             country,
@@ -53,20 +57,17 @@ const RegistrationForm = () => {
         };
 
         try {
-            const res = await apiUrl.post("/register/form-submit", // ✅ adjust URL to match backend
+            const res = await apiUrl.post("/register/form-submit",
                 formData
             );
-
             if (res.data.success) {
                 alert("Registration successful!");
+                router.push('/dashboard');
             } else {
-                alert(res.data.message || "Something went wrong");
+                alert("Something went wrong");
             }
         } catch (error) {
-            alert(
-                error.response?.data?.message ||
-                "Server error, please try again later"
-            );
+            alert(error.response?.data?.message || "Server error, please try again later");
         }
     };
 

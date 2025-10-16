@@ -35,7 +35,16 @@ export default function PayPalCheckout({ amount = "1.00", userId }) {
                         await apiUrl.post("/api/payment/capture-paypal", { orderId: data.orderID });
                         alert("Payment successful!");
                     },
-                    onError: console.error,
+                    onCancel: async function (data) {
+                        // User cancelled the PayPal payment
+                        console.log('User cancelled the payment', data);
+                        await apiUrl.post("/api/payment/cancellation", {
+                            userId: formData.userId,
+                            orderId: data.orderID,       // ✅ use data.orderID
+                            data,
+                        });
+                    },
+                    onError: console.log,
                 }).render("#paypal-button-container");
 
                 document.getElementById("paypal-button-container")?.setAttribute("id", "paypal-btn-rendered");
@@ -54,7 +63,7 @@ export default function PayPalCheckout({ amount = "1.00", userId }) {
         <>
             <div id="paypal-button-container"></div>
             <Script
-                src={`https://www.paypal.com/sdk/js?client-id=AXE0e0T-WVhYAxm7bKHdfiufchoL27auBeQ5PgJQ8UzmExYoesadzdcBxet-A3l2l1_m8V3CLLijAll9&currency=USD`}
+                src={`https://www.paypal.com/sdk/js?client-id=AbYmo3fDOLo929hTcfuSF5OAsTXMmvUiLalzVeXkqtWNVNlbaBP6erqJfy4bw1zP0MgBRoKhWUJ4LA6-&currency=USD`}
                 strategy="afterInteractive"
             />
         </>

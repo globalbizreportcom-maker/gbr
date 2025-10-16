@@ -27,7 +27,7 @@ export default function Contact() {
                 <div className="grid gap-6 md:grid-cols-1 bg-white p-6 md:p-10 rounded-2xl ">
 
                     <img
-                        src="https://img.freepik.com/free-photo/beautiful-biophilic-scene_23-2151897506.jpg?uid=R133306793&ga=GA1.1.1773690977.1730112906&semt=ais_hybrid&w=740"
+                        src="https://images.pexels.com/photos/8867263/pexels-photo-8867263.jpeg"
                         alt="About Global Biz Report"
                         className="w-full h-[400px] object-cover rounded-xl"
                     />

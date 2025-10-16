@@ -24,7 +24,7 @@ const AboutPage = () => {
                     {/* Left: Image */}
                     <div className="w-full">
                         <img
-                            src="https://img.freepik.com/free-photo/close-up-young-colleagues-having-meeting_23-2149060259.jpg"
+                            src="https://images.pexels.com/photos/7550286/pexels-photo-7550286.jpeg"
                             alt="About Global Biz Report"
                             className="w-full h-[350px] object-cover rounded-xl"
                         />
@@ -178,7 +178,7 @@ const AboutPage = () => {
                         <div className="w-full h-full">
                             <div className="w-full">
                                 <img
-                                    src="https://img.freepik.com/free-photo/happy-coworkers-making-decision-move_329181-20197.jpg"
+                                    src="https://images.pexels.com/photos/4344860/pexels-photo-4344860.jpeg"
                                     alt="About Global Biz Report"
                                     className="w-full h-[500px] object-cover rounded-xl"
                                 />

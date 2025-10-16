@@ -1,9 +1,9 @@
 'use client';
 
-import { adminUrl } from "@/api/api";
+import { adminUrl, apiUrl } from "@/api/api";
 import { useRouter } from "next/navigation";
 import React, { useCallback, useEffect, useState } from "react";
-import { FaArrowRight } from "react-icons/fa";
+import { FaArrowRight, FaMailBulk } from "react-icons/fa";
 import { useDropzone } from "react-dropzone";
 
 // Define colors for each status
@@ -28,6 +28,11 @@ const ReportsAdmin = ({ defaultTab }) => {
     const [updatingStatus, setUpdatingStatus] = useState(false);
     const [newStatus, setNewStatus] = useState(selectedReport?.status || STATUS_TABS[0]);
     const [searchQuery, setSearchQuery] = useState("");
+    const [files, setFiles] = useState([]);
+
+    const [forwardModalOpen, setForwardModalOpen] = useState(false);
+    const [forwardCompany, setForwardCompany] = useState({});
+
 
     useEffect(() => {
         const segments = window.location.pathname.split("/").filter(Boolean);
@@ -90,7 +95,23 @@ const ReportsAdmin = ({ defaultTab }) => {
         }
     };
 
-    const [files, setFiles] = useState([]);
+    // Open modal with existing company info
+    useEffect(() => {
+        if (forwardModalOpen && selectedReport) {
+            setForwardCompany({ ...selectedReport.targetCompany });
+        }
+    }, [forwardModalOpen, selectedReport]);
+
+    const handleForward = async () => {
+        try {
+            // await apiUrl.post("/forward-to-mira", forwardCompany);
+            // setForwardModalOpen(false);
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
+
 
     const onDrop = useCallback((acceptedFiles) => {
         setFiles(acceptedFiles);
@@ -186,9 +207,6 @@ const ReportsAdmin = ({ defaultTab }) => {
     display: none;
   }
 `}</style>
-
-
-
 
 
             {/* Table */}
@@ -319,31 +337,48 @@ const ReportsAdmin = ({ defaultTab }) => {
                             </button>
                         </div>
 
-                        {/* Status Dropdown */}
-                        <div className="p-4 w-full justify-end border-b border-gray-200 flex items-center gap-3">
-                            <span className="font-medium text-gray-600">Update Status:</span>
-                            <select
-                                value={newStatus}
-                                onChange={(e) => setNewStatus(e.target.value)}
-                                disabled={updatingStatus}
-                                className="select select-bordered bg-white border-black"
-                            >
-                                {STATUS_TABS.filter(status => status !== 'all').map((status) => (
-                                    <option key={status} value={status}>
-                                        {status.charAt(0).toUpperCase() + status.slice(1)}
-                                    </option>
-                                ))}
-                            </select>
+                        <div className="p-4 border-t border-gray-200 flex justify-end gap-2">
 
-                            <button
-                                className='btn btn-sm btn-primary'
-                                onClick={handleSaveStatus}
-                                disabled={updatingStatus || newStatus === selectedReport.status}
-                            >
-                                Save
-                            </button>
-                            {updatingStatus && <span className="text-gray-500">Updating...</span>}
                         </div>
+
+                        {/* Status Dropdown */}
+                        <div className="flex flex-col sm:flex-row sm:flex-wrap justify-between items-center gap-3 p-4 border-b border-gray-200 bg-gray-50 rounded-md">
+                            {/* Status */}
+                            <div className="flex flex-col sm:flex-row sm:items-center gap-2 w-full sm:w-auto">
+                                <span className="font-medium text-gray-600 whitespace-nowrap">Update Status:</span>
+                                <select
+                                    value={newStatus}
+                                    onChange={(e) => setNewStatus(e.target.value)}
+                                    disabled={updatingStatus}
+                                    className="select select-bordered bg-white border-black w-full sm:w-40"
+                                >
+                                    {STATUS_TABS.filter(status => status !== 'all').map((status) => (
+                                        <option key={status} value={status}>
+                                            {status.charAt(0).toUpperCase() + status.slice(1)}
+                                        </option>
+                                    ))}
+                                </select>
+                                <button
+                                    className='btn btn-sm btn-primary w-full sm:w-auto'
+                                    onClick={handleSaveStatus}
+                                    disabled={updatingStatus || newStatus === selectedReport.status}
+                                >
+                                    Save
+                                </button>
+                                {updatingStatus && <span className="text-gray-500 ml-2">Updating...</span>}
+                            </div>
+
+                            {/* Forward to Mira */}
+                            <div className="flex justify-end w-full sm:w-auto">
+                                {/* <button
+                                    className="btn btn-sm btn-warning flex items-center gap-2 w-full sm:w-auto"
+                                    onClick={() => setForwardModalOpen(true)}
+                                >
+                                    Forward to Mira <FaMailBulk />
+                                </button> */}
+                            </div>
+                        </div>
+
 
 
                         {/* Content */}
@@ -570,6 +605,67 @@ const ReportsAdmin = ({ defaultTab }) => {
 
 
 
+                                </div>
+                            )}
+
+                            {/* Forward Modal */}
+                            {forwardModalOpen && selectedReport && (
+                                <div className="fixed inset-0 z-50 bg-gray-50 bg-opacity-50 flex justify-center items-start overflow-auto p-4">
+                                    <div className="bg-white w-full max-w-4xl mx-auto rounded-lg overflow-y-auto relative p-6">
+                                        <div className="flex justify-between items-center mb-4">
+                                            <h2 className="text-xl font-bold text-gray-600">Edit Company Info</h2>
+                                            <button
+                                                className="btn btn-xs btn-circle btn-ghost"
+                                                onClick={() => setForwardModalOpen(false)}
+                                            >
+                                                ✕
+                                            </button>
+                                        </div>
+
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                            {[
+                                                { label: "Name", key: "name" },
+                                                { label: "Address", key: "address" },
+                                                { label: "Country", key: "country" },
+                                                { label: "State", key: "state" },
+                                                { label: "City", key: "city" },
+                                                { label: "Postal Code", key: "postalCode" },
+                                                { label: "Phone", key: "phone" },
+                                                { label: "Website", key: "website" },
+                                            ].map((field) => (
+                                                <div key={field.key} className="flex flex-col">
+                                                    <label className="font-medium text-gray-600 text-xs mb-2">{field.label}</label>
+                                                    <input
+                                                        type="text"
+                                                        className="input input-bordered border border-gray-200 w-full bg-white"
+                                                        value={forwardCompany[field.key] || ""}
+                                                        onChange={(e) =>
+                                                            setForwardCompany((prev) => ({
+                                                                ...prev,
+                                                                [field.key]: e.target.value,
+                                                            }))
+                                                        }
+                                                    />
+                                                </div>
+                                            ))}
+                                        </div>
+
+                                        {/* Buttons */}
+                                        <div className="flex justify-end gap-3 mt-6">
+                                            <button
+                                                className="btn btn-sm btn-ghost"
+                                                onClick={() => setForwardModalOpen(false)}
+                                            >
+                                                Cancel
+                                            </button>
+                                            <button
+                                                className="btn btn-sm btn-primary"
+                                                onClick={handleForward}
+                                            >
+                                                Forward
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
                             )}
 

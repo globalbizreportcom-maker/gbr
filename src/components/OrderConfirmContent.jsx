@@ -78,7 +78,7 @@ const OrderConfirmContent = () => {
                         </label>
                     </div> */}
 
-                    {/* <div className="w-full mx-auto mt-6 flex flex-col md:flex-col md:gap-4 space-y-4 md:space-y-0">
+                    <div className="w-full mx-auto mt-6 flex flex-col md:flex-col md:gap-4 space-y-4 md:space-y-0">
                         {(() => {
                             const country = typeof formData?.contactCountry === "string"
                                 ? formData.contactCountry
@@ -110,7 +110,7 @@ const OrderConfirmContent = () => {
                                 </label>
                             );
                         })()}
-                    </div> */}
+                    </div>
 
 
 

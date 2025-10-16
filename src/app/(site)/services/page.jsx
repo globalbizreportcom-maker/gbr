@@ -1,4 +1,5 @@
 import Subscription from "@/components/Subscription";
+import Link from "next/link";
 import { FaChartBar, FaCheckCircle, FaFileAlt, FaGlobe, FaHeadset, FaSearch, } from "react-icons/fa";
 import {
     FaClock,
@@ -10,6 +11,7 @@ import {
 
 
 const ServicesPage = () => {
+
     return (
         <section className="py-16 px-1 bg-zinc-50  text-gray-800">
             <div className="max-w-6xl mx-auto rounded-2xl bg-gradient-to-br from-blue-100 via-white to-orange-100 p-10 mb-3">
@@ -60,9 +62,14 @@ const ServicesPage = () => {
                         <p className="mx-auto max-w-4xl text-center mt-10 text-gray-500">
                             Our reports provide in-depth insights into a company's creditworthiness and financial health, helping you build trusted partnerships and make informed business choices.
                         </p>
-                        <button className="btn btn-primary mx-auto mt-10">
-                            Order Business Credit Report
-                        </button>
+                        <div className="text-center mt-10">
+                            <Link href="/order-business-credit-report">
+                                <button className="btn btn-primary mx-auto">
+                                    Order Business Credit Report
+                                </button>
+                            </Link>
+                        </div>
+
                     </div>
 
                 </div>
@@ -76,7 +83,7 @@ const ServicesPage = () => {
                     {/* Right: Image */}
                     <div className="w-full">
                         <img
-                            src="https://img.freepik.com/free-photo/happy-coworkers-making-decision-move_329181-20197.jpg" // Replace with your actual image path
+                            src="https://images.pexels.com/photos/7688335/pexels-photo-7688335.jpeg" // Replace with your actual image path
                             alt="Business Reports Illustration"
                             className="w-full object-cover max-w-md mx-auto rounded-2xl h-[400px]"
                         />

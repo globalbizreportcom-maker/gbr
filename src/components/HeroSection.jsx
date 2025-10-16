@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation"; // Next.js 13 app dir
+import Image from "next/image";
 
 const Select = dynamic(() => import("react-select"), { ssr: false });
 
@@ -26,17 +27,27 @@ const HeroSection = () => {
     useEffect(() => {
         const fetchCountries = async () => {
             try {
-                const res = await fetch("https://api.first.org/data/v1/countries");
-                const json = await res.json();
-                console.log(json);
-                // json.data is an object keyed by 2-letter country codes
-                const countryList = Object.entries(json.data).map(([code, info]) => ({
-                    value: code,          // e.g. "US", "IN", etc
-                    label: info.country,   // country name
+                // const res = await fetch("https://api.first.org/data/v1/countries");
+                // const json = await res.json();
+                // console.log(json);
+                // // json.data is an object keyed by 2-letter country codes
+                // const countryList = Object.entries(json.data).map(([code, info]) => ({
+                //     value: code,          // e.g. "US", "IN", etc
+                //     label: info.country,   // country name
+                // }));
+                // setCountries(countryList.sort((a, b) => a.label.localeCompare(b.label)));
+
+                const res = await fetch("https://countriesnow.space/api/v0.1/countries");
+                const json = await res.json()
+                const options = json.data.map((c) => ({
+                    value: c.iso2,
+                    label: c.country,
                 }));
-                setCountries(countryList.sort((a, b) => a.label.localeCompare(b.label)));
+
+                setCountries(options);
+
             } catch (err) {
-                console.error("Error fetching countries:", err);
+                console.log("Error fetching countries:", err);
             }
         };
 
@@ -69,10 +80,12 @@ const HeroSection = () => {
     return (
         <div className="relative flex flex-col justify-between bg-gradient-to-br from-blue-100 via-white to-orange-100 p-10 overflow-visible h-auto 2xl:h-150">
             {/* Background Image Layer */}
-            <img
-                src="https://img.freepik.com/free-photo/dusk-business-night-sea-architecture_1417-55.jpg"
+            <Image
+                src={require("../../public/images/hero_section.png")}
                 alt="Decorative"
-                className="absolute top-0 left-0 w-screen h-[100%] object-cover opacity-15 pointer-events-none select-none z-0"
+                fill
+                className="absolute top-0 left-0 w-screen h-full object-cover opacity-15 pointer-events-none select-none z-0"
+                priority
             />
 
 
@@ -102,7 +115,7 @@ const HeroSection = () => {
                         }}
                         className="w-full mb-4 md:mb-0 md:flex md:gap-4"
                     >
-                        {/* State Selector */}
+                        {/* Country Selector */}
                         <div className="w-full md:w-48">
                             <Select
                                 options={countries} // ✅ use country options

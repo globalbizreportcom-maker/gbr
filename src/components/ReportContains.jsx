@@ -1,7 +1,12 @@
-import React from "react";
+'use client';
+
+import { useRouter } from "next/navigation";
 import { FaArrowRight, FaCheckCircle } from "react-icons/fa";
 
 const ReportContains = () => {
+
+    const router = useRouter();
+
     return (
         <section className="py-10 px-2 bg-violet-50 ">
             <div className="max-w-5xl mx-auto px-4 flex flex-col md:flex-row items-center gap-10">
@@ -9,7 +14,7 @@ const ReportContains = () => {
                 {/* Left: Image */}
                 <div className="w-full md:w-1/2">
                     <img
-                        src="https://img.freepik.com/free-photo/beautiful-biophilic-scene_23-2151897506.jpg?uid=R133306793&ga=GA1.1.1773690977.1730112906&semt=ais_hybrid&w=740" // Replace with your actual image path
+                        src="https://images.pexels.com/photos/7693705/pexels-photo-7693705.jpeg" // Replace with your actual image path
                         alt="Business Check"
                         style={{ height: 400, objectFit: "cover" }}
                         className="rounded-xl shadow-md "
@@ -40,8 +45,11 @@ const ReportContains = () => {
                             </li>
                         ))}
                     </ul>
+                    <button className="btn btn-primary"
+                        onClick={() => { router.push('/sample-reports') }}
+                    >View Sample Report <FaArrowRight className=" text-sm font-thin" /></button>
 
-                    <button className="btn btn-primary">Read More <FaArrowRight className=" text-sm font-thin" /></button>
+                    {/* <button className="btn btn-dash text-black ml-2 hover:text-white">View Sample Report <FaArrowRight className=" text-sm font-thin" /></button> */}
                 </div>
             </div>
         </section>

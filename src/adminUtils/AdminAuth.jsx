@@ -5,7 +5,7 @@ import { useRouter, usePathname } from "next/navigation";
 import AdminHeader from "@/components/admin/AdminHeader";
 import { adminUrl } from "@/api/api";
 
-export default function AdminAuth({ children }) {
+const AdminAuth = ({ children }) => {
     const [admin, setAdmin] = useState(null);
     const [loading, setLoading] = useState(true);
     const router = useRouter();
@@ -53,3 +53,5 @@ export default function AdminAuth({ children }) {
         </div>
     );
 }
+
+export default AdminAuth;

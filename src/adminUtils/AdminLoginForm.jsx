@@ -6,7 +6,7 @@ import { adminUrl } from "@/api/api";
 export default function AdminLoginForm() {
     const [userName, setUserName] = useState("");
     const [password, setPassword] = useState("");
-    const [role, setRole] = useState("admin"); // default role
+    const [role, setRole] = useState("superadmin"); // default role
     const [error, setError] = useState(null);
 
 

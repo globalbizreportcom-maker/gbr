@@ -49,8 +49,8 @@ const UsersPage = () => {
     if (loading) return <p className="text-center mt-10">Loading...</p>;
 
     return (
-        <div className="p-4 max-w-6xl mx-auto">
-            <h1 className="text-md text-gray-500 font-bold mb-4">Users List</h1>
+        <div className="p-1 max-w-6xl mx-auto">
+            <h1 className="text-md text-gray-500 font-bold mb-4">Users List ({filteredUsers.length})</h1>
 
             {/* ✅ Search Bar */}
             <div className="mb-4 flex justify-end">
@@ -105,7 +105,7 @@ const UsersPage = () => {
                         {filteredUsers.map((user, idx) => (
                             <div
                                 key={user._id}
-                                className="bg-white shadow rounded-lg p-4 border border-gray-200"
+                                className="bg-white rounded-lg p-4 border border-gray-200"
                             >
                                 <div className="flex justify-between items-center mb-2">
                                     <span className="text-sm font-semibold text-gray-600">

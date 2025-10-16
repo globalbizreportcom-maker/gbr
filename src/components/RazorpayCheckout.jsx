@@ -34,6 +34,18 @@ export default function RazorpayCheckout({ amount = 100, userId }) {
 
                     alert("Payment successful!");
                 },
+                modal: {
+                    ondismiss: async function () {
+                        // console.log("User closed the payment modal", formData);
+                        await apiUrl.post("/api/payment/cancellation", {
+                            userId: formData.userId,
+                            orderId,
+                            data: formData,
+                        });
+
+                    }
+                },
+
                 prefill: { name: "", email: "", contact: "" },
                 theme: { color: "#000000" },
             };

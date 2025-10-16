@@ -74,6 +74,16 @@ export default function DashboardHome() {
                     <p className="text-xl sm:text-2xl font-bold text-gray-800 mt-1">{stats.totalOrders}</p>
                 </div>
 
+                {/* Search Reports */}
+                <div
+                    onClick={() => router.push("/search")}
+                    className="cursor-pointer bg-white rounded-lg p-4 sm:p-6 flex flex-col items-center justify-center border border-gray-200 hover:shadow-md transition"
+                >
+                    <div className="text-2xl sm:text-3xl mb-1 sm:mb-2">🔍</div>
+                    <p className="text-gray-500 text-sm sm:text-base">Search Company</p>
+                    <p className="text-blue-500 text-sm underline">Search</p>
+                </div>
+
 
             </div>
 
@@ -103,6 +113,8 @@ export default function DashboardHome() {
                     </button>
                 </div>
             </div>
+
+
 
 
         </div>

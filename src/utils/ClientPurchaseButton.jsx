@@ -9,7 +9,7 @@ const ClientPurchaseButton = ({ companyData }) => {
 
     const handlePurchaseReport = () => {
         if (!companyData) return;
-
+        console.log(companyData);
         const addressParts = companyData.Registered_Office_Address
             ?.split(",")
             .map(p => p.trim()) || [];
@@ -28,7 +28,9 @@ const ClientPurchaseButton = ({ companyData }) => {
             }
         }
 
-        const stateLabel = addressParts[addressParts.length - 3] || "";
+        const stateLabel = companyData?.CompanyStateCode
+            ? companyData.CompanyStateCode.charAt(0).toUpperCase() + companyData.CompanyStateCode.slice(1).toLowerCase()
+            : "";
         const cityLabel = addressParts[addressParts.length - 4] || "";
 
         const formData = {

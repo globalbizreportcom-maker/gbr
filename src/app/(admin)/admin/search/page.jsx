@@ -22,134 +22,152 @@ export default function CompanySearch() {
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
     const [loading, setLoading] = useState(false);
+    const [initialized, setInitialized] = useState(false);
 
     const normalize = (str) => str?.toLowerCase().trim();
 
-    // ------------------- Fetch countries -------------------
-    useEffect(() => {
-        const fetchCountries = async () => {
-            try {
-                const res = await fetch("https://countriesnow.space/api/v0.1/countries");
-                const json = await res.json();
-                const options = json.data.map(c => ({
-                    value: c.iso2.toLowerCase(),
-                    label: c.country
+    // ------------------- Helper Functions -------------------
+    const fetchCountries = async () => {
+        try {
+            const res = await fetch("https://countriesnow.space/api/v0.1/countries");
+            const json = await res.json();
+            const options = json.data.map(c => ({
+                value: c.iso2.toLowerCase(),
+                label: c.country
+            }));
+            setCountries(options);
+        } catch (err) {
+            console.error("Error fetching countries:", err);
+        }
+    };
+
+    const fetchStates = async () => {
+        if (normalize(selectedCountry?.value) !== "in") {
+            setStates([]);
+            setSelectedState(null);
+            return;
+        }
+        try {
+            const res = await fetch("https://countriesnow.space/api/v0.1/countries/states");
+            const json = await res.json();
+            const india = json.data.find(c => normalize(c.name) === "india");
+            if (india?.states?.length) {
+                const formattedStates = india.states.map(s => ({
+                    value: s.name,
+                    label: s.name
                 }));
-                setCountries(options);
-            } catch (err) {
-                console.error("Error fetching countries:", err);
+                setStates(formattedStates);
             }
-        };
+        } catch (err) {
+            console.error("Error fetching states:", err);
+        }
+    };
+
+    const fetchCompanies = async (
+        pageNumber = 1,
+        companyVal = company,
+        countryVal = selectedCountry?.label || "",
+        stateVal = selectedState?.label || "",
+        signal
+    ) => {
+        try {
+            setLoading(true);
+            const params = { company: companyVal, country: countryVal, state: stateVal || "", page: pageNumber, perPage: 20 };
+            const res = await axios.get("https://backend.globalbizreport.com/api/companies", { params, signal });
+            setResults(res.data.rows);
+            setTotalPages(res.data.totalPages);
+            setPage(res.data.page);
+        } catch (err) {
+            if (axios.isCancel(err)) return;
+            console.error("Error fetching companies:", err);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleSearch = (pageNumber = 1) => {
+
+        if (selectedCountry?.label !== "India") {
+            router.push('/order-business-credit-report')
+        }
+
+        const params = new URLSearchParams();
+        if (company) params.set("company", company);
+        if (selectedCountry) params.set("country", selectedCountry.label);
+        if (selectedCountry?.label === "India" && selectedState) {
+            params.set("state", selectedState.label);
+        }
+        params.set("page", pageNumber);
+
+        router.push(`?${params.toString()}`);
+        setPage(pageNumber); // triggers fetch
+
+        fetchCompanies(pageNumber)
+    };
+
+    // ------------------- useEffect Hooks in Correct Order -------------------
+
+    // 1️⃣ Fetch countries once
+    useEffect(() => {
         fetchCountries();
     }, []);
 
-    // ------------------- Fetch states for India -------------------
+    // 2️⃣ Restore from URL after countries load
     useEffect(() => {
-        const fetchStates = async () => {
-            if (normalize(selectedCountry?.value) !== "in") {
-                setStates([]);
-                setSelectedState(null);
-                return;
-            }
-            try {
-                const res = await fetch("https://countriesnow.space/api/v0.1/countries/states");
-                const json = await res.json();
-                const india = json.data.find(c => normalize(c.name) === "india");
-                if (india?.states?.length) {
-                    const formattedStates = india.states.map(s => ({
-                        value: s.name,
-                        label: s.name
-                    }));
-                    setStates(formattedStates);
-                }
-            } catch (err) {
-                console.error("Error fetching states:", err);
-            }
-        };
-        fetchStates();
-    }, [selectedCountry]);
+        if (initialized || !countries.length) return;
 
-    // ------------------- Restore from URL -------------------
-    useEffect(() => {
         const companyParam = searchParams.get("company") || "";
         const countryParam = searchParams.get("country") || "";
-        const stateParam = searchParams.get("state") || "";
         const pageParam = parseInt(searchParams.get("page") || "1", 10);
 
         setCompany(companyParam);
         setPage(pageParam);
 
-        if (countries.length && countryParam) {
-            const country = countries.find(c => normalize(c.value) === normalize(countryParam));
+        if (countryParam) {
+            const country = countries.find(c => normalize(c.label) === normalize(countryParam));
             if (country) setSelectedCountry(country);
         }
 
-        if (states.length && stateParam) {
-            const state = states.find(s => normalize(s.value) === normalize(stateParam));
+        setInitialized(true);
+    }, [countries, searchParams]);
+
+    // 3️⃣ Fetch states when country changes
+    useEffect(() => {
+        if (!selectedCountry) return;
+        fetchStates();
+    }, [selectedCountry]);
+
+    // 4️⃣ Restore state selection after states load
+    useEffect(() => {
+        if (!selectedCountry || !states.length) return;
+
+        const stateParam = searchParams.get("state") || "";
+        if (normalize(selectedCountry.value) === "in" && stateParam) {
+            const state = states.find(s => normalize(s.label) === normalize(stateParam));
             if (state) setSelectedState(state);
         }
+    }, [selectedCountry, states, searchParams]);
 
-        // Fetch after countries & states are ready
-        if (companyParam || countryParam) {
-            fetchCompanies(pageParam, companyParam, countryParam, stateParam);
-        }
-    }, [countries, states, searchParams]);
+    // 5️⃣ Fetch companies once after initialization or params change
+    useEffect(() => {
+        if (!initialized) return;
+        const controller = new AbortController();
+        fetchCompanies(page, company, selectedCountry?.label, selectedState?.label, controller.signal);
+        return () => controller.abort();
+    }, [initialized, company, selectedCountry, selectedState, page]);
 
-    // ------------------- Fetch Companies -------------------
-    const fetchCompanies = async (pageNumber = 1, companyVal = company, countryVal = selectedCountry?.value, stateVal = selectedState?.value) => {
-        try {
-            const params = {
-                company: companyVal,
-                country: selectedCountry?.label || "", // exact country name like "India"
-                state: selectedState?.value?.trim().toLowerCase() || "", // lowercase, no spaces
-                page: pageNumber,
-                perPage: 20
-            };
 
-            const res = await axios.get("https://backend.globalbizreport.com/api/companies", { params });
-            setResults(res.data.rows);
-            setTotalPages(res.data.totalPages);
-            setPage(res.data.page);
-        } catch (err) {
-            console.error("Error fetching companies:", err);
-        }
-    };
-
-    // ------------------- Handle search & update URL -------------------
-    const handleSearch = (pageNumber = 1) => {
-        const params = new URLSearchParams();
-        if (company) params.set("company", company);
-        if (selectedCountry) params.set("country", selectedCountry.value);
-        if (selectedCountry?.value === "in" && selectedState) {
-            const normalizedState = selectedState?.label?.trim().toLowerCase();
-            params.set("state", normalizedState);
-        }
-
-        params.set("page", pageNumber);
-
-        router.push(`?${params.toString()}`);
-        fetchCompanies(pageNumber, company, selectedCountry?.value, selectedState?.value);
-    };
-
-    // ------------------- Handle click and company navigation -------------------
-
+    const [selectedCompany, setSelectedCompany] = useState(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
     const handleClick = (company) => {
-        const companyName = encodeURIComponent(company.CompanyName.replace(/\s+/g, "-"));
-        const cin = encodeURIComponent(company.CIN);
-
-        let country =
-            company.CompanyIndian?.["Foreign Company"]?.toLowerCase() ||
-            company["CompanyIndian/Foreign Company"]?.toLowerCase() ||
-            "";
-        country = encodeURIComponent(country.slice(0, -1));
-
-        const stateCode = encodeURIComponent(company.CompanyStateCode?.toLowerCase() || "na");
-        console.log(`/${companyName}/${cin}/${country}/${stateCode}/order-credit-report`);
-        // router.push(`/${companyName}/${cin}/${country}/${stateCode}/order-credit-report`);
+        setSelectedCompany(company);
+        setIsModalOpen(true);
     };
 
-    return (
 
+
+    // ------------------- JSX -------------------
+    return (
         <div className="flex flex-col gap-4 max-w-6xl mx-auto">
             {/* Header + Inputs */}
             <div className="flex flex-col items-center gap-6 p-8 mb-6 bg-gradient-to-br from-blue-100 via-white to-orange-100 rounded-xl">
@@ -195,7 +213,7 @@ export default function CompanySearch() {
 
                     <button
                         onClick={() => handleSearch(1)}
-                        className="bg-blue-600 text-white px-4 py-2 rounded"
+                        className="btn btn-primary text-white px-4 py-2 rounded"
                     >
                         Search
                     </button>
@@ -205,7 +223,6 @@ export default function CompanySearch() {
                     Tip: For faster search, select the state (e.g., Goa) and at least 3 letters of the company name or keyword.
                 </p>
             </div>
-
 
             {/* Loading */}
             {loading && (
@@ -219,12 +236,10 @@ export default function CompanySearch() {
 
             {!loading && results.length > 0 && (
                 <>
-                    {/* (Your existing table + card layout untouched) */}
-                    <div className="flex flex-col lg:flex-row gap-6" ref={resultsRef}>
+                    <div className="flex flex-col lg:flex-row gap-6 " ref={resultsRef}>
 
                         {/* Left: Table for md+ screens */}
-                        <div className="w-full lg:w-3/4">
-                            {/* Table: md+ */}
+                        <div className="w-full lg:max-w-6xl mx-auto">
                             <div className="hidden md:block w-full">
                                 <div className="overflow-x-auto">
                                     <table className="min-w-full border border-gray-200 rounded-lg overflow-hidden table-fixed">
@@ -237,24 +252,32 @@ export default function CompanySearch() {
                                                     Information
                                                 </th>
                                                 <th className="px-4 py-3 text-center text-sm font-semibold text-gray-700 w-1/5">
+                                                    Company Category
+                                                </th>
+                                                <th className="px-4 py-3 text-center text-sm font-semibold text-gray-700 w-1/5">
                                                     Actions
                                                 </th>
                                             </tr>
                                         </thead>
-                                        <tbody className="divide-y divide-gray-200" >
+                                        <tbody className="divide-y divide-gray-200">
                                             {results.map((c, idx) => (
                                                 <tr key={idx} className="hover:bg-gray-50 transition">
                                                     <td className="px-4 py-3 text-sm text-gray-800 align-top max-w-sm">
                                                         <div className="font-bold">{c.CompanyName}</div>
                                                     </td>
-                                                    <td className="px-4 py-3 text-sm text-gray-700 space-y-1 align-top">
-                                                        <div>
+                                                    <td className="px-4 py-3 text-sm text-gray-700 align-top">
+                                                        <div className="break-words max-w-xs">
                                                             <span className="font-medium">Address:</span> {c.Registered_Office_Address}
                                                         </div>
-                                                        <div>
+                                                        <div className="mt-1">
                                                             <span className="font-medium">Status:</span> {c.CompanyStatus}
                                                         </div>
+
                                                     </td>
+                                                    <td className="px-4 py-3 text-sm text-gray-700 align-top">
+                                                        <div className="font-medium">{c.CompanyCategory}</div>
+                                                    </td>
+
                                                     <td className="px-4 py-3 text-center align-middle">
                                                         <button
                                                             className="cursor-pointer flex items-center gap-1 py-2 rounded-md px-2 bg-indigo-500 text-white text-xs font-semibold hover:bg-black hover:shadow-md transition-all duration-300"
@@ -296,30 +319,52 @@ export default function CompanySearch() {
                             </div>
                         </div>
 
-                        {/* Right: Ads / Tips */}
-                        <div className="w-full lg:w-1/4 flex flex-col gap-4">
-                            <div className="p-4 bg-gray-100  rounded-lg">
-                                <h3 className="font-semibold text-gray-800 mb-2">Ad / Promotion</h3>
-                                <p className="text-sm text-gray-600">
-                                    Promote your business here or display relevant content.
-                                </p>
-                            </div>
 
-                            <div className="p-4 bg-gray-100 rounded-lg">
-                                <h3 className="font-semibold text-gray-800 mb-2">Tip</h3>
-                                <p className="text-sm text-gray-600">
-                                    Search using company name or country to quickly find corporate records.
-                                </p>
-                            </div>
-                        </div>
                     </div>
 
+                    {/* Modal */}
+                    {isModalOpen && selectedCompany && (
+                        <div className="modal modal-open">
+                            <div className="modal-box relative max-w-4xl py-10 bg-white">
+                                <button
+                                    className="btn btn-xs btn-circle bg-gray-200 border-none absolute shadow-none text-black right-2 top-2"
+                                    onClick={() => setIsModalOpen(false)}
+                                >
+                                    ✕
+                                </button>
+                                <h3 className="text-xl font-bold mb-10">{selectedCompany.CompanyName}</h3>
+
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-gray-700">
+                                    {Object.entries(selectedCompany).map(([key, value]) => {
+                                        const formattedKey = key
+                                            .replace(/([a-z])([A-Z])/g, "$1 $2")
+                                            .replace(/_/g, " ");
+
+                                        // If value is an object, display it nicely
+                                        const displayValue =
+                                            value && typeof value === "object"
+                                                ? JSON.stringify(value, null, 2)
+                                                : value;
+
+                                        return (
+                                            <div key={key} className="flex">
+                                                <div className="w-40 font-medium">{formattedKey}:</div>
+                                                <div className="flex-1 break-words">{displayValue}</div>
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            </div>
+                            <div className="modal-backdrop" onClick={() => setIsModalOpen(false)}></div>
+                        </div>
+                    )}
+
                     {/* Pagination */}
-                    <div className="flex gap-2 mt-4 text-black items-center">
+                    <div className="flex gap-2 mt-4 text-black items-center w-full  justify-center">
                         <button
                             onClick={() => page > 1 && handleSearch(page - 1)}
                             disabled={page === 1}
-                            className="px-3 py-1 border rounded hover:bg-gray-200 disabled:opacity-50"
+                            className="cursor-pointer px-3 py-1 border rounded hover:bg-gray-200 disabled:opacity-50"
                         >
                             Prev
                         </button>
@@ -327,48 +372,18 @@ export default function CompanySearch() {
                         <button
                             onClick={() => page < totalPages && handleSearch(page + 1)}
                             disabled={page === totalPages}
-                            className="px-3 py-1 border rounded hover:bg-gray-200 disabled:opacity-50"
+                            className="cursor-pointer px-3 py-1 border rounded hover:bg-gray-200 disabled:opacity-50"
                         >
                             Next
                         </button>
                     </div>
                 </>
             )}
-
-
         </div>
-
-
-
-        //   <div className="p-4 ">
-
-
-        //         <div>
-        //             {results.map(r => (
-        //                 <div key={r.CIN} className="border p-2 mb-2 text-black bg-white rounded">
-        //                     <strong>{r.CompanyName}</strong> | {r.CompanyStateCode} | {r.CompanyIndustrialClassification}
-        //                 </div>
-        //             ))}
-        //         </div>
-
-        //         <div className="flex gap-2 mt-4 text-black items-center">
-        //             <button
-        //                 onClick={() => page > 1 && handleSearch(page - 1)}
-        //                 disabled={page === 1}
-        //                 className="px-3 py-1 border rounded hover:bg-gray-200 disabled:opacity-50"
-        //             >
-        //                 Prev
-        //             </button>
-        //             <span className="px-3 py-1">{page} / {totalPages}</span>
-        //             <button
-        //                 onClick={() => page < totalPages && handleSearch(page + 1)}
-        //                 disabled={page === totalPages}
-        //                 className="px-3 py-1 border rounded hover:bg-gray-200 disabled:opacity-50"
-        //             >
-        //                 Next
-        //             </button>
-        //         </div>
-        //     </div> 
-
     );
 }
+
+
+
+
+

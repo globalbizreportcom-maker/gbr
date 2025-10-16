@@ -58,7 +58,7 @@ const WhyGBRSection = () => {
                     {/* Right - Image block */}
                     <div className="md:col-span-2 rounded-xl">
                         <img
-                            src="https://img.freepik.com/free-photo/close-up-business-person-s-hand-drawing-increasing-arrow-graph-clipboard_23-2147972782.jpg"
+                            src="https://images.pexels.com/photos/3184287/pexels-photo-3184287.jpeg"
                             alt="Credit Report"
                             className="w-full h-[300px] sm:h-[500px] sm:object-contain md:object-cover rounded-xl"
                         />

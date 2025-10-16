@@ -57,6 +57,16 @@ const AdminHeader = () => {
         { label: "Log Out", onClick: handleLogout },
     ];
 
+    const navLinks = [
+        { href: "/admin/dashboard", label: "Home", color: 'black' },
+        { href: "/admin/users", label: "Users", color: 'black' },
+        { href: "/admin/inbox", label: "Inbox", color: 'black' },
+        { href: "/admin/order-request/all", label: "Orders", color: 'black' },
+        { href: "/admin/payments", label: "Payments", color: 'black' },
+        { href: "/admin/search", label: "Search Company", color: 'black' },
+        { href: "/admin", label: "Log Out", isButton: false, color: 'red-600' },
+    ];
+
     return (
         <>
             <header className={`bg-white sticky top-0 z-50 shadow-xs ${hideHeader ? 'hidden' : ''}`}>
@@ -68,8 +78,11 @@ const AdminHeader = () => {
                     <nav className="hidden md:flex space-x-6 items-center text-sm font-medium">
 
                         <Link href="/admin/order-request/all" className="hover:text-primary">Order Requests</Link>
+                        <Link href="/admin/inbox" className="hover:text-primary">Inbox</Link>
+                        <Link href="/admin/payments" className="hover:text-primary">payments</Link>
+                        <Link href="/admin/search" className="hover:text-primary">Company Search</Link>
 
-                        <div className="relative group">
+                        {/* <div className="relative group">
                             <button className="cursor-pointer flex items-center gap-1 hover:text-primary">
                                 Users
                                 <FaChevronDown className="h-3 w-3 mt-1" />
@@ -88,11 +101,10 @@ const AdminHeader = () => {
                                     ))}
                                 </div>
                             </div>
-                        </div>
+                        </div> */}
 
-                        <Link href="/admin/inbox" className="hover:text-primary">Inbox</Link>
 
-                        <div className="relative group">
+                        {/* <div className="relative group">
                             <button className=" cursor-pointer flex items-center gap-1 hover:text-primary">
                                 Visitors
                                 <FaChevronDown className="h-3 w-3 mt-1" />
@@ -134,12 +146,10 @@ const AdminHeader = () => {
                             </div>
                         </div>
 
-                        <Link href="/contact" className="hover:text-primary">Contact</Link>
 
                         <div className="relative group">
                             <button className=" cursor-pointer flex items-center gap-1 hover:text-primary">
                                 Account  <FaUser className="h-3 w-3" />
-                                {/* <FaChevronDown className="h-3 w-3 mt-1" /> */}
                             </button>
                             <div className="absolute top-2 right-1 mt-2 hidden group-hover:block z-50">
                                 <div className="bg-white shadow-lg rounded-md p-6 min-w-[200px] grid grid-cols-1 gap-4 text-sm text-gray-700">
@@ -160,7 +170,7 @@ const AdminHeader = () => {
                                     ))}
                                 </div>
                             </div>
-                        </div>
+                        </div> */}
 
                     </nav>
 
@@ -189,25 +199,17 @@ const AdminHeader = () => {
                 <div className="flex flex-col gap-2">
 
 
-                    <Link href="/admin/dashboard" className="hover:text-primary">
-                        <span onClick={() => setDrawerOpen(false)}>Home</span>
-                    </Link>
-
-                    <Link href="/admin/inbox" className="hover:text-primary">
-                        <span onClick={() => setDrawerOpen(false)}>Inbox</span>
-                    </Link>
-
-                    <Link href="/admin/order-request/all" className="hover:text-primary">
-                        <span onClick={() => setDrawerOpen(false)}>Orders</span>
-                    </Link>
-
-                    <Link href="/admin/payments" className="hover:text-primary">
-                        <span onClick={() => setDrawerOpen(false)}>Payments</span>
-                    </Link>
-
-                    <Link href="/admin" role="button" className="btn btn-soft py-2 hover:text-primary">
-                        <span onClick={() => setDrawerOpen(false)}>Log Out</span>
-                    </Link>
+                    {navLinks.map((link, index) => (
+                        <Link
+                            key={index}
+                            href={link.href}
+                            className='py-2'
+                            role={link.isButton ? "button" : undefined}
+                            onClick={() => setDrawerOpen(false)} // ✅ move here
+                        >
+                            <span className={`text-${link.color}`}>{link.label}</span>
+                        </Link>
+                    ))}
 
 
                     {/* <CollapseMenu

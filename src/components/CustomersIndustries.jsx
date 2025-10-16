@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { FaBuilding, FaIndustry, FaHandshake, FaUniversity, FaGlobe, FaChartBar } from "react-icons/fa";
 
 const industries = [
@@ -71,8 +72,13 @@ const CustomersIndustries = () => {
 
                     {/* CTA */}
                     <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                        <button className="btn btn-primary">Order Report</button>
-                        <button className="btn btn-outline btn-primary">Enquiry Now</button>
+                        <Link href="/order-business-credit-report">
+                            <button className="btn btn-primary mx-auto">
+                                Order Business Credit Report
+                            </button>
+                        </Link>
+                        {/* <button className="btn btn-primary">Order Report</button> */}
+                        {/* <button className="btn btn-outline btn-primary">Enquiry Now</button> */}
                     </div>
                 </div>
 
