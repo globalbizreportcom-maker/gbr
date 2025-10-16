@@ -6,7 +6,7 @@ import { useDashboard } from '@/app/(site)/dashboard/DashboardContext';
 import RazorpayCheckout from './RazorpayCheckout';
 
 const OrderConfirmContent = () => {
-    const [formData, setFormData] = useState([]);
+    const [formData, setFormData] = useState({});
     const { user } = useDashboard();
 
     const [selected, setSelected] = useState("paypal");
@@ -19,27 +19,87 @@ const OrderConfirmContent = () => {
     }, []);
 
     if (!formData) return <p className="text-sm text-gray-600">Loading...</p>;
-    const country = typeof formData?.contactCountry === "string"
-        ? formData.contactCountry
-        : formData?.contactCountry?.label;
 
-    // 🇮🇳 INR pricing (with GST)
-    const inrPricing = [
-        { country: "USA", total: 7080 },
-        { country: "Canada", total: 7080 },
-        { country: "India", total: 4720 },
-        { country: "China", total: 7670 },
-        { country: "Asia (excluding India & China)", total: 7670 },
-        { country: "Europe", total: 7670 },
-        { country: "Middle East", total: 7670 },
-        { country: "Australia & New Zealand", total: 8850 },
-        { country: "Africa", total: 8260 },
-        { country: "Oceania", total: 8850 },
-        { country: "Latin America", total: 9440 },
-        { country: "Other Countries", total: 9440 },
+    // Normalize country input
+    const countryInput = formData?.contactCountry;
+    const country = typeof countryInput === "string" ? countryInput : countryInput?.label;
+    const normalizedCountry = country?.trim()?.toLowerCase() || "";
+
+    // ✅ Define listed countries/regions
+    const listedCountries = {
+        "usa": "USA",
+        "united states": "USA",
+        "united states of america": "USA",
+        "canada": "Canada",
+        "india": "India",
+        "china": "China",
+        "england": "Europe",
+        "france": "Europe",
+        "germany": "Europe",
+        "italy": "Europe",
+        "spain": "Europe",
+        "netherlands": "Europe",
+        "uk": "Europe",
+        "united kingdom": "Europe",
+        "uae": "Middle East",
+        "united arab emirates": "Middle East",
+        "saudi arabia": "Middle East",
+        "qatar": "Middle East",
+        "oman": "Middle East",
+        "bahrain": "Middle East",
+        "kuwait": "Middle East",
+        "australia": "Australia & New Zealand",
+        "new zealand": "Australia & New Zealand",
+        "nigeria": "Africa",
+        "south africa": "Africa",
+        "kenya": "Africa",
+        "egypt": "Africa",
+        "ghana": "Africa",
+        "fiji": "Oceania",
+        "samoa": "Oceania",
+        "tonga": "Oceania",
+        "papua new guinea": "Oceania",
+        "brazil": "Latin America",
+        "argentina": "Latin America",
+        "mexico": "Latin America",
+        "chile": "Latin America",
+        "peru": "Latin America"
+    };
+
+    // 🌏 Asian countries (excluding India & China)
+    const asianCountries = [
+        "afghanistan", "armenia", "azerbaijan", "bahrain", "bangladesh", "bhutan", "brunei", "cambodia", "cyprus",
+        "georgia", "indonesia", "iran", "iraq", "israel", "japan", "jordan", "kazakhstan", "kuwait", "kyrgyzstan",
+        "laos", "lebanon", "malaysia", "maldives", "mongolia", "myanmar", "nepal", "north korea", "oman", "pakistan",
+        "palestine", "philippines", "qatar", "saudi arabia", "singapore", "south korea", "sri lanka", "syria",
+        "tajikistan", "thailand", "timor-leste", "turkmenistan", "united arab emirates", "uzbekistan", "vietnam", "yemen"
     ];
 
-    // 💵 USD pricing
+    // Determine priceKey
+    let priceKey = "Other Countries";
+
+    if (listedCountries[normalizedCountry]) {
+        priceKey = listedCountries[normalizedCountry];
+    } else if (asianCountries.includes(normalizedCountry)) {
+        priceKey = "Asia (excluding India & China)";
+    }
+
+    // 💰 Pricing tables
+    const inrPricing = {
+        "USA": 7080,
+        "Canada": 7080,
+        "India": 4720,
+        "China": 7670,
+        "Asia (excluding India & China)": 7670,
+        "Europe": 7670,
+        "Middle East": 7670,
+        "Australia & New Zealand": 8850,
+        "Africa": 8260,
+        "Oceania": 8850,
+        "Latin America": 9440,
+        "Other Countries": 9440
+    };
+
     const usdPricing = {
         "USA": 69,
         "Canada": 69,
@@ -52,99 +112,15 @@ const OrderConfirmContent = () => {
         "Africa": 89,
         "Oceania": 89,
         "Latin America": 99,
-        "Other Countries": 99,
+        "Other Countries": 99
     };
 
-    // 🌏 Asian countries (excluding India & China)
-    const asianCountries = [
-        "Afghanistan",
-        "Armenia",
-        "Azerbaijan",
-        "Bahrain",
-        "Bangladesh",
-        "Bhutan",
-        "Brunei",
-        "Cambodia",
-        "Cyprus",
-        "Georgia",
-        "Indonesia",
-        "Iran",
-        "Iraq",
-        "Israel",
-        "Japan",
-        "Jordan",
-        "Kazakhstan",
-        "Kuwait",
-        "Kyrgyzstan",
-        "Laos",
-        "Lebanon",
-        "Malaysia",
-        "Maldives",
-        "Mongolia",
-        "Myanmar",
-        "Nepal",
-        "North Korea",
-        "Oman",
-        "Pakistan",
-        "Palestine",
-        "Philippines",
-        "Qatar",
-        "Saudi Arabia",
-        "Singapore",
-        "South Korea",
-        "Sri Lanka",
-        "Syria",
-        "Tajikistan",
-        "Thailand",
-        "Timor-Leste",
-        "Turkmenistan",
-        "United Arab Emirates",
-        "Uzbekistan",
-        "Vietnam",
-        "Yemen",
-    ];
+    // Display price
+    const isIndia = priceKey === "India";
+    const displayPrice = isIndia ? `₹${inrPricing[priceKey]}.00` : `USD ${usdPricing[priceKey]}`;
 
+    console.log({ country, priceKey, displayPrice });
 
-    // 🧭 Normalize country input
-    const normalizedCountry = country?.trim()?.toLowerCase();
-    let priceKey = "Other Countries"; // Default fallback
-
-    // ✅ Region-based mapping logic
-    if (normalizedCountry === "india") {
-        priceKey = "India";
-    } else if (normalizedCountry === "china") {
-        priceKey = "China";
-    } else if (asianCountries.some(c => c.toLowerCase() === normalizedCountry)) {
-        priceKey = "Asia (excluding India & China)";
-    } else if (["usa", "united states", "united states of america"].includes(normalizedCountry)) {
-        priceKey = "USA";
-    } else if (normalizedCountry === "canada") {
-        priceKey = "Canada";
-    } else if (normalizedCountry?.includes("australia") || normalizedCountry?.includes("new zealand")) {
-        priceKey = "Australia & New Zealand";
-    } else if (["uae", "united arab emirates", "saudi arabia", "qatar", "oman", "bahrain", "kuwait"].includes(normalizedCountry)) {
-        priceKey = "Middle East";
-    } else if (["england", "france", "germany", "italy", "spain", "netherlands", "uk", "united kingdom"].includes(normalizedCountry)) {
-        priceKey = "Europe";
-    } else if (["nigeria", "south africa", "kenya", "egypt", "ghana"].includes(normalizedCountry)) {
-        priceKey = "Africa";
-    } else if (["fiji", "samoa", "tonga", "papua new guinea"].includes(normalizedCountry)) {
-        priceKey = "Oceania";
-    } else if (["brazil", "argentina", "mexico", "chile", "peru"].includes(normalizedCountry)) {
-        priceKey = "Latin America";
-    }
-
-
-    // 💰 Get matching prices
-    const inrMatch = inrPricing.find(item => item.country === priceKey);
-    const inrAmount = inrMatch ? inrMatch.total : inrPricing.find(i => i.country === "Other Countries").total;
-    const usdAmount = usdPricing[priceKey] ?? usdPricing["Other Countries"];
-
-    // 🇮🇳 or 💵 Final display
-    const isIndia = normalizedCountry === "india";
-    const displayPrice = isIndia ? `₹${inrAmount}.00` : `USD ${usdAmount}`;
-
-    console.log({ priceKey, displayPrice });
 
 
 
