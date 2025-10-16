@@ -19,7 +19,7 @@ export default function RazorpayCheckout({ amount = 100, userId }) {
             // 🔹 Call backend to create order
             const res = await apiUrl.post("/api/payment/create-order", { amount, userId, formData });
             const { orderId, key, amount: totalAmountFromBackend } = res.data;
-
+            console.log(amount);
             const options = {
                 key,
                 amount: totalAmountFromBackend * 100,
