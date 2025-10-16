@@ -120,7 +120,7 @@ const OrderConfirmContent = () => {
         priceKey = "USA";
     } else if (normalizedCountry === "canada") {
         priceKey = "Canada";
-    } else if (normalizedCountry.includes("australia") || normalizedCountry.includes("new zealand")) {
+    } else if (normalizedCountry?.includes("australia") || normalizedCountry?.includes("new zealand")) {
         priceKey = "Australia & New Zealand";
     } else if (["uae", "united arab emirates", "saudi arabia", "qatar", "oman", "bahrain", "kuwait"].includes(normalizedCountry)) {
         priceKey = "Middle East";
@@ -133,6 +133,7 @@ const OrderConfirmContent = () => {
     } else if (["brazil", "argentina", "mexico", "chile", "peru"].includes(normalizedCountry)) {
         priceKey = "Latin America";
     }
+
 
     // 💰 Get matching prices
     const inrMatch = inrPricing.find(item => item.country === priceKey);
