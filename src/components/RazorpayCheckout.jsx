@@ -18,11 +18,11 @@ export default function RazorpayCheckout({ amount = 100, userId }) {
         try {
             // 🔹 Call backend to create order
             const res = await apiUrl.post("/api/payment/create-order", { amount, userId, formData });
-            const { orderId, key } = res.data;
+            const { orderId, key, amount: totalAmountFromBackend } = res.data;
 
             const options = {
                 key,
-                amount: amount * 100,
+                amount: totalAmountFromBackend * 100,
                 currency: "INR",
                 name: "Your Company Name",
                 description: "Business Credit Report",
@@ -46,7 +46,7 @@ export default function RazorpayCheckout({ amount = 100, userId }) {
                     }
                 },
 
-                prefill: { name: "", email: "", contact: "" },
+                prefill: { name: formData?.contactName || "", email: formData?.contactEmail || "", contact: formData?.contactPhone || "" },
                 theme: { color: "#000000" },
             };
 
