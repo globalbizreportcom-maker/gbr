@@ -77,17 +77,26 @@ const OrderConfirmContent = () => {
         return "Other Countries";
     };
 
-    // Determine payer country (contactCountry)
+    // Payer country (for currency)
     const payerCountry =
         typeof formData?.contactCountry === "string"
             ? formData.contactCountry
             : formData?.contactCountry?.label;
 
-    // Determine region based on payer country
-    const region = getRegion(payerCountry || "");
+    // Target company country (for pricing region)
+    const targetCountry =
+        typeof formData?.country === "string"
+            ? formData.country
+            : formData?.country?.label;
 
-    // Pricing in INR if payer is in India, otherwise USD
-    const displayPrice = region === "India" ? `₹${pricingINR["India"]}` : `$${pricingUSD["Other Countries"]}`;
+    // Determine region of target company
+    const targetRegion = getRegion(targetCountry || "");
+
+    // Determine display price based on payer currency
+    const displayPrice =
+        payerCountry?.toLowerCase() === "india"
+            ? `₹${pricingINR[targetRegion] || pricingINR["Other Countries"]}`
+            : `$${pricingUSD[targetRegion] || pricingUSD["Other Countries"]}`;
 
 
 
