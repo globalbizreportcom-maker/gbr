@@ -86,14 +86,38 @@ export default function CompanySearch() {
         }
     };
 
+    // const handleSearch = (pageNumber = 1) => {
+    //     if (selectedCountry?.label !== "India") {
+    //         console.log("Navigating to order-business-credit-report...");
+    //         router.push('/order-business-credit-report');
+    //         return
+    //     }
+
+
+    //     const params = new URLSearchParams();
+    //     if (company) params.set("company", company);
+    //     if (selectedCountry) params.set("country", selectedCountry.label);
+    //     if (selectedCountry?.label === "India" && selectedState) {
+    //         params.set("state", selectedState.label);
+    //     }
+    //     params.set("page", pageNumber);
+
+    //     router.push(`?${params.toString()}`);
+    //     setPage(pageNumber); // triggers fetch
+
+    //     fetchCompanies(pageNumber)
+    // };
+
+
     const handleSearch = (pageNumber = 1) => {
-        if (selectedCountry?.label !== "India") {
+        // ✅ Only redirect if a country is selected AND it is not India
+        if (selectedCountry && selectedCountry.label !== "India") {
             console.log("Navigating to order-business-credit-report...");
             router.push('/order-business-credit-report');
-            return
+            return;
         }
 
-
+        // Prepare URL params
         const params = new URLSearchParams();
         if (company) params.set("company", company);
         if (selectedCountry) params.set("country", selectedCountry.label);
@@ -102,11 +126,12 @@ export default function CompanySearch() {
         }
         params.set("page", pageNumber);
 
+        // Update route and trigger fetch
         router.push(`?${params.toString()}`);
-        setPage(pageNumber); // triggers fetch
-
-        fetchCompanies(pageNumber)
+        setPage(pageNumber);
+        fetchCompanies(pageNumber);
     };
+
 
     const handleClick = (company) => {
         const companyName = encodeURIComponent(company.CompanyName.replace(/\s+/g, "-"));
