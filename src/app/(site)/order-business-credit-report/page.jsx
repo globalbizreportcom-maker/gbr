@@ -6,9 +6,16 @@ const OrderCreditReportPage = () => {
         <section className="py-8 px-1 bg-white text-gray-800">
             <div className="max-w-6xl mx-auto rounded-2xl bg-gradient-to-br from-blue-100 via-white to-orange-100 p-10 mb-3">
 
-                <h2 className="text-xl md:text-xl font-bold mb-6 text-center">
-                    Order Freshly Investigated Credit Report of Your Business Partners, Suppliers, Buyers, Customers or Order a Self-Assessment Report for your Own Company.
+                <h2 className="text-xl  md:text-xl font-bold mb-6 text-center">
+                    Order Freshly Investigated Business Credit Report of Your{" "}
+                    <span className="text-primary">
+                        Business Partners, Suppliers, Buyers, Competitors
+                    </span>{" "}
+                    or Your <span className="text-primary">
+                        Own Company.
+                    </span>{" "}
                 </h2>
+
                 <h2 className="text-xl md:text-xl font-bold mb-6 text-center">
                     Lowest Pay-per-Report Pricing. <span className="text-primary">Worldwide Coverage in 220+ Countries.</span>
                 </h2>

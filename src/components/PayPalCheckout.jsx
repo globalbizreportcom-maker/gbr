@@ -1,10 +1,13 @@
 "use client";
 
 import { apiUrl } from "@/api/api";
+import { useRouter } from "next/navigation";
 import Script from "next/script";
 import { useRef, useEffect, useState } from "react";
 
 export default function PayPalCheckout({ amount = "1.00", userId }) {
+
+    const router = useRouter();
     const [formData, setFormData] = useState(null);
     const userIdRef = useRef(userId);
 
@@ -33,11 +36,11 @@ export default function PayPalCheckout({ amount = "1.00", userId }) {
                     },
                     onApprove: async (data) => {
                         await apiUrl.post("/api/payment/capture-paypal", { orderId: data.orderID });
-                        alert("Payment successful!");
+                        // alert("Payment successful!");
+                        router.push('/order-success')
                     },
                     onCancel: async function (data) {
                         // User cancelled the PayPal payment
-                        console.log('User cancelled the payment', data);
                         await apiUrl.post("/api/payment/cancellation", {
                             userId: formData.userId,
                             orderId: data.orderID,       // ✅ use data.orderID

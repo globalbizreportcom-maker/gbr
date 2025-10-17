@@ -2,8 +2,11 @@
 import Script from "next/script";
 import { useEffect, useState } from "react";
 import { apiUrl } from "@/api/api";
+import { useRouter } from "next/navigation";
 
 export default function RazorpayCheckout({ amount = 100, userId }) {
+
+    const router = useRouter();
     const [loading, setLoading] = useState(false);
 
     const [formData, setFormData] = useState(null);
@@ -19,7 +22,7 @@ export default function RazorpayCheckout({ amount = 100, userId }) {
             // 🔹 Call backend to create order
             const res = await apiUrl.post("/api/payment/create-order", { amount, userId, formData });
             const { orderId, key, amount: totalAmountFromBackend } = res.data;
-            console.log(amount);
+
             const options = {
                 key,
                 amount: totalAmountFromBackend * 100,
@@ -32,7 +35,8 @@ export default function RazorpayCheckout({ amount = 100, userId }) {
                     // 🔹 Call backend to verify payment
                     await apiUrl.post("/api/payment/verify", response);
 
-                    alert("Payment successful!");
+                    // alert("Payment successful!");
+                    router.push('/order-success')
                 },
                 modal: {
                     ondismiss: async function () {
