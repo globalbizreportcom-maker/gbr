@@ -383,14 +383,21 @@ const OrderConfirmContent = () => {
             ? formData.country
             : formData?.country?.label;
 
-    // ✅ Determine correct pricing region based on payer (contact country)
-    const region = getRegion(payerCountry || targetCountry || "");
+    // ✅ Determine pricing region based on target country
+    const region = getRegion(targetCountry || "");
 
-    // ✅ Determine display price (INR for India, USD for others)
-    const displayPrice =
-        payerCountry?.toLowerCase() === "india"
-            ? `₹${pricingINR[region] || pricingINR["Other Countries"]}`
-            : `$${pricingUSD[region] || pricingUSD["Other Countries"]}`;
+    // ✅ Choose which currency to show based on payer country
+    const isINR = payerCountry?.toLowerCase() === "india";
+
+    // ✅ Show correct pricing based on target + currency
+    const displayPrice = isINR
+        ? `₹${pricingINR[region] || pricingINR["Other Countries"]}`
+        : `$${pricingUSD[region] || pricingUSD["Other Countries"]}`;
+
+    // ✅ Pass raw amount (without symbol) for payment gateways
+    const paymentAmount = isINR
+        ? pricingINR[region] || pricingINR["Other Countries"]
+        : pricingUSD[region] || pricingUSD["Other Countries"];
 
     return (
         <div>
@@ -427,13 +434,13 @@ const OrderConfirmContent = () => {
                     </div>
 
                     <div className="w-full mx-auto mt-6 flex flex-col space-y-4">
-                        {payerCountry?.toLowerCase() === "india" ? (
+                        {isINR ? (
                             <label className="flex flex-col md:flex-row items-center justify-between p-4 border border-gray-200 rounded-xl cursor-pointer hover:bg-gray-50">
                                 <span className="font-medium text-gray-600 mb-2 md:mb-0 md:mr-4 text-center md:text-left">
                                     Pay via Razorpay <span className="text-xs">(For payments in INR from India)</span>
                                 </span>
                                 <div className="w-full md:w-auto flex justify-center">
-                                    <RazorpayCheckout amount="1" userId={user?._id || ""} />
+                                    <RazorpayCheckout amount={paymentAmount.toString()} userId={user?._id || ""} />
                                 </div>
                             </label>
                         ) : (
@@ -442,7 +449,7 @@ const OrderConfirmContent = () => {
                                     Pay via PayPal
                                 </span>
                                 <div className="w-full md:w-auto flex justify-center">
-                                    <PayPalCheckout amount="1" userId={user?._id || ""} />
+                                    <PayPalCheckout amount={paymentAmount.toString()} userId={user?._id || ""} />
                                 </div>
                             </label>
                         )}
@@ -509,3 +516,4 @@ const OrderConfirmContent = () => {
 };
 
 export default OrderConfirmContent;
+

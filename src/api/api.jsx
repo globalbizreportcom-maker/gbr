@@ -1,16 +1,6 @@
 import axios from "axios";
 
 
-// prod
-// export const apiUrl = axios.create({
-//     baseURL: "https://backend.globalbizreport.com", // your admin backend
-//     withCredentials: true,                  //  include cookies
-// });
-// // export const apiUrl = 'https://backend.globalbizreport.com'
-// export const adminUrl = axios.create({
-//     baseURL: "https://backend.globalbizreport.com/admin", // your admin backend
-//     withCredentials: true,                  // include cookies
-// });
 
 // dev
 export const apiUrl = axios.create({
