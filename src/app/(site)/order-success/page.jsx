@@ -149,15 +149,15 @@ const OrderSuccessPage = () => {
 
 export default OrderSuccessPage;
 
-export const metadata = {
-    title: "order success | GBR",
-    description: "Learn more about Global Biz Report and our mission.",
-    keywords: ["GBR", "Global Biz Report", "About"],
-    openGraph: {
-        title: "order success",
-        description: "What we do at Global Biz Report.",
-        url: "https://globalbizreport.com/order-success",
-        siteName: "Global Biz Report",
-        type: "website",
-    },
-};
+// export const metadata = {
+//     title: "order success | GBR",
+//     description: "Learn more about Global Biz Report and our mission.",
+//     keywords: ["GBR", "Global Biz Report", "About"],
+//     openGraph: {
+//         title: "order success",
+//         description: "What we do at Global Biz Report.",
+//         url: "https://globalbizreport.com/order-success",
+//         siteName: "Global Biz Report",
+//         type: "website",
+//     },
+// };
