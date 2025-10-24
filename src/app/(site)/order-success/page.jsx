@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { FaCheckCircle } from "react-icons/fa";
 import Script from "next/script";
 
-export default function OrderSuccessPage() {
+const OrderSuccessPage = () => {
     const router = useRouter();
     const [countdown, setCountdown] = useState(3);
     const [confetti, setConfetti] = useState([]);
@@ -147,6 +147,7 @@ export default function OrderSuccessPage() {
     );
 }
 
+export default OrderSuccessPage;
 
 export const metadata = {
     title: "order success | GBR",
