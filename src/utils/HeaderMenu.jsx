@@ -16,6 +16,7 @@ export default function HeaderMenu() {
         { href: "/about", label: "About" },
         { href: "/services", label: "Services" },
         { href: "/pricing", label: "Pricing" },
+        // { href: "/company-directory", label: "Company directory" },
         { href: "/contact", label: "Contact" },
     ];
 

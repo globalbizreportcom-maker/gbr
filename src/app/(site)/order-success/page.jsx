@@ -3,11 +3,22 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { FaCheckCircle } from "react-icons/fa";
+import Script from "next/script";
 
 export default function OrderSuccessPage() {
     const router = useRouter();
     const [countdown, setCountdown] = useState(3);
     const [confetti, setConfetti] = useState([]);
+
+    // Event snippet for GBRPur-Jun25 conversion page 
+    useEffect(() => {
+        if (typeof window !== "undefined" && window.gtag) {
+            window.gtag('event', 'conversion', {
+                'send_to': 'AW-734050468/_84tCO3-_s8aEKTxgt4C',
+                'transaction_id': ''
+            });
+        }
+    }, []);
 
     // ✅ Generate confetti only on the client
     useEffect(() => {
@@ -38,6 +49,21 @@ export default function OrderSuccessPage() {
 
     return (
         <div className="relative min-h-screen flex items-start justify-center bg-white px-4 mt-10 overflow-hidden">
+
+            <Script
+                id="gads-conversion-script"
+                strategy="afterInteractive"
+                dangerouslySetInnerHTML={{
+                    __html: `
+            gtag('event', 'conversion', {
+              'send_to': 'AW-734050468/_84tCO3-_s8aEKTxgt4C',
+              'transaction_id': ''
+            });
+          `,
+                }}
+            />
+
+
             {/* 🎊 Confetti elements */}
             {confetti.map((c, i) => (
                 <div
@@ -120,3 +146,17 @@ export default function OrderSuccessPage() {
         </div>
     );
 }
+
+
+export const metadata = {
+    title: "order success | GBR",
+    description: "Learn more about Global Biz Report and our mission.",
+    keywords: ["GBR", "Global Biz Report", "About"],
+    openGraph: {
+        title: "order success",
+        description: "What we do at Global Biz Report.",
+        url: "https://globalbizreport.com/order-success",
+        siteName: "Global Biz Report",
+        type: "website",
+    },
+};

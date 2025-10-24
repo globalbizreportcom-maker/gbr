@@ -42,3 +42,16 @@ const OrderConfirm = () => {
 };
 
 export default OrderConfirm;
+
+export const metadata = {
+    title: "order confirm | GBR",
+    description: "Learn more about Global Biz Report and our mission.",
+    keywords: ["GBR", "Global Biz Report", "About"],
+    openGraph: {
+        title: "order confirm",
+        description: "What we do at Global Biz Report.",
+        url: "https://globalbizreport.com/order-confirm",
+        siteName: "Global Biz Report",
+        type: "website",
+    },
+};

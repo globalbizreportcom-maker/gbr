@@ -45,6 +45,22 @@ export default function RootLayout({ children }) {
             });
           `}
         </Script>
+
+        {/* Google tag (gtag.js) Ads */}
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=AW-734050468"
+          strategy="afterInteractive"
+        />
+        <Script id="gtag-init" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-734050468', {
+              page_path: window.location.pathname,
+            });
+          `}
+        </Script>
       </head>
 
       <body

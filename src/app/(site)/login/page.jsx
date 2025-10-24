@@ -64,7 +64,7 @@ export const metadata = {
     openGraph: {
         title: "Login GBR",
         description: "What we do at Global Biz Report.",
-        url: "https://yourdomain.com/about",
+        url: "https://globalbizreport.com/login",
         siteName: "Global Biz Report",
         type: "website",
     },
