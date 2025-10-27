@@ -73,7 +73,7 @@ export default function CompanySearch() {
         try {
             setLoading(true);
             const params = { company: companyVal, country: countryVal, state: stateVal || "", page: pageNumber, perPage: 20 };
-            const res = await axios.get("http://localhost:5000/api/companies", { params, signal });
+            const res = await axios.get("https://backend.globalbizreport.com/api/companies", { params, signal });
             setResults(res.data.rows);
             setTotalPages(res.data.totalPages);
             setPage(res.data.page);
