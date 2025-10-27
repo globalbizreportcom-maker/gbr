@@ -14,7 +14,7 @@ export default function HeaderMenu() {
     const mainNav = [
         { href: "/", label: "Home" },
         { href: "/about", label: "About" },
-        { href: "/company-directory", label: "Company directory" },
+        { href: "/company-directory/india", label: "Company directory" },
         { href: "/services", label: "Services" },
         { href: "/pricing", label: "Pricing" },
         { href: "/contact", label: "Contact" },
