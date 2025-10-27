@@ -29,7 +29,7 @@ const CompanyDirectory = () => {
                 perPage: 20,
                 ...appliedFilters
             };
-            const res = await apiUrl.get("/api/companies-directory", { params, signal });
+            const res = await apiUrl.get("/companies-directory", { params, signal });
             setResults(res.data.rows);
             setTotalPages(res.data.totalPages);
             setPage(res.data.page);
