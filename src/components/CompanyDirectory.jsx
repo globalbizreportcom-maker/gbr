@@ -1,9 +1,5 @@
 'use client'
 
-export const dynamic = 'force-dynamic';
-export const revalidate = 0;
-
-
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -96,7 +92,7 @@ const CompanyDirectory = () => {
         setFilters(restoredFilters);
         setPage(pageParam);
         setInitialized(true);
-    }, [searchParams]);
+    }, []);
 
     // ----------------- Fetch on page / filter change -----------------
     useEffect(() => {
@@ -125,8 +121,6 @@ const CompanyDirectory = () => {
         const stateCode = encodeURIComponent(company.CompanyStateCode?.toLowerCase() || "na");
 
         const path = `/${companyName}/${cin}/${country}/${stateCode}/order-credit-report`;
-
-        console.log("Navigating to:", path);
         router.push(path);
     };
 
