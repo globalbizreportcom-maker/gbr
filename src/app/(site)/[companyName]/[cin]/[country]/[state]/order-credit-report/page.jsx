@@ -10,7 +10,7 @@ const CompanyPage = async ({ params }) => {
 
     try {
         const res = await fetch(
-            `https://backend.globalbizreport.com/api/company-details?query=${decodeURIComponent(
+            `http://localhost:5000/api/company-details?query=${decodeURIComponent(
                 companyName.replace(/-/g, " ")
             )}&state=${state}&cin=${cin}`,
             { cache: "no-store" }

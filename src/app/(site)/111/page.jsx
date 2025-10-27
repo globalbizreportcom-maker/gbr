@@ -22,7 +22,7 @@ export default function PayPalCheckout({ amount = "1.00" }) {
 
         window.paypal.Buttons({
             createOrder: async () => {
-                const res = await fetch("https://backend.globalbizreport.com/create-order", {
+                const res = await fetch("http://localhost:5000/create-order", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ amount }),
@@ -31,7 +31,7 @@ export default function PayPalCheckout({ amount = "1.00" }) {
                 return data.id; // return order ID to PayPal
             },
             onApprove: async (data) => {
-                const res = await fetch("https://backend.globalbizreport.com/capture-order", {
+                const res = await fetch("http://localhost:5000/capture-order", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ orderId: data.orderID }),

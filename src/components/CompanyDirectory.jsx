@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { useRouter, useSearchParams } from "next/navigation";
 import { FaArrowRight, FaAngleDoubleLeft, FaAngleLeft, FaAngleRight, FaAngleDoubleRight, FaTrash, FaSearch, FaChevronUp, FaChevronDown } from "react-icons/fa";
+import { apiUrl } from "@/api/api";
 
 const CompanyDirectory = () => {
     const router = useRouter();
@@ -28,13 +29,13 @@ const CompanyDirectory = () => {
                 perPage: 20,
                 ...appliedFilters
             };
-            const res = await axios.get("https://backend.globalbizreport.com/api/companies-directory", { params, signal });
+            const res = await apiUrl.get("/api/companies-directory", { params, signal });
             setResults(res.data.rows);
             setTotalPages(res.data.totalPages);
             setPage(res.data.page);
         } catch (err) {
             if (axios.isCancel(err)) return;
-            console.error("Error fetching companies:", err);
+            console.log("Error fetching companies:", err);
         } finally {
             setLoading(false);
         }
