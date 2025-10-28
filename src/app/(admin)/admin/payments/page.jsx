@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { adminUrl } from "@/api/api";
+import { FaChevronRight } from "react-icons/fa";
 
 const AdminPayment = () => {
     const [payments, setPayments] = useState([]);
@@ -8,6 +9,8 @@ const AdminPayment = () => {
     const [statusFilter, setStatusFilter] = useState("all");
     const [methodFilter, setMethodFilter] = useState("all");
     const [search, setSearch] = useState("");
+    const [selectedPayment, setSelectedPayment] = useState(null);
+    const [openDialog, setOpenDialog] = useState(false);
 
     // Pagination states
     const [currentPage, setCurrentPage] = useState(1);
@@ -31,8 +34,15 @@ const AdminPayment = () => {
         let data = payments;
 
         if (statusFilter !== "all") {
-            data = data.filter((p) => p.status === statusFilter);
+            data = data.filter((p) => {
+                if (statusFilter === "failed") {
+                    // show both failed and cancelled
+                    return p.status === "failed" || p.status === "cancelled";
+                }
+                return p.status === statusFilter;
+            });
         }
+
 
         if (methodFilter !== "all") {
             data = data.filter((p) => p.method === methodFilter);
@@ -51,6 +61,29 @@ const AdminPayment = () => {
         setFilteredPayments(data);
         setCurrentPage(1); // reset to page 1 when filters/search change
     }, [statusFilter, methodFilter, search, payments]);
+
+
+    const handleView = (payment) => {
+        setSelectedPayment(payment);
+        setOpenDialog(true);
+    };
+
+    const handleClose = () => {
+        setOpenDialog(false);
+        setSelectedPayment(null);
+    };
+
+    const InfoItem = ({ label, value }) => (
+        <div className="flex flex-col bg-gray-50 border border-gray-100 rounded-lg px-4 py-3 hover:bg-gray-100 transition">
+            <span className="text-xs uppercase text-gray-500 tracking-wide">{label}</span>
+            <span className="text-sm sm:text-base font-medium text-gray-800 mt-1">{value}</span>
+        </div>
+    );
+
+    const Divider = () => (
+        <div className="border-t border-gray-200 my-4 opacity-70"></div>
+    );
+
 
     // Pagination calculations
     const totalPages = Math.ceil(filteredPayments.length / itemsPerPage);
@@ -131,7 +164,8 @@ const AdminPayment = () => {
                             <th className="px-4 py-2 font-semibold">Method</th>
                             <th className="px-4 py-2 font-semibold">Amount</th>
                             <th className="px-4 py-2 font-semibold">Payer Email</th>
-                            <th className="px-4 py-2 font-semibold">Time</th>
+                            <th className="px-4 py-2 font-semibold">Date</th>
+                            <th className="px-4 py-2 font-semibold">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -146,16 +180,21 @@ const AdminPayment = () => {
                                     <td className="px-4 py-4">{p.paymentId || '-'}</td>
                                     <td className="px-4 py-4">
                                         <span
-                                            className={`px-2 uppercase py-1 rounded text-xs font-semibold ${{
+                                            className={`px-2 py-1 rounded text-xs font-semibold ${{
                                                 paid: "bg-green-100 text-green-700",
                                                 pending: "bg-yellow-100 text-yellow-700",
+                                                cancelled: "bg-red-100 text-red-700", // same as failed
                                                 failed: "bg-red-100 text-red-700",
                                             }[p.status] || "bg-gray-200 text-gray-700"
                                                 }`}
                                         >
-                                            {p.status.charAt(0).toUpperCase() + p.status.slice(1)}
+                                            {p.status === "cancelled"
+                                                ? "Failed"
+                                                : p.status.charAt(0).toUpperCase() + p.status.slice(1)}
                                         </span>
+
                                     </td>
+
                                     <td className="px-4 py-4">{p.method}</td>
                                     <td className="px-4 py-4">
                                         {p.amount} {p.currency}
@@ -164,81 +203,15 @@ const AdminPayment = () => {
                                     <td className="px-4 py-4">
                                         {new Date(p.createdAt).toLocaleString()}
                                     </td>
-
-                                    {/* 🔹 Hover Tooltip (Requester + Target Company Info) */}
-                                    <td className="absolute right-0 top-full mt-0 z-10 hidden group-hover:block">
-                                        <div className="bg-white shadow-lg border border-gray-200 rounded-lg p-4 text-md text-gray-700 w-max max-w-3xl">
-                                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                                                {/* Left: Requester Info */}
-                                                <div className="border-r border-gray-200 pr-4">
-                                                    <h4 className="font-semibold text-blue-700 mb-2 border-b border-gray-100 pb-1">
-                                                        Requester Info
-                                                    </h4>
-                                                    <div className="space-y-1">
-                                                        <div>
-                                                            <strong>Name:</strong>{" "}
-                                                            {p.user?.name ||
-                                                                p.reportRequest?.requesterInfo?.name ||
-                                                                "-"}
-                                                        </div>
-                                                        <div>
-                                                            <strong>Email:</strong>{" "}
-                                                            {p.user?.email ||
-                                                                p.reportRequest?.requesterInfo?.email ||
-                                                                "-"}
-                                                        </div>
-                                                        <div>
-                                                            <strong>Phone:</strong>{" "}
-                                                            {p.user?.phone ||
-                                                                p.reportRequest?.requesterInfo?.phone ||
-                                                                "-"}
-                                                        </div>
-                                                        <div>
-                                                            <strong>Country:</strong>{" "}
-                                                            {p.user?.country ||
-                                                                p.reportRequest?.requesterInfo?.country ||
-                                                                "-"}
-                                                        </div>
-                                                        <div>
-                                                            <strong>Company:</strong>{" "}
-                                                            {p.user?.company ||
-                                                                p.reportRequest?.requesterInfo?.company ||
-                                                                "-"}
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                {/* Right: Target Company Info */}
-                                                <div>
-                                                    <h4 className="font-semibold text-green-700 mb-2 border-b border-gray-100 pb-1">
-                                                        Target Company
-                                                    </h4>
-                                                    <div className="space-y-1">
-                                                        <div>
-                                                            <strong>Name:</strong>{" "}
-                                                            {p.reportRequest?.targetCompany?.name || "-"}
-                                                        </div>
-                                                        <div>
-                                                            <strong>Address:</strong>{" "}
-                                                            {p.reportRequest?.targetCompany?.address || "-"}
-                                                        </div>
-                                                        <div>
-                                                            <strong>Country:</strong>{" "}
-                                                            {p.reportRequest?.targetCompany?.country || "-"}
-                                                        </div>
-                                                        <div>
-                                                            <strong>City:</strong>{" "}
-                                                            {p.reportRequest?.targetCompany?.city || "-"}
-                                                        </div>
-                                                        <div>
-                                                            <strong>Phone:</strong>{" "}
-                                                            {p.reportRequest?.targetCompany?.phone || "-"}
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
+                                    <td className="px-4 py-4 text-right">
+                                        <button
+                                            onClick={() => handleView(p)}
+                                            className=" font-medium btn btn-primary btn-xs"
+                                        >
+                                            View <FaChevronRight />
+                                        </button>
                                     </td>
+
                                 </tr>
                             ))
                         ) : (
@@ -306,12 +279,16 @@ const AdminPayment = () => {
                                     className={`px-2 py-1 rounded text-xs font-semibold ${{
                                         paid: "bg-green-100 text-green-700",
                                         pending: "bg-yellow-100 text-yellow-700",
+                                        cancelled: "bg-red-100 text-red-700", // same as failed
                                         failed: "bg-red-100 text-red-700",
                                     }[p.status] || "bg-gray-200 text-gray-700"
                                         }`}
                                 >
-                                    {p.status.charAt(0).toUpperCase() + p.status.slice(1)}
+                                    {p.status === "cancelled"
+                                        ? "Failed"
+                                        : p.status.charAt(0).toUpperCase() + p.status.slice(1)}
                                 </span>
+
                             </div>
                             <div className="flex justify-between">
                                 <span className="font-medium">Method:</span>
@@ -331,12 +308,115 @@ const AdminPayment = () => {
                                 <span className="font-medium">Created:</span>
                                 <span>{new Date(p.createdAt).toLocaleString()}</span>
                             </div>
+                            <div className="flex justify-end py-4">
+                                <button
+                                    onClick={() => handleView(p)}
+                                    className=" font-medium btn btn-primary btn-sm "
+                                >
+                                    View <FaChevronRight />
+
+                                </button>
+                            </div>
                         </div>
                     ))
                 ) : (
                     <p className="text-center text-gray-500 py-6">No payments found.</p>
                 )}
             </div>
+
+            {openDialog && selectedPayment && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm animate-fadeIn">
+                    <div className="relative h-full w-full bg-white  overflow-hidden animate-slideUp border border-gray-200">
+
+                        {/* Sticky Header */}
+                        <div className="sticky top-0 z-10 bg-white border-b border-gray-200 flex justify-between items-center px-6 py-4 ">
+                            <h2 className="text-xl sm:text-2xl font-semibold text-gray-800 tracking-wide">
+                                Payment Details
+                            </h2>
+                            <button
+                                onClick={handleClose}
+                                className="text-gray-500 hover:text-gray-700 text-3xl font-bold leading-none transition"
+                            >
+                                &times;
+                            </button>
+                        </div>
+
+                        {/* Scrollable Content */}
+                        <div className="overflow-y-auto max-h-[calc(90vh-70px)] px-8 py-6 space-y-10 text-gray-800">
+
+                            {/* Section: Payment Info */}
+                            <section>
+                                <h3 className="text-lg font-semibold text-blue-700 border-b border-gray-200 pb-2 mb-4 tracking-wide">
+                                    Payment Info
+                                </h3>
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    <InfoItem label="Order ID" value={selectedPayment.orderId} />
+                                    <InfoItem label="Payment ID" value={selectedPayment.paymentId || "-"} />
+                                    <InfoItem
+                                        label="Status"
+                                        value={
+                                            <span
+                                                className={`px-2 py-1 rounded text-sm font-semibold ${{
+                                                    paid: "bg-green-100 text-green-700",
+                                                    pending: "bg-yellow-100 text-yellow-700",
+                                                    cancelled: "bg-red-100 text-red-700", // same as failed
+                                                    failed: "bg-red-100 text-red-700",
+                                                }[selectedPayment.status] || "bg-gray-200 text-gray-700"
+                                                    }`}
+                                            >
+                                                {selectedPayment.status === "cancelled"
+                                                    ? "Failed"
+                                                    : selectedPayment.status.charAt(0).toUpperCase() + selectedPayment.status.slice(1)}
+                                            </span>
+
+                                        }
+                                    />
+
+                                    <InfoItem label="Method" value={selectedPayment.method} />
+                                    <InfoItem label="Amount" value={`${selectedPayment.amount} ${selectedPayment.currency}`} />
+                                    <InfoItem label="Created At" value={new Date(selectedPayment.createdAt).toLocaleString()} />
+                                    <InfoItem label="Payer Email" value={selectedPayment.details?.payerEmail || "-"} />
+                                </div>
+                            </section>
+
+                            <Divider />
+
+                            {/* Section: Requester Info */}
+                            <section>
+                                <h3 className="text-lg font-semibold text-blue-700 border-b border-gray-200 pb-2 mb-4  tracking-wide">
+                                    Requester Info
+                                </h3>
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    <InfoItem label="Name" value={selectedPayment.user?.name || selectedPayment.reportRequest?.requesterInfo?.name || "-"} />
+                                    <InfoItem label="Email" value={selectedPayment.user?.email || selectedPayment.reportRequest?.requesterInfo?.email || "-"} />
+                                    <InfoItem label="Phone" value={selectedPayment.user?.phone || selectedPayment.reportRequest?.requesterInfo?.phone || "-"} />
+                                    <InfoItem label="Country" value={selectedPayment.user?.country || selectedPayment.reportRequest?.requesterInfo?.country || "-"} />
+                                    <InfoItem label="Company" value={selectedPayment.user?.company || selectedPayment.reportRequest?.requesterInfo?.company || "-"} />
+                                </div>
+                            </section>
+
+                            <Divider />
+
+                            {/* Section: Target Company Info */}
+                            <section>
+                                <h3 className="text-lg font-semibold text-green-700 border-b border-gray-200 pb-2 mb-4  tracking-wide">
+                                    Target Company Info
+                                </h3>
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    <InfoItem label="Name" value={selectedPayment.reportRequest?.targetCompany?.name || "-"} />
+                                    <InfoItem label="Address" value={selectedPayment.reportRequest?.targetCompany?.address || "-"} />
+                                    <InfoItem label="Country" value={selectedPayment.reportRequest?.targetCompany?.country || "-"} />
+                                    <InfoItem label="City" value={selectedPayment.reportRequest?.targetCompany?.city || "-"} />
+                                    <InfoItem label="Phone" value={selectedPayment.reportRequest?.targetCompany?.phone || "-"} />
+                                </div>
+                            </section>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+
+
         </div>
     );
 };
