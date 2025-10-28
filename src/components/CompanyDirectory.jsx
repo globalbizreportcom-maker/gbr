@@ -121,7 +121,7 @@ const CompanyDirectory = () => {
 
         const stateCode = encodeURIComponent(company.CompanyStateCode?.toLowerCase() || "na");
 
-        const path = `/${companyName}/${cin}/${country}/${stateCode}/order-credit-report`;
+        const path = `/${companyName}/${cin}/${country}/${stateCode}/company-business-financial-credit-report`;
         router.push(path);
     };
 

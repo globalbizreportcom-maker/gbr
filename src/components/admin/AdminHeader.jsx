@@ -60,9 +60,10 @@ const AdminHeader = () => {
     const navLinks = [
         { href: "/admin/dashboard", label: "Home", color: 'black' },
         { href: "/admin/users", label: "Users", color: 'black' },
-        { href: "/admin/inbox", label: "Inbox", color: 'black' },
+        { href: "/admin/abandon-checkout", label: "Abandon Checkout", color: 'black' },
         { href: "/admin/order-request/all", label: "Orders", color: 'black' },
         { href: "/admin/payments", label: "Payments", color: 'black' },
+        { href: "/admin/inbox", label: "Inbox", color: 'black' },
         { href: "/admin/search", label: "Search Company", color: 'black' },
         { href: "/admin", label: "Log Out", isButton: false, color: 'red-600' },
     ];
@@ -77,23 +78,22 @@ const AdminHeader = () => {
 
                     <nav className="hidden md:flex space-x-6 items-center text-sm font-medium">
 
+                        <Link href="/admin/abandon-checkout" className="hover:text-primary">Abandon Checkout</Link>
                         <Link href="/admin/order-request/all" className="hover:text-primary">Order Requests</Link>
                         <Link href="/admin/inbox" className="hover:text-primary">Inbox</Link>
                         <Link href="/admin/payments" className="hover:text-primary">payments</Link>
                         <Link href="/admin/search" className="hover:text-primary">Company Search</Link>
 
-                        {/* <div className="relative group">
+                        <div className="relative group">
                             <button className="cursor-pointer flex items-center gap-1 hover:text-primary">
-                                Users
+                                Visitors
                                 <FaChevronDown className="h-3 w-3 mt-1" />
                             </button>
                             <div className="absolute top-3 right-1 mt-2 hidden group-hover:block z-50">
                                 <div className="bg-white shadow-lg rounded-md p-6 min-w-[300px] grid grid-cols-2 gap-4 text-sm text-gray-700">
                                     {[
-                                        { label: "Consulting", href: "/services/consulting" },
-                                        { label: "Development", href: "/services/development" },
-                                        { label: "Design", href: "/services/design" },
-                                        { label: "SEO", href: "/services/seo" },
+                                        { label: "Log In", href: "/admin/login" },
+                                        { label: "Payment Visitors", href: "/admin/payment-visitors" },
                                     ].map((item, idx) => (
                                         <Link key={idx} href={item.href} className="hover:text-primary cursor-pointer">
                                             {item.label}
@@ -101,7 +101,7 @@ const AdminHeader = () => {
                                     ))}
                                 </div>
                             </div>
-                        </div> */}
+                        </div>
 
 
                         {/* <div className="relative group">
@@ -219,6 +219,14 @@ const AdminHeader = () => {
                             { label: "Analytics", href: "/products/analytics" },
                         ]}
                     /> */}
+
+                    <CollapseMenu
+                        label="Visitors"
+                        items={[
+                            { label: "Log In", href: "/admin/login" },
+                            { label: "Payment Visitors", href: "/admin/payment-visitors" },
+                        ]}
+                    />
 
                 </div>
             </div>

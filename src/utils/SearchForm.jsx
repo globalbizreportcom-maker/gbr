@@ -144,8 +144,7 @@ export default function CompanySearch() {
         country = encodeURIComponent(country.slice(0, -1));
 
         const stateCode = encodeURIComponent(company.CompanyStateCode?.toLowerCase() || "na");
-        console.log(`/${companyName}/${cin}/${country}/${stateCode}/order-credit-report`);
-        router.push(`/${companyName}/${cin}/${country}/${stateCode}/order-credit-report`);
+        router.push(`/${companyName}/${cin}/${country}/${stateCode}/company-business-financial-credit-report`);
     };
 
     // ------------------- useEffect Hooks in Correct Order -------------------

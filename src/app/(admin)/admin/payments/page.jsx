@@ -23,6 +23,7 @@ const AdminPayment = () => {
     const fetchPayments = async () => {
         try {
             const res = await adminUrl.get("/payments");
+            console.log(res.data);
             setPayments(res.data);
             setFilteredPayments(res.data);
         } catch (err) {

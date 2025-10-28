@@ -151,9 +151,9 @@ const OrderCreditReport = () => {
             return;
         }
 
-        if (!user) {
-            try {
-                // 🔹 Call backend to check or create user
+        try {
+            // 🔹 1️⃣ If user not logged in — check or create
+            if (!user) {
                 const res = await apiUrl.post("/api/users/check-or-create", {
                     name: formData.contactName,
                     email: formData.contactEmail,
@@ -163,7 +163,7 @@ const OrderCreditReport = () => {
                 });
 
                 if (res.data.exists) {
-                    // user already exists → show login modal
+                    // user exists → show login modal
                     setSnackbarMessage(res.data.message);
                     setShowSnackbar(true);
                     setTimeout(() => setShowSnackbar(false), 3000);
@@ -171,23 +171,88 @@ const OrderCreditReport = () => {
                     return;
                 }
 
-                // user created → save form data and navigate
+                // new user created → save form data & go to next step
                 localStorage.setItem("gbr_form", JSON.stringify(formData));
                 router.push("/order-confirm");
-
-            } catch (error) {
-                setSnackbarMessage("Something went wrong. Please try again.");
-                setShowSnackbar(true);
-                setTimeout(() => setShowSnackbar(false), 3000);
+                return;
             }
+
+            // 🔹 2️⃣ If user is logged in — submit visitor payment info
+            const payload = {
+                ...formData,
+                userId: user?._id,
+                country: formData.country?.label || formData.country || "",
+            };
+
+            const { data } = await apiUrl.post("/visitors/payments", payload, {
+                headers: { "Content-Type": "application/json" },
+            });
+
+            console.log("✅ Visitor form submitted:", data);
+
+            // Save & navigate after successful submission
+            localStorage.setItem("gbr_form", JSON.stringify(formData));
+            router.push("/order-confirm");
+        } catch (error) {
+            console.error("❌ Error:", error.response?.data || error.message);
+            setSnackbarMessage("Something went wrong. Please try again.");
+            setShowSnackbar(true);
+            setTimeout(() => setShowSnackbar(false), 3000);
         }
-
-        // user created → save form data and navigate
-        localStorage.setItem("gbr_form", JSON.stringify(formData));
-        router.push("/order-confirm");
-
-
     };
+
+
+    // const handlePreview = async () => {
+    //     const missingFields = [];
+
+    //     if (!formData.contactName) missingFields.push("Fill your Name");
+    //     if (!formData.contactEmail) missingFields.push("Fill your Email");
+    //     if (!formData.contactCountry) missingFields.push("Fill your Country");
+    //     if (!formData.contactPhone) missingFields.push("Fill your Phone");
+    //     if (!formData.agreedToTerms) missingFields.push("Agree to privacy policy");
+
+    //     if (missingFields.length > 0) {
+    //         setSnackbarMessage(`Kindly: ${missingFields.join(", ")}`);
+    //         setShowSnackbar(true);
+    //         setTimeout(() => setShowSnackbar(false), 3000);
+    //         return;
+    //     }
+
+    //     if (!user) {
+    //         try {
+    //             // 🔹 Call backend to check or create user
+    //             const res = await apiUrl.post("/api/users/check-or-create", {
+    //                 name: formData.contactName,
+    //                 email: formData.contactEmail,
+    //                 country: formData.contactCountry,
+    //                 phone: formData.contactPhone,
+    //                 company: formData.contactCompany,
+    //             });
+
+    //             if (res.data.exists) {
+    //                 // user already exists → show login modal
+    //                 setSnackbarMessage(res.data.message);
+    //                 setShowSnackbar(true);
+    //                 setTimeout(() => setShowSnackbar(false), 3000);
+    //                 setShowLoginModal(true);
+    //                 return;
+    //             }
+
+    //             // user created → save form data and navigate
+    //             localStorage.setItem("gbr_form", JSON.stringify(formData));
+    //             router.push("/order-confirm");
+
+    //         } catch (error) {
+    //             setSnackbarMessage("Something went wrong. Please try again.");
+    //             setShowSnackbar(true);
+    //             setTimeout(() => setShowSnackbar(false), 3000);
+    //         }
+    //     }
+
+    //     // user created → save form data and navigate
+    //     localStorage.setItem("gbr_form", JSON.stringify(formData));
+    //     router.push("/order-confirm");
+    // };
 
 
     return (
