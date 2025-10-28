@@ -92,7 +92,13 @@ const UsersPage = () => {
                                         <td className="p-2">{user.country}</td>
                                         <td className="p-2">{user.company || "-"}</td>
                                         <td className="p-2">
-                                            {new Date(user.createdAt).toLocaleDateString("en-GB")}
+                                            {new Date(user.createdAt).toLocaleString("en-GB", {
+                                                dateStyle: "short",
+                                                timeStyle: "short",
+                                                hour12: true,
+                                                timeZone: "Asia/Kolkata", // converts from UTC to IST
+                                            })
+                                            }
                                         </td>
                                     </tr>
                                 ))}

@@ -201,7 +201,13 @@ const AdminPayment = () => {
                                     </td>
                                     <td className="px-4 py-4">{p.details?.payerEmail || '-'}</td>
                                     <td className="px-4 py-4">
-                                        {new Date(p.createdAt).toLocaleString()}
+                                        {new Date(p.createdAt).toLocaleString("en-GB", {
+                                            dateStyle: "short",
+                                            timeStyle: "short",
+                                            hour12: true,
+                                            timeZone: "Asia/Kolkata", // converts from UTC to IST
+                                        })
+                                        }
                                     </td>
                                     <td className="px-4 py-4 text-right">
                                         <button
