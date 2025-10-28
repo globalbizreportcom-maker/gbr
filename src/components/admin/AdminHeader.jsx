@@ -20,10 +20,18 @@ const CollapseMenu = ({ label, items }) => {
                 {label}
                 <FaChevronDown className={`transition-transform ${open ? 'rotate-180' : ''}`} />
             </button>
+
             {open && (
                 <div className="pl-4 pb-3 flex flex-col gap-2 text-gray-600 text-sm">
                     {items.map((item, idx) => (
-                        <Link key={idx} href={item.href} className="hover:text-primary">
+                        <Link
+                            key={idx}
+                            href={item.href}
+                            onClick={() => {
+                                if (onItemClick) onItemClick(); // ✅ closes drawer on click
+                            }}
+                            className="hover:text-primary"
+                        >
                             {item.label}
                         </Link>
                     ))}
@@ -199,7 +207,7 @@ const AdminHeader = () => {
                 <div className="flex flex-col gap-2">
 
 
-                    {navLinks.map((link, index) => (
+                    {/* {navLinks.map((link, index) => (
                         <Link
                             key={index}
                             href={link.href}
@@ -209,7 +217,7 @@ const AdminHeader = () => {
                         >
                             <span className={`text-${link.color}`}>{link.label}</span>
                         </Link>
-                    ))}
+                    ))} */}
 
 
                     {/* <CollapseMenu
@@ -220,13 +228,48 @@ const AdminHeader = () => {
                         ]}
                     /> */}
 
+                    <Link href="/admin/dashboard" className="py-2" onClick={() => setDrawerOpen(false)}>
+                        <span className="text-black">Home</span>
+                    </Link>
+
+                    <Link href="/admin/users" className="py-2" onClick={() => setDrawerOpen(false)}>
+                        <span className="text-black">Users</span>
+                    </Link>
+
+                    <Link href="/admin/abandon-checkout" className="py-2" onClick={() => setDrawerOpen(false)}>
+                        <span className="text-black">Abandon Checkout</span>
+                    </Link>
+
+                    <Link href="/admin/order-request/all" className="py-2" onClick={() => setDrawerOpen(false)}>
+                        <span className="text-black">Orders</span>
+                    </Link>
+
+                    <Link href="/admin/payments" className="py-2" onClick={() => setDrawerOpen(false)}>
+                        <span className="text-black">Payments</span>
+                    </Link>
+
+                    <Link href="/admin/inbox" className="py-2" onClick={() => setDrawerOpen(false)}>
+                        <span className="text-black">Inbox</span>
+                    </Link>
+
+                    <Link href="/admin/search" className="py-2" onClick={() => setDrawerOpen(false)}>
+                        <span className="text-black">Search Company</span>
+                    </Link>
+
+
                     <CollapseMenu
                         label="Visitors"
                         items={[
-                            { label: "Log In", href: "/admin/login" },
-                            { label: "Payment Visitors", href: "/admin/payment-visitors" },
+                            { label: "Visitors", href: "/admin/payment-visitors" },
                         ]}
+                        onItemClick={() => setDrawerOpen(false)} // ✅ close drawer on click
                     />
+
+
+
+                    <Link href="/admin" className="py-2" onClick={() => setDrawerOpen(false)}>
+                        <span className="text-red-600">Log Out</span>
+                    </Link>
 
                 </div>
             </div>
