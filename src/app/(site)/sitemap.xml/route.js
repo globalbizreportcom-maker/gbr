@@ -1,18 +1,16 @@
-// app/sitemap.xml/route.js
 import { NextResponse } from "next/server";
 
-const API_URL = "https://www.globalbizreport.com/companies-directory/india"; // update this if needed
-const PER_PAGE = 20;
-const PAGES_PER_SITEMAP = 50; // each sitemap contains 50 pages (1,000 companies)
+const API_URL = "https://backend.globalbizreport.com/companies-directory/?page=1";
+const PER_PAGE = 20; // companies per page
+const PAGES_PER_SITEMAP = 100; // sitemap groups 100 backend pages
 
 export async function GET() {
     try {
-        // Get total company count from backend
+        // Fetch total count
         const res = await fetch(API_URL, { next: { revalidate: 86400 } });
         const data = await res.json();
-        const totalCompanies = data.total || 0;
+        const totalPages = data.totalPages || 0;
 
-        const totalPages = Math.ceil(totalCompanies / PER_PAGE);
         const totalSitemaps = Math.ceil(totalPages / PAGES_PER_SITEMAP);
 
         let xml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
@@ -30,8 +28,8 @@ export async function GET() {
         return new NextResponse(xml, {
             headers: { "Content-Type": "application/xml" },
         });
-    } catch (error) {
-        console.log("Error generating sitemap index:", error);
+    } catch (err) {
+        console.log("❌ Error generating sitemap index:", err);
         return NextResponse.json({ error: "Failed to generate sitemap index" }, { status: 500 });
     }
 }
