@@ -23,7 +23,8 @@
     "react-paypal-js": "^0.0.1-security",
     "react-phone-input-2": "^2.15.1",
     "react-select": "^5.10.1",
-    "react-virtuoso": "^4.14.0"
+    "react-virtuoso": "^4.14.0",
+    "recharts": "^3.3.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

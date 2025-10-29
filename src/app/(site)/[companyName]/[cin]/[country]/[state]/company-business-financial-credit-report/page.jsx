@@ -3,6 +3,16 @@ import ClientPurchaseButton from "@/utils/ClientPurchaseButton";
 
 export const dynamic = "force-dynamic";
 
+export async function generateMetadata({ params }) {
+    const { companyName } = params;
+    const decodedName = decodeURIComponent(companyName.replace(/-/g, " "));
+
+    return {
+        title: `${decodedName} | Business Credit Report`,
+        description: `Get a detailed business credit report and insights for ${decodedName}. Build trust and make informed business decisions.`,
+    };
+}
+
 const CompanyPage = async ({ params }) => {
     const { companyName, cin, state } = params; // ✅ works in server component
 
