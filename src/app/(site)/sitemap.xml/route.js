@@ -1,7 +1,7 @@
 // app/sitemap.xml/route.js
 import { NextResponse } from "next/server";
 
-const API_URL = "https://backend.globalbizreport.com/companies-directory/india"; // update this if needed
+const API_URL = "https://www.globalbizreport.com/companies-directory/india"; // update this if needed
 const PER_PAGE = 20;
 const PAGES_PER_SITEMAP = 50; // each sitemap contains 50 pages (1,000 companies)
 
