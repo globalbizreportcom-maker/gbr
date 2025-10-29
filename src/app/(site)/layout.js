@@ -7,6 +7,7 @@ import { DashboardProvider } from "./dashboard/DashboardContext";
 import { CompanyProvider } from "@/context/CompanyContext";
 import Script from "next/script";
 
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],

@@ -1,60 +1,34 @@
+// app/sitemaps/sitemap-[id].xml/route.js
 import { NextResponse } from "next/server";
 
-const API_URL = "https://backend.globalbizreport.com/companies-directory";
-const PER_PAGE = 20;
-const PAGES_PER_SITEMAP = 500; // 500 pages × 20 companies = 10,000 URLs per sitemap
+export async function GET(req, { params }) {
+    const { id } = params;
+    const sitemapId = parseInt(id, 10);
+    const totalCompanies = 200;
+    const perPage = 20;
+    const totalPages = Math.ceil(totalCompanies / perPage);
+    const pagesPerSitemap = 10;
 
-// utility: slugify company name for SEO-friendly URLs
-function slugify(name) {
-    return name
-        .toLowerCase()
-        .replace(/[^a-z0-9]+/g, "-")
-        .replace(/(^-|-$)/g, "");
-}
+    const startPage = (sitemapId - 1) * pagesPerSitemap + 1;
+    const endPage = Math.min(sitemapId * pagesPerSitemap, totalPages);
 
-export async function GET(request, { params }) {
-    const sitemapId = parseInt(params.id);
-    if (isNaN(sitemapId) || sitemapId < 1)
-        return NextResponse.json({ error: "Invalid sitemap ID" }, { status: 400 });
-
-    const startPage = (sitemapId - 1) * PAGES_PER_SITEMAP + 1;
-    const endPage = sitemapId * PAGES_PER_SITEMAP;
-
-    let urls = [];
+    let xml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
+    xml += `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n`;
 
     for (let page = startPage; page <= endPage; page++) {
-        try {
-            const res = await fetch(`${API_URL}?page=${page}`, { next: { revalidate: 86400 } }); // cache 1 day
-            const data = await res.json();
-            if (!data.rows || !data.rows.length) break;
-
-            const pageUrls = data.rows.map((company) => {
-                const companySlug = slugify(company.CompanyName);
-                const stateSlug = encodeURIComponent(company.CompanyStateCode || "unknown");
-
-                const companyUrl = `https://www.globalbizreport.com/${companySlug}/${company.CIN}/india/${stateSlug}/company-business-financial-credit-report`;
-
-                return `
-        <url>
-          <loc>${companyUrl}</loc>
-          <lastmod>${new Date().toISOString()}</lastmod>
-          <changefreq>monthly</changefreq>
-          <priority>0.8</priority>
-        </url>`;
-            });
-
-            urls.push(...pageUrls);
-        } catch (err) {
-            console.error(`Error fetching page ${page}:`, err);
-        }
+        xml += `  <url>\n`;
+        xml += `    <loc>https://www.globalbizreport.com/company-directory/india?page=${page}</loc>\n`;
+        xml += `    <lastmod>${new Date().toISOString()}</lastmod>\n`;
+        xml += `    <changefreq>weekly</changefreq>\n`;
+        xml += `    <priority>0.8</priority>\n`;
+        xml += `  </url>\n`;
     }
 
-    const xml = `<?xml version="1.0" encoding="UTF-8"?>
-  <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-    ${urls.join("\n")}
-  </urlset>`;
+    xml += `</urlset>`;
 
     return new NextResponse(xml, {
-        headers: { "Content-Type": "application/xml" },
+        headers: {
+            "Content-Type": "application/xml",
+        },
     });
 }
