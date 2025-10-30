@@ -3,32 +3,43 @@ import ClientPurchaseButton from "@/utils/ClientPurchaseButton";
 
 export const dynamic = "force-dynamic";
 
-export async function generateMetadata({ params }) {
-    const { companyName } = params;
-    const decodedName = decodeURIComponent(companyName.replace(/-/g, " "));
+// export async function generateMetadata({ params }) {
+//     const { companyName } = params;
+//     const decodedName = decodeURIComponent(companyName.replace(/-/g, " "));
 
-    return {
-        title: `${decodedName} | Business Credit Report`,
-        description: `Get a detailed business credit report and insights for ${decodedName}. Build trust and make informed business decisions.`,
-    };
-}
+//     return {
+//         title: `${decodedName} | Business Credit Report`,
+//         description: `Get a detailed business credit report and insights for ${decodedName}. Build trust and make informed business decisions.`,
+//     };
+// }
 
 const CompanyPage = async ({ params }) => {
-    const { companyName, cin, state } = params; // ✅ works in server component
+    const { companyName, cin, state } = await params; // ✅ works in server component
 
     let companyData = null;
 
     try {
+        // const res = await fetch(
+        //     `https://backend.globalbizreport.com/api/company-details?query=${decodeURIComponent(
+        //         companyName.replace(/-/g, " ")
+        //     )}&state=${state}&cin=${cin}`,
+        //     { cache: "no-store" }
+        // );
+
+        const cleanedState = state
+            ?.replace(/[^a-zA-Z0-9\s]/g, " ") || ""; // trim any extra spaces
+
         const res = await fetch(
             `https://backend.globalbizreport.com/api/company-details?query=${decodeURIComponent(
                 companyName.replace(/-/g, " ")
-            )}&state=${state}&cin=${cin}`,
+            )}&state=${encodeURIComponent(cleanedState)}&cin=${cin}`,
             { cache: "no-store" }
         );
+
         const data = await res.json();
         companyData = data[0] || null;
     } catch (err) {
-        console.error("Error fetching company data:", err);
+        console.log("Error fetching company data:", err);
     }
 
     if (!companyData) {
