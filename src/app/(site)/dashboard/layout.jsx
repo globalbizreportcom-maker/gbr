@@ -1,10 +1,17 @@
+import BackButton from "@/components/BackButton";
 
 export default function DashboardLayout({ children }) {
 
     return (
         <div className="min-h-screen flex">
-            {/* Main content (like <Outlet />) */}
-            <main className="flex-1 p-6 bg-gray-50">{children}</main>
+            <main className="flex-1 p-6 bg-gray-50">
+                {/* Back button aligned to the right */}
+                <div className="flex justify-end mb-4">
+                    <BackButton />
+                </div>
+
+                {children}
+            </main>
         </div>
     );
 }
