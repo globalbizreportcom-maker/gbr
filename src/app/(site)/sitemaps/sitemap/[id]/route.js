@@ -42,7 +42,10 @@ export async function GET(req, { params }) {
         allCompanies.forEach((c) => {
             const name = encodeURIComponent(c.CompanyName?.replace(/\s+/g, "-").toUpperCase());
             const cin = encodeURIComponent(c.CIN || "");
-            const state = encodeURIComponent(c.CompanyStateCode?.toLowerCase() || "unknown");
+            // const state = encodeURIComponent(c.CompanyStateCode?.toLowerCase() || "unknown");
+            const state = encodeURIComponent(
+                (c.CompanyStateCode?.toLowerCase().replace(/\s+/g, "_")) || "unknown"
+            );
 
             const url = `${BASE_URL}/${name}/${cin}/india/${state}/company-business-financial-credit-report`;
 
@@ -61,7 +64,6 @@ export async function GET(req, { params }) {
         });
 
     } catch (err) {
-        console.log(`❌ Error generating sitemap-${id}.xml:`, err);
         return new NextResponse("Failed to generate sitemap", { status: 500 });
     }
 }

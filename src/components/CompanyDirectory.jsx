@@ -119,7 +119,10 @@ const CompanyDirectory = () => {
         // Trim last character only if not empty
         country = country ? encodeURIComponent(country.slice(0, -1)) : "na";
 
-        const stateCode = encodeURIComponent(company.CompanyStateCode?.toLowerCase() || "na");
+        // const stateCode = encodeURIComponent(company.CompanyStateCode?.toLowerCase() || "na");
+        const stateCode = encodeURIComponent(
+            (company.CompanyStateCode?.toLowerCase().replace(/\s+/g, "_")) || "na"
+        );
 
         const path = `/${companyName}/${cin}/${country}/${stateCode}/company-business-financial-credit-report`;
         router.push(path);

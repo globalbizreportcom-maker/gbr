@@ -142,8 +142,11 @@ export default function CompanySearch() {
             company["CompanyIndian/Foreign Company"]?.toLowerCase() ||
             "";
         country = encodeURIComponent(country.slice(0, -1));
+        const stateCode = encodeURIComponent(
+            (company.CompanyStateCode?.toLowerCase().replace(/\s+/g, "_")) || "na"
+        );
 
-        const stateCode = encodeURIComponent(company.CompanyStateCode?.toLowerCase() || "na");
+        // const stateCode = encodeURIComponent(company.CompanyStateCode?.toLowerCase() || "na");
         router.push(`/${companyName}/${cin}/${country}/${stateCode}/company-business-financial-credit-report`);
     };
 
