@@ -289,21 +289,91 @@
 
 
 'use client';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { FaEye } from 'react-icons/fa';
 import PayPalCheckout from './PayPalCheckout';
 import { useDashboard } from '@/app/(site)/dashboard/DashboardContext';
 import RazorpayCheckout from './RazorpayCheckout';
+import { apiUrl } from '@/api/api';
+import { useRouter, usePathname } from "next/navigation";
 
 const OrderConfirmContent = () => {
     const [formData, setFormData] = useState({});
     const { user } = useDashboard();
+    const hasSubmittedRef = useRef(false);
+    const router = useRouter();
+    const pathname = usePathname();
 
     useEffect(() => {
-        const storedData = localStorage.getItem('gbr_form');
-        if (storedData) {
-            setFormData(JSON.parse(storedData));
-        }
+        const submitVisitorPayment = async () => {
+
+            const storedData = localStorage.getItem("gbr_form");
+            if (!storedData) return;
+
+            const parsedData = JSON.parse(storedData);
+            setFormData(parsedData);
+
+            if (hasSubmittedRef.current) return; // prevent double submission
+            hasSubmittedRef.current = true;
+
+            if (sessionStorage.getItem("visitor_payment_submitted")) return;
+            try {
+                const payerCountry =
+                    typeof parsedData?.contactCountry === "string"
+                        ? parsedData.contactCountry
+                        : parsedData?.contactCountry?.label;
+
+                const targetCountry =
+                    typeof parsedData?.country === "string"
+                        ? parsedData.country
+                        : parsedData?.country?.label;
+
+                const region = getRegion(targetCountry || "");
+                const isINR = payerCountry?.toLowerCase() === "india";
+                const paymentAmount = isINR
+                    ? pricingINR[region] || pricingINR["Other Countries"]
+                    : pricingUSD[region] || pricingUSD["Other Countries"];
+                const currency = isINR ? "INR" : "USD";
+
+                const payload = {
+                    ...parsedData,
+                    userId: user?._id,
+                    country: parsedData.country?.label || parsedData.country || "",
+                    paymentAmount,
+                    currency,
+                };
+
+                await apiUrl.post("/visitors/payments", payload, {
+                    headers: { "Content-Type": "application/json" },
+                });
+
+                sessionStorage.setItem("visitor_payment_submitted", "true");
+                console.log("✅ Visitor form submitted");
+            } catch (error) {
+                console.error("❌ Error submitting visitor form:", error);
+            }
+        };
+
+        submitVisitorPayment();
+    }, []); // 👈 still runs only once
+
+    useEffect(() => {
+        const handlePopState = () => {
+            sessionStorage.removeItem('visitor_payment_submitted')
+            // const confirmLeave = window.confirm('sure');
+            // if (!confirmLeave) {
+            //     // Prevent navigation by re-pushing current state
+            //     history.pushState(null, "", window.location.href);
+            // }
+        };
+
+        // Push a new state so back button triggers popstate
+        history.pushState(null, "", window.location.href);
+        window.addEventListener("popstate", handlePopState);
+
+        return () => {
+            window.removeEventListener("popstate", handlePopState);
+        };
     }, []);
 
     if (!formData) return <p className="text-sm text-gray-600">Loading...</p>;

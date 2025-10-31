@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useDashboard } from '@/app/(site)/dashboard/DashboardContext';
 import { LoginModalButton } from '@/utils/LoginModalButton';
 import { apiUrl } from '@/api/api';
-import { useCompany } from '@/context/CompanyContext';
+// import { useCompany } from '@/context/CompanyContext';
 
 const CountryDropdown = dynamic(() => import('@/utils/CountryDropdown'), {
     ssr: false,
@@ -83,7 +83,7 @@ const OrderCreditReport = () => {
     }, [user?._id]);
 
 
-    const { companies, setCompanies } = useCompany();
+    // const { companies, setCompanies } = useCompany();
 
     const handleCompanyChange = (index, field, value) => {
         setCompanies((prev) => {
@@ -177,18 +177,18 @@ const OrderCreditReport = () => {
                 return;
             }
 
-            // 🔹 2️⃣ If user is logged in — submit visitor payment info
-            const payload = {
-                ...formData,
-                userId: user?._id,
-                country: formData.country?.label || formData.country || "",
-            };
+            // // 🔹 2️⃣ If user is logged in — submit visitor payment info
+            // const payload = {
+            //     ...formData,
+            //     userId: user?._id,
+            //     country: formData.country?.label || formData.country || "",
+            // };
 
-            const { data } = await apiUrl.post("/visitors/payments", payload, {
-                headers: { "Content-Type": "application/json" },
-            });
+            // const { data } = await apiUrl.post("/visitors/payments", payload, {
+            //     headers: { "Content-Type": "application/json" },
+            // });
 
-            console.log("✅ Visitor form submitted:", data);
+            // console.log("✅ Visitor form submitted:", data);
 
             // Save & navigate after successful submission
             localStorage.setItem("gbr_form", JSON.stringify(formData));

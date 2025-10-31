@@ -25,7 +25,7 @@ export const CompanyProvider = ({ children }) => {
             try {
                 const parsed = JSON.parse(storedData);
 
-                if (parsed.companies && Array.isArray(parsed.companies) && parsed.companies.length > 0) {
+                if (parsed?.companies && Array.isArray(parsed.companies) && parsed.companies.length > 0) {
                     setCompanies(parsed.companies.map(c => ({
                         companyName: c.companyName || "",
                         address: c.address || "",
@@ -36,7 +36,7 @@ export const CompanyProvider = ({ children }) => {
                         telephone: c.telephone || "",
                         website: c.website || "",
                     })));
-                } else if (parsed.companyName) {
+                } else if (parsed?.companyName) {
                     setCompanies([{
                         companyName: parsed.companyName || "",
                         address: parsed.address || "",
@@ -49,7 +49,7 @@ export const CompanyProvider = ({ children }) => {
                     }]);
                 }
             } catch (err) {
-                console.error("Failed to parse localStorage companies", err);
+                console.log("Failed to parse localStorage companies", err);
             }
         }
     }, []);

@@ -5,7 +5,7 @@ import { apiUrl } from "@/api/api";
 import { useRouter } from "next/navigation";
 
 export default function RazorpayCheckout({ amount = 100, userId }) {
-
+    console.log(userId);
     const router = useRouter();
     const [loading, setLoading] = useState(false);
 
@@ -42,7 +42,7 @@ export default function RazorpayCheckout({ amount = 100, userId }) {
                     ondismiss: async function () {
                         // console.log("User closed the payment modal", formData);
                         await apiUrl.post("/api/payment/cancellation", {
-                            userId: formData.userId,
+                            userId: userId,
                             orderId,
                             data: formData,
                         });

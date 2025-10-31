@@ -128,7 +128,7 @@ const CompanyPage = async ({ params }) => {
                     <span className="font-medium">{companyData.CompanyRegistrationdate_date || "N/A"}</span>,
                     is a{" "}
                     <span className="font-medium">{companyData.CompanyCategory || "N/A"}</span>
-                    operating under the{" "}
+                    {" "}operating under the{" "}
                     <span className="font-medium">{companyData.CompanySubCategory || "N/A"}</span> category.
                     Legally registered as a{" "}
                     <span className="font-medium">{companyData.CompanyClass || "N/A"}</span>,
