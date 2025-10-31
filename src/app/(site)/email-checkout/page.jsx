@@ -6,7 +6,10 @@ import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FaSpinner } from "react-icons/fa";
 
-export default function OrderBusinessCreditReportPage() {
+export const dynamic = "force-dynamic";
+
+
+const EmailCheckout = () => {
     const searchParams = useSearchParams();
     const [formData, setFormData] = useState(null);
     const [countries, setCountries] = useState([]);
@@ -44,13 +47,20 @@ export default function OrderBusinessCreditReportPage() {
     }, [searchParams]);
 
     useEffect(() => {
-        localStorage.setItem("gbr_form", JSON.stringify(formData));
+        if (!formData) return;
+
+        const timeout = setTimeout(() => {
+            localStorage.setItem("gbr_form", JSON.stringify(formData));
+        }, 500); // wait half a second after user stops typing
+
+        return () => clearTimeout(timeout);
     }, [formData]);
+
 
     if (!formData) {
         return (
             <div className="min-h-screen flex items-center justify-center text-gray-600">
-                <FaSpinner />     <p>Loading...</p>
+                <FaSpinner className="animate-spin" /> <p>Loading...</p>
             </div>
         );
     }
@@ -309,3 +319,5 @@ export default function OrderBusinessCreditReportPage() {
         </div >
     );
 }
+
+export default EmailCheckout;
