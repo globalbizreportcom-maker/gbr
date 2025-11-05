@@ -63,6 +63,7 @@ export default function RootLayout({ children }) {
           `}
         </Script>
 
+
         <Script id="facebook-pixel" strategy="afterInteractive">
           {`!function(f,b,e,v,n,t,s)
 {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
@@ -75,6 +76,8 @@ s.parentNode.insertBefore(t,s)}(window, document,'script',
 fbq('init', '674979842003410');
 fbq('track', 'PageView');`}
         </Script>
+
+        <Script src="//code.tidio.co/mibylcfadd5kvacnf5olu0q8fkptyuto.js" async></Script>
 
         {/* NoScript fallback */}
         <noscript>

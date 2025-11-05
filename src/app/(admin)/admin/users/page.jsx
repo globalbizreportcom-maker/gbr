@@ -153,45 +153,80 @@ const UsersPage = () => {
                         ))}
                     </div>
 
-                    {/* ✅ Pagination Controls */}
+                    {/* ✅ Compact Pagination Controls */}
                     {!showAll && filteredUsers.length > usersPerPage && (
-                        <div className="flex justify-center items-center gap-2 mt-6">
+                        <div className="flex justify-center items-center flex-wrap gap-2 mt-6 text-sm">
+                            {/* ⏮ First Page */}
                             <button
+                                onClick={() => setCurrentPage(1)}
                                 disabled={currentPage === 1}
-                                onClick={() => setCurrentPage((p) => p - 1)}
-                                className={`btn bg-transparent btn-sm shadow-none px-3 py-1 border rounded-md text-sm ${currentPage === 1
+                                className={`px-2 py-1 border rounded-md ${currentPage === 1
                                     ? "text-gray-400 border-gray-200 cursor-not-allowed"
-                                    : "text-blue-600 border-blue-300 hover:bg-blue-50"
+                                    : "text-gray-700 hover:bg-gray-100 border-gray-300"
                                     }`}
                             >
-                                Prev
+                                {"<<"}
                             </button>
 
-                            {[...Array(totalPages)].map((_, i) => (
-                                <button
-                                    key={i}
-                                    onClick={() => setCurrentPage(i + 1)}
-                                    className={`cursor-pointer px-3 py-1 text-sm rounded-md ${currentPage === i + 1
-                                        ? "bg-gray-700 text-white"
-                                        : "text-gray-600 hover:bg-gray-100"
-                                        }`}
-                                >
-                                    {i + 1}
-                                </button>
-                            ))}
-
+                            {/* ◀ Prev */}
                             <button
-                                disabled={currentPage === totalPages}
-                                onClick={() => setCurrentPage((p) => p + 1)}
-                                className={`btn bg-transparent btn-sm shadow-none px-3 py-1 border rounded-md text-sm ${currentPage === totalPages
+                                onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
+                                disabled={currentPage === 1}
+                                className={`px-2 py-1 border rounded-md ${currentPage === 1
                                     ? "text-gray-400 border-gray-200 cursor-not-allowed"
-                                    : "text-blue-600 border-blue-300 hover:bg-blue-50"
+                                    : "text-gray-700 hover:bg-gray-100 border-gray-300"
                                     }`}
                             >
-                                Next
+                                {"<"}
+                            </button>
+
+                            {/* Page Numbers */}
+                            {[...Array(totalPages)].slice(
+                                Math.max(0, currentPage - 3),
+                                Math.min(totalPages, currentPage + 2)
+                            ).map((_, i) => {
+                                const pageNum = Math.max(0, currentPage - 3) + i + 1;
+                                return (
+                                    <button
+                                        key={pageNum}
+                                        onClick={() => setCurrentPage(pageNum)}
+                                        className={`px-3 py-1 rounded-md border ${currentPage === pageNum
+                                            ? "bg-gray-800 text-white border-gray-700"
+                                            : "text-gray-700 hover:bg-gray-100 border-gray-300"
+                                            }`}
+                                    >
+                                        {pageNum}
+                                    </button>
+                                );
+                            })}
+
+                            {/* ▶ Next */}
+                            <button
+                                onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))}
+                                disabled={currentPage === totalPages}
+                                className={`px-2 py-1 border rounded-md ${currentPage === totalPages
+                                    ? "text-gray-400 border-gray-200 cursor-not-allowed"
+                                    : "text-gray-700 hover:bg-gray-100 border-gray-300"
+                                    }`}
+                            >
+                                {">"}
+                            </button>
+
+                            {/* ⏭ Last Page */}
+                            <button
+                                onClick={() => setCurrentPage(totalPages)}
+                                disabled={currentPage === totalPages}
+                                className={`px-2 py-1 border rounded-md ${currentPage === totalPages
+                                    ? "text-gray-400 border-gray-200 cursor-not-allowed"
+                                    : "text-gray-700 hover:bg-gray-100 border-gray-300"
+                                    }`}
+                            >
+                                {">>"}
                             </button>
                         </div>
                     )}
+
+
 
                     {/* ✅ Show All / Paginated Toggle */}
                     <div className="flex justify-center mt-4">

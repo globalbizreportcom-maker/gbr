@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import React, { useState, useMemo } from "react";
 import {
     LineChart,
@@ -11,7 +12,10 @@ import {
     CartesianGrid,
 } from "recharts";
 
-const DateWiseChart = ({ data, title = "Activity Overview" }) => {
+const DateWiseChart = ({ data, title = "Activity Overview", link }) => {
+
+    const router = useRouter();
+
     const [fromDate, setFromDate] = useState("");
     const [toDate, setToDate] = useState("");
 
@@ -37,7 +41,7 @@ const DateWiseChart = ({ data, title = "Activity Overview" }) => {
     return (
         <div className="bg-white p-6 rounded-2xl border border-gray-100 ">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 gap-3">
-                <h2 className="text-lg font-semibold text-gray-800">{title} <span className="text-blue-500 text-sm">View</span></h2>
+                <h2 className="text-lg font-semibold text-gray-800">{title} <span className="cursor-pointer text-blue-500 text-sm ml-1" onClick={() => router.push(link)}>View</span></h2>
 
                 {/* Date Filter */}
                 <div className="flex items-center gap-2">

@@ -108,6 +108,7 @@ const CompanyDirectory = () => {
         const companyName = encodeURIComponent(
             company.CompanyName?.replace(/\s+/g, "-") || "unknown"
         );
+
         const cin = encodeURIComponent(company.CIN || "na");
 
         // Determine country safely
