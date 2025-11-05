@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-const BACKEND_URL = "https://www.globalbizreport.com/companies-directory/india/?page=";
+const BACKEND_URL = "https://backend.globalbizreport.com/companies-directory/?page=";
 const BASE_URL = "https://www.globalbizreport.com";
 const PAGES_PER_SITEMAP = 100; // adjust as needed (each sitemap = 2000 URLs if 20 per page)
 const PER_PAGE = 20;

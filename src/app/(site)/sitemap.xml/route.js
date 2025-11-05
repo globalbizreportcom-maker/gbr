@@ -35,7 +35,7 @@
 
 import { NextResponse } from "next/server";
 
-const API_URL = "https://www.globalbizreport.com/companies-directory/india/?page=1";
+const API_URL = "https://backend.globalbizreport.com/companies-directory/?page=1";
 const PAGES_PER_SITEMAP = 100; // backend pages per sitemap
 
 export async function GET() {
