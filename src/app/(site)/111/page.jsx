@@ -53,7 +53,7 @@ export default function Home() {
                                 className="w-full max-w-lg rounded-2xl shadow-xl object-cover"
                             />
                             <div className="absolute -bottom-6 -right-6 bg-indigo-600 text-white px-6 py-3 rounded-lg shadow-lg text-sm font-semibold">
-                                Trusted by 10,000+ Companies
+                                Trusted by 10,000+ Companiesss
                             </div>
                         </div>
                     </div>
