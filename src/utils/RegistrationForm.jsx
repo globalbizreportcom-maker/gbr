@@ -128,24 +128,21 @@ const RegistrationForm = () => {
                 <PincodeInput value={pincode} onChange={(e) => setPincode(e.target.value)} />
             </div> */}
 
-            {/* Passwords side by side */}
-            <div className="col-span-1 md:col-span-2 flex flex-col md:flex-row gap-4">
+            <div className="col-span-1 md:col-span-2 flex flex-col md:flex-row gap-4 w-full">
 
                 {/* Password */}
-                <div className="flex-1 relative">
-                    <label className="block text-sm font-medium mb-1 text-gray-600">
-                        Password (optional)
-                    </label>
+                <div className="flex-1 relative w-full">
+                    <label className="block text-sm font-medium mb-1 text-gray-600">Password (optional)</label>
                     <input
                         type={showPassword ? "text" : "password"}
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         placeholder="Password"
-                        className="input input-bordered w-full bg-white border border-gray-300 focus:border-blue-600 focus:ring-0 h-[50px] placeholder-gray-400 placeholder-italic pr-10"
+                        className="input input-bordered w-full bg-white border border-gray-300 focus:border-blue-600 focus:ring-0 h-12 pr-10 placeholder-gray-400 placeholder-italic"
                     />
                     <button
                         type="button"
-                        className="absolute right-3 top-[38px] text-gray-400 hover:text-gray-600"
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
                         onClick={() => setShowPassword(!showPassword)}
                     >
                         {showPassword ? <FaEyeSlash size={20} /> : <FaEye size={20} />}
@@ -153,46 +150,49 @@ const RegistrationForm = () => {
                 </div>
 
                 {/* Re-enter Password */}
-                <div className="flex-1 relative">
-                    <label className="block text-sm font-medium mb-1 text-gray-600">
-                        Re-enter Password
-                    </label>
+                <div className="flex-1 relative w-full">
+                    <label className="block text-sm font-medium mb-1 text-gray-600">Re-enter Password</label>
                     <input
                         type={showRePassword ? "text" : "password"}
                         value={rePassword}
                         onChange={(e) => setRePassword(e.target.value)}
                         placeholder="Re-enter Password"
-                        className="input input-bordered w-full bg-white border border-gray-300 focus:border-blue-600 focus:ring-0 h-[50px] placeholder-gray-400 placeholder-italic pr-10"
+                        className="input input-bordered w-full bg-white border border-gray-300 focus:border-blue-600 focus:ring-0 h-12 pr-10 placeholder-gray-400 placeholder-italic"
                     />
                     <button
                         type="button"
-                        className="absolute right-3 top-[38px] text-gray-400 hover:text-gray-600"
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
                         onClick={() => setShowRePassword(!showRePassword)}
                     >
                         {showRePassword ? <FaEyeSlash size={20} /> : <FaEye size={20} />}
                     </button>
                 </div>
-
-
-
-
             </div>
 
-            <div className="col-span-2">
+            {/* Company */}
+            <div className="col-span-1 md:col-span-2 w-full">
                 <CompanyInput value={company} onChange={(e) => setCompany(e.target.value)} />
-
             </div>
 
             {/* Submit Button */}
-            <div className="flex flex-col md:flex-row col-span-1 md:col-span-3 text-end w-full justify-end bg-grey-100">
-                <button type="submit" className="btn w-64 bg-indigo-500 text-white font-semibold hover:bg-indigo-600 h-[50px] transition-all duration-300" >
+            <div className="flex flex-col md:flex-row col-span-1 md:col-span-3 w-full justify-end gap-2">
+                <button
+                    type="submit"
+                    className="btn w-full md:w-64 bg-indigo-500 text-white font-semibold hover:bg-indigo-600 h-12 transition-all duration-300"
+                >
                     Register
                 </button>
-                <p className="mt-4 w-64 text-sm text-gray-500 text-center">
-                    Already have an account?{" "} <a href="/login" className="text-indigo-500 hover:underline"> Login </a>
+                <p
+                    className="mt-4 text-sm text-gray-500 text-center md:text-right w-full md:w-auto cursor-pointer"
+                    onClick={() => router.push("/login")}
+                >
+                    Already have an account?{" "}
+                    <span className="text-indigo-500 hover:underline">Login</span>
                 </p>
             </div>
         </form>
+
+
     );
 };
 

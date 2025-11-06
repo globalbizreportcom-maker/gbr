@@ -3,7 +3,7 @@ import { apiUrl } from "@/api/api";
 import { useDashboard } from "@/app/(site)/dashboard/DashboardContext";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { FaUserCircle, FaBars } from "react-icons/fa";
+import { FaUserCircle, FaBars, FaChevronRight } from "react-icons/fa";
 import { useState } from "react";
 
 export default function HeaderMenu() {
@@ -14,7 +14,7 @@ export default function HeaderMenu() {
     const mainNav = [
         { href: "/", label: "Home" },
         { href: "/about", label: "About" },
-        { href: "/company-directory/india", label: "Company directory" },
+        { href: "/company-directory/india", label: "Company Directory" },
         { href: "/services", label: "Services" },
         { href: "/pricing", label: "Pricing" },
         { href: "/contact", label: "Contact" },
@@ -153,28 +153,88 @@ export default function HeaderMenu() {
                             <ul className="flex flex-col gap-2 text-black">
                                 {user ? (
                                     <>
+                                        {/* Dashboard */}
                                         <li>
                                             {renderLink({
                                                 href: "/dashboard",
                                                 label: "Dashboard",
                                                 vertical: true,
-                                                onClick: () => setMobileOpen(false), // close menu
+                                                onClick: () => setMobileOpen(false),
                                             })}
                                         </li>
-                                        {mainNav.map((item) => (
-                                            <li key={item.href}>
-                                                {renderLink({
-                                                    ...item,
-                                                    vertical: true,
-                                                    onClick: () => setMobileOpen(false), // close menu
-                                                })}
-                                            </li>
-                                        ))}
-                                        <li className="mt-2">
-                                            <Link href="/order-business-credit-report" onClick={() => setMobileOpen(false)}>
-                                                Order Business Credit Report
+
+                                        {/* Home */}
+                                        <li>
+                                            {renderLink({
+                                                href: "/",
+                                                label: "Home",
+                                                vertical: true,
+                                                onClick: () => setMobileOpen(false),
+                                            })}
+                                        </li>
+
+                                        {/* About */}
+                                        <li>
+                                            {renderLink({
+                                                href: "/about",
+                                                label: "About",
+                                                vertical: true,
+                                                onClick: () => setMobileOpen(false),
+                                            })}
+                                        </li>
+
+                                        {/* Order Business Credit Report */}
+                                        <li>
+                                            <Link
+                                                href="/order-business-credit-report"
+                                                className="items-center justify-between font-semibold text-[16px] text-blue-600 py-2 flex flex-row"
+                                                onClick={() => setMobileOpen(false)}
+                                            >
+                                                Order Business Credit Report <FaChevronRight className="ml-5 font-normal" />
                                             </Link>
                                         </li>
+
+                                        {/* Company Directory */}
+                                        <li>
+                                            {renderLink({
+                                                href: "/company-directory/india",
+                                                label: "Company Directory",
+                                                vertical: true,
+                                                onClick: () => setMobileOpen(false),
+                                            })}
+                                        </li>
+
+                                        {/* Services */}
+                                        <li>
+                                            {renderLink({
+                                                href: "/services",
+                                                label: "Services",
+                                                vertical: true,
+                                                onClick: () => setMobileOpen(false),
+                                            })}
+                                        </li>
+
+                                        {/* Pricing */}
+                                        <li>
+                                            {renderLink({
+                                                href: "/pricing",
+                                                label: "Pricing",
+                                                vertical: true,
+                                                onClick: () => setMobileOpen(false),
+                                            })}
+                                        </li>
+
+                                        {/* Contact */}
+                                        <li>
+                                            {renderLink({
+                                                href: "/contact",
+                                                label: "Contact",
+                                                vertical: true,
+                                                onClick: () => setMobileOpen(false),
+                                            })}
+                                        </li>
+
+                                        {/* Profile */}
                                         <li className="pt-3 mt-3">
                                             <Link
                                                 href="/dashboard/profile"
@@ -184,6 +244,8 @@ export default function HeaderMenu() {
                                                 Profile
                                             </Link>
                                         </li>
+
+                                        {/* Password Settings */}
                                         <li>
                                             <Link
                                                 href="/dashboard/password"
@@ -193,6 +255,8 @@ export default function HeaderMenu() {
                                                 Password Settings
                                             </Link>
                                         </li>
+
+                                        {/* Logout */}
                                         <li>
                                             <button
                                                 onClick={() => {
@@ -207,39 +271,108 @@ export default function HeaderMenu() {
                                     </>
                                 ) : (
                                     <>
-                                        {mainNav.map((item) => (
-                                            <li key={item.href}>
-                                                {renderLink({
-                                                    ...item,
-                                                    vertical: true,
-                                                    onClick: () => setMobileOpen(false),
-                                                })}
-                                            </li>
-                                        ))}
+                                        {/* Home */}
                                         <li>
-                                            <Link
-                                                href="/register"
-                                                className="block font-semibold text-[16px] text-blue-600 underline py-2"
-                                                onClick={() => setMobileOpen(false)}
-                                            >
-                                                Register
-                                            </Link>
+                                            {renderLink({
+                                                href: "/",
+                                                label: "Home",
+                                                vertical: true,
+                                                onClick: () => setMobileOpen(false),
+                                            })}
                                         </li>
-                                        <li className="mt-2 ">
-                                            <Link href="/order-business-credit-report" onClick={() => setMobileOpen(false)}>
-                                                Order Business Credit Report
-                                            </Link>
-                                        </li>
+
+                                        {/* About */}
                                         <li>
-                                            <Link href="/login" onClick={() => setMobileOpen(false)}>
-                                                Log In
-                                            </Link>
+                                            {renderLink({
+                                                href: "/about",
+                                                label: "About",
+                                                vertical: true,
+                                                onClick: () => setMobileOpen(false),
+                                            })}
+                                        </li>
+
+                                        {/* Order Business Credit Report */}
+                                        <li>
+                                            {renderLink({
+                                                href: "/order-business-credit-report",
+                                                label: (
+                                                    <span className="flex items-center justify-between font-semibold text-[16px] text-blue-600">
+                                                        Order Business Credit Report
+                                                        <FaChevronRight className="ml-5 font-normal" />
+                                                    </span>
+                                                ),
+                                                vertical: true,
+                                                onClick: () => setMobileOpen(false),
+                                            })}
+                                        </li>
+
+                                        {/* Company Directory */}
+                                        <li>
+                                            {renderLink({
+                                                href: "/company-directory/india",
+                                                label: "Company Directory",
+                                                vertical: true,
+                                                onClick: () => setMobileOpen(false),
+                                            })}
+                                        </li>
+
+                                        {/* Services */}
+                                        <li>
+                                            {renderLink({
+                                                href: "/services",
+                                                label: "Services",
+                                                vertical: true,
+                                                onClick: () => setMobileOpen(false),
+                                            })}
+                                        </li>
+
+                                        {/* Pricing */}
+                                        <li>
+                                            {renderLink({
+                                                href: "/pricing",
+                                                label: "Pricing",
+                                                vertical: true,
+                                                onClick: () => setMobileOpen(false),
+                                            })}
+                                        </li>
+
+                                        {/* Contact */}
+                                        <li>
+                                            {renderLink({
+                                                href: "/contact",
+                                                label: "Contact",
+                                                vertical: true,
+                                                onClick: () => setMobileOpen(false),
+                                            })}
+                                        </li>
+
+                                        {/* Register */}
+                                        <li>
+                                            {renderLink({
+                                                href: "/register",
+                                                label: "Register",
+                                                vertical: true,
+                                                onClick: () => setMobileOpen(false),
+                                            })}
+                                        </li>
+
+                                        {/* Login */}
+                                        <li>
+                                            {renderLink({
+                                                href: "/login",
+                                                label: "Log In",
+                                                vertical: true,
+                                                onClick: () => setMobileOpen(false),
+                                            })}
                                         </li>
                                     </>
-                                )}
 
+                                )}
                             </ul>
                         </div>
+
+
+
                     </div>
                 </div>
             )}

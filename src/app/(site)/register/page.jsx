@@ -22,7 +22,9 @@ const RegisterPage = () => {
                 <h2 className="text-xl font-bold mb-6 text-gray-400 text-left">
                     Register Now!
                 </h2>
-                <RegistrationForm />
+                <div className="w-full  mx-auto">
+                    <RegistrationForm />
+                </div>
             </div>
         </section>
     );
