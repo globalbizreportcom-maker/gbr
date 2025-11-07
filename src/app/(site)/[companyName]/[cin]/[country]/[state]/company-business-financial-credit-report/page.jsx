@@ -156,7 +156,7 @@ const CompanyPage = async ({ params }) => {
                     <span className="font-medium">{companyData.CompanyIndian?.["Foreign Company"] || companyData["CompanyIndian/Foreign Company"] || "N/A"}</span>,
                     with financial backing that includes an authorized capital of{" "}
                     <span className="font-medium">₹{companyData.AuthorizedCapital || "N/A"}</span>
-                    and a paid-up capital of{" "}
+                    {" "} and a paid-up capital of{" "}
                     <span className="font-medium">₹{companyData.PaidupCapital || "N/A"}</span>.
                 </p>
             </div>

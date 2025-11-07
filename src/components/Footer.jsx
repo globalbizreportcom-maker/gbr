@@ -32,7 +32,7 @@ const Footer = () => {
                     <div>
                         <h3 className="text-lg font-bold text-white mb-3">MAIN LINKS</h3>
                         <ul className="space-y-2">
-                            <li><a className="link link-hover text-gray-400">Order Credit Report</a></li>
+                            <li><a href="/order-business-credit-report" className="link link-hover text-gray-400">Order Credit Report</a></li>
                             <li><a className="link link-hover text-gray-400">View Sample Report</a></li>
                         </ul>
                     </div>

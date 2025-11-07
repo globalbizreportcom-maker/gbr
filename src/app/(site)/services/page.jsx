@@ -17,7 +17,7 @@ const ServicesPage = () => {
             <div className="max-w-6xl mx-auto rounded-2xl bg-gradient-to-br from-blue-100 via-white to-orange-100 p-10 mb-3">
 
                 <h2 className="text-3xl md:text-4xl font-bold mb-6 text-center max-w-2xl mx-auto">
-                    <span className="text-primary">Business Credit Reports</span>You Can Trust
+                    <span className="text-primary">Business Credit Reports</span>{" "}You Can Trust
                 </h2>
                 <p className="text-gray-600 text-center max-w-2xl mx-auto">
                     Trust in our reliable reports to gain valuable insights into potential partners, customers and vendors ensuring a secure and thriving business future.
