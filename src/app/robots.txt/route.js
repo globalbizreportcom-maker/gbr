@@ -18,8 +18,9 @@ User-agent: *
 Disallow: /admin/
 Allow: /
 
-# ✅ Static pages sitemap (contains your homepage, about, services, pricing, etc.)
+# Site maps
 Sitemap: ${BASE_URL}/sitemaps/static
+Sitemap: ${BASE_URL}/company-directory/india
 `;
 
         // 🧩 3️⃣ Add dynamic company sitemaps
