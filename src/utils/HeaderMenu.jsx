@@ -136,8 +136,9 @@ export default function HeaderMenu() {
                             href="/order-business-credit-report"
                             className="btn btn-primary"
                             onClick={() => {
-                                sessionStorage.setItem("credit_report", "direct");
-
+                                if (typeof window !== "undefined") {
+                                    sessionStorage.setItem("credit_report", "direct");
+                                }
                             }}
                         >
                             Order Business Credit Report
@@ -331,17 +332,18 @@ export default function HeaderMenu() {
 
                                         {/* Order Business Credit Report */}
                                         <li>
-                                            {renderLink({
-                                                href: "/order-business-credit-report",
-                                                label: (
-                                                    <span className="flex items-center justify-between font-semibold text-[16px] text-blue-600">
-                                                        Order Business Credit Report
-                                                        <FaChevronRight className="ml-5 font-normal" />
-                                                    </span>
-                                                ),
-                                                vertical: true,
-                                                onClick: () => setMobileOpen(false),
-                                            })}
+                                            <Link
+                                                href="/order-business-credit-report"
+                                                className="items-center justify-between font-semibold text-[16px] text-blue-600 py-2 flex flex-row"
+                                                onClick={() => {
+                                                    // if (typeof window !== "undefined") {
+                                                    sessionStorage.setItem("credit_report", "direct");
+                                                    // }
+                                                    setMobileOpen(false);
+                                                }}
+                                            >
+                                                Order Business Credit Report <FaChevronRight className="ml-5 font-normal" />
+                                            </Link>
                                         </li>
 
                                         {/* Company Directory */}
