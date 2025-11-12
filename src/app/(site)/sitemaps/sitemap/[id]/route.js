@@ -73,38 +73,32 @@ import { NextResponse } from "next/server";
 
 const BACKEND_URL = "https://backend.globalbizreport.com/companies-directory/";
 const BASE_URL = "https://www.globalbizreport.com";
-const PER_PAGE = 20;
 const URLS_PER_SITEMAP = 2000;
-const META_URL = "https://backend.globalbizreport.com/companies-meta";
 
-export async function GET(req, { params }) {
+export async function GET(req, context) {
+    const params = await context.params;
+    console.log(params.id);
     const sitemapId = parseInt(params.id, 10);
-    if (isNaN(sitemapId) || sitemapId < 1) return new NextResponse("Invalid sitemap ID", { status: 400 });
+
+    if (isNaN(sitemapId) || sitemapId < 1) {
+        return new NextResponse("Invalid sitemap ID", { status: 400 });
+    }
 
     try {
-        const metaRes = await fetch(META_URL, { next: { revalidate: 86400 } });
-        const metaData = await metaRes.json();
-        const totalBackendPages = metaData.totalPages || 0;
+        const offset = (sitemapId - 1) * URLS_PER_SITEMAP;
+        const url = `${BACKEND_URL}?perPage=${URLS_PER_SITEMAP}&offset=${offset}`;
+        const res = await fetch(url);
+        const data = await res.json();
 
-        // Determine which backend pages to fetch for this sitemap
-        const urlsPerSitemapPages = Math.ceil(URLS_PER_SITEMAP / PER_PAGE);
-        const startPage = (sitemapId - 1) * urlsPerSitemapPages + 1;
-        const endPage = Math.min(sitemapId * urlsPerSitemapPages, totalBackendPages);
-
-        if (startPage > totalBackendPages) return new NextResponse("Sitemap not found", { status: 404 });
-
-        let allCompanies = [];
-        for (let page = startPage; page <= endPage; page++) {
-            const res = await fetch(`${BACKEND_URL}?page=${page}&perPage=${PER_PAGE}`, { next: { revalidate: 86400 } });
-            const data = await res.json();
-            if (!data.rows?.length) continue; // skip empty pages
-            allCompanies.push(...data.rows);
+        if (!data.rows || data.rows.length === 0) {
+            return new NextResponse("Sitemap not found", { status: 404 });
         }
 
+        // Build XML
         let xml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
         xml += `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n`;
 
-        allCompanies.forEach(c => {
+        data.rows.forEach(c => {
             const name = encodeURIComponent(c.CompanyName?.replace(/\s+/g, "-").toUpperCase());
             const cin = encodeURIComponent(c.CIN || "");
             const state = encodeURIComponent((c.CompanyStateCode?.toLowerCase().replace(/\s+/g, "_")) || "unknown");
@@ -118,6 +112,7 @@ export async function GET(req, { params }) {
         });
 
         xml += `</urlset>`;
+
         return new NextResponse(xml, { headers: { "Content-Type": "application/xml" } });
 
     } catch (err) {

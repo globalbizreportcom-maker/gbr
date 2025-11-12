@@ -46,13 +46,13 @@ import { NextResponse } from "next/server";
 
 const META_URL = "https://backend.globalbizreport.com/companies-meta";
 const BASE_URL = "https://www.globalbizreport.com";
-const URLS_PER_SITEMAP = 2000; // Google recommends <= 50k, but safe for you
+const URLS_PER_SITEMAP = 2000;
 
 export async function GET() {
     try {
         const metaRes = await fetch(META_URL, { next: { revalidate: 86400 } });
         const metaData = await metaRes.json();
-        const totalBackendPages = metaData.totalPages || 0; // backend pages (perPage=20)
+        const totalBackendPages = metaData.totalPages || 0;
         const PER_PAGE = 20;
 
         const totalUrls = totalBackendPages * PER_PAGE;
@@ -76,4 +76,3 @@ export async function GET() {
         return NextResponse.json({ error: "Failed to generate sitemap index" }, { status: 500 });
     }
 }
-

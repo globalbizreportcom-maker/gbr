@@ -51,45 +51,52 @@
 
 import { NextResponse } from "next/server";
 
+const META_URL = "https://backend.globalbizreport.com/companies-meta";
 const BASE_URL = "https://www.globalbizreport.com";
-const API_URL = "https://backend.globalbizreport.com/companies-meta";
-const PAGES_PER_SITEMAP = 100;
+const URLS_PER_SITEMAP = 2000;
 
 export async function GET() {
     try {
-        // 🧩 Fetch only meta info (lightweight)
-        const res = await fetch(API_URL, { next: { revalidate: 86400 } });
-        const data = await res.json();
-        const totalPages = data.totalPages || 0;
-        const totalSitemaps = Math.ceil(totalPages / PAGES_PER_SITEMAP);
+        const metaRes = await fetch(META_URL, { next: { revalidate: 86400 } });
+        const metaData = await metaRes.json();
+        const totalBackendPages = metaData.totalPages || 0;
+        const PER_PAGE = 20;
 
-        // 🧩 Construct robots.txt
+        const totalUrls = totalBackendPages * PER_PAGE;
+        const totalSitemaps = Math.ceil(totalUrls / URLS_PER_SITEMAP);
+
+        // Build robots.txt content
         let content = `
-User-agent: Googlebot
+User-agent: *
 Disallow: /admin/
 Allow: /
 
-# Site maps
+# Static sitemaps
 Sitemap: ${BASE_URL}/sitemaps/static
 Sitemap: ${BASE_URL}/company-directory/india
 `;
 
+        // Add dynamic sitemaps
         for (let i = 1; i <= totalSitemaps; i++) {
             content += `Sitemap: ${BASE_URL}/sitemaps/sitemap/${i}\n`;
         }
+
         // Ensure final newline
         content += "\n";
+
         return new NextResponse(content.trim(), {
             headers: { "Content-Type": "text/plain" },
         });
-    } catch (error) {
-        // 🧩 Fallback version
+    } catch (err) {
+        console.error("Robots.txt generation error:", err);
+
+        // Fallback robots.txt
         const fallback = `
-User-agent: Googlebot
+User-agent: *
 Disallow: /admin/
 Allow: /
 
-# Fallback static sitemap only
+# Static sitemap only
 Sitemap: ${BASE_URL}/sitemaps/static
 `.trim();
 
@@ -98,4 +105,3 @@ Sitemap: ${BASE_URL}/sitemaps/static
         });
     }
 }
-
