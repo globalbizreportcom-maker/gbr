@@ -65,7 +65,7 @@ export async function GET() {
 
         // 🧩 Construct robots.txt
         let content = `
-User-agent: *
+User-agent: Googlebot
 Disallow: /admin/
 Allow: /
 
@@ -84,7 +84,7 @@ Sitemap: ${BASE_URL}/company-directory/india
     } catch (error) {
         // 🧩 Fallback version
         const fallback = `
-User-agent: *
+User-agent: Googlebot
 Disallow: /admin/
 Allow: /
 
