@@ -10,22 +10,32 @@ export const DashboardProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
     const router = useRouter();
+
     useEffect(() => {
         const fetchUser = async () => {
             try {
                 const res = await apiUrl.get("/user/protected");
                 if (res.data.success) {
                     setUser(res.data.user);
+                } else {
+                    setUser(null);
+                    // router.push("/login"); // redirect if not logged in
                 }
             } catch (err) {
                 setUser(null);
+                // router.push("/login"); // redirect if not logged in
+
             } finally {
                 setLoading(false);
+
             }
         };
 
         fetchUser();
     }, []);
+
+
+
 
 
     return (

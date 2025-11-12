@@ -23,7 +23,7 @@ export default function DashboardHome() {
                 const res = await apiUrl.get(`/user/dashboard/stats/${user._id}`);
                 setStats(res.data);
             } catch (err) {
-                console.error("Error fetching dashboard stats:", err);
+                console.log("Error fetching dashboard stats:", err);
             }
         };
 
@@ -59,7 +59,7 @@ export default function DashboardHome() {
                     className="cursor-pointer bg-white rounded-lg p-4 sm:p-6 flex flex-col items-center justify-center border border-gray-200 hover:shadow-md transition"
                 >
                     <div className="text-2xl sm:text-3xl mb-1 sm:mb-2">📑</div>
-                    <p className="text-gray-500 text-sm sm:text-base">Received Reports</p>
+                    <p className="text-gray-500 text-sm sm:text-base">Delivered Reports</p>
                     <p className="text-xl sm:text-2xl font-bold text-gray-800 mt-1">{stats.receivedReports}</p>
                 </div>
 

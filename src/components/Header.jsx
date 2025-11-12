@@ -21,7 +21,7 @@ const Header = () => {
                                 alt="GBR Logo"
                                 width={120}
                                 height={10}
-                                className="object-contain w-[140px] h-[50px] sm:w-[180px] sm:h-[60px] lg:w-[180px] lg:h-[50px] xl:w-[200px] xl:h-[70px]"
+                                className="object-contain w-[140px] h-[50px] sm:w-[180px] sm:h-[60px] lg:w-[180px] lg:h-[50px] xl:w-[200px] xl:h-[50px]"
                                 priority  // optional: loads faster
                             />
                         </Link>

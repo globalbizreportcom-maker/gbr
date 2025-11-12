@@ -3,8 +3,12 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams } from "next/navigation";
 import { adminUrl } from "@/api/api";
+import { useAlert } from "@/context/AlertProvider";
 
 const InboxReply = () => {
+
+    const { showAlert } = useAlert();
+
     const { id } = useParams();
     const [contact, setContact] = useState(null);
     const [user, setUser] = useState(null);
@@ -31,11 +35,11 @@ const InboxReply = () => {
         if (!reply.trim()) return;
         try {
             await adminUrl.post(`/contacts/thread/${email}/reply`, { message: reply });
-            alert("Reply sent successfully!");
+            showAlert(`Reply sent successfully`, "success");
             setReply("");
         } catch (err) {
-            console.log(err);
-            alert("Failed to send reply");
+            showAlert(`Failed to send reply`, "error");
+
         }
     };
 

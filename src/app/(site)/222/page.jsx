@@ -14,6 +14,6 @@ export const metadata = {
     },
 };
 
-export default function OrderCreditReportPage() {
+export default function OrderPage222() {
     return <OrderCreditReportClient />;
 }

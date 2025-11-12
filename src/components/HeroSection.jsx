@@ -65,6 +65,9 @@ const HeroSection = () => {
         }
 
         if (countryCode && countryCode !== 'IN') {
+
+            sessionStorage.setItem("credit_report", "direct");
+
             router.push('/order-business-credit-report');
             return;
         }

@@ -1,15 +1,26 @@
 'use client';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/lib/style.css';
 
-const PhoneInputWithCountry = ({ value, onChange }) => {
+const PhoneInputWithCountry = ({ value, onChange, defaultCountry }) => {
+
+    const [countryCode, setCountryCode] = useState('');
+
+    useEffect(() => {
+        if (defaultCountry) {
+            setCountryCode(defaultCountry.toLowerCase()); // e.g. "IN" → "in"
+        } else {
+            setCountryCode(''); // empty if not found
+        }
+    }, [defaultCountry]);
+
     return (
         <div>
-            {/* <label className="label text-sm font-medium text-gray-700">Phone*</label> */}
             <PhoneInput
-                country={'in'}
-                value={value}
+                key={countryCode} // ✅ Force re-render when country changes
+                country={countryCode || ''}
+                value={value || ''}
                 onChange={onChange}
                 inputStyle={{
                     width: '100%',
@@ -18,7 +29,6 @@ const PhoneInputWithCountry = ({ value, onChange }) => {
                 containerStyle={{ width: '100%' }}
                 inputClass="bg-white"
                 enableSearch
-                RE
             />
         </div>
     );

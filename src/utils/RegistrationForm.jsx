@@ -13,8 +13,15 @@ import axios from "axios";
 import CompanyInput from "./CompanyInput";
 import { apiUrl } from "@/api/api";
 import { useRouter } from "next/navigation";
+import { useAlert } from "@/context/AlertProvider";
+import GstInput from "./GstInput";
+import { useDashboard } from "@/app/(site)/dashboard/DashboardContext";
 
 const RegistrationForm = () => {
+
+    const { showAlert } = useAlert();
+
+    const { user, setUser } = useDashboard();
 
     const router = useRouter();
     const [username, setUsername] = useState("");
@@ -24,6 +31,7 @@ const RegistrationForm = () => {
     const [country, setCountry] = useState("");
     const [state, setState] = useState("");
     const [city, setCity] = useState("");
+    const [gst, setGst] = useState("");
     const [pincode, setPincode] = useState("");
     const [password, setPassword] = useState("");
     const [rePassword, setRePassword] = useState("");
@@ -31,16 +39,18 @@ const RegistrationForm = () => {
     const [showRePassword, setShowRePassword] = useState(false);
 
 
+
+
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         if (password !== rePassword) {
-            alert("Passwords do not match!");
+            showAlert("Passwords do not match!", "error");
             return;
         }
 
         if (!phone) {
-            alert("Enter phone number!");
+            showAlert("Enter phone number!", "error");
             return;
         }
 
@@ -54,6 +64,7 @@ const RegistrationForm = () => {
             pincode,
             password,
             company,
+            gst
         };
 
         try {
@@ -61,13 +72,16 @@ const RegistrationForm = () => {
                 formData
             );
             if (res.data.success) {
-                alert("Registration successful!");
+                showAlert("Registration successful!", "success");
+                // 🧩 Save user in context/localStorage if needed
+                const userData = res.data.newUser;
+                setUser(userData);
                 router.push('/dashboard');
             } else {
-                alert("Something went wrong");
+                showAlert("Something went wrong!", "error");
             }
         } catch (error) {
-            alert(error.response?.data?.message || "Server error, please try again later");
+            showAlert(error.response?.data?.message || "Server error, please try again later", 'error');
         }
     };
 
@@ -132,47 +146,63 @@ const RegistrationForm = () => {
 
                 {/* Password */}
                 <div className="flex-1 relative w-full">
-                    <label className="block text-sm font-medium mb-1 text-gray-600">Password (optional)</label>
-                    <input
-                        type={showPassword ? "text" : "password"}
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        placeholder="Password"
-                        className="input input-bordered w-full bg-white border border-gray-300 focus:border-blue-600 focus:ring-0 h-12 pr-10 placeholder-gray-400 placeholder-italic"
-                    />
-                    <button
-                        type="button"
-                        className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
-                        onClick={() => setShowPassword(!showPassword)}
-                    >
-                        {showPassword ? <FaEyeSlash size={20} /> : <FaEye size={20} />}
-                    </button>
+                    <label className="block text-sm font-medium mb-1 text-gray-600">
+                        Password (optional)
+                    </label>
+                    <div className="relative">
+                        <input
+                            type={showPassword ? "text" : "password"}
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            placeholder="Password"
+                            className="input input-bordered w-full bg-white border border-gray-300 focus:border-blue-600 focus:ring-0 h-12 pr-12 placeholder-gray-400 placeholder-italic"
+                        />
+                        <button
+                            type="button"
+                            className="absolute inset-y-0 right-3 flex items-center text-gray-400 hover:text-gray-600 z-10"
+                            onClick={() => setShowPassword(!showPassword)}
+                        >
+                            {showPassword ? <FaEyeSlash size={18} className="cursor-pointer" /> : <FaEye size={18} className="cursor-pointer" />}
+                        </button>
+                    </div>
                 </div>
 
                 {/* Re-enter Password */}
                 <div className="flex-1 relative w-full">
-                    <label className="block text-sm font-medium mb-1 text-gray-600">Re-enter Password</label>
-                    <input
-                        type={showRePassword ? "text" : "password"}
-                        value={rePassword}
-                        onChange={(e) => setRePassword(e.target.value)}
-                        placeholder="Re-enter Password"
-                        className="input input-bordered w-full bg-white border border-gray-300 focus:border-blue-600 focus:ring-0 h-12 pr-10 placeholder-gray-400 placeholder-italic"
-                    />
-                    <button
-                        type="button"
-                        className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
-                        onClick={() => setShowRePassword(!showRePassword)}
-                    >
-                        {showRePassword ? <FaEyeSlash size={20} /> : <FaEye size={20} />}
-                    </button>
+                    <label className="block text-sm font-medium mb-1 text-gray-600">
+                        Re-enter Password
+                    </label>
+                    <div className="relative">
+                        <input
+                            type={showRePassword ? "text" : "password"}
+                            value={rePassword}
+                            onChange={(e) => setRePassword(e.target.value)}
+                            placeholder="Re-enter Password"
+                            className="input input-bordered w-full bg-white border border-gray-300 focus:border-blue-600 focus:ring-0 h-12 pr-12 placeholder-gray-400 placeholder-italic"
+                        />
+                        <button
+                            type="button"
+                            className="absolute inset-y-0 right-3 flex items-center text-gray-400 hover:text-gray-600 z-10"
+                            onClick={() => setShowRePassword(!showRePassword)}
+                        >
+                            {showRePassword ? <FaEyeSlash size={18} className="cursor-pointer" /> : <FaEye size={18} className="cursor-pointer" />}
+                        </button>
+                    </div>
                 </div>
             </div>
+
+
 
             {/* Company */}
             <div className="col-span-1 md:col-span-2 w-full">
                 <CompanyInput value={company} onChange={(e) => setCompany(e.target.value)} />
             </div>
+
+            {company !== '' &&
+                <div className="col-span-1">
+                    <GstInput value={gst} onChange={(e) => setGst(e.target.value)} />
+                </div>
+            }
 
             {/* Submit Button */}
             <div className="flex flex-col md:flex-row col-span-1 md:col-span-3 w-full justify-end gap-2">

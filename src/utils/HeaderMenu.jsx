@@ -8,6 +8,7 @@ import { useState } from "react";
 
 export default function HeaderMenu() {
     const { user, setUser } = useDashboard();
+
     const router = useRouter();
     const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -34,12 +35,24 @@ export default function HeaderMenu() {
 
 
     const handleLogout = async () => {
-        await apiUrl.post("/user/logout");
-        localStorage.removeItem("user");
-        sessionStorage.removeItem("token");
-        setUser("");
-        router.push("/");
+        try {
+            const res = await apiUrl.post("/user/logout");
+
+            // Optional: check response status
+            if (res.status === 200) {
+                localStorage.removeItem("user");
+                sessionStorage.removeItem("token");
+                setUser("");
+                router.push("/");
+            } else {
+                console.warn("Logout failed:", res.data?.message || "Unknown error");
+            }
+        } catch (err) {
+            console.error("Error during logout:", err);
+            alert("Something went wrong while logging out. Please try again.");
+        }
     };
+
 
     // ---------------- Desktop UI ----------------
     const DesktopMenu = () => (
@@ -51,10 +64,19 @@ export default function HeaderMenu() {
                         <li key={item.href}>{renderLink(item)}</li>
                     ))}
                     <li className="ml-2 mr-2">
-                        <button className="btn btn-primary">
-                            <Link href="/order-business-credit-report">Order Business Credit Report</Link>
-                        </button>
+                        <Link
+                            href="/order-business-credit-report"
+                            className="btn btn-primary"
+                            onClick={() => {
+                                if (typeof window !== "undefined") {
+                                    sessionStorage.setItem("credit_report", "direct");
+                                }
+                            }}
+                        >
+                            Order Business Credit Report
+                        </Link>
                     </li>
+
                     <li>
                         <div className="dropdown dropdown-hover dropdown-end">
                             <div
@@ -110,10 +132,18 @@ export default function HeaderMenu() {
                         </Link>
                     </li>
                     <li className="ml-2 mr-2">
-                        <button className="btn btn-primary">
-                            <Link href="/order-business-credit-report">Order Business Credit Report</Link>
-                        </button>
+                        <Link
+                            href="/order-business-credit-report"
+                            className="btn btn-primary"
+                            onClick={() => {
+                                sessionStorage.setItem("credit_report", "direct");
+
+                            }}
+                        >
+                            Order Business Credit Report
+                        </Link>
                     </li>
+
                     <li>
                         <button className="btn btn-outline">
                             <Link href="/login">Log In</Link>
@@ -135,7 +165,10 @@ export default function HeaderMenu() {
             </button>
 
             {mobileOpen && (
-                <div className="fixed inset-0 bg-black bg-opacity-40 z-50">
+                <div
+                    className="fixed inset-0 bg-black bg-opacity-40 z-[99999]"
+                    style={{ isolation: "isolate" }} // 👈 ensures PayPal iframe can’t overlap
+                >
                     <div className="absolute right-0 top-0 h-full w-full bg-white shadow-lg flex flex-col">
                         {/* Header row */}
                         <div className="flex justify-between items-center p-4 border-b">
@@ -188,7 +221,12 @@ export default function HeaderMenu() {
                                             <Link
                                                 href="/order-business-credit-report"
                                                 className="items-center justify-between font-semibold text-[16px] text-blue-600 py-2 flex flex-row"
-                                                onClick={() => setMobileOpen(false)}
+                                                onClick={() => {
+                                                    // if (typeof window !== "undefined") {
+                                                    sessionStorage.setItem("credit_report", "direct");
+                                                    // }
+                                                    setMobileOpen(false);
+                                                }}
                                             >
                                                 Order Business Credit Report <FaChevronRight className="ml-5 font-normal" />
                                             </Link>

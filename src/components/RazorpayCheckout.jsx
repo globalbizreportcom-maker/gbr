@@ -3,9 +3,12 @@ import Script from "next/script";
 import { useEffect, useState } from "react";
 import { apiUrl } from "@/api/api";
 import { useRouter } from "next/navigation";
+import { useAlert } from "@/context/AlertProvider";
 
 export default function RazorpayCheckout({ amount = 100, userId }) {
-    console.log(userId);
+
+    const { showAlert } = useAlert();
+
     const router = useRouter();
     const [loading, setLoading] = useState(false);
 
@@ -34,8 +37,7 @@ export default function RazorpayCheckout({ amount = 100, userId }) {
 
                     // 🔹 Call backend to verify payment
                     await apiUrl.post("/api/payment/verify", response);
-
-                    // alert("Payment successful!");
+                    showAlert(`Payment successful`, "success");
                     router.push('/order-success')
                 },
                 modal: {
@@ -46,6 +48,7 @@ export default function RazorpayCheckout({ amount = 100, userId }) {
                             orderId,
                             data: formData,
                         });
+                        showAlert(`Payment Cancelled`, "error");
 
                     }
                 },
@@ -57,8 +60,8 @@ export default function RazorpayCheckout({ amount = 100, userId }) {
             const rzp = new window.Razorpay(options);
             rzp.open();
         } catch (error) {
-            console.log(error);
-            alert("Payment failed. Please try again.");
+            showAlert(`Payment failed. Please try again`, "error");
+
         } finally {
             setLoading(false);
         }

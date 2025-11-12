@@ -4,8 +4,9 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import ScrollToTop from "@/components/ScrollToTop";
 import { DashboardProvider } from "./dashboard/DashboardContext";
-import { CompanyProvider } from "@/context/CompanyContext";
+// import { CompanyProvider } from "@/context/CompanyContext";
 import Script from "next/script";
+import { AlertProvider } from "@/context/AlertProvider";
 
 
 const geistSans = Geist({
@@ -95,13 +96,17 @@ fbq('track', 'PageView');`}
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <DashboardProvider>
-          <CompanyProvider>
+          {/* <CompanyProvider> */}
+          <AlertProvider>
             <Header />
             {children}
             <ScrollToTop />
             <Footer />
-          </CompanyProvider>
+          </AlertProvider>
+          {/* </CompanyProvider> */}
         </DashboardProvider>
+
+
 
       </body>
 

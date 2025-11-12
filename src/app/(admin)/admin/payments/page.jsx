@@ -12,6 +12,8 @@ const AdminPayment = () => {
     const [selectedPayment, setSelectedPayment] = useState(null);
     const [openDialog, setOpenDialog] = useState(false);
 
+    console.log(payments);
+
     // Pagination states
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 10;
@@ -159,8 +161,8 @@ const AdminPayment = () => {
                     <thead>
                         <tr className="bg-gray-100 text-left text-sm">
                             <th className="px-4 py-2 font-semibold">#</th>
-                            <th className="px-4 py-2 font-semibold">Order ID</th>
-                            <th className="px-4 py-2 font-semibold">Payment ID</th>
+                            <th className="px-4 py-2 font-semibold">Name</th>
+                            <th className="px-4 py-2 font-semibold">Country</th>
                             <th className="px-4 py-2 font-semibold">Status</th>
                             <th className="px-4 py-2 font-semibold">Method</th>
                             <th className="px-4 py-2 font-semibold">Amount</th>
@@ -177,8 +179,8 @@ const AdminPayment = () => {
                                     className="border border-gray-200 text-sm relative group hover:bg-gray-50 transition-colors"
                                 >
                                     <td className="px-4 py-4">{startIdx + idx + 1}</td>
-                                    <td className="px-4 py-4">{p.orderId}</td>
-                                    <td className="px-4 py-4">{p.paymentId || '-'}</td>
+                                    <td className="px-4 py-4">{p.reportRequest?.requesterInfo?.name}</td>
+                                    <td className="px-4 py-4">{p.reportRequest?.requesterInfo?.country || '-'}</td>
                                     <td className="px-4 py-4">
                                         <span
                                             className={`px-2 py-1 rounded text-xs font-semibold ${{
@@ -273,12 +275,12 @@ const AdminPayment = () => {
                                 <span>#{startIdx + idx + 1}</span>
                             </div>
                             <div className="flex justify-between">
-                                <span className="font-medium">Order:</span>
-                                <span>{p.orderId}</span>
+                                <span className="font-medium"> Name:</span>
+                                <span>{p.reportRequest?.requesterInfo?.name}</span>
                             </div>
                             <div className="flex justify-between">
-                                <span className="font-medium">Payment ID:</span>
-                                <span>{p.paymentId}</span>
+                                <span className="font-medium">Country:</span>
+                                <span>{p.reportRequest?.requesterInfo?.country}</span>
                             </div>
                             <div className="flex justify-between">
                                 <span className="font-medium">Status:</span>
@@ -332,12 +334,12 @@ const AdminPayment = () => {
             </div>
 
             {openDialog && selectedPayment && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm animate-fadeIn">
-                    <div className="relative h-full w-full bg-white  overflow-hidden animate-slideUp border border-gray-200">
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900/75 bg-opacity-50 backdrop-blur-sm animate-fadeIn" onClick={handleClose}>
+                    <div className="relative h-full max-w-5xl bg-white  overflow-hidden animate-slideUp border border-gray-200" onClick={(e) => e.stopPropagation()}>
 
                         {/* Sticky Header */}
                         <div className="sticky top-0 z-10 bg-white border-b border-gray-200 flex justify-between items-center px-6 py-4 ">
-                            <h2 className="text-xl sm:text-2xl font-semibold text-gray-800 tracking-wide">
+                            <h2 className="text-lg sm:text-lg font-semibold text-gray-800 tracking-wide">
                                 Payment Details
                             </h2>
                             <button
@@ -413,8 +415,10 @@ const AdminPayment = () => {
                                     <InfoItem label="Name" value={selectedPayment.reportRequest?.targetCompany?.name || "-"} />
                                     <InfoItem label="Address" value={selectedPayment.reportRequest?.targetCompany?.address || "-"} />
                                     <InfoItem label="Country" value={selectedPayment.reportRequest?.targetCompany?.country || "-"} />
+                                    <InfoItem label="State" value={selectedPayment.reportRequest?.targetCompany?.state || "-"} />
                                     <InfoItem label="City" value={selectedPayment.reportRequest?.targetCompany?.city || "-"} />
                                     <InfoItem label="Phone" value={selectedPayment.reportRequest?.targetCompany?.phone || "-"} />
+                                    <InfoItem label="Pincode / Zipcode" value={selectedPayment.reportRequest?.targetCompany?.postalCode || "-"} />
                                 </div>
                             </section>
                         </div>

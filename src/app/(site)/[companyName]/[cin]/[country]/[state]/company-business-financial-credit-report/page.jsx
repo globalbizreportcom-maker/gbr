@@ -1,30 +1,73 @@
 
 import ClientPurchaseButton from "@/utils/ClientPurchaseButton";
+import { capitalizeWords } from "@/utils/capitalizeWords";
 
 export const dynamic = "force-dynamic";
 
-// export async function generateMetadata({ params }) {
-//     const { companyName } = params;
-//     const decodedName = decodeURIComponent(companyName.replace(/-/g, " "));
+export async function generateMetadata({ params }) {
+    const { companyName, cin, state, country } = params; // include country if in URL
 
-//     return {
-//         title: `${decodedName} | Business Credit Report`,
-//         description: `Get a detailed business credit report and insights for ${decodedName}. Build trust and make informed business decisions.`,
-//     };
-// }
+    let companyData = null;
+    try {
+        const cleanedState = state?.replace(/[^a-zA-Z0-9\s]/g, " ") || "";
+
+        const res = await fetch(
+            `https://backend.globalbizreport.com/api/company-details?query=${decodeURIComponent(
+                companyName.replace(/-/g, " ")
+            )}&state=${encodeURIComponent(cleanedState)}&cin=${cin}`,
+            { cache: "no-store" }
+        );
+
+        const data = await res.json();
+        companyData = data[0] || null;
+    } catch (err) {
+        console.log("Error fetching company data for metadata:", err);
+    }
+
+    const companyDisplayName = companyData
+        ? capitalizeWords(companyData.CompanyName)
+        : "Company";
+
+    // Build dynamic URL
+    const safeCompanyName = encodeURIComponent(
+        companyData?.CompanyName?.trim().replace(/\s+/g, "-") || "unknown"
+    );
+    const safeCin = encodeURIComponent(companyData?.CIN || "na");
+    const safeState = encodeURIComponent(
+        (companyData?.CompanyStateCode || "na").trim().toLowerCase().replace(/\s+/g, "-")
+    );
+    const safeCountry = encodeURIComponent(
+        (companyData?.CompanyIndian?.["Foreign Company"] ||
+            companyData?.["CompanyIndian/Foreign Company"] ||
+            "na").trim().toLowerCase()
+    );
+
+    const url = `https://www.globalbizreport.com/${safeCompanyName}/${safeCin}/${safeCountry}/${safeState}/company-business-financial-credit-report`;
+
+    return {
+        title: `${companyDisplayName} - Business Credit Report`,
+        description: `Get reliable business insights, credit info for ${companyDisplayName}.`,
+        keywords: ["GBR", "Global Biz Report", companyDisplayName],
+        openGraph: {
+            title: `${companyDisplayName} - Business Credit Report`,
+            description: `Get reliable business insights, credit info for ${companyDisplayName}.`,
+            url,
+            siteName: "Global Biz Report",
+            type: "website",
+        },
+    };
+}
+
+
+
 
 const CompanyPage = async ({ params }) => {
+
     const { companyName, cin, state } = await params; // ✅ works in server component
 
     let companyData = null;
 
     try {
-        // const res = await fetch(
-        //     `https://backend.globalbizreport.com/api/company-details?query=${decodeURIComponent(
-        //         companyName.replace(/-/g, " ")
-        //     )}&state=${state}&cin=${cin}`,
-        //     { cache: "no-store" }
-        // );
 
         const cleanedState = state
             ?.replace(/[^a-zA-Z0-9\s]/g, " ") || ""; // trim any extra spaces
@@ -167,3 +210,4 @@ const CompanyPage = async ({ params }) => {
 };
 
 export default CompanyPage;
+

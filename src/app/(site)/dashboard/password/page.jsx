@@ -2,8 +2,12 @@
 import { useState } from "react";
 import { useDashboard } from "../DashboardContext";
 import { apiUrl } from "@/api/api";
+import { useAlert } from "@/context/AlertProvider";
 
 export default function PasswordPage() {
+
+    const { showAlert } = useAlert();
+
     const { user, setUser } = useDashboard();
 
     const [currentPassword, setCurrentPassword] = useState("");
@@ -14,11 +18,11 @@ export default function PasswordPage() {
     const handleAddPassword = async (e) => {
         e.preventDefault();
         if (!newPassword || !confirmPassword) {
-            alert("Please fill all fields");
+            showAlert(`Please fill all fields`, "error");
             return;
         }
         if (newPassword !== confirmPassword) {
-            alert("Passwords do not match");
+            showAlert(`Passwords do not match`, "error");
             return;
         }
 
@@ -28,12 +32,12 @@ export default function PasswordPage() {
                 userId: user._id,
                 password: newPassword,
             });
-            alert(res.data.message);
+            showAlert(`${res.data.message}`, "success");
             setUser(res.data.user); // update user in context
             setNewPassword("");
             setConfirmPassword("");
         } catch (error) {
-            alert(error.response?.data?.message || "Failed to add password");
+            showAlert(`${error.response?.data?.message || "Failed to add password"}`, "success");
         } finally {
             setLoading(false);
         }
@@ -42,11 +46,11 @@ export default function PasswordPage() {
     const handleChangePassword = async (e) => {
         e.preventDefault();
         if (!currentPassword || !newPassword || !confirmPassword) {
-            alert("Please fill all fields");
+            showAlert(`Please fill all fields`, "error");
             return;
         }
         if (newPassword !== confirmPassword) {
-            alert("Passwords do not match");
+            showAlert(`Passwords do not match`, "error");
             return;
         }
 
@@ -57,13 +61,13 @@ export default function PasswordPage() {
                 currentPassword,
                 newPassword,
             });
-            alert(res.data.message);
+            showAlert(`${res.data.message}`, "success");
             setUser(res.data.user);
             setCurrentPassword("");
             setNewPassword("");
             setConfirmPassword("");
         } catch (error) {
-            alert(error.response?.data?.message || "Failed to change password");
+            showAlert(`${error.response?.data?.message || "Failed to change password"}`, "success");
         } finally {
             setLoading(false);
         }

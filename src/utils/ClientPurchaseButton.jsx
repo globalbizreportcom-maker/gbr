@@ -9,7 +9,9 @@ const ClientPurchaseButton = ({ companyData }) => {
 
     const handlePurchaseReport = () => {
         if (!companyData) return;
-        console.log(companyData);
+
+        sessionStorage.removeItem('credit_report');
+
         const addressParts = companyData.Registered_Office_Address
             ?.split(",")
             .map(p => p.trim()) || [];
@@ -48,13 +50,16 @@ const ClientPurchaseButton = ({ companyData }) => {
             contactName: "",
             contactEmail: "",
             contactCountry: {
-                label: countryLabel,
-                value: countryLabel.toLowerCase(),
+                label: '',
+                value: '',
+                // label: countryLabel,
+                // value: countryLabel.toLowerCase(),
             },
             contactPhone: "",
             contactCompany: "",
             agreedToTerms: true,
         };
+
 
         // Save to localStorage
         localStorage.setItem("gbr_form", JSON.stringify(formData));
@@ -64,7 +69,7 @@ const ClientPurchaseButton = ({ companyData }) => {
     };
 
     return (
-        <div className="fixed bottom-0 left-0 w-full bg-gray-600 text-white p-4 flex justify-between items-center shadow-lg z-50">
+        <div className="fixed bottom-0 left-0 w-full bg-gray-600 text-white p-4 flex justify-between xl:justify-evenly items-center shadow-lg z-50">
             <div>
                 <p className="font-medium">
                     Order Freshly Investigated Business Credit Report

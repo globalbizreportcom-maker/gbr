@@ -60,12 +60,12 @@ const AbandonedCheckouts = () => {
 
 
     return (
-        <div className="w-full  ">
+        <div className="max-w-6xl mx-auto  ">
             {/* Desktop Table View */}
 
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
                 <h1 className="text-lg font-semibold text-gray-800">
-                    Abandon Checkout – Visitors
+                    Abandon Checkout
                 </h1>
 
                 {/* Search Bar */}
@@ -94,9 +94,9 @@ const AbandonedCheckouts = () => {
             ) : (
                 <>
                     {/* desktop view */}
-                    <div className="hidden md:block overflow-x-auto bg-white rounded-xl border border-gray-200 py-6">
+                    <div className="hidden md:block overflow-x-auto bg-white rounded-xl border border-gray-200 ">
 
-                        <table className="min-w-full border-collapse text-sm text-gray-700">
+                        <table className="min-w-full border-collapse text-sm table-md text-gray-700">
                             <thead className="bg-gray-100 text-gray-800 text-xs uppercase">
                                 <tr>
                                     <th className="px-4 py-3 text-left">#</th>
@@ -237,8 +237,9 @@ const AbandonedCheckouts = () => {
 
             {/* Selected Visitor Modal (optional) */}
             {selectedVisitor && (
-                <div className="fixed inset-0 bg-gray-900/70 backdrop-blur-sm flex items-center justify-center z-50 ">
-                    <div className="bg-white w-full h-full overflow-hidden border border-gray-200 animate-fadeIn">
+                <div className="fixed inset-0 bg-gray-900/70 backdrop-blur-sm flex items-center justify-center z-50 " onClick={() => setSelectedVisitor(null)} >
+
+                    <div className="bg-white max-w-6xl mx-auto h-auto overflow-hidden border border-gray-200 animate-fadeIn" onClick={(e) => e.stopPropagation()}>
 
                         {/* Header */}
                         <div className="flex justify-between items-center px-8 py-5 bg-gray-100 text-black">
@@ -260,7 +261,7 @@ const AbandonedCheckouts = () => {
                         </div>
 
                         {/* Content */}
-                        <div className="p-8 space-y-10 overflow-y-auto max-h-[80vh]">
+                        <div className="p-8 space-y-10 overflow-y-auto max-h-[90vh]">
 
                             {/* 🧍 Requester Information */}
                             <div className="bg-white border border-gray-200 rounded-xl  transition-all duration-200">
@@ -305,7 +306,7 @@ const AbandonedCheckouts = () => {
                                         <span>This section contains the contact details provided by the user for this order.</span>)
                                     </p>
 
-                                    <div className="p-6 grid grid-cols-1 sm:grid-cols-2 gap-4 text-gray-700">
+                                    <div className="p-6 grid grid-cols-1 sm:grid-cols-1 gap-4 text-gray-700">
                                         <p><strong>Name:</strong> {selectedVisitor.contactName || "-"}</p>
                                         <p><strong>Email:</strong> {selectedVisitor.contactEmail || "-"}</p>
                                         <p><strong>Phone:</strong> {selectedVisitor.contactPhone || "-"}</p>
@@ -323,95 +324,80 @@ const AbandonedCheckouts = () => {
                                         </h3>
                                     </div>
 
-                                    <div className="p-6 text-gray-700 bg-gray-50 border border-gray-200 rounded-xl">
+                                    <div className="p-6 text-gray-700  rounded-xl">
+                                        <div className="p-6 grid grid-cols-1 sm:grid-cols-1 gap-4 text-gray-700">
 
+                                            <p>
+                                                <strong>Company:</strong>{" "}
+                                                {selectedVisitor.companyName
+                                                    ? selectedVisitor.companyName
+                                                        .toLowerCase()
+                                                        .replace(/\b\w/g, (char) => char.toUpperCase())
+                                                    : "-"}
+                                            </p>
+                                            <p>
+                                                <strong>Address:</strong>{" "}
+                                                {selectedVisitor.address
+                                                    ? selectedVisitor.address
+                                                        .toLowerCase()
+                                                        .replace(/\b\w/g, (char) => char.toUpperCase())
+                                                    : "-"}
+                                            </p>
 
-                                        <div className="flex flex-wrap gap-x-12 gap-y-4">
-                                            {/* Left Column */}
-                                            <div className="space-y-2 min-w-[250px] flex-1">
-                                                <p>
-                                                    <strong>Company:</strong>{" "}
-                                                    {selectedVisitor.companyName
-                                                        ? selectedVisitor.companyName
-                                                            .toLowerCase()
-                                                            .replace(/\b\w/g, (char) => char.toUpperCase())
-                                                        : "-"}
-                                                </p>
-                                                <p>
-                                                    <strong>Address:</strong>{" "}
-                                                    {selectedVisitor.address
-                                                        ? selectedVisitor.address
-                                                            .toLowerCase()
-                                                            .replace(/\b\w/g, (char) => char.toUpperCase())
-                                                        : "-"}
-                                                </p>
+                                            <p>
+                                                <strong>City:</strong>{" "}
+                                                {selectedVisitor.city
+                                                    ? selectedVisitor.city
+                                                        .toLowerCase()
+                                                        .replace(/\b\w/g, (char) => char.toUpperCase())
+                                                    : "-"}
+                                            </p>
 
-                                            </div>
+                                            <p>
+                                                <strong>State:</strong>{" "}
+                                                {selectedVisitor.state
+                                                    ? selectedVisitor.state
+                                                        .toLowerCase()
+                                                        .replace(/\b\w/g, (char) => char.toUpperCase())
+                                                    : "-"}
+                                            </p>
 
-                                            {/* <p className="text-xs text-gray-500 flex items-center justify-end gap-1  italic">
-                                                        (      <FaInfo className="text-[10px] " />
-                                                        <span>
-                                                            The city and state may vary from the main address. Please refer above for the accurate details.
-                                                        </span>)
-                                                    </p> */}
+                                            <p>
+                                                <strong>Postal Code:</strong>{" "}
+                                                {selectedVisitor.postalCode || "-"}
+                                            </p>
 
+                                            <p>
+                                                <strong>Country:</strong>{" "}
+                                                {selectedVisitor.country
+                                                    ? selectedVisitor.country
+                                                        .toLowerCase()
+                                                        .replace(/\b\w/g, (char) => char.toUpperCase())
+                                                    : "-"}
+                                            </p>
 
-                                            {/* Right Column */}
-                                            <div className="flex flex-wrap gap-x-4 gap-y-4">
+                                            <p>
+                                                <strong>Website:</strong>{" "}
+                                                {selectedVisitor.website ? (
+                                                    <a
+                                                        href={selectedVisitor.website}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        className="text-emerald-700 hover:underline"
+                                                    >
+                                                        {selectedVisitor.website}
+                                                    </a>
+                                                ) : "-"}
+                                            </p>
 
+                                            <p>
+                                                <strong>Telephone:</strong>{" "}
+                                                {selectedVisitor.telephone || "-"}
+                                            </p>
 
-                                                <p>
-                                                    <strong>City:</strong>{" "}
-                                                    {selectedVisitor.city
-                                                        ? selectedVisitor.city
-                                                            .toLowerCase()
-                                                            .replace(/\b\w/g, (char) => char.toUpperCase())
-                                                        : "-"}
-                                                </p>
-
-                                                <p>
-                                                    <strong>State:</strong>{" "}
-                                                    {selectedVisitor.state
-                                                        ? selectedVisitor.state
-                                                            .toLowerCase()
-                                                            .replace(/\b\w/g, (char) => char.toUpperCase())
-                                                        : "-"}
-                                                </p>
-
-                                                <p>
-                                                    <strong>Postal Code:</strong>{" "}
-                                                    {selectedVisitor.postalCode || "-"}
-                                                </p>
-
-                                                <p>
-                                                    <strong>Country:</strong>{" "}
-                                                    {selectedVisitor.country
-                                                        ? selectedVisitor.country
-                                                            .toLowerCase()
-                                                            .replace(/\b\w/g, (char) => char.toUpperCase())
-                                                        : "-"}
-                                                </p>
-
-                                                <p>
-                                                    <strong>Website:</strong>{" "}
-                                                    {selectedVisitor.website ? (
-                                                        <a
-                                                            href={selectedVisitor.website}
-                                                            target="_blank"
-                                                            rel="noopener noreferrer"
-                                                            className="text-emerald-700 hover:underline"
-                                                        >
-                                                            {selectedVisitor.website}
-                                                        </a>
-                                                    ) : "-"}
-                                                </p>
-
-                                                <p>
-                                                    <strong>Telephone:</strong>{" "}
-                                                    {selectedVisitor.telephone || "-"}
-                                                </p>
-                                            </div>
                                         </div>
+
+
                                     </div>
 
                                 </div>
@@ -433,7 +419,7 @@ const AbandonedCheckouts = () => {
                                             <span className="text-red-500 font-medium">No</span>
                                         )}
                                     </p>
-                                    <p><strong>Order Placed On:</strong>{" "}
+                                    <p><strong>Timestamp:</strong>{" "}
                                         {new Date(selectedVisitor.createdAt).toLocaleString("en-GB")}
                                     </p>
                                 </div>

@@ -1,10 +1,12 @@
 'use client';
 import { forwardRef } from "react";
+import RequiredStar from "./RequiredStar";
 
-const PincodeInput = forwardRef(({ value, onChange, placeholder = "Pincode/ Zipcode" }, ref) => {
+const GstInput = forwardRef(({ value, onChange, placeholder = "Gst" }, ref) => {
     return (
-        <div className="mb-5">
-            <label className="block text-sm font-medium mb-1 text-gray-500">Pincode/ Zipcode</label>
+
+        <div className=" mb-5">
+            <label className="block text-sm font-medium mb-1 text-gray-500">Gst </label>
             <input
                 ref={ref}
                 type="text"
@@ -17,5 +19,5 @@ const PincodeInput = forwardRef(({ value, onChange, placeholder = "Pincode/ Zipc
     );
 });
 
-PincodeInput.displayName = "PincodeInput";
-export default PincodeInput;
+GstInput.displayName = "GstInput";
+export default GstInput;

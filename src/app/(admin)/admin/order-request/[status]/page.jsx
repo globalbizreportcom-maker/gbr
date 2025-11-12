@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import React, { useCallback, useEffect, useState } from "react";
 import { FaArrowRight, FaMailBulk } from "react-icons/fa";
 import { useDropzone } from "react-dropzone";
+import { useAlert } from "@/context/AlertProvider";
 
 // Define colors for each status
 const STATUS_COLORS = {
@@ -18,6 +19,9 @@ const STATUS_TABS = ["all", "initiated", "in-progress", "completed", "delivered"
 
 
 const ReportsAdmin = ({ defaultTab }) => {
+
+
+    const { showAlert } = useAlert();
 
     const router = useRouter(); // inside your component
 
@@ -128,7 +132,9 @@ const ReportsAdmin = ({ defaultTab }) => {
     });
 
     const handleUpload = async () => {
-        if (!files.length) return alert("Please select a file!");
+
+
+        if (!files.length) return showAlert(`Please select a file`, "error");
         const formData = new FormData();
         formData.append("file", files[0]);
         formData.append("reportRequestId", selectedReport._id);
@@ -139,7 +145,7 @@ const ReportsAdmin = ({ defaultTab }) => {
                 headers: { "Content-Type": "multipart/form-data" },
             });
             if (data.success) {
-                alert("File uploaded successfully!");
+                showAlert(`File uploaded successfully`, "success");
                 setFiles([]);
             }
         } catch (err) {

@@ -1,167 +1,96 @@
-// "use client";
 
-// import { apiUrl } from "@/api/api";
-// import { useRouter } from "next/navigation";
-// import Script from "next/script";
-// import { useRef, useEffect, useState } from "react";
-
-// export default function PayPalCheckout({ amount = "1.00", userId }) {
-
-//     const router = useRouter();
-//     const [formData, setFormData] = useState(null);
-//     const userIdRef = useRef(userId);
-
-//     useEffect(() => {
-//         userIdRef.current = userId; // always keep latest userId
-//     }, [userId]);
-
-//     useEffect(() => {
-//         const storedData = localStorage.getItem("gbr_form");
-//         if (storedData) setFormData(JSON.parse(storedData));
-//     }, []);
-
-//     useEffect(() => {
-//         if (!formData) return;
-
-//         const renderPayPalButtons = () => {
-//             if (window.paypal && !document.getElementById("paypal-btn-rendered")) {
-//                 window.paypal.Buttons({
-//                     createOrder: async () => {
-//                         const res = await apiUrl.post("/api/payment/create-paypal-order", {
-//                             amount,
-//                             userId: userIdRef.current,
-//                             formData,
-//                         });
-//                         return res.data.orderId;
-//                     },
-//                     onApprove: async (data) => {
-//                         await apiUrl.post("/api/payment/capture-paypal", { orderId: data.orderID });
-//                         // alert("Payment successful!");
-//                         router.push('/order-success')
-//                     },
-//                     onCancel: async function (data) {
-//                         // User cancelled the PayPal payment
-//                         await apiUrl.post("/api/payment/cancellation", {
-//                             userId: formData.userId,
-//                             orderId: data.orderID,       // ✅ use data.orderID
-//                             data,
-//                         });
-//                     },
-//                     onError: console.log,
-//                 }).render("#paypal-button-container");
-
-//                 document.getElementById("paypal-button-container")?.setAttribute("id", "paypal-btn-rendered");
-//             }
-//         };
-
-//         const interval = setInterval(() => {
-//             if (window.paypal) {
-//                 renderPayPalButtons();
-//                 clearInterval(interval);
-//             }
-//         }, 100);
-//     }, [formData, amount]);
-
-//     return (
-//         <>
-//             <div id="paypal-button-container"></div>
-//             <Script
-//                 src={`https://www.paypal.com/sdk/js?client-id=AbYmo3fDOLo929hTcfuSF5OAsTXMmvUiLalzVeXkqtWNVNlbaBP6erqJfy4bw1zP0MgBRoKhWUJ4LA6-&currency=USD`}
-//                 strategy="afterInteractive"
-//             />
-//         </>
-//     );
-// }
-
-
-"use client";
+'use client';
 
 import { apiUrl } from "@/api/api";
 import { useRouter } from "next/navigation";
-import Script from "next/script";
 import { useEffect, useRef, useState } from "react";
+import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
+import { useAlert } from "@/context/AlertProvider";
+import { useDashboard } from "@/app/(site)/dashboard/DashboardContext";
 
-export default function PayPalCheckout({ amount = "1.00", userId }) {
+export default function PayPalCheckout({ amount = "1.00", userId, }) {
+
+
+    const { showAlert } = useAlert();
+
+    const { user } = useDashboard();
+
     const router = useRouter();
-    const [formData, setFormData] = useState(null);
-    const userIdRef = useRef(userId);
-    const [paypalLoaded, setPaypalLoaded] = useState(false);
+    const formDataRef = useRef(null); // stable ref for formData
+    const [loaded, setLoaded] = useState(false); // trigger re-render once loaded
 
-    // Keep latest userId
+    // Load formData from localStorage **once**
     useEffect(() => {
-        userIdRef.current = userId;
-    }, [userId]);
 
-    // Load formData from localStorage
-    useEffect(() => {
         const storedData = localStorage.getItem("gbr_form");
-        if (storedData) setFormData(JSON.parse(storedData));
+        if (storedData) {
+            formDataRef.current = JSON.parse(storedData);
+            setLoaded(true); // triggers render
+        }
     }, []);
 
-    // Initialize PayPal Buttons when SDK is loaded and formData exists
-    useEffect(() => {
-        if (!paypalLoaded || !formData) return;
 
-        const renderPayPalButtons = () => {
-            if (window.paypal && !document.getElementById("paypal-btn-rendered")) {
-                window.paypal.Buttons({
-                    createOrder: async () => {
+
+    // Prevent rendering if formData is not ready
+    if (!loaded || !formDataRef.current) return null;
+
+    const formData = formDataRef.current;
+    console.log(formData);
+    const paypalKey = `paypal-${amount}-${userId}-${formData?.currency || ""}-${formData?.companyName || ""}`;
+
+
+    return (
+        <>
+            {!loaded && <p>Loading...</p>}
+
+            <PayPalScriptProvider
+                key={paypalKey}
+                options={{
+                    "client-id": 'AbYmo3fDOLo929hTcfuSF5OAsTXMmvUiLalzVeXkqtWNVNlbaBP6erqJfy4bw1zP0MgBRoKhWUJ4LA6-',
+                    currency: "USD",
+                }}
+                deferLoading={false}
+            >
+
+                <PayPalButtons
+                    style={{ layout: "vertical" }}
+                    forceReRender={[amount, userId || user?._id, formData]}
+                    createOrder={async () => {
                         const res = await apiUrl.post("/api/payment/create-paypal-order", {
-                            amount,
-                            userId: userIdRef.current,
+                            amount: Number(amount).toFixed(2),
+                            userId,
                             formData,
                         });
-                        return res.data.orderId; // return PayPal order ID
-                    },
-                    onApprove: async (data) => {
+                        return res.data.orderId;
+                    }}
+                    onApprove={async (data) => {
                         try {
                             const res = await apiUrl.post("/api/payment/capture-paypal", {
                                 orderId: data.orderID,
                             });
-                            console.log("Payment captured:", res.data);
+                            showAlert(`Payment successful`, "success");
                             router.push("/order-success");
                         } catch (err) {
-                            console.error("Capture failed:", err);
+                            showAlert(`Payment failed. Please try again`, "error");
                         }
-                    },
-                    onCancel: async (data) => {
+                    }}
+                    onCancel={async (data) => {
                         await apiUrl.post("/api/payment/cancellation", {
-                            userId: formData.userId,
+                            userId: formData.userId || userId || user?._id || "",
                             orderId: data.orderID,
                             data,
                         });
-                        alert("Payment cancelled");
-                    },
-                    onError: (err) => {
-                        console.error("PayPal error:", err);
-                        alert("Something went wrong with PayPal payment");
-                    },
-                }).render("#paypal-button-container");
+                        showAlert(`Payment Cancelled`, "error");
+                    }}
+                    onError={(err) => {
+                        console.log(err);
+                        showAlert(`Something went wrong with PayPal payment`, "error");
 
-                // Prevent double rendering
-                document.getElementById("paypal-button-container")?.setAttribute(
-                    "id",
-                    "paypal-btn-rendered"
-                );
-            }
-        };
+                    }}
+                />
+            </PayPalScriptProvider>
 
-        const interval = setInterval(() => {
-            if (window.paypal) {
-                renderPayPalButtons();
-                clearInterval(interval);
-            }
-        }, 100);
-    }, [paypalLoaded, formData, amount]);
-
-    return (
-        <>
-            <div id="paypal-button-container"></div>
-            <Script
-                src={`https://www.paypal.com/sdk/js?client-id=AbYmo3fDOLo929hTcfuSF5OAsTXMmvUiLalzVeXkqtWNVNlbaBP6erqJfy4bw1zP0MgBRoKhWUJ4LA6-&currency=USD`}
-                strategy="afterInteractive"
-                onLoad={() => setPaypalLoaded(true)}
-            />
         </>
     );
 }
+

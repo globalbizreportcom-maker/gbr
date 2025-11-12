@@ -86,13 +86,15 @@ const AdminHeader = () => {
 
                     <nav className="hidden md:flex space-x-6 items-center text-sm font-medium">
 
+                        <Link href="/admin/users" className="hover:text-primary">Users</Link>
                         <Link href="/admin/abandon-checkout" className="hover:text-primary">Abandon Checkout</Link>
                         <Link href="/admin/order-request/all" className="hover:text-primary">Order Requests</Link>
                         <Link href="/admin/inbox" className="hover:text-primary">Inbox</Link>
                         <Link href="/admin/payments" className="hover:text-primary">Payments</Link>
                         <Link href="/admin/search" className="hover:text-primary">Company Search</Link>
+                        <Link href="/admin/payment-visitors" className="hover:text-primary">Visitors</Link>
 
-                        <div className="relative group">
+                        {/* <div className="relative group">
                             <button className="cursor-pointer flex items-center gap-1 hover:text-primary">
                                 Visitors
                                 <FaChevronDown className="h-3 w-3 mt-1" />
@@ -101,7 +103,7 @@ const AdminHeader = () => {
                                 <div className="bg-white shadow-lg rounded-md p-6 min-w-[300px] grid grid-cols-2 gap-4 text-sm text-gray-700">
                                     {[
                                         { label: "Log In", href: "/admin/login" },
-                                        { label: "Payment Visitors", href: "/admin/payment-visitors" },
+                                        { label: "Visitors", href: "/admin/payment-visitors" },
                                     ].map((item, idx) => (
                                         <Link key={idx} href={item.href} className="hover:text-primary cursor-pointer">
                                             {item.label}
@@ -109,7 +111,7 @@ const AdminHeader = () => {
                                     ))}
                                 </div>
                             </div>
-                        </div>
+                        </div> */}
 
 
                         {/* <div className="relative group">

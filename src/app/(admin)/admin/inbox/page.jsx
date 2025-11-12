@@ -46,6 +46,7 @@ const AdminInbox = () => {
                                 const bLastMsg = b.messages[b.messages.length - 1];
                                 const aUnread = aLastMsg?.sender === "user" && !aLastMsg?.read;
                                 const bUnread = bLastMsg?.sender === "user" && !bLastMsg?.read;
+                                const sendBy = aLastMsg?.sender;
                                 if (aUnread && !bUnread) return -1;
                                 if (!aUnread && bUnread) return 1;
                                 return new Date(bLastMsg?.createdAt) - new Date(aLastMsg?.createdAt);
@@ -68,7 +69,7 @@ const AdminInbox = () => {
                                             {lastMsg ? (
                                                 <div className="relative group">
                                                     <span className="cursor-pointer">{truncatedMsg}</span>
-                                                    {!lastMsg.read ? (
+                                                    {!lastMsg.read && c.sendBy === "user" ? (
                                                         <span className="ml-2 px-1 text-xs py-0.5 bg-red-500 text-white rounded-sm">
                                                             new !
                                                         </span>

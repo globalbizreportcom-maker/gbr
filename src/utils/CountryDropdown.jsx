@@ -53,6 +53,7 @@
 import React, { useEffect, useState } from 'react';
 import Select from 'react-select';
 import { Country } from 'country-state-city';
+import RequiredStar from './RequiredStar';
 
 const CountryDropdown = ({ value, onChange }) => {
     const [options, setOptions] = useState([]);
@@ -81,10 +82,11 @@ const CountryDropdown = ({ value, onChange }) => {
             onChange(selectedOption); // send full object
         }
     };
+    console.log(value);
 
     return (
         <div>
-            <label className="label text-sm font-medium text-gray-700">Country</label>
+            <label className="label text-sm font-medium text-gray-700">Country  <RequiredStar /></label>
             <Select
                 options={options}
                 value={selected}

@@ -1,291 +1,3 @@
-// 'use client';
-// import React, { useEffect, useState } from 'react';
-// import { FaEye } from 'react-icons/fa';
-// import PayPalCheckout from './PayPalCheckout';
-// import { useDashboard } from '@/app/(site)/dashboard/DashboardContext';
-// import RazorpayCheckout from './RazorpayCheckout';
-
-// const OrderConfirmContent = () => {
-//     const [formData, setFormData] = useState({});
-//     const { user } = useDashboard();
-
-//     const [selected, setSelected] = useState("paypal");
-
-//     useEffect(() => {
-//         const storedData = localStorage.getItem('gbr_form');
-//         if (storedData) {
-//             setFormData(JSON.parse(storedData));
-//         }
-//     }, []);
-
-//     if (!formData) return <p className="text-sm text-gray-600">Loading...</p>;
-
-//     const pricingINR = {
-//         India: 4720,
-//         China: 7670,
-//         "Asia (excluding India & China)": 7670,
-//         USA: 7080,
-//         Canada: 7080,
-//         Europe: 7670,
-//         "Middle East": 7670,
-//         "Australia & New Zealand": 8850,
-//         Africa: 8260,
-//         Oceania: 8850,
-//         "Latin America": 9440,
-//         "Other Countries": 9440,
-//     };
-
-//     const pricingUSD = {
-//         India: 49,
-//         China: 79,
-//         "Asia (excluding India & China)": 79,
-//         USA: 69,
-//         Canada: 69,
-//         Europe: 79,
-//         "Middle East": 79,
-//         "Australia & New Zealand": 89,
-//         Africa: 89,
-//         Oceania: 89,
-//         "Latin America": 99,
-//         "Other Countries": 99,
-//     };
-
-//     const getRegion = (country) => {
-//         const asiaExcludingIndiaChina = [
-//             "Japan", "South Korea", "Singapore", "Thailand", "Malaysia", "Indonesia", "Philippines", "Vietnam", "Nepal",
-//             "Sri Lanka", "Bangladesh", "Pakistan", "Myanmar", "Bhutan", "Cambodia", "Laos", "Brunei", "Maldives"
-//         ];
-
-//         const australiaNZ = ["Australia", "New Zealand"];
-//         const middleEast = ["UAE", "Saudi Arabia", "Qatar", "Kuwait", "Bahrain", "Oman"];
-//         const latinAmerica = ["Brazil", "Mexico", "Argentina", "Colombia", "Chile", "Peru"];
-//         const africa = ["South Africa", "Nigeria", "Egypt", "Kenya", "Morocco", "Ethiopia"];
-//         const oceania = ["Fiji", "Papua New Guinea", "Samoa", "Tonga"];
-
-//         if (country.toLowerCase() === "india") return "India";
-//         if (country.toLowerCase() === "china") return "China";
-//         if (asiaExcludingIndiaChina.map(c => c.toLowerCase()).includes(country.toLowerCase())) return "Asia (excluding India & China)";
-//         if (australiaNZ.map(c => c.toLowerCase()).includes(country.toLowerCase())) return "Australia & New Zealand";
-//         if (middleEast.map(c => c.toLowerCase()).includes(country.toLowerCase())) return "Middle East";
-//         if (latinAmerica.map(c => c.toLowerCase()).includes(country.toLowerCase())) return "Latin America";
-//         if (africa.map(c => c.toLowerCase()).includes(country.toLowerCase())) return "Africa";
-//         if (oceania.map(c => c.toLowerCase()).includes(country.toLowerCase())) return "Oceania";
-//         if (["usa", "united states"].includes(country.toLowerCase())) return "USA";
-//         if (["canada"].includes(country.toLowerCase())) return "Canada";
-//         if (["europe", "uk", "germany", "france", "italy", "spain"].includes(country.toLowerCase())) return "Europe";
-
-//         return "Other Countries";
-//     };
-
-//     // Payer country (for currency)
-//     const payerCountry =
-//         typeof formData?.contactCountry === "string"
-//             ? formData.contactCountry
-//             : formData?.contactCountry?.label;
-
-//     // Target company country (for pricing region)
-//     const targetCountry =
-//         typeof formData?.country === "string"
-//             ? formData.country
-//             : formData?.country?.label;
-
-//     // Determine region of target company
-//     const targetRegion = getRegion(targetCountry || "");
-
-//     // Determine display price based on payer currency
-//     const displayPrice =
-//         payerCountry?.toLowerCase() === "india"
-//             ? `₹${pricingINR[targetRegion] || pricingINR["Other Countries"]}`
-//             : `$${pricingUSD[targetRegion] || pricingUSD["Other Countries"]}`;
-
-
-
-//     return (
-//         < div>
-//             <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8">
-
-//                 {/* Left: Payment Section */}
-//                 <div className="lg:col-span-8 bg-gray-50 p-6 border border-gray-200 rounded-xl">
-//                     <h2 className="text-xl font-semibold">Payment Summary</h2>
-//                     <h6 className="text-xs text-gray-600 mb-4 pb-4 border-b border-gray-300">
-//                         Make the payment through Paypal / Credit or Debit Card.
-//                     </h6>
-
-//                     <div className="overflow-x-auto">
-//                         <table className="min-w-full text-sm text-gray-700">
-//                             <thead>
-//                                 <tr className="border-b border-gray-200 text-left text-gray-500 uppercase text-xs tracking-wider">
-//                                     <th className="py-2 pr-4">Description</th>
-//                                     <th className="py-2 text-right">Price</th>
-//                                 </tr>
-//                             </thead>
-//                             <tbody>
-//                                 <tr className="border-b border-gray-100">
-//                                     <td className="pt-4 pr-4 font-bold">Business Credit Report</td>
-//                                 </tr>
-//                                 <tr className="border-b border-gray-100">
-//                                     <td className="py-3 pr-4 text-primary">{formData.companyName}</td>
-//                                     <td className="py-3 text-right text-base font-semibold">{displayPrice}</td>
-//                                 </tr>
-//                                 <tr className="border-t border-gray-300 font-semibold">
-//                                     <td className="py-3 pr-4 text-xl">Total Amount</td>
-//                                     <td className="py-3 text-right text-xl">{displayPrice}</td>
-//                                 </tr>
-//                             </tbody>
-//                         </table>
-//                     </div>
-
-//                     <div className="w-full mx-auto mt-6 flex flex-col md:flex-col md:gap-4 space-y-4 md:space-y-0">
-//                         {(() => {
-//                             const country = typeof formData?.contactCountry === "string"
-//                                 ? formData.contactCountry
-//                                 : formData?.contactCountry?.label;
-
-//                             // If India, show Razorpay
-//                             if (country?.toLowerCase() === "india") {
-//                                 return (
-//                                     <label className="flex-1 flex flex-col md:flex-row items-center justify-between p-4 border border-gray-200 rounded-xl cursor-pointer hover:bg-gray-50">
-//                                         <span className="font-medium text-gray-600 mb-2 md:mb-0 md:mr-4 text-center md:text-left">
-//                                             Pay via Razorpay <span className="text-xs">(For payments in INR from India)</span>
-//                                         </span>
-//                                         <div className="w-full md:w-auto flex justify-center">
-//                                             <RazorpayCheckout amount="1" userId={user?._id || ""} />
-//                                         </div>
-//                                     </label>
-//                                 );
-//                             }
-
-//                             // Otherwise, show PayPal
-//                             return (
-//                                 <label className="flex-1 flex flex-col md:flex-row items-center justify-between p-4 border border-gray-200 rounded-xl cursor-pointer hover:bg-gray-50">
-//                                     <span className="font-medium text-gray-600 mb-2 md:mb-0 md:mr-4 text-center md:text-left">
-//                                         Pay via PayPal
-//                                     </span>
-//                                     <div className="w-full md:w-auto flex justify-center">
-//                                         <PayPalCheckout amount="1" userId={user?._id || ""} />
-//                                     </div>
-//                                 </label>
-//                             );
-//                         })()}
-//                     </div>
-
-
-
-
-
-
-
-
-
-//                     <h6 className="text-xs text-center text-gray-600 mb-4 pb-4 border-b border-gray-300 mt-5">WE ACCEPT</h6>
-
-//                     <div className="flex flex-wrap justify-center items-center gap-4">
-//                         <img src="https://badges.razorpay.com/badge-light.png" alt="Visa" className="h-6 object-contain" />
-//                         <img src="https://www.paypalobjects.com/webstatic/mktg/logo/bdg_now_accepting_pp_2line_w.png" alt="Mastercard" className="h-6 object-contain" />
-//                         <img src="https://www.paypalobjects.com/webstatic/mktg/logo/AM_mc_vs_dc_ae.jpg" alt="PayPal" className="h-6 object-contain" />
-//                         <img src="https://cdn.iconscout.com/icon/free/png-512/free-upi-logo-icon-svg-download-png-1747946.png?f=webp&w=512" alt="UPI" className="h-6 object-contain" />
-//                     </div>
-//                 </div>
-
-//                 {/* Right: Billing Summary */}
-//                 <div className="lg:col-span-4 p-6 border border-gray-200 rounded-xl">
-//                     <h3 className="text-lg font-semibold">Billing Detail</h3>
-//                     <h6 className="text-xs mb-4 pb-4 border-b border-gray-300">Billing info solely for payment, not shared.</h6>
-
-//                     <table className="w-full text-sm text-left text-gray-800 border-separate border-spacing-y-2">
-//                         <tbody>
-//                             <tr className="border-b border-gray-200 font-medium">
-//                                 <td className="py-2 pr-4 font-semibold">Name</td>
-//                                 <td className="py-2 text-right">{formData.contactName}</td>
-//                             </tr>
-//                             <tr className="border-b border-gray-200 font-medium">
-//                                 <td className="py-2 pr-4 font-semibold">Company</td>
-//                                 <td className="py-2 text-right">{formData.contactCompany}</td>
-//                             </tr>
-//                             <tr className="border-b border-gray-200 font-medium">
-//                                 <td className="py-2 pr-4 font-semibold" >Country</td>
-//                                 <td className="py-2 text-right">
-//                                     {typeof formData?.contactCountry === "string"
-//                                         ? formData.contactCountry
-//                                         : formData?.contactCountry?.label}
-//                                 </td>
-//                             </tr>
-//                             <tr className="border-b border-gray-200 font-medium">
-//                                 <td className="py-2 pr-4 font-semibold">Email</td>
-//                                 <td className="py-2 text-right">{formData.contactEmail}</td>
-//                             </tr>
-//                             <tr className="border-b border-gray-200 font-medium">
-//                                 <td className="py-2 pr-4 font-semibold">Telephone</td>
-//                                 <td className="py-2 text-right">{formData.contactPhone}</td>
-//                             </tr>
-//                         </tbody>
-//                     </table>
-
-
-//                     <p className="text-xs text-black mt-4 p-4 border border-green-200 bg-green-100 rounded-lg text-center">
-//                         You will receive freshly investigated business credit report on your email within the expected delivery time of 1–3 business days.
-//                     </p>
-//                 </div>
-//             </div>
-
-//             <div className='border border-gray-200 rounded-lg p-10 mt-10'>
-
-//                 <h3 className='text-2xl font-semibold'>Your Order Information</h3>
-
-//                 <div className="collapse rounded-lg mt-10" >
-//                     <input type="checkbox" />
-
-//                     <div className="collapse-title flex justify-between items-center font-semibold text-base bg-gray-100 py-5">
-//                         <div>
-//                             <span className='text-2xl'>{formData.companyName}</span>
-//                         </div>
-//                         <FaEye className="w-5 h-5 text-gray-500" />
-//                     </div>
-
-//                     <div className="collapse-content">
-//                         <div className="overflow-x-auto">
-//                             <table className="table table-md border-0 uppercase">
-//                                 <tbody >
-//                                     <tr className='border-b-gray-200 '>
-//                                         <td className="font-bold">COMPANY NAME</td>
-//                                         <td align='right'>{formData.companyName}</td>
-//                                     </tr>
-//                                     <tr className='border-b-gray-200'>
-//                                         <td className="font-bold">ADDRESS</td>
-//                                         <td align='right'>{formData.address}</td>
-//                                     </tr>
-//                                     <tr className='border-b-gray-200'>
-
-//                                         <td className="font-bold">CITY</td>
-//                                         <td align='right'>{formData.city}</td>
-//                                     </tr>
-//                                     <tr className='border-b-gray-200'>
-
-//                                         <td className="font-bold">STATE</td>
-//                                         <td align='right'>{formData.state}</td>
-//                                     </tr>
-//                                     <tr className='border-b-gray-200'>
-
-//                                         <td className="font-bold">COUNTRY</td>
-//                                         <td align='right'>{formData.country?.label}</td>
-//                                     </tr>
-//                                     <tr className='border-b-gray-200'>
-//                                         <td className="font-bold">POSTAL CODE</td>
-//                                         <td align='right'>{formData.postalCode}</td>
-//                                     </tr>
-//                                 </tbody>
-//                             </table>
-//                         </div>
-//                     </div>
-//                 </div>
-
-//             </div>
-//         </div >
-
-//     );
-// };
-
-// export default OrderConfirmContent;
 
 
 'use client';
@@ -297,88 +9,21 @@ import RazorpayCheckout from './RazorpayCheckout';
 import { apiUrl } from '@/api/api';
 import { useRouter, usePathname } from "next/navigation";
 
+
+const Skeleton = ({ className }) => (
+    <div className={`animate-pulse bg-gray-200 rounded ${className}`}></div>
+);
+
 const OrderConfirmContent = () => {
-    const [formData, setFormData] = useState({});
+
+
+    const [formData, setFormData] = useState(null);
+    const [loading, setLoading] = useState(true);
     const { user } = useDashboard();
+
     const hasSubmittedRef = useRef(false);
     const router = useRouter();
-    const pathname = usePathname();
 
-    useEffect(() => {
-        const submitVisitorPayment = async () => {
-
-            const storedData = localStorage.getItem("gbr_form");
-            if (!storedData) return;
-
-            const parsedData = JSON.parse(storedData);
-            setFormData(parsedData);
-
-            if (hasSubmittedRef.current) return; // prevent double submission
-            hasSubmittedRef.current = true;
-
-            if (sessionStorage.getItem("visitor_payment_submitted")) return;
-            try {
-                const payerCountry =
-                    typeof parsedData?.contactCountry === "string"
-                        ? parsedData.contactCountry
-                        : parsedData?.contactCountry?.label;
-
-                const targetCountry =
-                    typeof parsedData?.country === "string"
-                        ? parsedData.country
-                        : parsedData?.country?.label;
-
-                const region = getRegion(targetCountry || "");
-                const isINR = payerCountry?.toLowerCase() === "india";
-                const paymentAmount = isINR
-                    ? pricingINR[region] || pricingINR["Other Countries"]
-                    : pricingUSD[region] || pricingUSD["Other Countries"];
-                const currency = isINR ? "INR" : "USD";
-
-                const payload = {
-                    ...parsedData,
-                    userId: user?._id,
-                    country: parsedData.country?.label || parsedData.country || "",
-                    paymentAmount,
-                    currency,
-                };
-
-                await apiUrl.post("/visitors/payments", payload, {
-                    headers: { "Content-Type": "application/json" },
-                });
-
-                sessionStorage.setItem("visitor_payment_submitted", "true");
-                console.log("✅ Visitor form submitted");
-            } catch (error) {
-                console.error("❌ Error submitting visitor form:", error);
-            }
-        };
-
-        submitVisitorPayment();
-    }, []); // 👈 still runs only once
-
-    useEffect(() => {
-        const handlePopState = () => {
-            sessionStorage.removeItem('visitor_payment_submitted')
-            // const confirmLeave = window.confirm('sure');
-            // if (!confirmLeave) {
-            //     // Prevent navigation by re-pushing current state
-            //     history.pushState(null, "", window.location.href);
-            // }
-        };
-
-        // Push a new state so back button triggers popstate
-        history.pushState(null, "", window.location.href);
-        window.addEventListener("popstate", handlePopState);
-
-        return () => {
-            window.removeEventListener("popstate", handlePopState);
-        };
-    }, []);
-
-    if (!formData) return <p className="text-sm text-gray-600">Loading...</p>;
-
-    // ✅ Pricing Tables
     const pricingINR = {
         India: 4720,
         China: 7670,
@@ -409,16 +54,9 @@ const OrderConfirmContent = () => {
         "Other Countries": 99,
     };
 
-    // ✅ Region Mapping Function
     const getRegion = (country) => {
         if (!country) return "Other Countries";
-
-        const asiaExcludingIndiaChina = [
-            "Japan", "South Korea", "Singapore", "Thailand", "Malaysia", "Indonesia",
-            "Philippines", "Vietnam", "Nepal", "Sri Lanka", "Bangladesh", "Pakistan",
-            "Myanmar", "Bhutan", "Cambodia", "Laos", "Brunei", "Maldives"
-        ];
-
+        const asiaExcl = ["Japan", "South Korea", "Singapore", "Thailand", "Malaysia", "Indonesia", "Philippines", "Vietnam", "Nepal", "Sri Lanka", "Bangladesh", "Pakistan", "Myanmar", "Bhutan", "Cambodia", "Laos", "Brunei", "Maldives"];
         const australiaNZ = ["Australia", "New Zealand"];
         const middleEast = ["UAE", "Saudi Arabia", "Qatar", "Kuwait", "Bahrain", "Oman"];
         const latinAmerica = ["Brazil", "Mexico", "Argentina", "Colombia", "Chile", "Peru"];
@@ -426,10 +64,9 @@ const OrderConfirmContent = () => {
         const oceania = ["Fiji", "Papua New Guinea", "Samoa", "Tonga"];
 
         const c = country.toLowerCase();
-
         if (c === "india") return "India";
         if (c === "china") return "China";
-        if (asiaExcludingIndiaChina.map(x => x.toLowerCase()).includes(c)) return "Asia (excluding India & China)";
+        if (asiaExcl.map(x => x.toLowerCase()).includes(c)) return "Asia (excluding India & China)";
         if (australiaNZ.map(x => x.toLowerCase()).includes(c)) return "Australia & New Zealand";
         if (middleEast.map(x => x.toLowerCase()).includes(c)) return "Middle East";
         if (latinAmerica.map(x => x.toLowerCase()).includes(c)) return "Latin America";
@@ -438,11 +75,80 @@ const OrderConfirmContent = () => {
         if (["usa", "united states"].includes(c)) return "USA";
         if (["canada"].includes(c)) return "Canada";
         if (["europe", "uk", "germany", "france", "italy", "spain"].includes(c)) return "Europe";
-
         return "Other Countries";
     };
 
-    // ✅ Extract payer and target countries
+    useEffect(() => {
+        const submitVisitorPayment = async () => {
+            const storedData = localStorage.getItem("gbr_form");
+            if (!storedData) return;
+            const parsedData = JSON.parse(storedData);
+            setFormData(parsedData);
+            setLoading(false);
+
+            if (hasSubmittedRef.current) return;
+            hasSubmittedRef.current = true;
+            sessionStorage.removeItem("visitor_payment_submitted");
+            // if (sessionStorage.getItem("visitor_payment_submitted")) return;
+
+            try {
+                const payerCountry =
+                    typeof parsedData?.contactCountry === "string"
+                        ? parsedData.contactCountry
+                        : parsedData?.contactCountry?.label;
+
+                const targetCountry =
+                    typeof parsedData?.country === "string"
+                        ? parsedData.country
+                        : parsedData?.country?.label;
+
+                const region = getRegion(targetCountry || "");
+                const isINR = payerCountry?.toLowerCase() === "india";
+                const paymentAmount = isINR
+                    ? pricingINR[region] || pricingINR["Other Countries"]
+                    : pricingUSD[region] || pricingUSD["Other Countries"];
+                const currency = isINR ? "INR" : "USD";
+
+                const payload = {
+                    ...parsedData,
+                    userId: user?._id,
+                    country: parsedData.country?.label || parsedData.country || "",
+                    paymentAmount,
+                    currency,
+                };
+
+                // await apiUrl.post("/visitors/payments", payload, {
+                //     headers: { "Content-Type": "application/json" },
+                // });
+
+                // sessionStorage.setItem("visitor_payment_submitted", true);
+            } catch (error) {
+                console.error("❌ Error submitting visitor form:", error);
+            }
+        };
+
+        submitVisitorPayment();
+    }, []);
+
+    if (loading || !formData) {
+        // Skeleton Loader
+        return (
+            <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8">
+                <div className="lg:col-span-8 bg-gray-50 p-6 border border-gray-200 rounded-xl space-y-4">
+                    <Skeleton className="h-6 w-1/3" />
+                    <Skeleton className="h-4 w-full" />
+                    <Skeleton className="h-32 w-full" />
+                    <Skeleton className="h-10 w-full" />
+                </div>
+                <div className="lg:col-span-4 p-6 border border-gray-200 rounded-xl space-y-4">
+                    <Skeleton className="h-6 w-1/2" />
+                    <Skeleton className="h-4 w-full" />
+                    <Skeleton className="h-32 w-full" />
+                </div>
+            </div>
+        );
+    }
+
     const payerCountry =
         typeof formData?.contactCountry === "string"
             ? formData.contactCountry
@@ -453,18 +159,11 @@ const OrderConfirmContent = () => {
             ? formData.country
             : formData?.country?.label;
 
-    // ✅ Determine pricing region based on target country
     const region = getRegion(targetCountry || "");
-
-    // ✅ Choose which currency to show based on payer country
     const isINR = payerCountry?.toLowerCase() === "india";
-
-    // ✅ Show correct pricing based on target + currency
     const displayPrice = isINR
         ? `₹${pricingINR[region] || pricingINR["Other Countries"]}`
         : `$${pricingUSD[region] || pricingUSD["Other Countries"]}`;
-
-    // ✅ Pass raw amount (without symbol) for payment gateways
     const paymentAmount = isINR
         ? pricingINR[region] || pricingINR["Other Countries"]
         : pricingUSD[region] || pricingUSD["Other Countries"];
@@ -503,22 +202,22 @@ const OrderConfirmContent = () => {
                         </table>
                     </div>
 
-                    <div className="w-full mx-auto mt-6 flex flex-col space-y-4">
+                    <div className="w-full mx-auto mt-6 flex flex-col space-y-4 ">
                         {isINR ? (
-                            <label className="flex flex-col md:flex-row items-center justify-between p-4 border border-gray-200 rounded-xl cursor-pointer hover:bg-gray-50">
+                            <label className="flex flex-col md:flex-row items-center justify-between p-4 border border-gray-200 rounded-xl  hover:bg-gray-50">
                                 <span className="font-medium text-gray-600 mb-2 md:mb-0 md:mr-4 text-center md:text-left">
                                     Pay via Razorpay <span className="text-xs">(For payments in INR from India)</span>
                                 </span>
-                                <div className="w-full md:w-auto flex justify-center">
+                                <div className="w-full md:w-auto flex justify-center z-10">
                                     <RazorpayCheckout amount={paymentAmount.toString()} userId={user?._id || ""} />
                                 </div>
                             </label>
                         ) : (
-                            <label className="flex flex-col md:flex-row items-center justify-between p-4 border border-gray-200 rounded-xl cursor-pointer hover:bg-gray-50">
+                            <label className="flex flex-col md:flex-row items-center justify-between p-4 border border-gray-200 rounded-xl  hover:bg-gray-50">
                                 <span className="font-medium text-gray-600 mb-2 md:mb-0 md:mr-4 text-center md:text-left">
                                     Pay via PayPal
                                 </span>
-                                <div className="w-full md:w-auto flex justify-center">
+                                <div className="w-full md:w-auto flex justify-center z-10">
                                     <PayPalCheckout amount={paymentAmount.toString()} userId={user?._id || ""} />
                                 </div>
                             </label>
@@ -544,7 +243,7 @@ const OrderConfirmContent = () => {
                         <tbody>
                             <tr><td className="py-2 pr-4 font-semibold">Name</td><td className="py-2 text-right">{formData.contactName}</td></tr>
                             <tr><td className="py-2 pr-4 font-semibold">Company</td><td className="py-2 text-right">{formData.contactCompany}</td></tr>
-                            <tr><td className="py-2 pr-4 font-semibold">Country</td><td className="py-2 text-right">{payerCountry}</td></tr>
+                            <tr><td className="py-2 pr-4 font-semibold">Country</td><td className="py-2 text-right">{payerCountry || formData.contactCountry}</td></tr>
                             <tr><td className="py-2 pr-4 font-semibold">Email</td><td className="py-2 text-right">{formData.contactEmail}</td></tr>
                             <tr><td className="py-2 pr-4 font-semibold">Telephone</td><td className="py-2 text-right">{formData.contactPhone}</td></tr>
                         </tbody>
@@ -557,24 +256,24 @@ const OrderConfirmContent = () => {
             </div>
 
             {/* Order Details */}
-            <div className='border border-gray-200 rounded-lg p-10 mt-10'>
-                <h3 className='text-2xl font-semibold'>Your Order Information</h3>
+            <div className='border border-gray-200 rounded-lg px-2 mt-10 py-10'>
+                <h3 className='text-xl md:text-2xl  font-semibold'>Your Order Information</h3>
                 <div className="collapse rounded-lg mt-10">
                     <input type="checkbox" />
-                    <div className="collapse-title flex justify-between items-center font-semibold text-base bg-gray-100 py-5">
-                        <span className='text-2xl'>{formData.companyName}</span>
+                    <div className="collapse-title flex justify-between items-center font-semibold text-base bg-gray-100 py-5 mb-10">
+                        <span className='text-lg md:text-2xl'>{formData.companyName}</span>
                         <FaEye className="w-5 h-5 text-gray-500" />
                     </div>
                     <div className="collapse-content">
                         <div className="overflow-x-auto">
-                            <table className="table table-md border-0 uppercase">
+                            <table className="table table-md border-0 uppercase ">
                                 <tbody>
-                                    <tr><td className="font-bold">COMPANY NAME</td><td align='right'>{formData.companyName}</td></tr>
-                                    <tr><td className="font-bold">ADDRESS</td><td align='right'>{formData.address}</td></tr>
-                                    <tr><td className="font-bold">CITY</td><td align='right'>{formData.city}</td></tr>
-                                    <tr><td className="font-bold">STATE</td><td align='right'>{formData.state}</td></tr>
-                                    <tr><td className="font-bold">COUNTRY</td><td align='right'>{formData.country?.label}</td></tr>
-                                    <tr><td className="font-bold">POSTAL CODE</td><td align='right'>{formData.postalCode}</td></tr>
+                                    <tr><td className="font-bold">COMPANY NAME</td><td align='left'>{formData.companyName}</td></tr>
+                                    <tr><td className="font-bold">ADDRESS</td><td align='left'>{formData.address}</td></tr>
+                                    <tr><td className="font-bold">CITY</td><td align='left'>{formData.city}</td></tr>
+                                    <tr><td className="font-bold">STATE</td><td align='left'>{formData.state}</td></tr>
+                                    <tr><td className="font-bold">COUNTRY</td><td align='left'>{targetCountry || formData.country}</td></tr>
+                                    <tr><td className="font-bold">POSTAL CODE</td><td align='left'>{formData.postalCode}</td></tr>
                                 </tbody>
                             </table>
                         </div>

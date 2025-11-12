@@ -1,9 +1,16 @@
 "use client";
 import { useEffect, useState } from "react";
 import { FaArrowUp } from "react-icons/fa";
+import { usePathname } from 'next/navigation';
 
 const ScrollToTop = () => {
     const [visible, setVisible] = useState(false);
+    const pathname = usePathname();
+
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, [pathname]);
+
 
     useEffect(() => {
         const handleScroll = () => {

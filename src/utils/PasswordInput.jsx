@@ -6,7 +6,7 @@ const PasswordInput = forwardRef(({ value, onChange, placeholder = "Password" },
     const [show, setShow] = useState(false);
 
     return (
-        <div className=" mb-10">
+        <div className="mb-10">
             <label className="block text-sm font-medium mb-1 text-gray-500">Password</label>
             <div className="relative w-full">
                 <input
@@ -15,14 +15,16 @@ const PasswordInput = forwardRef(({ value, onChange, placeholder = "Password" },
                     value={value}
                     onChange={onChange}
                     placeholder={placeholder}
-                    className="input input-bordered w-full bg-white border border-gray-300 focus:border-black focus:ring-0 h-[50px]"
+                    className="input input-bordered w-full bg-white border border-gray-300 focus:border-black focus:ring-0 h-[50px] pr-12 placeholder-gray-400 placeholder-italic"
                 />
-                <span
-                    className="absolute right-3 top-4 cursor-pointer text-gray-500"
+                <button
+                    type="button"
                     onClick={() => setShow(!show)}
+                    className="absolute inset-y-0 right-3 flex items-center text-gray-500 hover:text-gray-700 z-10"
+                    tabIndex={-1} // 👈 prevents focus stealing
                 >
-                    {show ? <FaEyeSlash /> : <FaEye />}
-                </span>
+                    {show ? <FaEyeSlash size={18} className="cursor-pointer" /> : <FaEye size={18} className="cursor-pointer" />}
+                </button>
             </div>
         </div>
     );

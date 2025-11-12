@@ -56,9 +56,9 @@ export const CompanyProvider = ({ children }) => {
 
 
     // Save to localStorage whenever companies change
-    useEffect(() => {
-        localStorage.setItem("gbr_form", JSON.stringify({ companies }));
-    }, [companies]);
+    // useEffect(() => {
+    //     localStorage.setItem("gbr_form", JSON.stringify({ companies }));
+    // }, [companies]);
 
     return (
         <CompanyContext.Provider value={{ companies, setCompanies }}>

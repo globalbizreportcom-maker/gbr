@@ -1,10 +1,14 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import { FaArrowLeft } from 'react-icons/fa';
 
 export default function BackButton() {
     const router = useRouter();
+    const pathname = usePathname();
+
+    // Hide back button on dashboard page
+    if (pathname === '/dashboard') return null;
 
     return (
         <button

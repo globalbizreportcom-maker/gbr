@@ -5,6 +5,7 @@ import { GoogleReCaptchaProvider, useGoogleReCaptcha } from 'react-google-recapt
 import dynamic from 'next/dynamic';
 import axios from 'axios';
 import { apiUrl } from '@/api/api';
+import { useAlert } from '@/context/AlertProvider';
 
 const Select = dynamic(() => import('react-select'), { ssr: false });
 
@@ -21,6 +22,10 @@ const subjectOptions = [
 
 // ✅ Inner form (only rendered once recaptcha client is available)
 const ContactFormInner = () => {
+
+    const { showAlert } = useAlert();
+
+
     const { executeRecaptcha } = useGoogleReCaptcha();
     const [formData, setFormData] = useState({
         fullName: '',
@@ -53,12 +58,13 @@ const ContactFormInner = () => {
         e.preventDefault();
 
         if (!formData.subject) {
-            alert('❌ Please select a subject.');
+            const { showAlert } = useAlert();
+            showAlert(`Please select a subject`, "error");
             return;
         }
 
         if (!executeRecaptcha) {
-            alert('⚠️ reCAPTCHA not ready. Please try again.');
+            showAlert(`reCAPTCHA not ready. Please try again`, "error");
             return;
         }
 
@@ -76,14 +82,14 @@ const ContactFormInner = () => {
             const res = await apiUrl.post(`/contact/form-submit`, payload);
 
             if (res.data.success) {
-                alert('✅ Message sent successfully');
+                showAlert(`Message sent successfully`, "success");
+
                 setFormData({ fullName: '', email: '', subject: null, message: '' });
             } else {
-                alert(' Failed to send message');
+                showAlert(`Failed to send message`, "error");
             }
         } catch (err) {
-            console.error(err);
-            alert('Something went wrong.');
+            showAlert(`Something went wrong`, "error");
         }
     };
 
