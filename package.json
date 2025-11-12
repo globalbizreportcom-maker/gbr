@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@paypal/react-paypal-js": "^8.9.2",
+    "@splidejs/react-splide": "^0.7.12",
     "axios": "^1.11.0",
     "country-state-city": "^3.2.1",
     "cross-env": "^7.0.3",

@@ -401,6 +401,7 @@ const AdminPayment = () => {
                                     <InfoItem label="Phone" value={selectedPayment.user?.phone || selectedPayment.reportRequest?.requesterInfo?.phone || "-"} />
                                     <InfoItem label="Country" value={selectedPayment.user?.country || selectedPayment.reportRequest?.requesterInfo?.country || "-"} />
                                     <InfoItem label="Company" value={selectedPayment.user?.company || selectedPayment.reportRequest?.requesterInfo?.company || "-"} />
+                                    <InfoItem label="Company" value={selectedPayment.user?.gstin || selectedPayment.reportRequest?.requesterInfo?.gst || "-"} />
                                 </div>
                             </section>
 

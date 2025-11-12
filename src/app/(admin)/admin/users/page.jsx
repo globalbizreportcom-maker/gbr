@@ -148,6 +148,10 @@ const UsersPage = () => {
                                         <span className="font-medium">Company:</span>{" "}
                                         {user.company || "-"}
                                     </p>
+                                    <p>
+                                        <span className="font-medium">Company:</span>{" "}
+                                        {user.gstin || "-"}
+                                    </p>
                                 </div>
                             </div>
                         ))}

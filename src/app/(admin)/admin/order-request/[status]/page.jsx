@@ -472,6 +472,7 @@ const ReportsAdmin = ({ defaultTab }) => {
                                             {selectedReport.targetCompany.website}
                                         </p>
                                     )}
+
                                 </div>
                             </div>
 
@@ -505,12 +506,19 @@ const ReportsAdmin = ({ defaultTab }) => {
                                             {selectedReport.requesterInfo.company}
                                         </p>
                                     )}
+                                    {selectedReport.requesterInfo.gst && (
+                                        <p>
+                                            <span className="font-medium">Gst:</span>{" "}
+                                            {selectedReport.requesterInfo.gst}
+                                        </p>
+                                    )}
                                     {selectedReport.requesterInfo.optionalEmail && (
                                         <p>
                                             <span className="font-medium">Optional Email:</span>{" "}
                                             {selectedReport.requesterInfo.optionalEmail}
                                         </p>
                                     )}
+
                                 </div>
                             </div>
 

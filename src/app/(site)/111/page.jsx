@@ -305,7 +305,7 @@ export default function Home() {
             </section>
 
             {/* ===== CTA ===== */}
-            <section className="bg-indigo-600 text-white py-20 text-center rounded-2xl mt-20 mb-20">
+            <section className="bg-gray-600 text-white py-20 text-center rounded-2xl mt-20 mb-20">
                 <div className="container mx-auto px-6">
                     <h2 className="text-3xl md:text-4xl font-bold mb-6">
                         Start Your Business Verification Today
@@ -315,7 +315,7 @@ export default function Home() {
                         company report in just minutes.
                     </p>
                     <a
-                        href="/order"
+                        href="/order-business-credit-report"
                         className="bg-white text-indigo-700 font-semibold px-8 py-4 rounded-md hover:bg-gray-100 transition"
                     >
                         Order Now

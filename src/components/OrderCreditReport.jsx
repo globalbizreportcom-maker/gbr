@@ -159,6 +159,7 @@ const OrderCreditReport = () => {
                     country: formData.contactCountry?.label || formData.contactCountry || "",
                     phone: formData.contactPhone,
                     company: formData.contactCompany,
+                    gst: formData.companyGst || '',
                 });
 
                 // Existing user → show login modal & stop here
