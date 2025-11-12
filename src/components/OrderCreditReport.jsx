@@ -204,7 +204,7 @@ const OrderCreditReport = () => {
             localStorage.setItem("gbr_form", JSON.stringify(formData));
             router.push("/order-confirm");
         } catch (error) {
-            console.log(" Error in handlePreview:", error.response?.data || error.message);
+            // console.log(" Error in handlePreview:", error.response?.data || error.message);
             setSnackbarMessage("Something went wrong. Please try again.");
             setShowSnackbar(true);
             setTimeout(() => setShowSnackbar(false), 3000);
