@@ -73,42 +73,34 @@ import { NextResponse } from "next/server";
 
 const BACKEND_URL = "https://backend.globalbizreport.com/companies-directory/";
 const BASE_URL = "https://www.globalbizreport.com";
-const PAGES_PER_SITEMAP = 100; // pages per sitemap
-const PER_PAGE = 20; // items per backend page
+const PER_PAGE = 20;
+const URLS_PER_SITEMAP = 2000;
 const META_URL = "https://backend.globalbizreport.com/companies-meta";
 
 export async function GET(req, { params }) {
-    const { id } = params;
-    const sitemapId = parseInt(id, 10);
-
-    if (isNaN(sitemapId) || sitemapId < 1) {
-        return new NextResponse("Invalid sitemap ID", { status: 400 });
-    }
+    const sitemapId = parseInt(params.id, 10);
+    if (isNaN(sitemapId) || sitemapId < 1) return new NextResponse("Invalid sitemap ID", { status: 400 });
 
     try {
-        // ✅ Get total pages from meta endpoint
         const metaRes = await fetch(META_URL, { next: { revalidate: 86400 } });
         const metaData = await metaRes.json();
-        const totalPages = metaData.totalPages || 0;
+        const totalBackendPages = metaData.totalPages || 0;
 
-        const startPage = (sitemapId - 1) * PAGES_PER_SITEMAP + 1;
-        const endPage = Math.min(sitemapId * PAGES_PER_SITEMAP, totalPages);
+        // Determine which backend pages to fetch for this sitemap
+        const urlsPerSitemapPages = Math.ceil(URLS_PER_SITEMAP / PER_PAGE);
+        const startPage = (sitemapId - 1) * urlsPerSitemapPages + 1;
+        const endPage = Math.min(sitemapId * urlsPerSitemapPages, totalBackendPages);
 
-        if (startPage > totalPages) {
-            return new NextResponse("Sitemap not found", { status: 404 });
-        }
+        if (startPage > totalBackendPages) return new NextResponse("Sitemap not found", { status: 404 });
 
-        // ✅ Fetch companies for this sitemap using pagination
         let allCompanies = [];
         for (let page = startPage; page <= endPage; page++) {
-            const url = `${BACKEND_URL}?page=${page}&perPage=${PER_PAGE}`;
-            const res = await fetch(url, { next: { revalidate: 86400 } });
+            const res = await fetch(`${BACKEND_URL}?page=${page}&perPage=${PER_PAGE}`, { next: { revalidate: 86400 } });
             const data = await res.json();
-            if (!data.rows || data.rows.length === 0) break;
+            if (!data.rows?.length) continue; // skip empty pages
             allCompanies.push(...data.rows);
         }
 
-        // ✅ Build XML
         let xml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
         xml += `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n`;
 
@@ -117,10 +109,8 @@ export async function GET(req, { params }) {
             const cin = encodeURIComponent(c.CIN || "");
             const state = encodeURIComponent((c.CompanyStateCode?.toLowerCase().replace(/\s+/g, "_")) || "unknown");
 
-            const url = `${BASE_URL}/${name}/${cin}/india/${state}/company-business-financial-credit-report`;
-
             xml += `  <url>\n`;
-            xml += `    <loc>${url}</loc>\n`;
+            xml += `    <loc>${BASE_URL}/${name}/${cin}/india/${state}/company-business-financial-credit-report</loc>\n`;
             xml += `    <lastmod>${new Date().toISOString()}</lastmod>\n`;
             xml += `    <changefreq>weekly</changefreq>\n`;
             xml += `    <priority>0.8</priority>\n`;
@@ -128,13 +118,11 @@ export async function GET(req, { params }) {
         });
 
         xml += `</urlset>`;
-
-        return new NextResponse(xml, {
-            headers: { "Content-Type": "application/xml" },
-        });
+        return new NextResponse(xml, { headers: { "Content-Type": "application/xml" } });
 
     } catch (err) {
         console.error("Sitemap generation error:", err);
         return new NextResponse("Failed to generate sitemap", { status: 500 });
     }
 }
+

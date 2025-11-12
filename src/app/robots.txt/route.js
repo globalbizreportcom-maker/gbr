@@ -77,7 +77,8 @@ Sitemap: ${BASE_URL}/company-directory/india
         for (let i = 1; i <= totalSitemaps; i++) {
             content += `Sitemap: ${BASE_URL}/sitemaps/sitemap/${i}\n`;
         }
-
+        // Ensure final newline
+        content += "\n";
         return new NextResponse(content.trim(), {
             headers: { "Content-Type": "text/plain" },
         });
