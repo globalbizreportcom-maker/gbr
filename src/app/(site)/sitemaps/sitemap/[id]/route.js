@@ -74,7 +74,8 @@ import { NextResponse } from "next/server";
 const BACKEND_URL = "https://backend.globalbizreport.com/companies-directory/";
 const BASE_URL = "https://www.globalbizreport.com";
 const PAGES_PER_SITEMAP = 100; // pages per sitemap
-const PER_PAGE = 20; // items per page in backend
+const PER_PAGE = 20; // items per backend page
+const META_URL = "https://backend.globalbizreport.com/companies-meta";
 
 export async function GET(req, { params }) {
     const { id } = params;
@@ -85,11 +86,10 @@ export async function GET(req, { params }) {
     }
 
     try {
-        // 1️⃣ Get total pages from backend
-        const infoRes = await fetch(`${BACKEND_URL}?perPage=${PER_PAGE}`, { next: { revalidate: 86400 } });
-        const infoData = await infoRes.json();
-        const totalItems = infoData.totalRows || 0;
-        const totalPages = Math.ceil(totalItems / PER_PAGE);
+        // ✅ Get total pages from meta endpoint
+        const metaRes = await fetch(META_URL, { next: { revalidate: 86400 } });
+        const metaData = await metaRes.json();
+        const totalPages = metaData.totalPages || 0;
 
         const startPage = (sitemapId - 1) * PAGES_PER_SITEMAP + 1;
         const endPage = Math.min(sitemapId * PAGES_PER_SITEMAP, totalPages);
@@ -98,27 +98,17 @@ export async function GET(req, { params }) {
             return new NextResponse("Sitemap not found", { status: 404 });
         }
 
-        // 2️⃣ Keyset-based fetching
+        // ✅ Fetch companies for this sitemap using pagination
         let allCompanies = [];
-        let cursor = 0;
-        let pageCount = 0;
-
-        while (pageCount < PAGES_PER_SITEMAP) {
-            const url = `${BACKEND_URL}?perPage=${PER_PAGE}${cursor ? `&cursor=${cursor}` : ''}`;
+        for (let page = startPage; page <= endPage; page++) {
+            const url = `${BACKEND_URL}?page=${page}&perPage=${PER_PAGE}`;
             const res = await fetch(url, { next: { revalidate: 86400 } });
             const data = await res.json();
-
             if (!data.rows || data.rows.length === 0) break;
-
             allCompanies.push(...data.rows);
-
-            cursor = data.nextCursor;
-            pageCount++;
-
-            if (!cursor) break; // reached end
         }
 
-        // 3️⃣ Build XML
+        // ✅ Build XML
         let xml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
         xml += `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n`;
 

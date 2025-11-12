@@ -18,28 +18,76 @@ const CompanyDirectory = () => {
     const [totalPages, setTotalPages] = useState(1);
     const [loading, setLoading] = useState(false);
     const [initialized, setInitialized] = useState(false);
+    const [firstLoad, setFirstLoad] = useState(true);
 
     // ----------------- Fetch Companies -----------------
-    const fetchCompanies = async (pageNumber = 1, companyVal = company, appliedFilters = filters, signal) => {
+    // const fetchCompanies = async (pageNumber = 1, companyVal = company, appliedFilters = filters, signal) => {
+    //     try {
+    //         setLoading(true);
+    //         const params = {
+    //             company: companyVal,
+    //             page: pageNumber,
+    //             perPage: 20,
+    //             ...appliedFilters
+    //         };
+    //         const res = await apiUrl.get("/companies-directory", { params, signal });
+    //         setResults(res.data.rows);
+    //         setTotalPages(res.data.totalPages);
+    //         setPage(res.data.page);
+    //     } catch (err) {
+    //         if (axios.isCancel(err)) return;
+    //         console.log("Error fetching companies:", err);
+    //     } finally {
+    //         setLoading(false);
+    //     }
+    // };
+
+    const fetchCompanies = async (
+        pageNumber = 1,
+        companyVal = company,
+        appliedFilters = filters,
+        signal
+    ) => {
         try {
             setLoading(true);
+
             const params = {
-                company: companyVal,
+                company: companyVal || undefined,
                 page: pageNumber,
-                perPage: 20,
                 ...appliedFilters
             };
-            const res = await apiUrl.get("/companies-directory", { params, signal });
-            setResults(res.data.rows);
-            setTotalPages(res.data.totalPages);
-            setPage(res.data.page);
+
+            // ✅ Use the new fast API
+            const res = await apiUrl.get("/companies-fast", { params, signal });
+            const data = res.data || {};
+
+            // Safely extract keys with defaults
+            const rows = Array.isArray(data.rows) ? data.rows : [];
+            const totalPages = Number(data.totalPages || Math.ceil((data.totalResults || rows.length) / 20)) || 1;
+            const totalResults = Number(data.totalResults || rows.length);
+            const currentPage = Number(data.page || pageNumber) || 1;
+            const perPage = Number(data.perPage || 20);
+
+            setResults(rows);
+            setTotalPages(totalPages);
+            setPage(currentPage);
+            setLoading(false);
+
+            // Optional: scroll to results on page change
+            resultsRef.current?.scrollIntoView({ behavior: "smooth" });
+
         } catch (err) {
             if (axios.isCancel(err)) return;
-            console.log("Error fetching companies:", err);
+            // console.log("Error fetching companies:", err);
+            setResults([]);
+            setTotalPages(1);
+            setPage(1);
         } finally {
             setLoading(false);
+            setFirstLoad(false); // mark that initial fetch is done
         }
     };
+
 
     // ----------------- Handle Search -----------------
     const handleSearch = (pageNumber = 1) => {
@@ -467,7 +515,7 @@ const CompanyDirectory = () => {
             }
 
             {
-                !loading && results.length < 1 && (
+                !loading && !firstLoad && results.length < 1 && (
                     <div className="flex flex-col items-center justify-center py-16 text-gray-500">
                         <FaSearch className="text-4xl mb-3 text-gray-300" />
                         <p className="text-lg text-gray-400 font-medium">No results found for this search!</p>
