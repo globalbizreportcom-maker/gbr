@@ -72,12 +72,12 @@ export default function DashboardHome() {
                             Order Report Now <FaChevronRight />
                         </button>
 
-                        <button
+                        {/* <button
                             onClick={() => window.open('/sample-reports', '_blank')}
                             className="cursor-pointer  font-semibold px-8 py-3 rounded-lg shadow-none hover:shadow-lg hover:scale-105 transition-all duration-300 flex items-center gap-2 btn btn-outline"
                         >
                             View Sample Report
-                        </button>
+                        </button> */}
 
 
                     </div>

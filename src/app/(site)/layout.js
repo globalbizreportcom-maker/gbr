@@ -78,7 +78,7 @@ fbq('init', '674979842003410');
 fbq('track', 'PageView');`}
         </Script>
 
-        <Script src="//code.tidio.co/mibylcfadd5kvacnf5olu0q8fkptyuto.js" async></Script>
+        {/* <Script src="//code.tidio.co/mibylcfadd5kvacnf5olu0q8fkptyuto.js" async></Script> */}
 
         {/* NoScript fallback */}
         <noscript>
