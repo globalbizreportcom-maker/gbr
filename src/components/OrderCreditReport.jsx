@@ -117,10 +117,21 @@ const OrderCreditReport = () => {
 
         setStep(2);
 
-        // Scroll to Step 2 header
         setTimeout(() => {
-            step2ref.current?.scrollIntoView({ behavior: 'smooth' });
-        }, 50); // small delay to ensure Step 2 is rendered
+            const offset = -100; // adjust this (-50, -80, -120) as you like
+
+            if (step2ref.current) {
+                const top =
+                    step2ref.current.getBoundingClientRect().top +
+                    window.scrollY +
+                    offset;
+
+                window.scrollTo({
+                    top,
+                    behavior: "smooth",
+                });
+            }
+        }, 50);
 
     };
 
@@ -218,13 +229,16 @@ const OrderCreditReport = () => {
     return (
         <div className="bg-white rounded-2xl p-8 ">
 
+
             {step === 1 && (
                 <>
-                    <div className="flex flex-col md:flex-row items-start md:items-center justify-start mb-6 gap-2" ref={step1ref}>
+                    <div className="flex flex-col md:flex-row items-start md:items-center justify-start mb-6 gap-2 "
+                        ref={step1ref}
+                    >
                         {/* Left: Step Indicator */}
-                        <span className="text-sm font-medium text-primary md:text-base bg-blue-50 p-2 rounded-xl mr-5">
+                        {/* <span className="text-sm font-medium text-primary md:text-base bg-blue-50 p-2 rounded-xl mr-5">
                             Step 1
-                        </span>
+                        </span> */}
 
                         {/* Right: Title + Subtitle */}
                         <div className="text-right md:text-left">
@@ -366,9 +380,9 @@ const OrderCreditReport = () => {
             {step === 2 && (
                 <>
                     <div className="flex flex-col md:flex-row items-start md:items-center justify-start mb-6 gap-2" ref={step2ref}>
-                        <span className="text-sm font-medium text-primary md:text-base bg-blue-50 p-2 rounded-xl mr-5">
+                        {/* <span className="text-sm font-medium text-primary md:text-base bg-blue-50 p-2 rounded-xl mr-5">
                             Step 2
-                        </span>
+                        </span> */}
 
                         <div className="text-right md:text-left">
                             <h3 className="text-xl font-semibold text-gray-800" >
@@ -505,8 +519,21 @@ const OrderCreditReport = () => {
                         <button onClick={() => {
                             setStep(1);
                             setTimeout(() => {
-                                step1ref.current?.scrollIntoView({ behavior: 'smooth' });
+                                const offset = -100; // adjust (e.g., -50, -80, -120)
+
+                                if (step1ref.current) {
+                                    const top =
+                                        step1ref.current.getBoundingClientRect().top +
+                                        window.scrollY +
+                                        offset;
+
+                                    window.scrollTo({
+                                        top,
+                                        behavior: "smooth",
+                                    });
+                                }
                             }, 50);
+
                         }}
                             className="btn btn-outline px-6"
                         >

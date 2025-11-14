@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { apiUrl } from "@/api/api";
 import { useDashboard } from "./DashboardContext";
+import { FaChevronRight } from "react-icons/fa";
 
 export default function DashboardHome() {
     const { user } = useDashboard();
@@ -32,9 +33,72 @@ export default function DashboardHome() {
 
 
     return (
-        <div className="min-h-screen bg-gray-50 p-0  lg:p-8 max-w-5xl mx-auto">
+        <div className="min-h-screen bg-gray-50 p-0  lg:p-4 max-w-5xl mx-auto">
+
+            <div
+                className="relative rounded-2xl overflow-hidden text-white px-4 md:px-6 py-5 md:py-7 "
+                style={{
+                    backgroundImage:
+                        "url('https://cdn.pixabay.com/photo/2017/03/28/12/10/chairs-2181951_960_720.jpg')",
+                    backgroundSize: "cover",
+                    backgroundRepeat: "no-repeat",
+                    backgroundPosition: "center",
+                }}
+            >
+                {/* Overlay */}
+                <div className="absolute inset-0 bg-gradient-to-br from-[#0a1c28]/90 via-[#0c2331]/95 to-[#0f2b3b]/90"></div>
+
+                {/* Content */}
+                <div className="relative z-10 flex flex-col justify-evenly h-full ">
+                    <h2 className="text-xl md:text-3xl font-bold  mb-5 text-left">
+                        Order a Business Credit Report for Any Company Worldwide
+                    </h2>
+
+                    <p className="text-gray-300 text-left  mb-5 text-sm md:text-lg  italic">
+                        Verify your partners, vendors, buyers, and suppliers with a comprehensive Business Information Report
+                        covering registration details, financial data, credit rating, risk indicators, and more.
+                    </p>
+
+                    <div className="flex flex-col md:flex-row justify-start mb-5 gap-4">
+
+
+                        <button
+                            onClick={() => {
+                                sessionStorage.setItem("credit_report", "direct");
+                                router.push("/order-business-credit-report");
+                            }}
+                            className="cursor-pointer   font-semibold px-8 py-3 rounded-lg shadow-none hover:shadow-lg hover:scale-105 transition-all duration-300 flex items-center gap-2 btn btn-warning "
+                        >
+                            Order Report Now <FaChevronRight />
+                        </button>
+
+                        <button
+                            onClick={() => window.open('/sample-reports', '_blank')}
+                            className="cursor-pointer  font-semibold px-8 py-3 rounded-lg shadow-none hover:shadow-lg hover:scale-105 transition-all duration-300 flex items-center gap-2 btn btn-outline"
+                        >
+                            View Sample Report
+                        </button>
+
+
+                    </div>
+
+                    <div className="grid grid-cols-1 gap-6">
+                        {["Trusted by 20,000+ Global Companies"].map((service, idx) => (
+                            <div
+                                key={idx}
+                                className="p-2 text-left"
+                            >
+                                <h4 className="font-medium text-sm md:text-base text-gray-100">
+                                    {service}
+                                </h4>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </div>
+
             {/* Header */}
-            <div className="mb-6 sm:mb-8">
+            <div className="mb-6 sm:mb-8 py-5">
                 <h1 className="text-xl font-semibold text-gray-800">
                     Welcome, {user?.name || "User"}
                 </h1>

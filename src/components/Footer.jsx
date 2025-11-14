@@ -39,15 +39,11 @@ const Footer = () => {
 
                     {/* Contact Info + Social */}
                     <div>
-                        <h3 className="text-lg font-bold text-white mb-3">CONTACT INFO</h3>
-                        <p className="mb-2 text-gray-400">
+                        <h3 className="text-lg font-bold text-white mb-3">Social Media</h3>
+                        {/* <p className="mb-2 text-gray-400">
                             <strong>India Office:</strong><br />
                             1st Floor, Landmark Cyber Park, Sector 67, Gurugram, Haryana 122102<br />
                             Phone: +91-9811160294
-                        </p>
-                        {/* <p className="mb-4 text-gray-400">
-                            <strong>US Office:</strong><br />
-                            539 W. Commerce #567, Dallas TX 75208, United States.
                         </p> */}
                         <div className="flex gap-4 mt-2 text-blue-300 text-xl">
                             <a href="#" aria-label="Whatsapp"><FaWhatsapp /></a>

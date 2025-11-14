@@ -342,7 +342,9 @@ const PaymentVisitors = () => {
                                                 <p><strong>Phone:</strong> {selectedVisitor.contactPhone || "-"}</p>
                                                 <p><strong>Country:</strong> {selectedVisitor.contactCountry || "-"}</p>
                                                 <p><strong>Company:</strong> {selectedVisitor.contactCompany || "-"}</p>
+                                                <p><strong>GST:</strong> {selectedVisitor.companyGst || "-"}</p>
                                                 <p><strong>Optional Email:</strong> {selectedVisitor.optionalEmail || "-"}</p>
+
                                             </div>
                                         </div>
 

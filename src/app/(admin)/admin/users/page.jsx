@@ -103,7 +103,13 @@ const UsersPage = () => {
                                         <td className="p-2">{user.email}</td>
                                         <td className="p-2">{user.phone || "-"}</td>
                                         <td className="p-2">{user.country}</td>
-                                        <td className="p-2">{user.company || "-"}</td>
+                                        <td className="p-2">
+                                            <div className="flex flex-col">
+                                                <span>{user.company || "-"}</span>
+                                                {user.gstin && <span className="text-gray-500 text-sm"> GST : {user.gstin}</span>}
+
+                                            </div>
+                                        </td>
                                         <td className="p-2">
                                             {new Date(user.createdAt).toLocaleString("en-GB", {
                                                 dateStyle: "short",
@@ -149,7 +155,7 @@ const UsersPage = () => {
                                         {user.company || "-"}
                                     </p>
                                     <p>
-                                        <span className="font-medium">Company:</span>{" "}
+                                        <span className="font-medium">Gst:</span>{" "}
                                         {user.gstin || "-"}
                                     </p>
                                 </div>
