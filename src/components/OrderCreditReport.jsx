@@ -243,7 +243,7 @@ const OrderCreditReport = () => {
                         {/* Right: Title + Subtitle */}
                         <div className="text-right md:text-left">
                             <h3 className="text-xl font-semibold text-gray-800">
-                                Company to be Verified
+                                Target Company Details
                             </h3>
                             <p className="text-sm text-gray-500 mt-1">
                                 Fill in the details of the company for which you want Business Credit Report.

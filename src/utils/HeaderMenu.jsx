@@ -17,7 +17,7 @@ export default function HeaderMenu() {
         { href: "/about", label: "About" },
         { href: "/company-directory/india", label: "Company Directory" },
         { href: "/services", label: "Services" },
-        { href: "/pricing", label: "Pricing" },
+        // { href: "/pricing", label: "Pricing" },
         { href: "/contact", label: "Contact" },
     ];
 
@@ -254,14 +254,14 @@ export default function HeaderMenu() {
                                         </li>
 
                                         {/* Pricing */}
-                                        <li>
+                                        {/* <li>
                                             {renderLink({
                                                 href: "/pricing",
                                                 label: "Pricing",
                                                 vertical: true,
                                                 onClick: () => setMobileOpen(false),
                                             })}
-                                        </li>
+                                        </li> */}
 
                                         {/* Contact */}
                                         <li>
@@ -367,14 +367,14 @@ export default function HeaderMenu() {
                                         </li>
 
                                         {/* Pricing */}
-                                        <li>
+                                        {/* <li>
                                             {renderLink({
                                                 href: "/pricing",
                                                 label: "Pricing",
                                                 vertical: true,
                                                 onClick: () => setMobileOpen(false),
                                             })}
-                                        </li>
+                                        </li> */}
 
                                         {/* Contact */}
                                         <li>

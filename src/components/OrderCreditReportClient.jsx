@@ -7,57 +7,9 @@ import { Splide, SplideSlide } from "@splidejs/react-splide";
 import "@splidejs/splide/dist/css/splide.min.css";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
+import Testimonials from "./Testimonials";
 
-const testimonials = [
-    {
-        name: "Sarah L.",
-        role: "Procurement Head, USA",
-        text: "GBR's report on our new supplier saved us from a potential $50K loss – detailed payment history and credit rating were spot on!",
-        avatar: "https://cdn-icons-png.flaticon.com/128/149/149071.png",
-    },
-    {
-        name: "Raj Patel",
-        role: "CEO & MD, India",
-        text: "Quick delivery and accurate global data helped us expand safely into Europe. Highly recommend for due diligence!",
-        avatar: "https://cdn-icons-png.flaticon.com/128/149/149071.png",
-    },
-    {
-        name: "Emily Chen",
-        role: "Risk Analyst, Global Finance Advisor, Singapore",
-        text: "As a Business Analyst, GBR reports are my go-to for client assessments. Fresh insights every time – transformed my workflow.",
-        avatar: "https://cdn-icons-png.flaticon.com/128/149/149071.png",
-    },
-    {
-        name: "Sarah Emiley",
-        role: "CFO, Financial Institution, Hong-Kong",
-        text: "The Report coverage and turnaround time is exceptional. We needed urgent verification for a potential partner, and GBR delivered a detailed report quickly and saved us from making a costly mistake.",
-        avatar: "https://cdn-icons-png.flaticon.com/128/149/149071.png",
-    },
-    {
-        name: "TaeYong Kim",
-        role: "Owner, Market Research, South Korea",
-        text: "GlobalBizReport helped us verify international suppliers before placing large orders. The comprehensive reports gave us the confidence to expand our business globally without unnecessary risks.",
-        avatar: "https://cdn-icons-png.flaticon.com/128/149/149071.png",
-    },
-    {
-        name: "Michael Roberts",
-        role: "B2B Platform, United Kingdom",
-        text: "As a B2B marketplace, we rely on GBR for vendor verification. The depth of information in their reports is outstanding, and their support team is always helpful and responsive.",
-        avatar: "https://cdn-icons-png.flaticon.com/128/149/149071.png",
-    },
-    {
-        name: "David Martinez",
-        role: "Consulting Firm, Canada",
-        text: "We've been using GlobalBizReport for three years now. The global coverage is unmatched. We operate in 15 countries, and GBR provides consistent, reliable reports regardless of location.",
-        avatar: "https://cdn-icons-png.flaticon.com/128/149/149071.png",
-    },
-    {
-        name: "Aisha Mohammed",
-        role: "Trading Company, UAE",
-        text: "The reports include everything we need - financials, credit ratings, legal information - all in one place. Highly recommended for any business doing international trade.",
-        avatar: "https://cdn-icons-png.flaticon.com/128/149/149071.png",
-    },
-];
+
 
 
 const OrderCreditReportClient = () => {
@@ -157,24 +109,64 @@ const OrderCreditReportClient = () => {
                         Make  <span className="text-indigo-500">Informed <span className="text-gray-900">&</span> Smarter</span>  Business Decisions
                     </h2>
                 </div>
-
-                {/* Key Benefits */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-1 md:gap-6 max-w-6xl mx-auto mb-12">
-                    {[
-                        "Find out if your business partners, suppliers, or buyers are trustworthy.",
-                        "Get a Self-Assessment Report for your own company to build credibility and transparency.",
-                        "Quick & effortless Ordering Process. Worldwide Coverage.",
-                        "No contracts. No minimums. No annual fees. Just simple pay-per-report pricing.",
-                    ].map((point, idx) => (
-                        <div
-                            key={idx}
-                            className="bg-white rounded-xl p-3 md:p-6  text-left flex items-center  gap-3"
-                        >
-                            <span className="text-indigo-600 text-xl mt-0.5"><FaCheckCircle className="text-md text-indigo-400" /> </span>
-                            <p className="text-gray-700 text-md  leading-relaxed">{point}</p>
-                        </div>
-                    ))}
+
+                    {/* Point 1 */}
+                    <div className="bg-white rounded-xl p-3 md:p-6 text-left flex items-start gap-3">
+                        <FaCheckCircle className="text-indigo-400 text-2xl flex-shrink-0 mt-1" />
+                        <p className="text-gray-700 text-md leading-relaxed">
+                            Find out if your business partners, suppliers, or buyers are trustworthy.
+                        </p>
+                    </div>
+
+                    {/* Point 2 */}
+                    <div className="bg-white rounded-xl p-3 md:p-6 text-left flex items-start gap-3">
+                        <FaCheckCircle className="text-indigo-400 text-2xl flex-shrink-0 mt-1" />
+                        <p className="text-gray-700 text-md leading-relaxed">
+                            Get a Self-Assessment Report for your own company to build credibility and transparency.
+                        </p>
+                    </div>
+
+                    {/* Point 3 */}
+                    <div className="bg-white rounded-xl p-3 md:p-6 text-left flex items-start gap-3">
+                        <FaCheckCircle className="text-indigo-400 text-2xl flex-shrink-0 mt-1" />
+                        <p className="text-gray-700 text-md leading-relaxed">
+                            Quick & effortless Ordering Process. Worldwide Coverage.
+                        </p>
+                    </div>
+
+                    {/* Point 4 */}
+                    <div className="bg-white rounded-xl p-3 md:p-6 text-left flex items-start gap-3">
+                        <FaCheckCircle className="text-indigo-400 text-2xl flex-shrink-0 mt-1" />
+                        <p className="text-gray-700 text-md leading-relaxed">
+                            No contracts. No minimums. No annual fees. Just simple pay-per-report pricing.
+                        </p>
+                    </div>
+
+                    {/* Point 5 */}
+                    <div className="bg-white rounded-xl p-3 md:p-6 text-left flex items-start gap-3">
+                        <FaCheckCircle className="text-indigo-400 text-2xl flex-shrink-0 mt-1" />
+                        <p className="text-gray-700 text-md leading-relaxed font-semibold">
+                            Pricing of the credit report varies based on the country of the company
+                            to be verified, and you will find the pricing for the required Credit
+                            Report on submission of the order form.
+                        </p>
+                    </div>
+
+                    {/* Point 6 */}
+                    <div className="bg-white rounded-xl p-3 md:p-6 text-left flex items-start gap-3">
+                        <FaCheckCircle className="text-indigo-400 text-2xl flex-shrink-0 mt-1" />
+                        <p className="text-gray-700 text-md leading-relaxed font-semibold">
+                            You will receive a freshly investigated credit report digitally on your
+                            email within the expected delivery time of 1–3 business days.
+                        </p>
+                    </div>
+
                 </div>
+
+
+
+
 
                 {/* Trust Line */}
                 {/* <div className="text-center mb-7 ">
@@ -220,57 +212,8 @@ const OrderCreditReportClient = () => {
 
 
             {/* testimonials */}
-            <div className="max-w-5xl mx-auto py-10">
-                <h3 className="text-xl md:text-3xl font-extrabold text-center mb-2 text-gray-900">
-                    What Businesses Are Saying
-                </h3>
-                <p className=" text-sm md:text-base text-gray-500 text-center mb-8">
-                    Join <span className="text-indigo-500 font-bold">20,000+</span> companies that trust GlobalBizReport
-                </p>
-
-                <Splide
-                    options={{
-                        type: "loop",
-                        perPage: 1, // default for XS
-                        perMove: 1,
-                        gap: "1rem",
-                        breakpoints: {
-                            640: { perPage: 1 }, // XS
-                            768: { perPage: 2 }, // SM
-                            1024: { perPage: 3 }, // MD+
-                        },
-                        pagination: true,
-                        arrows: typeof window !== "undefined" && window.innerWidth >= 1080,
-                        autoplay: true,
-                        interval: 5000,
-                    }}
-
-                >
-                    {testimonials.map((t, index) => (
-                        <SplideSlide key={index}>
-                            <div className="bg-gradient-to-r from-white to-indigo-50 p-6 md:p-8 flex flex-col items-center gap-4 rounded-2xl border border-gray-100">
-                                <img
-                                    src={t.avatar}
-                                    alt={t.name}
-                                    className="w-16 h-16  rounded-full object-cover"
-                                />
-                                <div className="text-center md:text-center">
-                                    <p className="text-gray-700 italic text-sm sm:text-base md:text-lg mb-2 sm:mb-4 px-2 md:px-10 ">
-                                        "{t.text}"
-                                    </p>
-                                    <h3 className="font-semibold text-sm sm:text-md md:text-lg text-gray-900">
-                                        {t.name}
-                                    </h3>
-                                    <p className="text-gray-500 text-xs sm:text-sm md:text-sm">
-                                        {t.role}
-                                    </p>
-                                </div>
-                            </div>
-                        </SplideSlide>
-                    ))}
-
-
-                </Splide>
+            <div className='max-w-lg mx-auto py-10' >
+                <Testimonials />
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-2 md:gap-6 px-2 py-2 max-w-6xl mx-auto">
