@@ -35,6 +35,7 @@ const OrderCreditReport = () => {
     const [showSnackbar, setShowSnackbar] = useState(false);
     const [snackbarMessage, setSnackbarMessage] = useState('');
     const [showLoginModal, setShowLoginModal] = useState(false); // NEW
+    const [directOrder, setDirectOrder] = useState(false); // NEW
 
     // const [formData, setFormData] = useState(() => {
     //     // lazy initializer → runs only once
@@ -102,9 +103,11 @@ const OrderCreditReport = () => {
         agreedToTerms: true,
     });
 
+
     useEffect(() => {
         const isDirect = sessionStorage.getItem('credit_report') === 'direct';
-        if (isDirect) return;
+
+        if (isDirect) return setDirectOrder(true);
 
         const stored = localStorage.getItem('gbr_form');
         if (!stored) return;
@@ -158,6 +161,7 @@ const OrderCreditReport = () => {
         if (!formData.address) missingFields.push('Address');
         if (!formData.country) missingFields.push('Country');
         if (!formData.city) missingFields.push('City');
+        if (!formData.postalCode && directOrder) missingFields.push('Postal Code');
 
         if (missingFields.length > 0) {
             setSnackbarMessage(`Please fill in: ${missingFields.join(', ')}`);
@@ -207,14 +211,30 @@ const OrderCreditReport = () => {
             };
         }
 
-
-        // Use finalData everywhere instead of formData
         const missingFields = [];
-        if (!finalData.contactName) missingFields.push("Name");
-        if (!finalData.contactEmail) missingFields.push("Email");
-        if (!finalData.contactCountry) missingFields.push("Country");
-        if (!finalData.contactPhone) missingFields.push("Phone");
-        if (!finalData.agreedToTerms) missingFields.push("Privacy Policy");
+
+        if (formData.companyType === "my_company") {
+            if (!finalData.companyName) missingFields.push("Company Name");
+            if (!finalData.address) missingFields.push("Company Address");
+            if (!finalData.contactName) missingFields.push("Name");
+            if (!finalData.contactEmail) missingFields.push("Email");
+            if (!finalData.contactPhone) missingFields.push("Phone");
+            if (!finalData.contactCountry) missingFields.push("Country");
+            if (!finalData.state) missingFields.push("State");
+            if (!finalData.city) missingFields.push("City");
+            if (!finalData.postalCode) missingFields.push("Postalcode");
+            if (!finalData.agreedToTerms) missingFields.push("Privacy Policy");
+        } else {
+
+            // Use finalData everywhere instead of formData
+            if (!finalData.contactName) missingFields.push("Name");
+            if (!finalData.contactEmail) missingFields.push("Email");
+            if (!finalData.contactCountry) missingFields.push("Country");
+            if (!finalData.contactPhone) missingFields.push("Phone");
+            if (!finalData.agreedToTerms) missingFields.push("Privacy Policy");
+
+        }
+
 
         if (missingFields.length > 0) {
             setSnackbarMessage(`Please provide your ${missingFields.join(", ")}.`);
@@ -278,7 +298,6 @@ const OrderCreditReport = () => {
             setShowSnackbar(true);
         }
     };
-
 
     // const handlePreview = async () => {
 
@@ -381,13 +400,11 @@ const OrderCreditReport = () => {
     // };
 
 
-
-
     return (
-        <div className="bg-white rounded-2xl p-8 ">
+        <div className="bg-white rounded-2xl px-8  py-2">
 
             <div className="flex flex-col gap-3">
-                <label className="font-medium text-sm text-gray-700">Company Type <RequiredStar /></label>
+                <label className=" text-lg font-bold text-gray-700">Order Report Now </label>
 
                 <div className="flex  flex-col md:flex-row items-start md:items-center gap-6">
 
@@ -398,11 +415,14 @@ const OrderCreditReport = () => {
                             name="companyType"
                             value="my_company"
                             checked={formData.companyType === "my_company"}
-                            onChange={(e) =>
+                            onChange={(e) => {
                                 setFormData((prev) => ({
                                     ...prev,
                                     companyType: e.target.value,
-                                }))
+                                }));
+                                setSnackbarMessage('');
+                                setShowSnackbar(true);
+                            }
                             }
                             className="w-4 h-4 cursor-pointer appearance-none border-2 border-gray-400  rounded-full checked:bg-primary checked:border-white checked:ring-4 checked:ring-gray-200 transition-all"
 
@@ -417,11 +437,14 @@ const OrderCreditReport = () => {
                             name="companyType"
                             value="other_company"
                             checked={formData.companyType === "other_company"}
-                            onChange={(e) =>
+                            onChange={(e) => {
                                 setFormData((prev) => ({
                                     ...prev,
                                     companyType: e.target.value,
-                                }))
+                                }));
+                                setSnackbarMessage('');
+                                setShowSnackbar(true);
+                            }
                             }
                             className="w-4 h-4 cursor-pointer appearance-none border-2 border-gray-400  rounded-full checked:bg-primary checked:border-white checked:ring-4 checked:ring-gray-200 transition-all"
                         />
@@ -567,16 +590,18 @@ const OrderCreditReport = () => {
                             </div>
 
                             {/* GST */}
-                            <div>
-                                <Input
-                                    label="GST (optional)"
-                                    name="companyGst"
-                                    value={formData.companyGst || ""}
-                                    onChange={(e) =>
-                                        setFormData({ ...formData, companyGst: e.target.value })
-                                    }
-                                />
-                            </div>
+                            {formData.contactCountry?.label === "India" && (
+                                <div>
+                                    <Input
+                                        label="GST (optional)"
+                                        name="companyGst"
+                                        value={formData.companyGst || ""}
+                                        onChange={(e) =>
+                                            setFormData({ ...formData, companyGst: e.target.value })
+                                        }
+                                    />
+                                </div>
+                            )}
 
                             {/* Website */}
                             <div>
@@ -589,6 +614,8 @@ const OrderCreditReport = () => {
                                     }
                                 />
                             </div>
+
+
                         </form>
 
                         {/* USER AGREEMENT */}
@@ -611,6 +638,12 @@ const OrderCreditReport = () => {
                                 </span>
                             </label>
                         </div>
+
+                        {showSnackbar && (
+                            <div className="bg-grey-500 text-red-600 px-4 py-3 text-end text-sm font-medium">
+                                {snackbarMessage}
+                            </div>
+                        )}
 
                         {/* BUTTON */}
                         <div className="mt-8 gap-5 flex flex-col md:flex-row justify-between md:justify-between">
@@ -662,7 +695,7 @@ const OrderCreditReport = () => {
                             <form className="grid grid-cols-1 md:grid-cols-6 gap-x-6 gap-y-5">
                                 <div className="md:col-span-6">
                                     <Input
-                                        label="Company Name"
+                                        label="Target Company Name"
                                         name="companyName"
                                         value={formData.companyName || ''}
                                         onChange={(e) =>
@@ -705,6 +738,8 @@ const OrderCreditReport = () => {
                                         onChange={(e) =>
                                             setFormData({ ...formData, [e.target.name]: e.target.value })
                                         }
+                                        required={directOrder}
+
                                     />
                                 </div>
 
@@ -728,6 +763,7 @@ const OrderCreditReport = () => {
                                         onChange={(e) =>
                                             setFormData({ ...formData, [e.target.name]: e.target.value })
                                         }
+                                        required={directOrder}
                                     />
                                 </div>
 
@@ -857,23 +893,25 @@ const OrderCreditReport = () => {
                                     }
                                 />
 
-                                <Input
-                                    autoComplete="gst"
-                                    label="Gst"
-                                    name="companyGst"
-                                    type='text'
-                                    id="companyGstField"
-                                    value={formData.companyGst || ''}
-                                    onChange={(e) =>
-                                        setFormData({ ...formData, [e.target.name]: e.target.value })
-                                    }
-                                    className={formData.contactCompany ? 'block' : 'hidden'} // show only if company exists
+                                {formData.contactCountry?.label === "India" && (
 
-                                />
+                                    <Input
+                                        autoComplete="gst"
+                                        label="Gst"
+                                        name="companyGst"
+                                        type='text'
+                                        id="companyGstField"
+                                        value={formData.companyGst || ''}
+                                        onChange={(e) =>
+                                            setFormData({ ...formData, [e.target.name]: e.target.value })
+                                        }
+                                    // className={formData.contactCompany ? 'block' : 'hidden'} // show only if company exists
 
+                                    />
+                                )}
 
                                 <div>
-                                    <label className="block text-xs font-medium mb-1 text-gray-400">Optional Email: (Report will be send to this email too)</label>
+                                    <label className="block text-xs font-medium  text-gray-400">Optional Email: (Report will be send to this email too)</label>
                                     <Input
                                         name="optionalEmail"
                                         value={formData.optionalEmail || ''}
