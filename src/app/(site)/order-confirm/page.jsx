@@ -1,3 +1,5 @@
+
+
 import OrderConfirmContent from '@/components/OrderConfirmContent';
 import React from 'react';
 
@@ -44,7 +46,7 @@ const OrderConfirm = () => {
 export default OrderConfirm;
 
 export const metadata = {
-    title: "order confirm | GBR",
+    title: "Order Confirm | GBR",
     description: "Learn more about Global Biz Report and our mission.",
     keywords: ["GBR", "Global Biz Report", "About"],
     openGraph: {

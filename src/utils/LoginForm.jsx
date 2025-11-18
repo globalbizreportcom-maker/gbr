@@ -86,6 +86,7 @@ export default function LoginForm({ onClose }) {
 
             }
         } catch (err) {
+            console.log(err);
             alert(err.response?.data?.message || "Login failed");
         } finally {
             setLoading(false);

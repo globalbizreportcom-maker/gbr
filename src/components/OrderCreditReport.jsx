@@ -1,4 +1,5 @@
 'use client';
+
 import React, { useEffect, useRef, useState } from 'react';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
@@ -7,6 +8,7 @@ import { LoginModalButton } from '@/utils/LoginModalButton';
 import { apiUrl } from '@/api/api';
 import RequiredStar from '@/utils/RequiredStar';
 import { useAlert } from '@/context/AlertProvider';
+import Link from 'next/link';
 // import { useCompany } from '@/context/CompanyContext';
 
 const CountryDropdown = dynamic(() => import('@/utils/CountryDropdown'), {
@@ -34,48 +36,90 @@ const OrderCreditReport = () => {
     const [snackbarMessage, setSnackbarMessage] = useState('');
     const [showLoginModal, setShowLoginModal] = useState(false); // NEW
 
-    const [formData, setFormData] = useState(() => {
-        // lazy initializer → runs only once
+    // const [formData, setFormData] = useState(() => {
+    //     // lazy initializer → runs only once
 
-        if (typeof window !== "undefined") {
+    //     if (typeof window !== "undefined") {
 
-            const isDirect = sessionStorage.getItem('credit_report') === 'direct';
-            if (!isDirect) {
-                const stored = localStorage.getItem("gbr_form");
-                if (stored) {
-                    try {
-                        const parsed = JSON.parse(stored);
-                        return {
-                            ...parsed,
-                            agreedToTerms: parsed.agreedToTerms ?? true, // ✅ fallback to true
-                        };
-                    } catch (err) {
-                        console.error("Failed to parse localStorage:", err);
-                    }
-                }
-            }
+    //         const isDirect = sessionStorage.getItem('credit_report') === 'direct';
+    //         if (!isDirect) {
+    //             const stored = localStorage.getItem("gbr_form");
+    //             if (stored) {
+    //                 console.log(stored);
+    //                 try {
+    //                     const parsed = JSON.parse(stored);
+    //                     return {
+    //                         ...parsed,
+    //                         companyType: parsed.companyType || '',
+    //                         agreedToTerms: parsed.agreedToTerms ?? true,
+    //                     };
+    //                 } catch (err) {
+    //                     console.error("Failed to parse localStorage:", err);
+    //                 }
+    //             }
+    //         }
 
 
-        }
-        return {
-            companyName: '',
-            address: '',
-            city: '',
-            state: '',
-            country: '',
-            postalCode: '',
-            telephone: '',
-            website: '',
-            contactName: '',
-            contactEmail: '',
-            contactCountry: '',
-            contactPhone: '',
-            contactCompany: '',
-            companyGst: '',
-            optionalEmail: '',
-            agreedToTerms: true,
-        };
+    //     }
+    //     return {
+    //         companyType: '',
+    //         companyName: '',
+    //         address: '',
+    //         city: '',
+    //         state: '',
+    //         country: '',
+    //         postalCode: '',
+    //         telephone: '',
+    //         website: '',
+    //         contactName: '',
+    //         contactEmail: '',
+    //         contactCountry: '',
+    //         contactPhone: '',
+    //         contactCompany: '',
+    //         companyGst: '',
+    //         optionalEmail: '',
+    //         agreedToTerms: true,
+    //     };
+    // });
+
+    const [formData, setFormData] = useState({
+        companyType: '',
+        companyName: '',
+        address: '',
+        city: '',
+        state: '',
+        country: '',
+        postalCode: '',
+        telephone: '',
+        website: '',
+        contactName: '',
+        contactEmail: '',
+        contactCountry: '',
+        contactPhone: '',
+        contactCompany: '',
+        companyGst: '',
+        optionalEmail: '',
+        agreedToTerms: true,
     });
+
+    useEffect(() => {
+        const isDirect = sessionStorage.getItem('credit_report') === 'direct';
+        if (isDirect) return;
+
+        const stored = localStorage.getItem('gbr_form');
+        if (!stored) return;
+
+        try {
+            const parsed = JSON.parse(stored);
+            setFormData(prev => ({
+                ...prev,
+                ...parsed,
+                agreedToTerms: parsed.agreedToTerms ?? true,
+            }));
+        } catch (e) {
+            console.error("JSON parse error", e);
+        }
+    }, []);
 
 
     useEffect(() => {
@@ -102,6 +146,13 @@ const OrderCreditReport = () => {
     // form 1 Validation handler
     const handleNext = () => {
         const missingFields = [];
+
+        if (!formData.companyType) {
+            setSnackbarMessage(`Select Company Type to continue!`);
+            setShowSnackbar(true);
+            setTimeout(() => setShowSnackbar(false), 3000);
+            return;
+        }
 
         if (!formData.companyName) missingFields.push('Company Name');
         if (!formData.address) missingFields.push('Address');
@@ -135,26 +186,39 @@ const OrderCreditReport = () => {
 
     };
 
+
+
     const handlePreview = async () => {
 
-        const formatMissingFields = (fields) => {
-            if (fields.length === 1) return fields[0];
-            const last = fields.pop();
-            return `${fields.join(", ")} and ${last}`;
-        };
+        // Build finalData WITHOUT setState()
+        let finalData = { ...formData };
 
-        // Usage
+        if (formData.companyType === "my_company") {
+            finalData = {
+                ...finalData,
+                // The “contactCompany” MUST become the companyName
+                contactCompany: formData.companyName,
+                // Company address fields override finalData
+                address: formData.address,
+                city: formData.city,
+                state: formData.state,
+                postalCode: formData.postalCode,
+                country: finalData.contactCountry?.label || finalData.contactCountry || "",
+            };
+        }
+
+
+        // Use finalData everywhere instead of formData
         const missingFields = [];
-        if (!formData.contactName) missingFields.push("Name");
-        if (!formData.contactEmail) missingFields.push("Email");
-        if (!formData.contactCountry) missingFields.push("Country");
-        if (!formData.contactPhone) missingFields.push("Phone");
-        if (!formData.agreedToTerms) missingFields.push("Privacy Policy");
+        if (!finalData.contactName) missingFields.push("Name");
+        if (!finalData.contactEmail) missingFields.push("Email");
+        if (!finalData.contactCountry) missingFields.push("Country");
+        if (!finalData.contactPhone) missingFields.push("Phone");
+        if (!finalData.agreedToTerms) missingFields.push("Privacy Policy");
 
         if (missingFields.length > 0) {
-            setSnackbarMessage(`Please provide your ${formatMissingFields(missingFields)}.`);
+            setSnackbarMessage(`Please provide your ${missingFields.join(", ")}.`);
             setShowSnackbar(true);
-            setTimeout(() => setShowSnackbar(false), 3000);
             return;
         }
 
@@ -162,66 +226,159 @@ const OrderCreditReport = () => {
         try {
             let activeUser = user;
 
-            // 🔹 Step 1: If user is not logged in → check or create
             if (!activeUser) {
                 const res = await apiUrl.post("/api/users/check-or-create", {
-                    name: formData.contactName,
-                    email: formData.contactEmail,
-                    country: formData.contactCountry?.label || formData.contactCountry || "",
-                    phone: formData.contactPhone,
-                    company: formData.contactCompany,
-                    gst: formData.companyGst || '',
+                    name: finalData.contactName,
+                    email: finalData.contactEmail,
+                    country: finalData.contactCountry?.label || finalData.contactCountry || "",
+                    phone: finalData.contactPhone,
+                    company: finalData.contactCompany,
+                    gst: finalData.companyGst || '',
                 });
 
-                // Existing user → show login modal & stop here
                 if (res.data.exists) {
                     setSnackbarMessage(res.data.message);
                     setShowSnackbar(true);
-                    setTimeout(() => setShowSnackbar(false), 3000);
                     setShowLoginModal(true);
                     return;
                 }
 
-                // Newly created user
                 activeUser = res.data.user;
-
                 setUser(res.data.user);
             }
 
-            // 🔹 Step 2: Ensure userId exists before continuing
             if (!activeUser?._id) {
-                console.error("❌ Missing user ID:", activeUser);
                 setSnackbarMessage("Error identifying user. Please try again.");
                 setShowSnackbar(true);
-                setTimeout(() => setShowSnackbar(false), 3000);
                 return;
             }
 
-            // 🔹 Step 3: Prepare payload
             const payload = {
-                ...formData,
+                ...finalData,
                 userId: activeUser._id,
-                country: formData.contactCountry?.label || formData.contactCountry || "",
+                country: finalData.contactCountry?.label || finalData.contactCountry || "",
             };
 
-            // 🔹 Step 4: Avoid duplicate payment submission
             if (!sessionStorage.getItem("visitor_payment_submitted")) {
-                await apiUrl.post("/visitors/payments", payload, {
-                    headers: { "Content-Type": "application/json" },
-                });
+                await apiUrl.post("/visitors/payments", payload);
                 sessionStorage.setItem("visitor_payment_submitted", "true");
             }
 
-            // 🔹 Step 5: Save form data & navigate
-            localStorage.setItem("gbr_form", JSON.stringify(formData));
+
+            console.log("FINAL DATA BEFORE ROUTING:", finalData);
+            console.log("ACTIVE USER:", activeUser);
+            console.log("STOP CHECK 1:", !sessionStorage.getItem("visitor_payment_submitted"));
+
+            localStorage.setItem("gbr_form", JSON.stringify(finalData));
             router.push("/order-confirm");
+
         } catch (error) {
-            // console.log(" Error in handlePreview:", error.response?.data || error.message);
+            console.log("Error in handlePreview:", error);
             setSnackbarMessage("Something went wrong. Please try again.");
             setShowSnackbar(true);
-            setTimeout(() => setShowSnackbar(false), 3000);
         }
     };
+
+
+    // const handlePreview = async () => {
+
+
+    //     if (formData.companyType === "my_company") {
+    //         setFormData((prev) => ({
+    //             ...prev,
+    //             telephone: prev.contactPhone || "",
+    //             contactCompany: prev.companyName || "",
+    //             country: prev.contactCountry || "",
+    //         }));
+    //     }
+
+    //     const formatMissingFields = (fields) => {
+    //         if (fields.length === 1) return fields[0];
+    //         const last = fields.pop();
+    //         return `${fields.join(", ")} and ${last}`;
+    //     };
+
+    //     console.log(formData);
+    //     // Usage
+    //     const missingFields = [];
+    //     if (!formData.contactName) missingFields.push("Name");
+    //     if (!formData.contactEmail) missingFields.push("Email");
+    //     if (!formData.contactCountry) missingFields.push("Country");
+    //     if (!formData.contactPhone) missingFields.push("Phone");
+    //     if (!formData.agreedToTerms) missingFields.push("Privacy Policy");
+
+    //     if (missingFields.length > 0) {
+    //         setSnackbarMessage(`Please provide your ${formatMissingFields(missingFields)}.`);
+    //         setShowSnackbar(true);
+    //         setTimeout(() => setShowSnackbar(false), 3000);
+    //         return;
+    //     }
+
+
+    //     try {
+    //         let activeUser = user;
+
+    //         // 🔹 Step 1: If user is not logged in → check or create
+    //         if (!activeUser) {
+    //             const res = await apiUrl.post("/api/users/check-or-create", {
+    //                 name: formData.contactName,
+    //                 email: formData.contactEmail,
+    //                 country: formData.contactCountry?.label || formData.contactCountry || "",
+    //                 phone: formData.contactPhone,
+    //                 company: formData.contactCompany,
+    //                 gst: formData.companyGst || '',
+    //             });
+    //             console.log(res.data);
+
+    //             // Existing user → show login modal & stop here
+    //             if (res.data.exists) {
+    //                 setSnackbarMessage(res.data.message);
+    //                 setShowSnackbar(true);
+    //                 setTimeout(() => setShowSnackbar(false), 3000);
+    //                 setShowLoginModal(true);
+    //                 return;
+    //             }
+
+    //             // Newly created user
+    //             activeUser = res.data.user;
+
+    //             setUser(res.data.user);
+    //         }
+
+    //         // 🔹 Step 2: Ensure userId exists before continuing
+    //         if (!activeUser?._id) {
+    //             console.error("❌ Missing user ID:", activeUser);
+    //             setSnackbarMessage("Error identifying user. Please try again.");
+    //             setShowSnackbar(true);
+    //             setTimeout(() => setShowSnackbar(false), 3000);
+    //             return;
+    //         }
+
+    //         // 🔹 Step 3: Prepare payload
+    //         const payload = {
+    //             ...formData,
+    //             userId: activeUser._id,
+    //             country: formData.contactCountry?.label || formData.contactCountry || "",
+    //         };
+
+    //         // 🔹 Step 4: Avoid duplicate payment submission
+    //         if (!sessionStorage.getItem("visitor_payment_submitted")) {
+    //             await apiUrl.post("/visitors/payments", payload, {
+    //                 headers: { "Content-Type": "application/json" },
+    //             });
+    //             sessionStorage.setItem("visitor_payment_submitted", "true");
+    //         }
+
+    //         // 🔹 Step 5: Save form data & navigate
+    //         localStorage.setItem("gbr_form", JSON.stringify(formData));
+    //         router.push("/order-confirm");
+    //     } catch (error) {
+    //         console.log(" Error in handlePreview:", error.response?.data || error.message);
+    //         setSnackbarMessage("Something went wrong. Please try again.");
+    //         setShowSnackbar(true);
+    //         setTimeout(() => setShowSnackbar(false), 3000);
+    //     }
+    // };
 
 
 
@@ -229,139 +386,633 @@ const OrderCreditReport = () => {
     return (
         <div className="bg-white rounded-2xl p-8 ">
 
+            <div className="flex flex-col gap-3">
+                <label className="font-medium text-sm text-gray-700">Company Type <RequiredStar /></label>
 
-            {step === 1 && (
+                <div className="flex  flex-col md:flex-row items-start md:items-center gap-6">
+
+                    {/* My Company */}
+                    <label className="flex items-center gap-2 cursor-pointer select-none">
+                        <input
+                            type="radio"
+                            name="companyType"
+                            value="my_company"
+                            checked={formData.companyType === "my_company"}
+                            onChange={(e) =>
+                                setFormData((prev) => ({
+                                    ...prev,
+                                    companyType: e.target.value,
+                                }))
+                            }
+                            className="w-4 h-4 cursor-pointer appearance-none border-2 border-gray-400  rounded-full checked:bg-primary checked:border-white checked:ring-4 checked:ring-gray-200 transition-all"
+
+                        />
+                        <span>My Company</span>
+                    </label>
+
+                    {/* Other Company */}
+                    <label className="flex items-center gap-2 cursor-pointer select-none">
+                        <input
+                            type="radio"
+                            name="companyType"
+                            value="other_company"
+                            checked={formData.companyType === "other_company"}
+                            onChange={(e) =>
+                                setFormData((prev) => ({
+                                    ...prev,
+                                    companyType: e.target.value,
+                                }))
+                            }
+                            className="w-4 h-4 cursor-pointer appearance-none border-2 border-gray-400  rounded-full checked:bg-primary checked:border-white checked:ring-4 checked:ring-gray-200 transition-all"
+                        />
+                        <span>Other Company</span>
+                    </label>
+
+                    <label className='text-red-500 italic text-xs'>(Select an option to continue)</label>
+
+                </div>
+            </div>
+
+            {formData.companyType === "my_company" && (
                 <>
-                    <div className="flex flex-col md:flex-row items-start md:items-center justify-start mb-6 gap-2 "
-                        ref={step1ref}
-                    >
-                        {/* Left: Step Indicator */}
-                        {/* <span className="text-sm font-medium text-primary md:text-base bg-blue-50 p-2 rounded-xl mr-5">
-                            Step 1
-                        </span> */}
+                    <div className="w-full bg-white/70 rounded-xl mt-5">
 
-                        {/* Right: Title + Subtitle */}
-                        <div className="text-right md:text-left">
-                            <h3 className="text-xl font-semibold text-gray-800">
-                                Target Company Details
-                            </h3>
-                            <p className="text-sm text-gray-500 mt-1">
-                                Fill in the details of the company for which you want Business Credit Report.
-                            </p>
+                        {/* FORM GRID */}
+                        <form className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                            {/* Company Name – FULL WIDTH */}
+                            <div className="col-span-1 md:col-span-2">
+                                <Input
+                                    label="Company Name"
+                                    name="companyName"
+                                    value={formData.companyName || ""}
+                                    onChange={(e) =>
+                                        setFormData({ ...formData, companyName: e.target.value })
+                                    }
+                                    required
+                                />
+                            </div>
+
+                            {/* Company Address – FULL WIDTH */}
+                            <div className="col-span-1 md:col-span-2">
+                                <Input
+                                    label="Company Address"
+                                    name="address"
+                                    value={formData.address || ""}
+                                    onChange={(e) =>
+                                        setFormData({ ...formData, address: e.target.value })
+                                    }
+                                    required
+                                />
+                            </div>
+
+                            {/* Contact Name */}
+                            <div>
+                                <Input
+                                    label="Name"
+                                    name="contactName"
+                                    value={formData.contactName || ""}
+                                    onChange={(e) =>
+                                        setFormData({ ...formData, contactName: e.target.value })
+                                    }
+                                    required
+                                />
+                            </div>
+
+                            {/* Email */}
+                            <div>
+                                <Input
+                                    label="Your Email (Report will be sent to this email)"
+                                    name="contactEmail"
+                                    type='email'
+                                    value={user?.email || formData.contactEmail || ''}
+                                    onChange={(e) => {
+                                        const value = e.target.value;
+                                        setFormData({ ...formData, [e.target.name]: value });
+
+                                        // Basic Email Validation
+                                        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                                        if (value && !emailRegex.test(value)) {
+                                            showAlert("Please enter a valid email address", "warning");
+                                        }
+                                    }}
+                                    disable={user?.email}
+                                    required={!user?.email}
+                                />
+                            </div>
+
+                            {/* Phone */}
+                            <div className="md:col-span-1">
+                                <label className="block text-sm font-medium text-gray-700">
+                                    Phone <RequiredStar />
+                                </label>
+                                <PhoneInputWithCountry
+                                    defaultCountry={formData.contactCountry?.value || ""}
+                                    value={formData.contactPhone || ""}
+                                    onChange={(phone) =>
+                                        setFormData({ ...formData, contactPhone: phone })
+                                    }
+                                />
+                            </div>
+
+                            {/* Country */}
+                            <div className="md:col-span-1">
+                                <CountryDropdown
+                                    value={formData.contactCountry || ""}
+                                    onChange={(selected) => {
+                                        setSelectedCountry(selected);
+                                        setFormData({ ...formData, contactCountry: selected });
+                                    }}
+                                    required
+                                />
+                            </div>
+
+                            {/* State */}
+                            <div>
+                                <Input
+                                    label="State"
+                                    name="state"
+                                    value={formData.state || ""}
+                                    onChange={(e) =>
+                                        setFormData({ ...formData, state: e.target.value })
+                                    }
+                                    required
+                                />
+                            </div>
+
+                            {/* City */}
+                            <div>
+                                <Input
+                                    label="City"
+                                    name="city"
+                                    value={formData.city || ""}
+                                    onChange={(e) =>
+                                        setFormData({ ...formData, city: e.target.value })
+                                    }
+                                    required
+                                />
+                            </div>
+
+                            {/* Postal Code */}
+                            <div>
+                                <Input
+                                    label="Postal Code"
+                                    name="postalCode"
+                                    value={formData.postalCode || ""}
+                                    onChange={(e) =>
+                                        setFormData({ ...formData, postalCode: e.target.value })
+                                    }
+                                    required
+                                />
+                            </div>
+
+                            {/* GST */}
+                            <div>
+                                <Input
+                                    label="GST (optional)"
+                                    name="companyGst"
+                                    value={formData.companyGst || ""}
+                                    onChange={(e) =>
+                                        setFormData({ ...formData, companyGst: e.target.value })
+                                    }
+                                />
+                            </div>
+
+                            {/* Website */}
+                            <div>
+                                <Input
+                                    label="Website (optional)"
+                                    name="website"
+                                    value={formData.website || ""}
+                                    onChange={(e) =>
+                                        setFormData({ ...formData, [e.target.name]: e.target.value })
+                                    }
+                                />
+                            </div>
+                        </form>
+
+                        {/* USER AGREEMENT */}
+                        <div className="mt-6 mb-5">
+                            <label className="flex items-start gap-2 text-sm text-gray-700">
+                                <input
+                                    type="checkbox"
+                                    checked={formData.agreedToTerms}
+                                    onChange={(e) =>
+                                        setFormData({ ...formData, agreedToTerms: e.target.checked })
+                                    }
+                                    className="checkbox checkbox-primary mt-1"
+                                />
+
+                                <span className="leading-5">
+                                    I agree to the&nbsp;
+                                    <a href="/terms" className="text-primary underline">User Agreement</a>
+                                    &nbsp;and&nbsp;
+                                    <a href="/privacy-policy" className="text-primary underline">Privacy Policy</a>
+                                </span>
+                            </label>
+                        </div>
+
+                        {/* BUTTON */}
+                        <div className="mt-8 gap-5 flex flex-col md:flex-row justify-between md:justify-between">
+
+                            <button
+                                type="button"
+                                onClick={() => window.open("/sample-reports", "_blank")}
+                                className="btn btn-link text-sm font-medium text-blue-500 underline"
+                            >
+                                Sample Report
+                            </button>
+
+                            <button
+                                type="button"
+                                className="btn btn-primary px-8 w-full md:w-auto"
+                                onClick={handlePreview}
+                            >
+
+                                Preview and Order
+                            </button>
                         </div>
                     </div>
+                </>
+            )}
 
 
-                    <form className="grid grid-cols-1 md:grid-cols-6 gap-x-6 gap-y-5">
-                        <div className="md:col-span-6">
-                            <Input
-                                label="Company Name"
-                                name="companyName"
-                                value={formData.companyName || ''}
-                                onChange={(e) =>
-                                    setFormData({ ...formData, [e.target.name]: e.target.value })
-                                }
-                                required
-                            />
-                        </div>
 
-                        <div className="md:col-span-6">
-                            <Input
-                                label="Address"
-                                name="address"
-                                value={formData.address || ''}
-                                onChange={(e) =>
-                                    setFormData({ ...formData, [e.target.name]: e.target.value })
-                                }
-                                required
-                            />
-                        </div>
+            {formData.companyType && formData.companyType === 'other_company' &&
+                <>
 
-                        <div className="md:col-span-2">
-                            <CountryDropdown
-                                value={formData.country || ''}
-                                onChange={(selected) => {
-                                    setSelectedCountry(selected);
-                                    setFormData({
-                                        ...formData, country: selected
-                                    });
+                    {step === 1 && (
+                        <>
+                            <div className="flex flex-col md:flex-row items-start md:items-center justify-start mb-6 gap-2 "
+                                ref={step1ref}
+                            >
+
+                                {/* Right: Title + Subtitle */}
+                                {/* <div className="text-right md:text-left">
+                                    <h3 className="text-xl font-semibold text-gray-800">
+                                        Target Company Details
+                                    </h3>
+                                    <p className="text-sm text-gray-500 mt-1">
+                                        Fill in the details of the company for which you want Business Credit Report.
+                                    </p>
+                                </div> */}
+                            </div>
+
+
+                            <form className="grid grid-cols-1 md:grid-cols-6 gap-x-6 gap-y-5">
+                                <div className="md:col-span-6">
+                                    <Input
+                                        label="Company Name"
+                                        name="companyName"
+                                        value={formData.companyName || ''}
+                                        onChange={(e) =>
+                                            setFormData({ ...formData, [e.target.name]: e.target.value })
+                                        }
+                                        required
+                                    />
+                                </div>
+
+                                <div className="md:col-span-6">
+                                    <Input
+                                        label="Address"
+                                        name="address"
+                                        value={formData.address || ''}
+                                        onChange={(e) =>
+                                            setFormData({ ...formData, [e.target.name]: e.target.value })
+                                        }
+                                        required
+                                    />
+                                </div>
+
+                                <div className="md:col-span-3">
+                                    <CountryDropdown
+                                        value={formData.country || ''}
+                                        onChange={(selected) => {
+                                            setSelectedCountry(selected);
+                                            setFormData({
+                                                ...formData, country: selected
+                                            });
+                                        }}
+                                        required
+                                    />
+                                </div>
+
+                                <div className="md:col-span-3">
+                                    <Input
+                                        label="State"
+                                        name="state"
+                                        value={formData.state || ''}
+                                        onChange={(e) =>
+                                            setFormData({ ...formData, [e.target.name]: e.target.value })
+                                        }
+                                    />
+                                </div>
+
+                                <div className="md:col-span-3">
+                                    <Input
+                                        label="City"
+                                        name="city"
+                                        value={formData.city || ''}
+                                        onChange={(e) =>
+                                            setFormData({ ...formData, [e.target.name]: e.target.value })
+                                        }
+                                        required
+                                    />
+                                </div>
+
+                                <div className="md:col-span-3">
+                                    <Input
+                                        label="Postal Code"
+                                        name="postalCode"
+                                        value={formData.postalCode || ''}
+                                        onChange={(e) =>
+                                            setFormData({ ...formData, [e.target.name]: e.target.value })
+                                        }
+                                    />
+                                </div>
+
+                                <div className="md:col-span-3">
+                                    <label className="block text-sm font-medium mb-1 text-gray-700">Phone</label>
+                                    <PhoneInputWithCountry
+                                        defaultCountry={formData.country?.value || ''} // string code
+                                        value={formData.telephone || ''}
+                                        onChange={(phone) =>
+                                            setFormData({ ...formData, telephone: phone })
+                                        }
+                                    />
+                                </div>
+
+                                <div className="md:col-span-3">
+                                    <Input
+                                        label="Company Website (if available)"
+                                        name="website"
+                                        value={formData.website || ''}
+                                        onChange={(e) =>
+                                            setFormData({ ...formData, [e.target.name]: e.target.value })
+                                        }
+                                    />
+                                </div>
+                            </form>
+
+
+                            {showSnackbar && (
+                                <div className="bg-grey-500 text-red-600 px-4 py-3 text-end text-sm font-medium">
+                                    {snackbarMessage}
+                                </div>
+                            )}
+
+                            <div className="flex justify-between mt-10">
+
+
+                                <button
+                                    type="button"
+                                    onClick={() => window.open("/sample-reports", "_blank")}
+                                    className="btn btn-link text-sm font-medium text-blue-500 underline"
+                                >
+                                    Sample Report
+                                </button>
+
+                                <button
+                                    type="button"
+                                    onClick={() => handleNext()}
+                                    className="btn btn-primary px-8 py-2 text-sm font-medium"
+                                >
+                                    Next
+                                </button>
+                            </div>
+                        </>
+                    )}
+
+                    {step === 2 && (
+                        <>
+                            <div className="flex flex-col md:flex-row items-start md:items-center justify-start mb-6 gap-2" ref={step2ref}>
+
+                                {/* <div className="text-right md:text-left">
+                                    <h3 className="text-xl font-semibold text-gray-800" >
+                                        Your Contact Information
+                                    </h3>
+                                    <p className="text-sm text-gray-500 mt-1">
+                                        Fill your details to get a Freshly Investigated Report
+                                    </p>
+                                </div> */}
+                            </div>
+                            <form className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <Input
+                                    label="Your Name"
+                                    name="contactName"
+                                    value={formData.contactName || ''}
+                                    onChange={(e) =>
+                                        setFormData({ ...formData, [e.target.name]: e.target.value })
+                                    }
+                                    required
+                                />
+
+                                <Input
+                                    label="Your Email (Report will be sent to this email)"
+                                    name="contactEmail"
+                                    type='email'
+                                    value={user?.email || formData.contactEmail || ''}
+                                    onChange={(e) => {
+                                        const value = e.target.value;
+                                        setFormData({ ...formData, [e.target.name]: value });
+
+                                        // Basic Email Validation
+                                        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                                        if (value && !emailRegex.test(value)) {
+                                            showAlert("Please enter a valid email address", "warning");
+                                        }
+                                    }}
+                                    disable={user?.email}
+                                    required={!user?.email}
+                                />
+
+
+                                <CountryDropdown
+                                    value={formData.contactCountry || ''}
+                                    onChange={(selected) => {
+                                        setSelectedCountry(selected);
+                                        setFormData({ ...formData, contactCountry: selected });
+                                    }}
+                                    required={true}
+                                />
+
+                                <div>
+                                    <label className="block text-sm font-medium mb-1 text-gray-700">Phone <RequiredStar /></label>
+                                    <PhoneInputWithCountry
+                                        key={formData.contactCountry?.value || 'default'}  // 🧩 forces re-render
+                                        defaultCountry={formData.contactCountry?.value?.toLowerCase() || ''}
+                                        value={formData.contactPhone || ''}
+                                        onChange={(phone) =>
+                                            setFormData({ ...formData, contactPhone: phone })
+                                        }
+                                    />
+                                </div>
+
+                                <Input
+                                    label="Your Company"
+                                    name="contactCompany"
+                                    value={formData.contactCompany || ''}
+                                    onChange={(e) =>
+                                        setFormData({ ...formData, [e.target.name]: e.target.value })
+                                    }
+                                />
+
+                                <Input
+                                    autoComplete="gst"
+                                    label="Gst"
+                                    name="companyGst"
+                                    type='text'
+                                    id="companyGstField"
+                                    value={formData.companyGst || ''}
+                                    onChange={(e) =>
+                                        setFormData({ ...formData, [e.target.name]: e.target.value })
+                                    }
+                                    className={formData.contactCompany ? 'block' : 'hidden'} // show only if company exists
+
+                                />
+
+
+                                <div>
+                                    <label className="block text-xs font-medium mb-1 text-gray-400">Optional Email: (Report will be send to this email too)</label>
+                                    <Input
+                                        name="optionalEmail"
+                                        value={formData.optionalEmail || ''}
+                                        onChange={(e) =>
+                                            setFormData({ ...formData, [e.target.name]: e.target.value })
+                                        }
+                                    />
+                                </div>
+
+
+                            </form>
+
+                            <h3 className='text-base-100 mt-10 font-semibold' >User Agreement and Privacy Policy</h3>
+
+                            <div className="mt-6 mb-5">
+                                <label className="flex items-start gap-2 text-sm text-gray-700">
+                                    <input
+                                        type="checkbox"
+                                        checked={formData.agreedToTerms}
+                                        onChange={(e) =>
+                                            setFormData({ ...formData, agreedToTerms: e.target.checked })
+                                        }
+                                        className="checkbox checkbox-primary mt-1"
+                                    />
+
+                                    <span className='mt-2'>
+                                        I have read and agreed to the <a href="/terms" className="text-primary underline">User Agreement</a> and <a href="/privacy-policy" className="text-primary underline">Privacy Policy</a> of GlobalBizReport.com
+                                    </span>
+                                </label>
+                            </div>
+
+                            {showSnackbar && (
+                                <div className="bg-grey-500 text-red-600 px-4 py-3 text-end text-sm font-medium">
+                                    {snackbarMessage}
+                                </div>
+                            )}
+
+                            {/* <button
+                                type="button"
+                                onClick={() => window.open("/sample-reports", "_blank")}
+                                className="btn btn-link text-sm font-medium text-blue-500 underline"
+                            >
+                                Sample Report
+                            </button> */}
+
+                            <div className="flex justify-between mt-8">
+                                <button onClick={() => {
+                                    setStep(1);
+                                    setTimeout(() => {
+                                        const offset = -100; // adjust (e.g., -50, -80, -120)
+
+                                        if (step1ref.current) {
+                                            const top =
+                                                step1ref.current.getBoundingClientRect().top +
+                                                window.scrollY +
+                                                offset;
+
+                                            window.scrollTo({
+                                                top,
+                                                behavior: "smooth",
+                                            });
+                                        }
+                                    }, 50);
+
                                 }}
-                                required
-                            />
-                        </div>
+                                    className="btn btn-outline px-6"
+                                >
+                                    Back
+                                </button>
+                                <button
+                                    className="btn btn-primary px-6"
+                                    onClick={() => handlePreview()}
+                                >
+                                    Preview and Order
+                                </button>
+                            </div>
+                        </>
+                    )}
 
-                        <div className="md:col-span-2">
-                            <Input
-                                label="State"
-                                name="state"
-                                value={formData.state || ''}
-                                onChange={(e) =>
-                                    setFormData({ ...formData, [e.target.name]: e.target.value })
-                                }
-                            />
-                        </div>
+                </>
+            }
 
-                        <div className="md:col-span-2">
-                            <Input
-                                label="City"
-                                name="city"
-                                value={formData.city || ''}
-                                onChange={(e) =>
-                                    setFormData({ ...formData, [e.target.name]: e.target.value })
-                                }
-                                required
-                            />
-                        </div>
+            <LoginModalButton
+                btnTitle="E-mail already registered. Confirm to continue"
+                btnDisplay="none"
+                open={showLoginModal}
+                onClose={() => setShowLoginModal(false)}
+            />
 
-                        <div className="md:col-span-2">
-                            <Input
-                                label="Postal Code"
-                                name="postalCode"
-                                value={formData.postalCode || ''}
-                                onChange={(e) =>
-                                    setFormData({ ...formData, [e.target.name]: e.target.value })
-                                }
-                            />
-                        </div>
+            {!formData.companyType &&
 
-                        <div className="md:col-span-2">
-                            <label className="block text-sm font-medium mb-1 text-gray-700">Phone</label>
-                            <PhoneInputWithCountry
-                                defaultCountry={formData.country?.value || ''} // string code
-                                value={formData.telephone || ''}
-                                onChange={(phone) =>
-                                    setFormData({ ...formData, telephone: phone })
-                                }
-                            />
-                        </div>
+                <>
 
-                        <div className="md:col-span-2">
-                            <Input
-                                label="Company Website (if available)"
-                                name="website"
-                                value={formData.website || ''}
-                                onChange={(e) =>
-                                    setFormData({ ...formData, [e.target.name]: e.target.value })
-                                }
-                            />
-                        </div>
+
+                    <form className="grid grid-cols-1 md:grid-cols-6 gap-x-6 gap-y-5 mt-5 cursor-not-allowed">
+
+                        {[
+                            { label: "Company Name", name: "companyName", required: true },
+                            { label: "Address", name: "address", required: true },
+                            { label: "Country", name: "country" },
+                            { label: "State", name: "state" },
+                            { label: "City", name: "city", required: true },
+                            { label: "Postal Code", name: "postalCode" },
+                            { label: "Phone", name: "telephone", required: true },
+                            { label: "Company Website (if available)", name: "website" },
+                        ].map((field, index) => (
+                            <div
+                                key={index}
+                                className="md:col-span-3"
+                            >
+                                <Input
+                                    label={field.label}
+                                    name={field.name}
+                                    value={formData[field.name] || ""}
+                                    required={field.required}
+                                    disable
+                                />
+                            </div>
+                        ))}
+
                     </form>
 
+                    {showSnackbar && (
+                        <div className="bg-grey-500 text-red-600 px-4 py-3 text-end text-sm font-medium">
+                            {snackbarMessage}
+                        </div>
+                    )}
+
+                    <div className="flex justify-between mt-10">
 
 
-                    <div className="flex justify-end mt-10">
-                        {showSnackbar && (
-                            <div className="bg-grey-500 text-red-600 px-4 py-3 text-end text-sm font-medium">
-                                {snackbarMessage}
-                            </div>
-                        )}
-                        {/* <button
+                        <button
                             type="button"
-                            onClick={handleAddCompany}
-                            className="btn btn-outline mr-1"
+                            onClick={() => window.open("/sample-reports", "_blank")}
+                            className="btn btn-link text-sm font-medium text-blue-500 underline"
                         >
-                            + Add More Company
-                        </button> */}
+                            Sample Report
+                        </button>
+
 
                         <button
                             type="button"
@@ -372,183 +1023,7 @@ const OrderCreditReport = () => {
                         </button>
                     </div>
                 </>
-            )}
-
-
-
-
-            {step === 2 && (
-                <>
-                    <div className="flex flex-col md:flex-row items-start md:items-center justify-start mb-6 gap-2" ref={step2ref}>
-                        {/* <span className="text-sm font-medium text-primary md:text-base bg-blue-50 p-2 rounded-xl mr-5">
-                            Step 2
-                        </span> */}
-
-                        <div className="text-right md:text-left">
-                            <h3 className="text-xl font-semibold text-gray-800" >
-                                Your Contact Information
-                            </h3>
-                            <p className="text-sm text-gray-500 mt-1">
-                                Fill your details to get a Freshly Investigated Report
-                            </p>
-                        </div>
-                    </div>
-                    <form className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <Input
-                            label="Your Name"
-                            name="contactName"
-                            value={formData.contactName || ''}
-                            onChange={(e) =>
-                                setFormData({ ...formData, [e.target.name]: e.target.value })
-                            }
-                            required
-                        />
-
-                        <Input
-                            label="Your Email (Report will be sent to this email)"
-                            name="contactEmail"
-                            type='email'
-                            value={user?.email || formData.contactEmail || ''}
-                            onChange={(e) => {
-                                const value = e.target.value;
-                                setFormData({ ...formData, [e.target.name]: value });
-
-                                // Basic Email Validation
-                                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                                if (value && !emailRegex.test(value)) {
-                                    showAlert("Please enter a valid email address", "warning");
-                                }
-                            }}
-                            disable={user?.email}
-                            required={!user?.email}
-                        />
-
-
-                        <CountryDropdown
-                            value={formData.contactCountry || ''}
-                            onChange={(selected) => {
-                                setSelectedCountry(selected);
-                                setFormData({ ...formData, contactCountry: selected });
-                            }}
-                            required={true}
-                        />
-
-                        <div>
-                            <label className="block text-sm font-medium mb-1 text-gray-700">Phone <RequiredStar /></label>
-                            <PhoneInputWithCountry
-                                key={formData.contactCountry?.value || 'default'}  // 🧩 forces re-render
-                                defaultCountry={formData.contactCountry?.value?.toLowerCase() || ''}
-                                value={formData.contactPhone || ''}
-                                onChange={(phone) =>
-                                    setFormData({ ...formData, contactPhone: phone })
-                                }
-                            />
-                        </div>
-
-                        <Input
-                            label="Your Company"
-                            name="contactCompany"
-                            value={formData.contactCompany || ''}
-                            onChange={(e) =>
-                                setFormData({ ...formData, [e.target.name]: e.target.value })
-                            }
-                        />
-
-                        <Input
-                            autoComplete="gst"
-                            label="Gst"
-                            name="companyGst"
-                            type='text'
-                            id="companyGstField"
-                            value={formData.companyGst || ''}
-                            onChange={(e) =>
-                                setFormData({ ...formData, [e.target.name]: e.target.value })
-                            }
-                            className={formData.contactCompany ? 'block' : 'hidden'} // show only if company exists
-
-                        />
-
-
-                        <div>
-                            <label className="block text-xs font-medium mb-1 text-gray-400">Optional Email: (Report will be send to this email too)</label>
-                            <Input
-                                name="optionalEmail"
-                                value={formData.optionalEmail || ''}
-                                onChange={(e) =>
-                                    setFormData({ ...formData, [e.target.name]: e.target.value })
-                                }
-                            />
-                        </div>
-
-
-                    </form>
-
-                    <h3 className='text-base-100 mt-10 font-semibold' >User Agreement and Privacy Policy</h3>
-
-                    <div className="mt-6 mb-5">
-                        <label className="flex items-start gap-2 text-sm text-gray-700">
-                            <input
-                                type="checkbox"
-                                checked={formData.agreedToTerms}
-                                onChange={(e) =>
-                                    setFormData({ ...formData, agreedToTerms: e.target.checked })
-                                }
-                                className="checkbox checkbox-primary mt-1"
-                            />
-
-                            <span className='mt-2'>
-                                I have read and agreed to the <a href="/terms" className="text-primary underline">User Agreement</a> and <a href="/privacy-policy" className="text-primary underline">Privacy Policy</a> of GlobalBizReport.com
-                            </span>
-                        </label>
-                    </div>
-
-                    {showSnackbar && (
-                        <div className="bg-grey-500 text-red-600 px-4 py-3 text-end text-sm font-medium">
-                            {snackbarMessage}
-                        </div>
-                    )}
-
-                    <LoginModalButton
-                        btnTitle="E-mail already registered. Confirm to continue"
-                        btnDisplay="none"
-                        open={showLoginModal}
-                        onClose={() => setShowLoginModal(false)}
-                    />
-
-                    <div className="flex justify-between mt-8">
-                        <button onClick={() => {
-                            setStep(1);
-                            setTimeout(() => {
-                                const offset = -100; // adjust (e.g., -50, -80, -120)
-
-                                if (step1ref.current) {
-                                    const top =
-                                        step1ref.current.getBoundingClientRect().top +
-                                        window.scrollY +
-                                        offset;
-
-                                    window.scrollTo({
-                                        top,
-                                        behavior: "smooth",
-                                    });
-                                }
-                            }, 50);
-
-                        }}
-                            className="btn btn-outline px-6"
-                        >
-                            Back
-                        </button>
-                        <button
-                            className="btn btn-primary px-6"
-                            onClick={() => handlePreview()}
-                        >
-                            Preview and Order
-                        </button>
-                    </div>
-                </>
-            )}
-
+            }
 
         </div >
 

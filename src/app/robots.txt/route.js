@@ -49,58 +49,105 @@
 // }
 
 
-import { NextResponse } from "next/server";
+// import { NextResponse } from "next/server";
 
-const META_URL = "https://backend.globalbizreport.com/companies-meta";
-const BASE_URL = "https://www.globalbizreport.com";
-const URLS_PER_SITEMAP = 2000;
+// const META_URL = "https://backend.globalbizreport.com/companies-meta";
+// const BASE_URL = "https://www.globalbizreport.com";
+// const URLS_PER_SITEMAP = 2000;
+
+// export async function GET() {
+//     try {
+//         const metaRes = await fetch(META_URL, { next: { revalidate: 86400 } });
+//         const metaData = await metaRes.json();
+//         const totalBackendPages = metaData.totalPages || 0;
+//         const PER_PAGE = 20;
+
+//         const totalUrls = totalBackendPages * PER_PAGE;
+//         const totalSitemaps = Math.ceil(totalUrls / URLS_PER_SITEMAP);
+
+//         // Build robots.txt content
+//         let content = `
+// User-agent: *
+// Disallow: /admin/
+// Allow: /
+
+// # Static sitemaps
+// Sitemap: ${BASE_URL}/sitemaps/static
+// Sitemap: ${BASE_URL}/company-directory/india
+// `;
+
+//         // Add dynamic sitemaps
+//         for (let i = 1; i <= totalSitemaps; i++) {
+//             content += `Sitemap: ${BASE_URL}/sitemaps/sitemap/${i}\n`;
+//         }
+
+//         // Ensure final newline
+//         content += "\n";
+
+//         return new NextResponse(content.trim(), {
+//             headers: { "Content-Type": "text/plain" },
+//         });
+//     } catch (err) {
+//         console.error("Robots.txt generation error:", err);
+
+//         // Fallback robots.txt
+//         const fallback = `
+// User-agent: *
+// Disallow: /admin/
+// Allow: /
+
+// # Static sitemap only
+// Sitemap: ${BASE_URL}/sitemaps/static
+// `.trim();
+
+//         return new NextResponse(fallback, {
+//             headers: { "Content-Type": "text/plain" },
+//         });
+//     }
+// }
+
+
+import { NextResponse } from "next/server";
 
 export async function GET() {
     try {
-        const metaRes = await fetch(META_URL, { next: { revalidate: 86400 } });
-        const metaData = await metaRes.json();
-        const totalBackendPages = metaData.totalPages || 0;
-        const PER_PAGE = 20;
+        const content = `
+         # Allow Googlebot for web crawling
+User-agent: Googlebot
+Disallow:
 
-        const totalUrls = totalBackendPages * PER_PAGE;
-        const totalSitemaps = Math.ceil(totalUrls / URLS_PER_SITEMAP);
+# Allow Googlebot-Image for images
+User-agent: Googlebot-Image
+Disallow:
 
-        // Build robots.txt content
-        let content = `
+# Block all other bots
 User-agent: *
-Disallow: /admin/
-Allow: /
-
-# Static sitemaps
-Sitemap: ${BASE_URL}/sitemaps/static
-Sitemap: ${BASE_URL}/company-directory/india
+Disallow: /
 `;
 
-        // Add dynamic sitemaps
-        for (let i = 1; i <= totalSitemaps; i++) {
-            content += `Sitemap: ${BASE_URL}/sitemaps/sitemap/${i}\n`;
-        }
-
-        // Ensure final newline
-        content += "\n";
-
         return new NextResponse(content.trim(), {
-            headers: { "Content-Type": "text/plain" },
+            headers: {
+                "Content-Type": "text/plain",
+            },
         });
     } catch (err) {
         console.error("Robots.txt generation error:", err);
 
-        // Fallback robots.txt
         const fallback = `
+       # Allow Googlebot for web crawling
+User-agent: Googlebot
+Disallow:
+
+# Allow Googlebot-Image for images
+User-agent: Googlebot-Image
+Disallow:
+
+# Block all other bots
 User-agent: *
-Disallow: /admin/
-Allow: /
+Disallow: /
+`;
 
-# Static sitemap only
-Sitemap: ${BASE_URL}/sitemaps/static
-`.trim();
-
-        return new NextResponse(fallback, {
+        return new NextResponse(fallback.trim(), {
             headers: { "Content-Type": "text/plain" },
         });
     }

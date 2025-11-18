@@ -33,13 +33,13 @@ const OrderCreditReportClient = () => {
 
 
     return (
-        <section className="py-0 md:py-5  max-w-[1700px] mx-auto px-1 bg-white text-gray-800">
+        <section className="py-0 md:py-5  max-w-7xl mx-auto px-1 bg-white text-gray-800">
 
 
-            <div className="  flex flex-col md:flex-row justify-end gap-8 px-0 md:px-10  py-10">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 px-0 md:px-10 py-10">
 
                 <div
-                    className="relative max-w-lg 2xl:max-w-3xl rounded-2xl overflow-hidden text-white px-6 py-5 md:py-10 "
+                    className="relative  rounded-2xl overflow-hidden text-white px-6 py-5 md:py-10 h-[500px] "
                     style={{
                         backgroundImage:
                             "url('https://cdn.pixabay.com/photo/2017/03/28/12/10/chairs-2181951_960_720.jpg')",
@@ -57,17 +57,17 @@ const OrderCreditReportClient = () => {
                             Order a Business Credit Report for Any Company Worldwide
                         </h2>
 
-                        <p className="text-gray-300 text-left max-w-5xl mx-auto mb-5 text-lg md:text-lg xl:text-xl  italic">
+                        <p className="text-gray-300 text-left max-w-3xl mx-auto mb-5 text-lg md:text-lg xl:text-xl  italic">
                             Verify your partners, vendors, buyers, and suppliers with a comprehensive Business Information Report
                             covering registration details, financial data, credit rating, risk indicators, and more.
                         </p>
 
-                        <div className="flex flex-col md:flex-row justify-start mb-5 gap-4">
+                        <div className="flex flex-col md:hidden justify-start mb-5 gap-4">
 
 
                             <button
                                 onClick={handleScrollToForm}
-                                className="cursor-pointer   font-semibold px-8 py-3 rounded-lg shadow-none hover:shadow-lg hover:scale-105 transition-all duration-300 flex items-center gap-2 btn btn-warning "
+                                className="cursor-pointer   font-semibold px-8 py-3 rounded-lg shadow-none hover:shadow-lg hover:scale-105 transition-all duration-300 items-center gap-2 btn btn-warning "
                             >
                                 Order Report Now <FaChevronRight />
                             </button>
@@ -164,19 +164,10 @@ const OrderCreditReportClient = () => {
 
                 </div>
 
+            </section>
 
 
-
-
-                {/* Trust Line */}
-                {/* <div className="text-center mb-7 ">
-                    <h4 className="font-semibold text-gray-500 text-base md:text-lg">
-                        At Global Biz Report (GBR), we deliver freshly investigated business credit reports for any company in 220+ countries.
-                    </h4>
-                </div> */}
-
-
-
+            <section className="bg-gray-50 py-2 md:py-2 mt-5 px-6 md:px-10 lg:px-20 text-gray-800 w-full">
 
                 {/* Why Choose Section */}
                 <div className="max-w-5xl mx-auto py-10">

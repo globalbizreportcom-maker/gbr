@@ -4,7 +4,7 @@
 import { useRouter } from "next/navigation";
 import { FaLock } from "react-icons/fa";
 
-const ClientPurchaseButton = ({ companyData }) => {
+const ClientPurchaseButton = ({ companyData, label, bgColor = 'orange', overlay = 99999 }) => {
     const router = useRouter();
 
     const handlePurchaseReport = () => {
@@ -36,6 +36,7 @@ const ClientPurchaseButton = ({ companyData }) => {
         const cityLabel = addressParts[addressParts.length - 4] || "";
 
         const formData = {
+            companyType: 'other_company' || '',
             companyName: companyData.CompanyName || "",
             address: companyData.Registered_Office_Address || "",
             city: cityLabel,
@@ -69,20 +70,13 @@ const ClientPurchaseButton = ({ companyData }) => {
     };
 
     return (
-        <div className="fixed bottom-0 left-0 w-full bg-gray-600 text-white p-4 flex justify-between xl:justify-evenly items-center shadow-lg z-50">
-            <div>
-                <p className="font-medium">
-                    Order Freshly Investigated Business Credit Report
-                </p>
-            </div>
-            <button
-                onClick={handlePurchaseReport}
-                className="z-9999 cursor-pointer flex items-center gap-2 bg-orange-500 px-4 py-2 rounded-lg hover:bg-orange-600 transition"
-            >
-                <FaLock />
-                Purchase
-            </button>
-        </div>
+        <button
+            onClick={handlePurchaseReport}
+            className={`z-${overlay} cursor-pointer flex items-center text-md md:text-md gap-2 bg-${bgColor}-500 px-4 py-2 rounded-lg hover:bg-${bgColor}-600 transition shadow-lg`}
+        >
+            {/* <FaLock /> */}
+            {label}
+        </button>
     );
 };
 

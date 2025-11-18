@@ -4,14 +4,14 @@ import { useState } from "react";
 export default function SampleReports() {
 
     const sampleReports = [
-        { country: "India", title: "Business Credit Report - India", url: "https://res.cloudinary.com/dwccr86av/image/upload/v1759910760/GlobalBizReport-India_Pvt_Ltd-Sample_nvotqo.pdf" },
-        { country: "France", title: "Business Credit Report - France", url: "https://res.cloudinary.com/dwccr86av/image/upload/v1759910759/GlobalBizReport-France_Sample_phxxva.pdf" },
-        { country: "Netherlands", title: "Business Credit Report - Netherlands", url: "https://res.cloudinary.com/dwccr86av/image/upload/v1759910761/GlobalBizReport-Netherlands_Sample_wgl9fp.pdf" },
-        { country: "Taiwan", title: "Business Credit Report - Taiwan", url: "https://res.cloudinary.com/dwccr86av/image/upload/v1759910759/GlobalBizReport-Taiwan_Sample_l3ki0q.pdf" },
-        { country: "USA", title: "Business Credit Report - USA", url: "https://res.cloudinary.com/dwccr86av/image/upload/v1759910759/GlobalBizReport-USA_Sample_xgawbi.pdf" },
-        { country: "China", title: "Business Credit Report - China", url: "https://res.cloudinary.com/dwccr86av/image/upload/v1759910760/GlobalBizReport-China_Sample_owd5mt.pdf" },
-        { country: "Italy", title: "Business Credit Report - Italy", url: "https://res.cloudinary.com/dwccr86av/image/upload/v1759910761/GlobalBizReport-Italy_Sample_oxq9pi.pdf" },
-        { country: "Spain", title: "Business Credit Report - Spain", url: "https://res.cloudinary.com/dwccr86av/image/upload/v1759910760/GlobalBizReport-Spain_Sample_vscc6c.pdf" },
+        { country: "India", title: "Business Credit Report - India", url: "https://res.cloudinary.com/dwccr86av/image/upload/v1763462244/GlobalBizReport-India_Sample_wmihch.pdf" },
+        // { country: "France", title: "Business Credit Report - France", url: "https://res.cloudinary.com/dwccr86av/image/upload/v1759910759/GlobalBizReport-France_Sample_phxxva.pdf" },
+        // { country: "Netherlands", title: "Business Credit Report - Netherlands", url: "https://res.cloudinary.com/dwccr86av/image/upload/v1759910761/GlobalBizReport-Netherlands_Sample_wgl9fp.pdf" },
+        // { country: "Taiwan", title: "Business Credit Report - Taiwan", url: "https://res.cloudinary.com/dwccr86av/image/upload/v1759910759/GlobalBizReport-Taiwan_Sample_l3ki0q.pdf" },
+        { country: "USA", title: "Business Credit Report - USA", url: "https://res.cloudinary.com/dwccr86av/image/upload/v1763462255/GlobalBizReport-US_Sample_m6mgow.pdf" },
+        // { country: "China", title: "Business Credit Report - China", url: "https://res.cloudinary.com/dwccr86av/image/upload/v1759910760/GlobalBizReport-China_Sample_owd5mt.pdf" },
+        // { country: "Italy", title: "Business Credit Report - Italy", url: "https://res.cloudinary.com/dwccr86av/image/upload/v1759910761/GlobalBizReport-Italy_Sample_oxq9pi.pdf" },
+        // { country: "Spain", title: "Business Credit Report - Spain", url: "https://res.cloudinary.com/dwccr86av/image/upload/v1759910760/GlobalBizReport-Spain_Sample_vscc6c.pdf" },
     ];
 
     const [selectedCountry, setSelectedCountry] = useState("");
@@ -80,41 +80,55 @@ export default function SampleReports() {
                 {/* Report Grid */}
                 <div className="grid gap-6  sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 ">
                     {filteredReports.length > 0 ? (
-                        filteredReports.map((report) => (
-                            <a
-                                href={report.url}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                key={report.country}
-                                className="cursor-pointer bg-white rounded-xl  hover:bg-gray-100 transition p-6 flex flex-col justify-between"
+
+                        filteredReports.map((report, i) => (
+                            <div
+                                key={i}
+                                className="bg-white rounded-2xl  transition p-6 flex flex-col justify-between"
                             >
-                                <div className="mt-4 w-full h-48 rounded-lg border border-gray-200 overflow-hidden">
+                                {/* PDF Preview */}
+                                <div className="w-full h-56 md:h-64 rounded-xl border border-gray-200 overflow-hidden">
                                     <iframe
                                         src={`${report.url}#toolbar=0&navpanes=0&scrollbar=0`}
                                         title={report.title}
                                         scrolling="no"
-                                        className="w-full h-full pointer-events-none rounded-lg"
-                                        style={{ border: "none", margin: "4px" }} // optional extra spacing
-                                    ></iframe>
+                                        className="w-full h-full pointer-events-none rounded-xl"
+                                        style={{ border: "none" }}
+                                    />
                                 </div>
 
-
-
-                                <div>
-                                    <h2 className="text-md font-semibold text-gray-800 mb-2">
+                                {/* Title & Country */}
+                                <div className="mt-4">
+                                    <h2 className="text-sm font-semibold text-gray-800 truncate">
                                         {report.title}
                                     </h2>
-                                    <p className="text-sm text-gray-600">{report.country}</p>
+                                    <p className="text-sm text-gray-500">{report.country}</p>
                                 </div>
 
-                                <div
-                                    className="cursor-pointer mt-4 text-center bg-indigo-500 text-white px-4 py-2 rounded-lg hover:bg-black transition"
-                                >
-                                    View Sample Report
-                                </div>
-                            </a>
+                                {/* Buttons */}
+                                <div className="mt-4 flex flex-col sm:flex-col gap-3">
+                                    <a
+                                        href={report.url}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="flex-1 text-center border border-gray-300 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-100 transition"
+                                    >
+                                        View Sample Report
+                                    </a>
 
+                                    <a
+                                        href="/order-business-credit-report"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="flex-1 text-center bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition"
+                                    >
+                                        Order Report
+                                    </a>
+                                </div>
+                            </div>
                         ))
+
+
                     ) : (
                         <p className="text-gray-500 text-center col-span-full">
                             No reports found.

@@ -55,7 +55,7 @@ import Select from 'react-select';
 import { Country } from 'country-state-city';
 import RequiredStar from './RequiredStar';
 
-const CountryDropdown = ({ value, onChange }) => {
+const CountryDropdown = ({ value, onChange, disable = false }) => {
     const [options, setOptions] = useState([]);
     const [selected, setSelected] = useState(null);
 
@@ -99,6 +99,7 @@ const CountryDropdown = ({ value, onChange }) => {
                         fontSize: '0.875rem',
                     }),
                 }}
+                isDisabled={disable}
                 required
             />
         </div>

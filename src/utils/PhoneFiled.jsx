@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/lib/style.css';
 
-const PhoneInputWithCountry = ({ value, onChange, defaultCountry }) => {
+const PhoneInputWithCountry = ({ value, onChange, defaultCountry, disable = false }) => {
 
     const [countryCode, setCountryCode] = useState('');
 
@@ -26,6 +26,7 @@ const PhoneInputWithCountry = ({ value, onChange, defaultCountry }) => {
                     width: '100%',
                     height: '40px',
                 }}
+                disabled={disable}
                 containerStyle={{ width: '100%' }}
                 inputClass="bg-white"
                 enableSearch

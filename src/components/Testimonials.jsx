@@ -60,6 +60,7 @@ const PER_PAGE = 3;
 export default function Testimonials() {
     const [currentPage, setCurrentPage] = useState(1);
     const testimonialRef = useRef();
+    const firstRenderRef = useRef(true);
 
     const totalPages = Math.ceil(testimonials.length / PER_PAGE);
 
@@ -68,26 +69,31 @@ export default function Testimonials() {
         currentPage * PER_PAGE
     );
 
-    // Scroll to top of testimonials on page change
-    useEffect(() => {
+    const handlePageChange = (pageNum) => {
+        setCurrentPage(pageNum);
+
+        // Scroll ONLY when clicking buttons
         if (testimonialRef.current) {
-            testimonialRef.current.scrollIntoView({ behavior: 'smooth' });
+            testimonialRef.current.scrollIntoView({ behavior: "smooth" });
         }
-    }, [currentPage]);
+    };
+
 
     return (
         <section ref={testimonialRef} className="max-w-5xl mx-auto px-4 ">
-            <h2 className="text-2xl text-black font-bold text-center mb-2">What People Are Saying?</h2>
+            <h3 className="text-xl md:text-3xl font-extrabold text-center mb-8 text-gray-900">
+                What people are saying
+            </h3>
             <p className=" text-sm md:text-base text-gray-500 text-center mb-8">
                 Join <span className="text-indigo-500 font-bold">20,000+</span> companies that trust GlobalBizReport
             </p>
 
             <div className="flex flex-col space-y-10">
                 {currentTestimonials.map((t, idx) => (
-                    <div key={idx} className="flex gap-6">
+                    <div key={idx} className="flex gap-6 px-2 md:px-5 bg-gray-50 ">
 
                         <div>
-                            <div className="flex items-center gap-4 py-5">
+                            <div className="flex items-center gap-4  py-3">
 
 
 
@@ -145,7 +151,7 @@ export default function Testimonials() {
                     return (
                         <button
                             key={pageNum}
-                            onClick={() => setCurrentPage(pageNum)}
+                            onClick={() => handlePageChange(pageNum)}
                             className={`cursor-pointer w-9 h-9 rounded-md border border-gray-300 flex items-center justify-center text-sm font-semibold ${currentPage === pageNum
                                 ? 'bg-indigo-500 text-white border-transparent'
                                 : 'bg-white text-gray-600 hover:bg-gray-100'
