@@ -284,16 +284,10 @@ const OrderCreditReport = () => {
                 sessionStorage.setItem("visitor_payment_submitted", "true");
             }
 
-
-            console.log("FINAL DATA BEFORE ROUTING:", finalData);
-            console.log("ACTIVE USER:", activeUser);
-            console.log("STOP CHECK 1:", !sessionStorage.getItem("visitor_payment_submitted"));
-
             localStorage.setItem("gbr_form", JSON.stringify(finalData));
             router.push("/order-confirm");
 
         } catch (error) {
-            console.log("Error in handlePreview:", error);
             setSnackbarMessage("Something went wrong. Please try again.");
             setShowSnackbar(true);
         }
@@ -651,9 +645,9 @@ const OrderCreditReport = () => {
                             <button
                                 type="button"
                                 onClick={() => window.open("/sample-reports", "_blank")}
-                                className="btn btn-link text-sm font-medium text-blue-500 underline"
+                                className="btn btn-link text-lg lg:text-lg font-medium text-blue-500 underline"
                             >
-                                Sample Report
+                                View Sample Report
                             </button>
 
                             <button

@@ -99,11 +99,11 @@ const CompanyPage = async ({ params }) => {
                 <h2 className="max-w-2xl mx-auto text-xl md:text-2xl font-bold mb-6 text-center">
                     <span className="text-primary">{companyData.CompanyName}</span>
                 </h2>
-                <p className="text-gray-600 text-center max-w-2xl mx-auto">
+                {/* <p className="text-gray-600 text-center max-w-2xl mx-auto">
                     Trust in our reliable reports to gain valuable insights into potential
                     partners, customers, and vendors, ensuring a secure and thriving business
                     future.
-                </p>
+                </p> */}
             </div>
 
             <div className="grid grid-cols-1 xl:grid-cols-4 gap-x-6 gap-y-5">
@@ -160,12 +160,16 @@ const CompanyPage = async ({ params }) => {
                                 ].map(([label, value]) => (
                                     <div
                                         key={label}
-                                        className="flex flex-col sm:flex-row sm:justify-between p-2 sm:p-3 bg-gray-50 rounded-md"
+                                        className={`flex flex-col sm:flex-row sm:justify-between p-2 sm:p-3 bg-gray-50 rounded-md ${label === "Address" ? "items-start" : ""
+                                            }`}
                                     >
                                         <span className="font-medium text-gray-400">{label}:</span>
-                                        <span className="text-gray-900 sm:text-right mt-1 sm:mt-0 break-words">{value || "N/A"}</span>
+                                        <span className={`text-gray-900 mt-1 sm:mt-0 ${label === "Address" ? "break-words w-full sm:max-w-[70%]" : "sm:text-right break-words"}`}>
+                                            {value || "N/A"}
+                                        </span>
                                     </div>
                                 ))}
+
                             </div>
                         </div>
                     </div>
@@ -200,7 +204,7 @@ const CompanyPage = async ({ params }) => {
                             with its primary operations identified under NIC code{" "}
                             <span className="font-medium">{companyData.nic_code || "N/A"}</span>.
                             Its registered office is situated at{" "}
-                            <span className="font-medium">{companyData.Registered_Office_Address || "N/A"}</span>,
+                            <span className="font-medium break-words">{companyData.Registered_Office_Address || "N/A"}</span>,
                             located in{" "}
                             <span className="font-medium">{companyData.CompanyStateCode || "N/A"}</span>.
                             Structurally, the company is recognized as{" "}

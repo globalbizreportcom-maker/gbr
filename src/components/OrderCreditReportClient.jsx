@@ -72,12 +72,12 @@ const OrderCreditReportClient = () => {
                                 Order Report Now <FaChevronRight />
                             </button>
 
-                            {/* <button
+                            <button
                                 onClick={() => window.open('/sample-reports', '_blank')}
                                 className="cursor-pointer  font-semibold px-8 py-3 rounded-lg shadow-none hover:shadow-lg hover:scale-105 transition-all duration-300 flex items-center gap-2 btn btn-outline"
                             >
                                 View Sample Report
-                            </button> */}
+                            </button>
 
 
                         </div>
@@ -146,8 +146,8 @@ const OrderCreditReportClient = () => {
                     {/* Point 5 */}
                     <div className="bg-white rounded-xl p-3 md:p-6 text-left flex items-start gap-3">
                         <FaCheckCircle className="text-indigo-400 text-2xl flex-shrink-0 mt-1" />
-                        <p className="text-gray-700 text-md leading-relaxed font-semibold">
-                            Pricing of the credit report varies based on the country of the company
+                        <p className="text-gray-700 text-md leading-relaxed ">
+                            <strong>Pricing of the credit</strong>   report varies based on the country of the company
                             to be verified, and you will find the pricing for the required Credit
                             Report on submission of the order form.
                         </p>
@@ -156,8 +156,8 @@ const OrderCreditReportClient = () => {
                     {/* Point 6 */}
                     <div className="bg-white rounded-xl p-3 md:p-6 text-left flex items-start gap-3">
                         <FaCheckCircle className="text-indigo-400 text-2xl flex-shrink-0 mt-1" />
-                        <p className="text-gray-700 text-md leading-relaxed font-semibold">
-                            You will receive a freshly investigated credit report digitally on your
+                        <p className="text-gray-700 text-md leading-relaxed ">
+                            <strong>You will receive</strong>  a freshly investigated credit report digitally on your
                             email within the expected delivery time of 1–3 business days.
                         </p>
                     </div>

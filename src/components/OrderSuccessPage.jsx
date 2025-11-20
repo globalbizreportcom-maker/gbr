@@ -63,6 +63,21 @@ const OrderSuccessPage = () => {
                 }}
             />
 
+            {/*  Event snippet for GBR Sales + Lead-Old Main conversion page  */}
+
+            <Script
+                id="gads-conversion-script-2"
+                strategy="afterInteractive"
+                dangerouslySetInnerHTML={{
+                    __html: `
+            gtag('event', 'conversion', {
+              'send_to': 'AW-734050468/b5kxCKjGs98DEKTxgt4C',
+              'transaction_id': ''
+            });
+          `,
+                }}
+            />
+
 
             {/* 🎊 Confetti elements */}
             {confetti.map((c, i) => (

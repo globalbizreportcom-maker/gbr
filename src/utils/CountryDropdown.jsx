@@ -82,7 +82,6 @@ const CountryDropdown = ({ value, onChange, disable = false }) => {
             onChange(selectedOption); // send full object
         }
     };
-    console.log(value);
 
     return (
         <div>
