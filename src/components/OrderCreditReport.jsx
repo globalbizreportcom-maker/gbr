@@ -398,7 +398,7 @@ const OrderCreditReport = () => {
         <div className="bg-white rounded-2xl px-8  py-2">
 
             <div className="flex flex-col gap-3">
-                <label className=" text-lg font-bold text-gray-700">Order Report Now </label>
+                <label className=" text-lg font-bold text-gray-700">Order Report Of </label>
 
                 <div className="flex  flex-col md:flex-row items-start md:items-center gap-6">
 
