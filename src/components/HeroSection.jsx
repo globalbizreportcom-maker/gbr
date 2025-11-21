@@ -95,7 +95,7 @@ const HeroSection = () => {
             {/* Top Content */}
             <div className="w-full max-w-2xl mx-auto text-center mt-20 relative z-10">
                 <h1 className="text-4xl md:text-5xl font-bold text-gray-800 text-center">
-                    Order <span className="text-primary">Business Credit Report</span> for any Company Worldwide.
+                    Order <span className="text-primary">Freshly Investigated Business Credit Report</span> for any Company Worldwide.
                 </h1>
 
                 <p className="text-gray-600 mt-4 max-w-2xl mx-auto">

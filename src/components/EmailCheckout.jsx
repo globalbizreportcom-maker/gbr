@@ -54,12 +54,30 @@ const EmailCheckout = () => {
 
     const getRegion = (country) => {
         if (!country) return "Other Countries";
-        const asiaExcl = ["Japan", "South Korea", "Singapore", "Thailand", "Malaysia", "Indonesia", "Philippines", "Vietnam", "Nepal", "Sri Lanka", "Bangladesh", "Pakistan", "Myanmar", "Bhutan", "Cambodia", "Laos", "Brunei", "Maldives"];
+        // const asiaExcl = ["Japan", "South Korea", "Singapore", "Thailand", "Malaysia", "Indonesia", "Philippines", "Vietnam", "Nepal", "Sri Lanka", "Bangladesh", "Pakistan", "Myanmar", "Bhutan", "Cambodia", "Laos", "Brunei", "Maldives"];
+        // const australiaNZ = ["Australia", "New Zealand"];
+        // const middleEast = ["UAE", "Saudi Arabia", "Qatar", "Kuwait", "Bahrain", "Oman"];
+        // const latinAmerica = ["Brazil", "Mexico", "Argentina", "Colombia", "Chile", "Peru"];
+        // const africa = ["South Africa", "Nigeria", "Egypt", "Kenya", "Morocco", "Ethiopia"];
+        // const oceania = ["Fiji", "Papua New Guinea", "Samoa", "Tonga"];
+
+
+        const asiaExcl = ["Afghanistan", "Bangladesh", "Bhutan", "Brunei", "Myanmar", "Cambodia", "Timor-Leste", "Hong Kong", "Indonesia", "Japan", "Kazakhstan", "North Korea", "South Korea", "Kyrgyzstan", "Laos", "Malaysia", "Maldives", "Mongolia", "Nepal", "Pakistan", "Philippines", "Russia", "Singapore", "Sri Lanka", "Tajikistan", "Taiwan", "Thailand", "Turkmenistan", "Uzbekistan", "Vietnam"];
         const australiaNZ = ["Australia", "New Zealand"];
-        const middleEast = ["UAE", "Saudi Arabia", "Qatar", "Kuwait", "Bahrain", "Oman"];
+        const middleEast = ["Bahrain", "Iran", "Iraq", "Israel", "Jordan", "Kuwait", "Lebanon", "Oman", "Qatar", "Saudi Arabia", "Syria", "Turkey", "Turkmenistan", "United Arab Emirates", "Yemen"];
         const latinAmerica = ["Brazil", "Mexico", "Argentina", "Colombia", "Chile", "Peru"];
-        const africa = ["South Africa", "Nigeria", "Egypt", "Kenya", "Morocco", "Ethiopia"];
-        const oceania = ["Fiji", "Papua New Guinea", "Samoa", "Tonga"];
+        const africa = ["Algeria", "Angola", "Benin", "Botswana", "Burkina Faso", "Burundi", "Cameroon", "Cape Verde", "Central African Republic", "Chad", "Comoros", "Congo", "Djibouti", "Egypt", "Equatorial Guinea", "Eritrea", "Ethiopia", "Gabon", "Gambia", "Ghana", "Guinea", "Guinea-Bissau", "Ivory Coast", "Kenya", "Lesotho", "Liberia", "Libya", "Madagascar", "Malawi", "Mali", "Mauritania", "Mauritius", "Morocco", "Mozambique", "Namibia", "Niger", "Nigeria", "Rwanda", "Sao Tome and Principe", "Senegal", "Seychelles", "Sierra Leone", "Somalia", "South Africa", "Sudan", "Eswatini", "Tanzania", "Togo", "Tunisia", "Uganda", "Zambia", "Zimbabwe"];
+        const oceania = ["Fiji", "Kiribati", "Marshall Islands", "Micronesia", "Nauru", "Palau", "Papua New Guinea", "Samoa", "Solomon Islands", "Tonga", "Tuvalu", "Vanuatu"];
+        const europe = [
+            "Albania", "Andorra", "Armenia", "Austria", "Azerbaijan", "Belarus", "Belgium",
+            "Bosnia and Herzegovina", "Bulgaria", "Croatia", "Cyprus", "Czech Republic",
+            "Denmark", "Estonia", "Finland", "France", "Georgia", "Germany", "Greece",
+            "Hungary", "Iceland", "Ireland", "Italy", "Latvia", "Liechtenstein",
+            "Lithuania", "Luxembourg", "North Macedonia", "Malta", "Moldova", "Monaco",
+            "Montenegro", "Netherlands", "Norway", "Poland", "Portugal", "Romania",
+            "San Marino", "Serbia", "Slovakia", "Slovenia", "Spain", "Sweden", "Switzerland",
+            "United Kingdom", "Ukraine", "Vatican City State (Holy See)"
+        ];
 
         const c = country.toLowerCase();
         if (c === "india") return "India";
@@ -72,7 +90,9 @@ const EmailCheckout = () => {
         if (oceania.map(x => x.toLowerCase()).includes(c)) return "Oceania";
         if (["usa", "united states"].includes(c)) return "USA";
         if (["canada"].includes(c)) return "Canada";
-        if (["europe", "uk", "germany", "france", "italy", "spain"].includes(c)) return "Europe";
+        if (europe.map(x => x.toLowerCase()).includes(c)) return "Europe";
+
+        // if (["europe", "uk", "germany", "france", "italy", "spain"].includes(c)) return "Europe";
         return "Other Countries";
     };
 

@@ -15,7 +15,7 @@ export default function HeaderMenu() {
     const mainNav = [
         { href: "/", label: "Home" },
         { href: "/about", label: "About" },
-        { href: "/company-directory/india", label: "Company Directory" },
+        // { href: "/company-directory/india", label: "Company Directory" },
         { href: "/services", label: "Services" },
         // { href: "/pricing", label: "Pricing" },
         { href: "/contact", label: "Contact" },
@@ -234,14 +234,14 @@ export default function HeaderMenu() {
                                         </li>
 
                                         {/* Company Directory */}
-                                        <li>
+                                        {/* <li>
                                             {renderLink({
                                                 href: "/company-directory/india",
                                                 label: "Company Directory",
                                                 vertical: true,
                                                 onClick: () => setMobileOpen(false),
                                             })}
-                                        </li>
+                                        </li> */}
 
                                         {/* Services */}
                                         <li>
@@ -347,14 +347,14 @@ export default function HeaderMenu() {
                                         </li>
 
                                         {/* Company Directory */}
-                                        <li>
+                                        {/* <li>
                                             {renderLink({
                                                 href: "/company-directory/india",
                                                 label: "Company Directory",
                                                 vertical: true,
                                                 onClick: () => setMobileOpen(false),
                                             })}
-                                        </li>
+                                        </li> */}
 
                                         {/* Services */}
                                         <li>
