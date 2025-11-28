@@ -61,6 +61,12 @@ export async function GET() {
         let xml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
         xml += `<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n`;
 
+        // ✅ Add static sitemap first
+        xml += `  <sitemap>\n`;
+        xml += `    <loc>https://www.globalbizreport.com/sitemaps/static</loc>\n`;
+        xml += `    <lastmod>${new Date().toISOString()}</lastmod>\n`;
+        xml += `  </sitemap>\n`;
+
         for (let i = 1; i <= totalSitemaps; i++) {
             xml += `  <sitemap>\n`;
             xml += `    <loc>${BASE_URL}/sitemaps/sitemap/${i}</loc>\n`;

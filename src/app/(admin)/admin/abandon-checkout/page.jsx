@@ -1,6 +1,7 @@
 'use client'
 
 import { apiUrl } from "@/api/api";
+import { splitPhone } from "@/utils/splitPhone";
 import React, { useEffect, useState } from "react";
 import { FaBuilding, FaChevronRight, FaInfo, FaPhone, FaSearch, FaSpinner, FaUser } from "react-icons/fa";
 
@@ -59,6 +60,7 @@ const AbandonedCheckouts = () => {
     const handleNext = () => page < totalPages && setPage(page + 1);
 
 
+
     return (
         <div className="max-w-6xl mx-auto  ">
             {/* Desktop Table View */}
@@ -104,7 +106,7 @@ const AbandonedCheckouts = () => {
                                     <th className="px-4 py-3 text-left">Company</th>
                                     <th className="px-4 py-3 text-left">Contact</th>
                                     <th className="px-4 py-3 text-left">Country</th>
-                                    <th className="px-4 py-3 text-left">Created</th>
+                                    <th className="px-4 py-3 text-left">Date / Time</th>
                                     <th className="px-4 py-3 text-center">Action</th>
                                 </tr>
                             </thead>
@@ -125,7 +127,21 @@ const AbandonedCheckouts = () => {
                                                 <span className="text-xs text-gray-500">{v.user?.email || ""}</span>
                                             </div>
                                         </td>
-                                        <td className="px-4 py-3 capitalize">{v.companyName || "-"}</td>
+                                        <td className="px-4 py-3 capitalize">
+                                            <div className="flex flex-col">
+                                                <span className="font-medium text-gray-800 capitalize">
+                                                    {v.companyName || "-"}
+                                                </span>
+                                                <span
+                                                    className={`text-xs font-semibold ${v.companyType === "other_company"
+                                                        ? "text-red-600"
+                                                        : "text-green-600"
+                                                        }`}
+                                                >
+                                                    {v.companyType || ""}
+                                                </span>
+                                            </div>
+                                        </td>
                                         <td className="px-4 py-3 capitalize">{v.contactName || "-"}</td>
                                         <td className="px-4 py-3 capitalize">
                                             {v.contactCountry || v.country || "-"}
@@ -274,10 +290,19 @@ const AbandonedCheckouts = () => {
                                 <div className="p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-y-4 text-gray-700 text-sm">
                                     <p><strong className="text-gray-800">Name:</strong> {selectedVisitor.user?.name || <span className="text-gray-500 italic">Not provided</span>}</p>
                                     <p><strong className="text-gray-800">Email:</strong> {selectedVisitor.user?.email || <span className="text-gray-500 italic">Not provided</span>}</p>
-                                    <p><strong className="text-gray-800">Phone:</strong> {selectedVisitor.user?.phone || <span className="text-gray-500 italic">-</span>}</p>
+                                    <p><strong className="text-gray-800">Phone:</strong>
+
+                                        {(() => {
+                                            const p = splitPhone(selectedVisitor.user?.phone);
+                                            return p ? `+${p.countryCode} ${p.nationalNumber}` : "-";
+                                        })()}
+
+                                    </p>
                                     <p><strong className="text-gray-800">Country:</strong> {selectedVisitor.user?.country || <span className="text-gray-500 italic">-</span>}</p>
+                                    <p><strong className="text-gray-800">State:</strong> {selectedVisitor.user?.state || <span className="text-gray-500 italic">-</span>}</p>
                                     <p><strong className="text-gray-800">Company:</strong> {selectedVisitor.user?.company || <span className="text-gray-500 italic">-</span>}</p>
-                                    <p className="col-span-full">
+                                    <p><strong className="text-gray-800">GstIn:</strong> {selectedVisitor.user?.gstin || <span className="text-gray-500 italic">-</span>}</p>
+                                    <p className="text-gray-500">
                                         <strong className="text-gray-800">Registered On:</strong>{" "}
                                         {selectedVisitor.user?.createdAt
                                             ? new Date(selectedVisitor.user.createdAt).toLocaleString("en-GB", { dateStyle: 'short', timeStyle: 'short', timeZone: "Asia/Kolkata", hour12: true })
@@ -309,8 +334,12 @@ const AbandonedCheckouts = () => {
                                     <div className="p-6 grid grid-cols-1 sm:grid-cols-1 gap-4 text-gray-700">
                                         <p><strong>Name:</strong> {selectedVisitor.contactName || "-"}</p>
                                         <p><strong>Email:</strong> {selectedVisitor.contactEmail || "-"}</p>
-                                        <p><strong>Phone:</strong> {selectedVisitor.contactPhone || "-"}</p>
+                                        <p><strong>Phone:</strong>  {(() => {
+                                            const p = splitPhone(selectedVisitor.contactPhone);
+                                            return p ? `+${p.countryCode} ${p.nationalNumber}` : "-";
+                                        })()}</p>
                                         <p><strong>Country:</strong> {selectedVisitor.contactCountry || "-"}</p>
+                                        <p><strong>State:</strong> {selectedVisitor.contactState || "-"}</p>
                                         <p><strong>Company:</strong> {selectedVisitor.contactCompany || "-"}</p>
                                         <p><strong>GST:</strong> {selectedVisitor.companyGst || "-"}</p>
                                         <p><strong>Optional Email:</strong> {selectedVisitor.optionalEmail || "-"}</p>
@@ -325,6 +354,19 @@ const AbandonedCheckouts = () => {
                                             <FaBuilding className="text-emerald-700" /> Target Company
                                         </h3>
                                     </div>
+
+                                    <p className="text-xs text-center text-gray-500 flex items-center justify-end gap-1 py-2 px-2 italic">
+                                        <FaInfo className="text-[10px] " />
+                                        <span>Company Type.</span>
+                                        <span
+                                            className={`text-xs font-semibold ${selectedVisitor.companyType === "other_company"
+                                                ? "text-red-600"
+                                                : "text-green-600"
+                                                }`}
+                                        >
+                                            {selectedVisitor.companyType || ""}
+                                        </span>
+                                    </p>
 
                                     <div className="p-6 text-gray-700  rounded-xl">
                                         <div className="p-6 grid grid-cols-1 sm:grid-cols-1 gap-4 text-gray-700">
@@ -347,9 +389,9 @@ const AbandonedCheckouts = () => {
                                             </p>
 
                                             <p>
-                                                <strong>City:</strong>{" "}
-                                                {selectedVisitor.city
-                                                    ? selectedVisitor.city
+                                                <strong>Country:</strong>{" "}
+                                                {selectedVisitor.country
+                                                    ? selectedVisitor.country
                                                         .toLowerCase()
                                                         .replace(/\b\w/g, (char) => char.toUpperCase())
                                                     : "-"}
@@ -365,17 +407,17 @@ const AbandonedCheckouts = () => {
                                             </p>
 
                                             <p>
-                                                <strong>Postal Code:</strong>{" "}
-                                                {selectedVisitor.postalCode || "-"}
-                                            </p>
-
-                                            <p>
-                                                <strong>Country:</strong>{" "}
-                                                {selectedVisitor.country
-                                                    ? selectedVisitor.country
+                                                <strong>City:</strong>{" "}
+                                                {selectedVisitor.city
+                                                    ? selectedVisitor.city
                                                         .toLowerCase()
                                                         .replace(/\b\w/g, (char) => char.toUpperCase())
                                                     : "-"}
+                                            </p>
+
+                                            <p>
+                                                <strong>Postal Code:</strong>{" "}
+                                                {selectedVisitor.postalCode || "-"}
                                             </p>
 
                                             <p>
@@ -394,7 +436,11 @@ const AbandonedCheckouts = () => {
 
                                             <p>
                                                 <strong>Telephone:</strong>{" "}
-                                                {selectedVisitor.telephone || "-"}
+                                                {(() => {
+                                                    const p = splitPhone(selectedVisitor.telephone);
+                                                    return p ? `+${p.countryCode} ${p.nationalNumber}` : "-";
+                                                })()}
+
                                             </p>
 
                                         </div>

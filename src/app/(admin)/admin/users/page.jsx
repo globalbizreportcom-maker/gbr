@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { adminUrl } from "@/api/api"; // axios instance
+import { parsePhoneNumberFromString } from "libphonenumber-js";
+import { splitPhone } from "@/utils/splitPhone";
 
 const UsersPage = () => {
     const [users, setUsers] = useState([]);
@@ -60,6 +62,9 @@ const UsersPage = () => {
 
     if (loading) return <p className="text-center mt-10">Loading...</p>;
 
+
+
+
     return (
         <div className="p-1 max-w-6xl mx-auto">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 gap-3">
@@ -88,7 +93,6 @@ const UsersPage = () => {
                                 <tr className="bg-gray-100 text-left text-black">
                                     <th className="p-2">#</th>
                                     <th className="p-2">Name</th>
-                                    <th className="p-2">Email</th>
                                     <th className="p-2">Phone</th>
                                     <th className="p-2">Country</th>
                                     <th className="p-2">Company</th>
@@ -99,10 +103,27 @@ const UsersPage = () => {
                                 {paginatedUsers.map((user, idx) => (
                                     <tr key={user._id} className="border-t hover:bg-gray-50">
                                         <td className="p-2">{startIdx + idx + 1}</td>
-                                        <td className="p-2">{user.name}</td>
-                                        <td className="p-2">{user.email}</td>
-                                        <td className="p-2">{user.phone || "-"}</td>
-                                        <td className="p-2">{user.country}</td>
+                                        <td className="p-2">
+                                            <div className="flex flex-col">
+                                                <span>{user.name || "-"}</span>
+                                                <span className="text-gray-500 text-sm">{user.email || "-"}</span>
+                                            </div>
+                                        </td>
+                                        <td className="p-2">
+                                            {(() => {
+                                                const p = splitPhone(user.phone);
+                                                return p ? `+${p.countryCode} ${p.nationalNumber}` : "-";
+                                            })()}
+                                        </td>
+
+
+                                        <td className="p-2">
+                                            <div className="flex flex-col">
+                                                <span>{user.country || "-"}</span>
+                                                <span className="text-gray-500 text-sm">{user.state || "-"}</span>
+                                            </div>
+
+                                        </td>
                                         <td className="p-2">
                                             <div className="flex flex-col">
                                                 <span>{user.company || "-"}</span>

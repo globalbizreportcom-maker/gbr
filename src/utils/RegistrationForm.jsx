@@ -28,8 +28,8 @@ const RegistrationForm = () => {
     const [email, setEmail] = useState("");
     const [company, setCompany] = useState("");
     const [phone, setPhone] = useState("");
-    const [country, setCountry] = useState("");
-    const [state, setState] = useState("");
+    const [country, setCountry] = useState({});
+    const [state, setState] = useState({});
     const [city, setCity] = useState("");
     const [gst, setGst] = useState("");
     const [pincode, setPincode] = useState("");
@@ -53,6 +53,11 @@ const RegistrationForm = () => {
             showAlert("Enter phone number!", "error");
             return;
         }
+        if (country?.label === 'India' && state === '') {
+            showAlert("State is required!", "error");
+            return;
+        }
+
 
         const formData = {
             name: username,
@@ -106,9 +111,12 @@ const RegistrationForm = () => {
             {/* Country */}
             <div className="col-span-1">
                 <CountryInput
-                    value={country}
+                    value={country?.label}      // pass only value to react-select
                     onChange={(e) => {
-                        setCountry(e.target.value);
+                        setCountry({
+                            label: e.target.value.label,
+                            value: e.target.value.value,
+                        });
                         setState("");
                         setCity("");
                     }}
@@ -116,16 +124,23 @@ const RegistrationForm = () => {
             </div>
 
             {/* State */}
-            {/* <div className="col-span-1">
-                <StateInput
-                    country={country}
-                    value={state}
-                    onChange={(e) => {
-                        setState(e.target.value);
-                        setCity("");
-                    }}
-                />
-            </div> */}
+            {
+                country.label === 'India' &&
+
+                <div className="col-span-1">
+                    <StateInput
+                        country={country}
+                        value={state.label}
+                        onChange={(e) => {
+                            setState({
+                                label: e.target.value.label,
+                                value: e.target.value.value,
+                            });
+                            setCity("");
+                        }}
+                    />
+                </div>
+            }
 
             {/* City */}
             {/* <div className="col-span-1">
@@ -141,6 +156,13 @@ const RegistrationForm = () => {
             {/* <div className="col-span-1">
                 <PincodeInput value={pincode} onChange={(e) => setPincode(e.target.value)} />
             </div> */}
+
+
+            {/* Company */}
+            <div className="col-span-1  w-full">
+                <CompanyInput value={company} onChange={(e) => setCompany(e.target.value)} />
+            </div>
+
 
             <div className="col-span-1 md:col-span-2 flex flex-col md:flex-row gap-4 w-full">
 
@@ -193,12 +215,7 @@ const RegistrationForm = () => {
 
 
 
-            {/* Company */}
-            <div className="col-span-1 md:col-span-2 w-full">
-                <CompanyInput value={company} onChange={(e) => setCompany(e.target.value)} />
-            </div>
-
-            {company !== '' &&
+            {country.label === 'India' &&
                 <div className="col-span-1">
                     <GstInput value={gst} onChange={(e) => setGst(e.target.value)} />
                 </div>

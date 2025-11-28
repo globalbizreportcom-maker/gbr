@@ -6,6 +6,8 @@ import dynamic from "next/dynamic";
 import { useRouter, useSearchParams } from "next/navigation";
 import { FaArrowRight } from "react-icons/fa";
 import { apiUrl } from "@/api/api";
+import { Country, State, City } from 'country-state-city';
+import ClientPurchaseButton from "./ClientPurchaseButton";
 
 const Select = dynamic(() => import("react-select"), { ssr: false });
 
@@ -30,39 +32,61 @@ export default function CompanySearch() {
     // ------------------- Helper Functions -------------------
     const fetchCountries = async () => {
         try {
-            const res = await fetch("https://countriesnow.space/api/v0.1/countries");
-            const json = await res.json();
-            const options = json.data.map(c => ({
-                value: c.iso2.toLowerCase(),
-                label: c.country
+            const countryOptions = Country.getAllCountries().map((c) => ({
+                value: c.isoCode,
+                label: c.name,
+                countryObj: c,
             }));
-            setCountries(options);
+
+            setCountries(countryOptions);
+
+
         } catch (err) {
             console.error("Error fetching countries:", err);
         }
     };
 
-    const fetchStates = async () => {
+    const fetchStates = () => {
         if (normalize(selectedCountry?.value) !== "in") {
             setStates([]);
             setSelectedState(null);
             return;
         }
-        try {
-            const res = await fetch("https://countriesnow.space/api/v0.1/countries/states");
-            const json = await res.json();
-            const india = json.data.find(c => normalize(c.name) === "india");
-            if (india?.states?.length) {
-                const formattedStates = india.states.map(s => ({
-                    value: s.name,
-                    label: s.name
-                }));
-                setStates(formattedStates);
-            }
-        } catch (err) {
-            console.error("Error fetching states:", err);
+
+        // Get states of India using CSC
+        const indiaStates = State.getStatesOfCountry("IN");
+
+        if (indiaStates?.length) {
+            const formattedStates = indiaStates.map(s => ({
+                value: s.name,
+                label: s.name
+            }));
+            setStates(formattedStates);
         }
     };
+
+
+    // const fetchStates = async () => {
+    //     if (normalize(selectedCountry?.value) !== "in") {
+    //         setStates([]);
+    //         setSelectedState(null);
+    //         return;
+    //     }
+    //     try {
+    //         const res = await fetch("https://countriesnow.space/api/v0.1/countries/states");
+    //         const json = await res.json();
+    //         const india = json.data.find(c => normalize(c.name) === "india");
+    //         if (india?.states?.length) {
+    //             const formattedStates = india.states.map(s => ({
+    //                 value: s.name,
+    //                 label: s.name
+    //             }));
+    //             setStates(formattedStates);
+    //         }
+    //     } catch (err) {
+    //         console.error("Error fetching states:", err);
+    //     }
+    // };
 
     const fetchCompanies = async (
         pageNumber = 1,
@@ -220,6 +244,11 @@ export default function CompanySearch() {
                         type="text"
                         placeholder="Search company"
                         value={company}
+                        onKeyDown={(e) => {
+                            if (e.key === "Enter") {
+                                handleSearch(); // call your function
+                            }
+                        }}
                         onChange={e => setCompany(e.target.value)}
                         className="border p-2 flex-1 border-gray-300 text-black"
                     />
@@ -231,6 +260,11 @@ export default function CompanySearch() {
                             onChange={setSelectedCountry}
                             placeholder="Select Country"
                             className="text-black"
+                            onKeyDown={(e) => {
+                                if (e.key === "Enter") {
+                                    handleSearch(); // call your function
+                                }
+                            }}
                         />
                     </div>
 
@@ -242,12 +276,19 @@ export default function CompanySearch() {
                                 onChange={setSelectedState}
                                 placeholder="Select State"
                                 className="text-black"
+                                onKeyDown={(e) => {
+                                    if (e.key === "Enter") {
+                                        handleSearch(); // call your function
+                                    }
+                                }}
                             />
                         </div>
                     )}
 
                     <button
-                        onClick={() => handleSearch(1)}
+                        onClick={() => {
+                            handleSearch(1);
+                        }}
                         className="btn btn-primary text-white px-4 py-2 rounded"
                     >
                         Search
@@ -306,13 +347,25 @@ export default function CompanySearch() {
                                                         </div>
                                                     </td>
                                                     <td className="px-4 py-3 text-center align-middle">
-                                                        <button
-                                                            className="cursor-pointer flex items-center gap-1 py-2 rounded-md px-2 bg-indigo-500 text-white text-xs font-semibold hover:bg-black hover:shadow-md transition-all duration-300"
-                                                            onClick={() => handleClick(c)}
-                                                        >
-                                                            View <FaArrowRight className="text-white" />
-                                                        </button>
+
+                                                        <div className="flex flex-col items-center gap-2">
+
+                                                            {/* View Button */}
+                                                            <button
+                                                                className="cursor-pointer flex items-center gap-1 py-2 rounded-md px-2 bg-indigo-500 text-white text-xs font-semibold hover:bg-black hover:shadow-md transition-all duration-300"
+                                                                onClick={() => handleClick(c)}
+                                                            >
+                                                                View <FaArrowRight className="text-white" />
+                                                            </button>
+
+                                                            {/* New Button */}
+                                                            <ClientPurchaseButton companyData={c} label='Buy Report' bgColor='orange' />
+
+
+                                                        </div>
+
                                                     </td>
+
                                                 </tr>
                                             ))}
                                         </tbody>
@@ -323,7 +376,7 @@ export default function CompanySearch() {
                             {/* Cards: sm screens */}
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:hidden w-full">
                                 {results.map((c, idx) => (
-                                    <div key={idx} className="p-4 bg-white border border-gray-200 rounded-lg shadow-sm">
+                                    <div key={idx} className="p-4 bg-gray-100  rounded-lg ">
                                         <div className="font-bold text-gray-800">{c.CompanyName}</div>
                                         <div className="text-gray-600 text-sm mt-1 line-clamp-2">
                                             Address: {c.Registered_Office_Address}
@@ -340,6 +393,8 @@ export default function CompanySearch() {
                                             >
                                                 View <FaArrowRight className="text-white" />
                                             </button>
+                                            <ClientPurchaseButton companyData={c} label='Buy Report' bgColor='orange' btnSize='xs' />
+
                                         </div>
                                     </div>
                                 ))}

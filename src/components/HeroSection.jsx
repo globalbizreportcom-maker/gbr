@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation"; // Next.js 13 app dir
 import Image from "next/image";
+import { Country, State, City } from "country-state-city";
 
 const Select = dynamic(() => import("react-select"), { ssr: false });
 
@@ -27,24 +28,15 @@ const HeroSection = () => {
     useEffect(() => {
         const fetchCountries = async () => {
             try {
-                // const res = await fetch("https://api.first.org/data/v1/countries");
-                // const json = await res.json();
-                // console.log(json);
-                // // json.data is an object keyed by 2-letter country codes
-                // const countryList = Object.entries(json.data).map(([code, info]) => ({
-                //     value: code,          // e.g. "US", "IN", etc
-                //     label: info.country,   // country name
-                // }));
-                // setCountries(countryList.sort((a, b) => a.label.localeCompare(b.label)));
 
-                const res = await fetch("https://countriesnow.space/api/v0.1/countries");
-                const json = await res.json()
-                const options = json.data.map((c) => ({
-                    value: c.iso2,
-                    label: c.country,
+                const countryOptions = Country.getAllCountries().map((c) => ({
+                    value: c.isoCode,
+                    label: c.name,
+                    countryObj: c,
                 }));
 
-                setCountries(options);
+                setCountries(countryOptions);
+
 
             } catch (err) {
                 console.log("Error fetching countries:", err);

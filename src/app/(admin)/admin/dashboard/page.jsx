@@ -17,14 +17,20 @@ const AdminDashboard = () => {
                 const { data } = await apiUrl.get("/visitors/abandoned-checkouts");
                 const visitors = data.visitors || [];
 
-                // 🧮 Transform: Group by date and count
                 const grouped = visitors.reduce((acc, item) => {
-                    const date = new Date(item.createdAt)
-                        .toISOString()
-                        .split("T")[0]; // format: YYYY-MM-DD
-                    acc[date] = (acc[date] || 0) + 1;
+                    // Convert to IST
+                    const istDate = new Date(item.createdAt).toLocaleString("en-GB", {
+                        timeZone: "Asia/Kolkata"
+                    });
+
+                    // Extract YYYY-MM-DD from IST date
+                    const [day, month, year] = istDate.split(",")[0].split("/");
+                    const formatted = `${year}-${month}-${day}`;
+
+                    acc[formatted] = (acc[formatted] || 0) + 1;
                     return acc;
                 }, {});
+
 
                 // Convert into recharts format
                 const formatted = Object.entries(grouped).map(([date, count]) => ({

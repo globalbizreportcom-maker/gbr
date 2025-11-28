@@ -3,6 +3,8 @@ import SearchForm from "@/utils/SearchForm";
 import { FaSearch, FaMapMarkerAlt, FaDatabase } from "react-icons/fa";
 
 export default async function SearchPage({ searchParams }) {
+
+
     // SSR: get initial values from query
     const params = await searchParams;
 

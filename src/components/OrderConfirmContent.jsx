@@ -68,7 +68,7 @@ const OrderConfirmContent = () => {
         Oceania: 8927,
         "Latin America": 8927,
         // testing
-        "Costa Rica": 1,
+        "Christmas Island": 1,
         "Other Countries": 8927,
     };
 
@@ -85,25 +85,49 @@ const OrderConfirmContent = () => {
         Oceania: 89,
         "Latin America": 89,
         // testing
-        "Costa Rica": 1,
+        "Christmas Island": 1,
         "Other Countries": 89,
     };
 
     const getRegion = (country) => {
         if (!country) return "Other Countries";
 
-        const asiaExcl = ["Afghanistan", "Bangladesh", "Bhutan", "Brunei", "Myanmar", "Cambodia", "Timor-Leste", "Hong Kong", "Indonesia", "Japan", "Kazakhstan", "North Korea", "South Korea", "Kyrgyzstan", "Laos", "Malaysia", "Maldives", "Mongolia", "Nepal", "Pakistan", "Philippines", "Russia", "Singapore", "Sri Lanka", "Tajikistan", "Taiwan", "Thailand", "Turkmenistan", "Uzbekistan", "Vietnam"];
+        const asiaExcl = ["Afghanistan", "Bangladesh", "Bhutan", "Brunei", "Myanmar", "Cambodia", "East Timor", "Hong Kong S.A.R.", "Indonesia", "Japan", "Kazakhstan", "North Korea", "South Korea", "Kyrgyzstan", "Laos", "Malaysia", "Maldives", "Mongolia", "Nepal", "Pakistan", "Philippines", "Russia", "Singapore", "Sri Lanka", "Tajikistan", "Taiwan", "Thailand", "Turkmenistan", "Uzbekistan", "Vietnam"];
         const australiaNZ = ["Australia", "New Zealand"];
         const middleEast = ["Bahrain", "Iran", "Iraq", "Israel", "Jordan", "Kuwait", "Lebanon", "Oman", "Qatar", "Saudi Arabia", "Syria", "Turkey", "Turkmenistan", "United Arab Emirates", "Yemen"];
         const latinAmerica = ["Brazil", "Mexico", "Argentina", "Colombia", "Chile", "Peru"];
-        const africa = ["Algeria", "Angola", "Benin", "Botswana", "Burkina Faso", "Burundi", "Cameroon", "Cape Verde", "Central African Republic", "Chad", "Comoros", "Congo", "Djibouti", "Egypt", "Equatorial Guinea", "Eritrea", "Ethiopia", "Gabon", "Gambia", "Ghana", "Guinea", "Guinea-Bissau", "Ivory Coast", "Kenya", "Lesotho", "Liberia", "Libya", "Madagascar", "Malawi", "Mali", "Mauritania", "Mauritius", "Morocco", "Mozambique", "Namibia", "Niger", "Nigeria", "Rwanda", "Sao Tome and Principe", "Senegal", "Seychelles", "Sierra Leone", "Somalia", "South Africa", "Sudan", "Eswatini", "Tanzania", "Togo", "Tunisia", "Uganda", "Zambia", "Zimbabwe"];
-        const oceania = ["Fiji", "Kiribati", "Marshall Islands", "Micronesia", "Nauru", "Palau", "Papua New Guinea", "Samoa", "Solomon Islands", "Tonga", "Tuvalu", "Vanuatu"];
+        const africa = [
+            "Algeria", "Angola", "Benin", "Botswana", "Burkina Faso", "Burundi",
+            "Cameroon", "Cape Verde", "Central African Republic", "Chad", "Comoros",
+            "Congo", "Djibouti", "Egypt", "Equatorial Guinea", "Eritrea", "Ethiopia",
+            "Gabon", "The Gambia", "Ghana", "Guinea", "Guinea-Bissau",
+            "Cote D'Ivoire (Ivory Coast)", "Kenya", "Lesotho", "Liberia", "Libya",
+            "Madagascar", "Malawi", "Mali", "Mauritania", "Mauritius", "Morocco",
+            "Mozambique", "Namibia", "Niger", "Nigeria", "Rwanda",
+            "Sao Tome and Principe", "Senegal", "Seychelles", "Sierra Leone",
+            "Somalia", "South Africa", "Sudan", "Swaziland", "Tanzania", "Togo",
+            "Tunisia", "Uganda", "Zambia", "Zimbabwe"
+        ];
+        const oceania = [
+            "Fiji Islands",
+            "Kiribati",
+            "Marshall Islands",
+            "Micronesia",
+            "Nauru",
+            "Palau",
+            "Papua new Guinea",
+            "Samoa",
+            "Solomon Islands",
+            "Tonga",
+            "Tuvalu",
+            "Vanuatu"
+        ];
         const europe = [
             "Albania", "Andorra", "Armenia", "Austria", "Azerbaijan", "Belarus", "Belgium",
             "Bosnia and Herzegovina", "Bulgaria", "Croatia", "Cyprus", "Czech Republic",
             "Denmark", "Estonia", "Finland", "France", "Georgia", "Germany", "Greece",
             "Hungary", "Iceland", "Ireland", "Italy", "Latvia", "Liechtenstein",
-            "Lithuania", "Luxembourg", "North Macedonia", "Malta", "Moldova", "Monaco",
+            "Lithuania", "Luxembourg", "Macedonia", "Malta", "Moldova", "Monaco",
             "Montenegro", "Netherlands", "Norway", "Poland", "Portugal", "Romania",
             "San Marino", "Serbia", "Slovakia", "Slovenia", "Spain", "Sweden", "Switzerland",
             "United Kingdom", "Ukraine", "Vatican City State (Holy See)"
@@ -166,7 +190,7 @@ const OrderConfirmContent = () => {
         if (europe.map(x => x.toLowerCase()).includes(c)) return "Europe";
 
         // testing
-        if (c === "costa rica") return "Costa Rica";
+        if (c === "christmas island") return "Christmas Island";
 
         if (["usa", "united states"].includes(c)) return "USA";
 
@@ -379,9 +403,9 @@ const OrderConfirmContent = () => {
                                 <tbody>
                                     <tr><td className="font-bold">COMPANY NAME</td><td align='left'>{formData.companyName}</td></tr>
                                     <tr><td className="font-bold">ADDRESS</td><td align='left'>{formData.address}</td></tr>
-                                    <tr><td className="font-bold">CITY</td><td align='left'>{formData.city}</td></tr>
-                                    <tr><td className="font-bold">STATE</td><td align='left'>{formData.state}</td></tr>
                                     <tr><td className="font-bold">COUNTRY</td><td align='left'>{targetCountry || formData.country}</td></tr>
+                                    <tr><td className="font-bold">STATE</td><td align='left'>{formData.state || '-'}</td></tr>
+                                    <tr><td className="font-bold">CITY</td><td align='left'>{formData.city}</td></tr>
                                     <tr><td className="font-bold">POSTAL CODE</td><td align='left'>{formData.postalCode}</td></tr>
                                 </tbody>
                             </table>

@@ -6,7 +6,7 @@ const GstInput = forwardRef(({ value, onChange, placeholder = "Gst" }, ref) => {
     return (
 
         <div className=" mb-5">
-            <label className="block text-sm font-medium mb-1 text-gray-500">Gst </label>
+            <label className="block text-sm font-medium mb-1 text-gray-500">Gst (optional) </label>
             <input
                 ref={ref}
                 type="text"

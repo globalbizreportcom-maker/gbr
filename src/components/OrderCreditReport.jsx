@@ -96,6 +96,7 @@ const OrderCreditReport = () => {
         contactName: '',
         contactEmail: '',
         contactCountry: '',
+        contactState: '',
         contactPhone: '',
         contactCompany: '',
         companyGst: '',
@@ -132,13 +133,13 @@ const OrderCreditReport = () => {
                 contactName: user.name || prev.contactName,
                 contactEmail: user.email || prev.contactEmail,
                 contactCountry: user.country || prev.contactCountry,
+                contactState: user.state || prev.contactState,
                 contactPhone: user.phone || prev.contactPhone,
                 contactCompany: user.company || prev.contactCompany,
+                companyGst: user.gstin || prev.companyGst,
             }));
         }
     }, [user?._id]);
-
-
 
 
 
@@ -161,6 +162,7 @@ const OrderCreditReport = () => {
         if (!formData.address) missingFields.push('Address');
         if (!formData.country) missingFields.push('Country');
         if (!formData.city) missingFields.push('City');
+        if ((formData.country === 'India' || formData.country?.label === 'India') && !formData.state) missingFields.push('State');
         if (!formData.postalCode && directOrder) missingFields.push('Postal Code');
 
         if (missingFields.length > 0) {
@@ -190,12 +192,11 @@ const OrderCreditReport = () => {
 
     };
 
-
-
     const handlePreview = async () => {
 
         // Build finalData WITHOUT setState()
         let finalData = { ...formData };
+
 
         if (formData.companyType === "my_company") {
             finalData = {
@@ -205,7 +206,7 @@ const OrderCreditReport = () => {
                 // Company address fields override finalData
                 address: formData.address,
                 city: formData.city,
-                state: formData.state,
+                state: formData.contactState,
                 postalCode: formData.postalCode,
                 country: finalData.contactCountry?.label || finalData.contactCountry || "",
             };
@@ -219,8 +220,8 @@ const OrderCreditReport = () => {
             if (!finalData.contactName) missingFields.push("Name");
             if (!finalData.contactEmail) missingFields.push("Email");
             if (!finalData.contactPhone) missingFields.push("Phone");
-            if (!finalData.contactCountry) missingFields.push("Country");
-            if (!finalData.state) missingFields.push("State");
+            if ((finalData.contactCountry?.label === 'India' || finalData.contactCountry === 'India') && !finalData?.contactState) missingFields.push("State");
+            // if (!finalData.state) missingFields.push("State");
             if (!finalData.city) missingFields.push("City");
             if (!finalData.postalCode) missingFields.push("Postalcode");
             if (!finalData.agreedToTerms) missingFields.push("Privacy Policy");
@@ -230,6 +231,7 @@ const OrderCreditReport = () => {
             if (!finalData.contactName) missingFields.push("Name");
             if (!finalData.contactEmail) missingFields.push("Email");
             if (!finalData.contactCountry) missingFields.push("Country");
+            if ((finalData.contactCountry?.label === 'India' || finalData.contactCountry === 'India') && !finalData?.contactState) missingFields.push("State");
             if (!finalData.contactPhone) missingFields.push("Phone");
             if (!finalData.agreedToTerms) missingFields.push("Privacy Policy");
 
@@ -241,6 +243,7 @@ const OrderCreditReport = () => {
             setShowSnackbar(true);
             return;
         }
+
 
 
         try {
@@ -276,7 +279,7 @@ const OrderCreditReport = () => {
             const payload = {
                 ...finalData,
                 userId: activeUser._id,
-                country: finalData.contactCountry?.label || finalData.contactCountry || "",
+                country: formData.companyType === "my_company" ? finalData.contactCountry?.label || finalData.contactCountry : finalData.country?.label || finalData.country,
             };
 
             if (!sessionStorage.getItem("visitor_payment_submitted")) {
@@ -293,105 +296,6 @@ const OrderCreditReport = () => {
         }
     };
 
-    // const handlePreview = async () => {
-
-
-    //     if (formData.companyType === "my_company") {
-    //         setFormData((prev) => ({
-    //             ...prev,
-    //             telephone: prev.contactPhone || "",
-    //             contactCompany: prev.companyName || "",
-    //             country: prev.contactCountry || "",
-    //         }));
-    //     }
-
-    //     const formatMissingFields = (fields) => {
-    //         if (fields.length === 1) return fields[0];
-    //         const last = fields.pop();
-    //         return `${fields.join(", ")} and ${last}`;
-    //     };
-
-    //     console.log(formData);
-    //     // Usage
-    //     const missingFields = [];
-    //     if (!formData.contactName) missingFields.push("Name");
-    //     if (!formData.contactEmail) missingFields.push("Email");
-    //     if (!formData.contactCountry) missingFields.push("Country");
-    //     if (!formData.contactPhone) missingFields.push("Phone");
-    //     if (!formData.agreedToTerms) missingFields.push("Privacy Policy");
-
-    //     if (missingFields.length > 0) {
-    //         setSnackbarMessage(`Please provide your ${formatMissingFields(missingFields)}.`);
-    //         setShowSnackbar(true);
-    //         setTimeout(() => setShowSnackbar(false), 3000);
-    //         return;
-    //     }
-
-
-    //     try {
-    //         let activeUser = user;
-
-    //         // 🔹 Step 1: If user is not logged in → check or create
-    //         if (!activeUser) {
-    //             const res = await apiUrl.post("/api/users/check-or-create", {
-    //                 name: formData.contactName,
-    //                 email: formData.contactEmail,
-    //                 country: formData.contactCountry?.label || formData.contactCountry || "",
-    //                 phone: formData.contactPhone,
-    //                 company: formData.contactCompany,
-    //                 gst: formData.companyGst || '',
-    //             });
-    //             console.log(res.data);
-
-    //             // Existing user → show login modal & stop here
-    //             if (res.data.exists) {
-    //                 setSnackbarMessage(res.data.message);
-    //                 setShowSnackbar(true);
-    //                 setTimeout(() => setShowSnackbar(false), 3000);
-    //                 setShowLoginModal(true);
-    //                 return;
-    //             }
-
-    //             // Newly created user
-    //             activeUser = res.data.user;
-
-    //             setUser(res.data.user);
-    //         }
-
-    //         // 🔹 Step 2: Ensure userId exists before continuing
-    //         if (!activeUser?._id) {
-    //             console.error("❌ Missing user ID:", activeUser);
-    //             setSnackbarMessage("Error identifying user. Please try again.");
-    //             setShowSnackbar(true);
-    //             setTimeout(() => setShowSnackbar(false), 3000);
-    //             return;
-    //         }
-
-    //         // 🔹 Step 3: Prepare payload
-    //         const payload = {
-    //             ...formData,
-    //             userId: activeUser._id,
-    //             country: formData.contactCountry?.label || formData.contactCountry || "",
-    //         };
-
-    //         // 🔹 Step 4: Avoid duplicate payment submission
-    //         if (!sessionStorage.getItem("visitor_payment_submitted")) {
-    //             await apiUrl.post("/visitors/payments", payload, {
-    //                 headers: { "Content-Type": "application/json" },
-    //             });
-    //             sessionStorage.setItem("visitor_payment_submitted", "true");
-    //         }
-
-    //         // 🔹 Step 5: Save form data & navigate
-    //         localStorage.setItem("gbr_form", JSON.stringify(formData));
-    //         router.push("/order-confirm");
-    //     } catch (error) {
-    //         console.log(" Error in handlePreview:", error.response?.data || error.message);
-    //         setSnackbarMessage("Something went wrong. Please try again.");
-    //         setShowSnackbar(true);
-    //         setTimeout(() => setShowSnackbar(false), 3000);
-    //     }
-    // };
 
 
     return (
@@ -537,25 +441,34 @@ const OrderCreditReport = () => {
                                 <CountryDropdown
                                     value={formData.contactCountry || ""}
                                     onChange={(selected) => {
+
                                         setSelectedCountry(selected);
-                                        setFormData({ ...formData, contactCountry: selected });
+                                        setFormData((prev) => ({
+                                            ...prev,
+                                            contactCountry: selected,
+                                            contactState: selected !== "India" ? "" : prev.contactState,
+                                            companyGst: selected !== "India" ? "" : prev.companyGst,
+                                        }));
                                     }}
                                     required
                                 />
                             </div>
 
                             {/* State */}
-                            <div>
-                                <Input
-                                    label="State"
-                                    name="state"
-                                    value={formData.state || ""}
-                                    onChange={(e) =>
-                                        setFormData({ ...formData, state: e.target.value })
-                                    }
-                                    required
-                                />
-                            </div>
+                            {
+                                formData.contactCountry === 'India' &&
+                                <div>
+                                    <Input
+                                        label="State"
+                                        name="state"
+                                        value={formData.contactState || ""}
+                                        onChange={(e) =>
+                                            setFormData({ ...formData, contactState: e.target.value })
+                                        }
+                                        required
+                                    />
+                                </div>
+                            }
 
                             {/* City */}
                             <div>
@@ -584,7 +497,7 @@ const OrderCreditReport = () => {
                             </div>
 
                             {/* GST */}
-                            {formData.contactCountry?.label === "India" && (
+                            {formData.contactCountry === "India" && (
                                 <div>
                                     <Input
                                         label="GST (optional)"
@@ -716,26 +629,32 @@ const OrderCreditReport = () => {
                                         value={formData.country || ''}
                                         onChange={(selected) => {
                                             setSelectedCountry(selected);
-                                            setFormData({
-                                                ...formData, country: selected
-                                            });
+                                            setFormData((prev) => ({
+                                                ...prev,
+                                                country: selected,
+                                                state: selected?.label !== "India" || selected !== 'India' ? "" : prev.state,
+                                            }));
                                         }}
                                         required
                                     />
                                 </div>
 
-                                <div className="md:col-span-3">
-                                    <Input
-                                        label="State"
-                                        name="state"
-                                        value={formData.state || ''}
-                                        onChange={(e) =>
-                                            setFormData({ ...formData, [e.target.name]: e.target.value })
-                                        }
-                                        required={directOrder}
+                                {
+                                    (formData.country === 'India' || formData.country?.label === 'India') && (
 
-                                    />
-                                </div>
+                                        <div className="md:col-span-3">
+                                            <Input
+                                                label="State"
+                                                name="state"
+                                                value={formData.state || ''}
+                                                onChange={(e) =>
+                                                    setFormData({ ...formData, [e.target.name]: e.target.value })
+                                                }
+                                            // required={directOrder}
+
+                                            />
+                                        </div>
+                                    )}
 
                                 <div className="md:col-span-3">
                                     <Input
@@ -861,10 +780,32 @@ const OrderCreditReport = () => {
                                     value={formData.contactCountry || ''}
                                     onChange={(selected) => {
                                         setSelectedCountry(selected);
-                                        setFormData({ ...formData, contactCountry: selected });
+
+                                        setFormData((prev) => ({
+                                            ...prev,
+                                            contactCountry: selected,
+                                            contactState: selected?.label !== "India" || selected !== 'India' ? "" : prev.contactState,
+                                            companyGst: selected?.label !== "India" || selected !== 'India' ? "" : prev.companyGst,
+                                        }));
                                     }}
                                     required={true}
                                 />
+
+                                {
+                                    (formData.contactCountry === 'India' || formData.contactCountry?.label === 'India') && (
+                                        <Input
+                                            label="State"
+                                            // name="state"
+                                            value={formData.contactState || ""}
+                                            onChange={(e) => {
+                                                console.log(e);
+                                                setFormData({ ...formData, contactState: e.target.value })
+                                            }}
+                                            required={true}
+                                        />
+                                    )
+                                }
+
 
                                 <div>
                                     <label className="block text-sm font-medium mb-1 text-gray-700">Phone <RequiredStar /></label>
@@ -887,22 +828,23 @@ const OrderCreditReport = () => {
                                     }
                                 />
 
-                                {formData.contactCountry?.label === "India" && (
+                                {
+                                    (formData.contactCountry === 'India' || formData.contactCountry?.label === 'India') && (
 
-                                    <Input
-                                        autoComplete="gst"
-                                        label="Gst"
-                                        name="companyGst"
-                                        type='text'
-                                        id="companyGstField"
-                                        value={formData.companyGst || ''}
-                                        onChange={(e) =>
-                                            setFormData({ ...formData, [e.target.name]: e.target.value })
-                                        }
-                                    // className={formData.contactCompany ? 'block' : 'hidden'} // show only if company exists
+                                        <Input
+                                            autoComplete="gst"
+                                            label="Gst"
+                                            name="companyGst"
+                                            type='text'
+                                            id="companyGstField"
+                                            value={formData.companyGst || ''}
+                                            onChange={(e) =>
+                                                setFormData({ ...formData, [e.target.name]: e.target.value })
+                                            }
+                                        // className={formData.contactCompany ? 'block' : 'hidden'} // show only if company exists
 
-                                    />
-                                )}
+                                        />
+                                    )}
 
                                 <div>
                                     <label className="block text-xs font-medium  text-gray-400">Optional Email: (Report will be send to this email too)</label>

@@ -8,6 +8,7 @@ import "@splidejs/splide/dist/css/splide.min.css";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import Testimonials from "./Testimonials";
+import Image from "next/image";
 
 
 
@@ -168,6 +169,15 @@ const OrderCreditReportClient = () => {
 
             </section>
 
+            {/* <div className='max-w-6xl mx-auto' >
+                <Image
+                    src={require("../../public/images/10.png")}
+                    alt="Example"
+                    // width={600}
+                    height={400}
+                    className="rounded-xl mx-auto"
+                />
+            </div> */}
 
             <section className="bg-gray-50 py-2 md:py-2 mt-5 px-6 md:px-10 lg:px-20 text-gray-800 w-full">
 

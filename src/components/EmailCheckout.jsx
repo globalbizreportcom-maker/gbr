@@ -10,6 +10,7 @@ import RequiredStar from "@/utils/RequiredStar";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FaSpinner } from "react-icons/fa";
+import { Country, State, City } from 'country-state-city';
 
 export const dynamic = "force-dynamic";
 
@@ -62,18 +63,42 @@ const EmailCheckout = () => {
         // const oceania = ["Fiji", "Papua New Guinea", "Samoa", "Tonga"];
 
 
-        const asiaExcl = ["Afghanistan", "Bangladesh", "Bhutan", "Brunei", "Myanmar", "Cambodia", "Timor-Leste", "Hong Kong", "Indonesia", "Japan", "Kazakhstan", "North Korea", "South Korea", "Kyrgyzstan", "Laos", "Malaysia", "Maldives", "Mongolia", "Nepal", "Pakistan", "Philippines", "Russia", "Singapore", "Sri Lanka", "Tajikistan", "Taiwan", "Thailand", "Turkmenistan", "Uzbekistan", "Vietnam"];
+        const asiaExcl = ["Afghanistan", "Bangladesh", "Bhutan", "Brunei", "Myanmar", "Cambodia", "East Timor", "Hong Kong S.A.R.", "Indonesia", "Japan", "Kazakhstan", "North Korea", "South Korea", "Kyrgyzstan", "Laos", "Malaysia", "Maldives", "Mongolia", "Nepal", "Pakistan", "Philippines", "Russia", "Singapore", "Sri Lanka", "Tajikistan", "Taiwan", "Thailand", "Turkmenistan", "Uzbekistan", "Vietnam"];
         const australiaNZ = ["Australia", "New Zealand"];
         const middleEast = ["Bahrain", "Iran", "Iraq", "Israel", "Jordan", "Kuwait", "Lebanon", "Oman", "Qatar", "Saudi Arabia", "Syria", "Turkey", "Turkmenistan", "United Arab Emirates", "Yemen"];
         const latinAmerica = ["Brazil", "Mexico", "Argentina", "Colombia", "Chile", "Peru"];
-        const africa = ["Algeria", "Angola", "Benin", "Botswana", "Burkina Faso", "Burundi", "Cameroon", "Cape Verde", "Central African Republic", "Chad", "Comoros", "Congo", "Djibouti", "Egypt", "Equatorial Guinea", "Eritrea", "Ethiopia", "Gabon", "Gambia", "Ghana", "Guinea", "Guinea-Bissau", "Ivory Coast", "Kenya", "Lesotho", "Liberia", "Libya", "Madagascar", "Malawi", "Mali", "Mauritania", "Mauritius", "Morocco", "Mozambique", "Namibia", "Niger", "Nigeria", "Rwanda", "Sao Tome and Principe", "Senegal", "Seychelles", "Sierra Leone", "Somalia", "South Africa", "Sudan", "Eswatini", "Tanzania", "Togo", "Tunisia", "Uganda", "Zambia", "Zimbabwe"];
-        const oceania = ["Fiji", "Kiribati", "Marshall Islands", "Micronesia", "Nauru", "Palau", "Papua New Guinea", "Samoa", "Solomon Islands", "Tonga", "Tuvalu", "Vanuatu"];
+        const africa = [
+            "Algeria", "Angola", "Benin", "Botswana", "Burkina Faso", "Burundi",
+            "Cameroon", "Cape Verde", "Central African Republic", "Chad", "Comoros",
+            "Congo", "Djibouti", "Egypt", "Equatorial Guinea", "Eritrea", "Ethiopia",
+            "Gabon", "The Gambia", "Ghana", "Guinea", "Guinea-Bissau",
+            "Cote D'Ivoire (Ivory Coast)", "Kenya", "Lesotho", "Liberia", "Libya",
+            "Madagascar", "Malawi", "Mali", "Mauritania", "Mauritius", "Morocco",
+            "Mozambique", "Namibia", "Niger", "Nigeria", "Rwanda",
+            "Sao Tome and Principe", "Senegal", "Seychelles", "Sierra Leone",
+            "Somalia", "South Africa", "Sudan", "Swaziland", "Tanzania", "Togo",
+            "Tunisia", "Uganda", "Zambia", "Zimbabwe"
+        ];
+        const oceania = [
+            "Fiji Islands",
+            "Kiribati",
+            "Marshall Islands",
+            "Micronesia",
+            "Nauru",
+            "Palau",
+            "Papua new Guinea",
+            "Samoa",
+            "Solomon Islands",
+            "Tonga",
+            "Tuvalu",
+            "Vanuatu"
+        ];
         const europe = [
             "Albania", "Andorra", "Armenia", "Austria", "Azerbaijan", "Belarus", "Belgium",
             "Bosnia and Herzegovina", "Bulgaria", "Croatia", "Cyprus", "Czech Republic",
             "Denmark", "Estonia", "Finland", "France", "Georgia", "Germany", "Greece",
             "Hungary", "Iceland", "Ireland", "Italy", "Latvia", "Liechtenstein",
-            "Lithuania", "Luxembourg", "North Macedonia", "Malta", "Moldova", "Monaco",
+            "Lithuania", "Luxembourg", "Macedonia", "Malta", "Moldova", "Monaco",
             "Montenegro", "Netherlands", "Norway", "Poland", "Portugal", "Romania",
             "San Marino", "Serbia", "Slovakia", "Slovenia", "Spain", "Sweden", "Switzerland",
             "United Kingdom", "Ukraine", "Vatican City State (Holy See)"
@@ -91,6 +116,9 @@ const EmailCheckout = () => {
         if (["usa", "united states"].includes(c)) return "USA";
         if (["canada"].includes(c)) return "Canada";
         if (europe.map(x => x.toLowerCase()).includes(c)) return "Europe";
+
+        if (c === "christmas island") return "Christmas Island";
+
 
         // if (["europe", "uk", "germany", "france", "italy", "spain"].includes(c)) return "Europe";
         return "Other Countries";
@@ -140,6 +168,7 @@ const EmailCheckout = () => {
         Africa: 7924,
         Oceania: 8927,
         "Latin America": 8927,
+        'Christmas Island': 1,
         "Other Countries": 8927,
     };
 
@@ -155,6 +184,8 @@ const EmailCheckout = () => {
         Africa: 79,
         Oceania: 89,
         "Latin America": 89,
+        'Christmas Island': 1,
+
         "Other Countries": 89,
     };
 
@@ -185,11 +216,16 @@ const EmailCheckout = () => {
     useEffect(() => {
         async function fetchCountries() {
             try {
-                const res = await fetch("https://countriesnow.space/api/v0.1/countries");
-                const data = await res.json();
-                if (data?.data) {
-                    setCountries(data.data.map((c) => c.country));
-                }
+
+                const countryOptions = Country.getAllCountries().map((c) => ({
+                    value: c.isoCode,
+                    label: c.name,
+                    countryObj: c,
+                }));
+                console.log(countryOptions.map(c => c.label));
+
+                setCountries(countryOptions);
+
             } catch (err) {
                 console.log(" Failed to load countries:", err);
             }
@@ -203,32 +239,27 @@ const EmailCheckout = () => {
             if (!formData?.contactCountry) return;
 
             try {
-                const res = await fetch('https://countriesnow.space/api/v0.1/countries');
-                const data = await res.json();
 
-                if (data?.data?.length) {
-                    const match = data.data.find(
-                        (c) =>
-                            c.country.toLowerCase() ===
-                            formData.contactCountry.toLowerCase()
-                    );
+                const allCountries = Country.getAllCountries();
+                const match = allCountries.find(
+                    (c) =>
+                        c.name.toLowerCase() ===
+                        formData.contactCountry?.toLowerCase()
+                );
 
-                    if (match) {
-                        setCountryIso(match.iso2);
-                    } else {
-                        setCountryIso('');
-                    }
+                if (match) {
+                    setCountryIso(match.isoCode);   // ISO2
+                } else {
+                    setCountryIso('');
                 }
+
             } catch (err) {
-                console.log('Failed to fetch ISO code:', err);
                 setCountryIso('');
             }
         };
 
         fetchIsoForCountry();
     }, [formData?.contactCountry]);
-
-
 
     // ✅ Decode visitor data
     useEffect(() => {
@@ -298,19 +329,22 @@ const EmailCheckout = () => {
         setLoading(true)
         localStorage.setItem("gbr_form", JSON.stringify(formData));
 
-        if (!formData?.user
-            // || !user?._id
-        ) {
+        if (!formData?.user) {
             showAlert('User Id is missing! Contact Us to continue checkout!', 'error');
             setLoading(false);
 
             return
         }
 
-        if (!formData?.contactPhone
-            // || !user?._id
-        ) {
+        if (!formData?.contactPhone) {
             showAlert('Billing Phone Number is missing!', 'error');
+            setLoading(false);
+
+            return
+        }
+
+        if ((formData?.contactCountry === 'India' || formData?.contactCountry?.label === 'India') && !formData?.contactState) {
+            showAlert('State field is missing!', 'error');
             setLoading(false);
 
             return
@@ -426,8 +460,8 @@ const EmailCheckout = () => {
                                 >
                                     {countries.length > 0 ? (
                                         countries.map((c) => (
-                                            <option key={c} value={c}>
-                                                {c}
+                                            <option key={c.label} value={c.label}>
+                                                {c.label}
                                             </option>
                                         ))
                                     ) : (
@@ -478,6 +512,9 @@ const EmailCheckout = () => {
                                     className="mt-1 w-full rounded-md border border-gray-300 p-2 focus:ring-2 focus:ring-indigo-300 focus:outline-none"
                                 />
                             </div>
+
+
+
                         </div>
                     </div>
                 </div>
@@ -558,14 +595,14 @@ const EmailCheckout = () => {
                                 disabled={showBtn}
                                 required
                                 name="contactCountry"
-                                value={formData.contactCountry || ""}
+                                value={formData.contactCountry || formData.contactCountry?.value || ""}
                                 onChange={handleChange}
                                 className="mt-1 w-full rounded-md border border-gray-300 p-2 bg-white focus:ring-2 focus:ring-indigo-300 focus:outline-none"
                             >
                                 {countries.length > 0 ? (
                                     countries.map((c) => (
-                                        <option key={c} value={c}>
-                                            {c}
+                                        <option key={c.label} value={c.label}>
+                                            {c.label}
                                         </option>
                                     ))
                                 ) : (
@@ -573,6 +610,43 @@ const EmailCheckout = () => {
                                 )}
                             </select>
                         </div>
+
+                        {
+                            (formData?.contactCountry === 'India' || formData?.contactCountry?.label === 'India') &&
+                            <div>
+
+                                <label className="block text-sm font-medium text-gray-600">
+                                    State
+                                </label>
+                                <input
+                                    disabled={showBtn}
+                                    type="text"
+                                    name="contactState"
+                                    value={formData.contactState || ""}
+                                    onChange={handleChange}
+                                    className="mt-1 w-full rounded-md border border-gray-300 p-2 focus:ring-2 focus:ring-indigo-300 focus:outline-none"
+                                />
+                            </div>
+                        }
+
+                        {
+                            (formData?.contactCountry === 'India' || formData?.contactCountry?.label === 'India') &&
+                            <div>
+
+                                <label className="block text-sm font-medium text-gray-600">
+                                    Gst
+                                </label>
+                                <input
+                                    disabled={showBtn}
+                                    type="text"
+                                    name="companyGst"
+                                    value={formData.companyGst || ""}
+                                    onChange={handleChange}
+                                    className="mt-1 w-full rounded-md border border-gray-300 p-2 focus:ring-2 focus:ring-indigo-300 focus:outline-none"
+                                />
+                            </div>
+                        }
+
                     </div>
 
                     <div className="bg-green-100 rounded-2xl p-4">

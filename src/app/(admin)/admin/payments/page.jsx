@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { adminUrl } from "@/api/api";
 import { FaChevronRight } from "react-icons/fa";
+import { splitPhone } from "@/utils/splitPhone";
 
 const AdminPayment = () => {
     const [payments, setPayments] = useState([]);
@@ -12,7 +13,6 @@ const AdminPayment = () => {
     const [selectedPayment, setSelectedPayment] = useState(null);
     const [openDialog, setOpenDialog] = useState(false);
 
-    console.log(payments);
 
     // Pagination states
     const [currentPage, setCurrentPage] = useState(1);
@@ -32,6 +32,7 @@ const AdminPayment = () => {
             console.log(err);
         }
     };
+    console.log(payments);
 
     useEffect(() => {
         let data = payments;
@@ -77,7 +78,7 @@ const AdminPayment = () => {
     };
 
     const InfoItem = ({ label, value }) => (
-        <div className="flex flex-col bg-gray-50 border border-gray-100 rounded-lg px-4 py-3 hover:bg-gray-100 transition">
+        <div className="flex flex-col bg-gray-50 border border-gray-100 rounded-lg px-4 py-1 hover:bg-gray-100 transition">
             <span className="text-xs uppercase text-gray-500 tracking-wide">{label}</span>
             <span className="text-sm sm:text-base font-medium text-gray-800 mt-1">{value}</span>
         </div>
@@ -334,98 +335,117 @@ const AdminPayment = () => {
             </div>
 
             {openDialog && selectedPayment && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900/75 bg-opacity-50 backdrop-blur-sm animate-fadeIn" onClick={handleClose}>
-                    <div className="relative h-full max-w-5xl bg-white  overflow-hidden animate-slideUp border border-gray-200" onClick={(e) => e.stopPropagation()}>
-
-                        {/* Sticky Header */}
-                        <div className="sticky top-0 z-10 bg-white border-b border-gray-200 flex justify-between items-center px-6 py-4 ">
-                            <h2 className="text-lg sm:text-lg font-semibold text-gray-800 tracking-wide">
-                                Payment Details
-                            </h2>
+                <div
+                    className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm"
+                    onClick={handleClose}
+                >
+                    <div
+                        className="relative w-full max-w-5xl h-[90vh] bg-white rounded-xl border border-gray-200 shadow-lg flex flex-col"
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        {/* Header */}
+                        <div className="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex justify-between items-center z-10">
+                            <h2 className="text-xl font-semibold text-gray-800">Payment Details </h2>
                             <button
                                 onClick={handleClose}
-                                className="text-gray-500 hover:text-gray-700 text-3xl font-bold leading-none transition"
+                                className="text-gray-500 hover:text-gray-700 text-3xl leading-none font-bold"
                             >
                                 &times;
                             </button>
                         </div>
 
-                        {/* Scrollable Content */}
-                        <div className="overflow-y-auto max-h-[calc(90vh-70px)] px-8 py-6 space-y-10 text-gray-800">
+                        {/* Content */}
+                        <div className="flex-1 overflow-y-auto px-6 py-6 space-y-8">
 
-                            {/* Section: Payment Info */}
-                            <section>
-                                <h3 className="text-lg font-semibold text-blue-700 border-b border-gray-200 pb-2 mb-4 tracking-wide">
-                                    Payment Info
-                                </h3>
-                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            {/* Payment Info */}
+                            <div className="p-6 bg-gray-50 rounded-xl ">
+                                <h3 className="text-lg font-semibold text-indigo-800 mb-4">Payment Info</h3>
+
+                                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                                     <InfoItem label="Order ID" value={selectedPayment.orderId} />
                                     <InfoItem label="Payment ID" value={selectedPayment.paymentId || "-"} />
+
                                     <InfoItem
                                         label="Status"
                                         value={
                                             <span
-                                                className={`px-2 py-1 rounded text-sm font-semibold ${{
+                                                className={`px-2 py-1 rounded text-sm font-medium ${{
                                                     paid: "bg-green-100 text-green-700",
                                                     pending: "bg-yellow-100 text-yellow-700",
-                                                    cancelled: "bg-red-100 text-red-700", // same as failed
                                                     failed: "bg-red-100 text-red-700",
-                                                }[selectedPayment.status] || "bg-gray-200 text-gray-700"
+                                                    cancelled: "bg-red-100 text-red-700",
+                                                }[selectedPayment.status] || "bg-gray-100 text-gray-700"
                                                     }`}
                                             >
                                                 {selectedPayment.status === "cancelled"
                                                     ? "Failed"
-                                                    : selectedPayment.status.charAt(0).toUpperCase() + selectedPayment.status.slice(1)}
+                                                    : selectedPayment.status.charAt(0).toUpperCase() +
+                                                    selectedPayment.status.slice(1)}
                                             </span>
-
                                         }
                                     />
 
                                     <InfoItem label="Method" value={selectedPayment.method} />
                                     <InfoItem label="Amount" value={`${selectedPayment.amount} ${selectedPayment.currency}`} />
-                                    <InfoItem label="Created At" value={new Date(selectedPayment.createdAt).toLocaleString()} />
+                                    <InfoItem
+                                        label="Created At"
+                                        value={new Date(selectedPayment.createdAt).toLocaleString()}
+                                    />
                                     <InfoItem label="Payer Email" value={selectedPayment.details?.payerEmail || "-"} />
                                 </div>
-                            </section>
+                            </div>
 
-                            <Divider />
+                            {/* Flex Row Bento Grid */}
+                            <div className="flex flex-col lg:flex-row gap-6">
 
-                            {/* Section: Requester Info */}
-                            <section>
-                                <h3 className="text-lg font-semibold text-blue-700 border-b border-gray-200 pb-2 mb-4  tracking-wide">
-                                    Requester Info
-                                </h3>
-                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                    <InfoItem label="Name" value={selectedPayment.user?.name || selectedPayment.reportRequest?.requesterInfo?.name || "-"} />
-                                    <InfoItem label="Email" value={selectedPayment.user?.email || selectedPayment.reportRequest?.requesterInfo?.email || "-"} />
-                                    <InfoItem label="Phone" value={selectedPayment.user?.phone || selectedPayment.reportRequest?.requesterInfo?.phone || "-"} />
-                                    <InfoItem label="Country" value={selectedPayment.user?.country || selectedPayment.reportRequest?.requesterInfo?.country || "-"} />
-                                    <InfoItem label="Company" value={selectedPayment.user?.company || selectedPayment.reportRequest?.requesterInfo?.company || "-"} />
-                                    <InfoItem label="Company" value={selectedPayment.user?.gstin || selectedPayment.reportRequest?.requesterInfo?.gst || "-"} />
+                                {/* Requester Info */}
+                                <div className="flex-1 p-6 bg-gray-50 rounded-xl ">
+                                    <h3 className="text-lg font-semibold text-red-800 mb-4">Requester Info</h3>
+
+                                    <div className="grid grid-cols-1 sm:grid-cols-1 gap-4">
+                                        <InfoItem label="Name" value={selectedPayment.reportRequest?.requesterInfo?.name || "-"} />
+                                        <InfoItem label="Email" value={selectedPayment.reportRequest?.requesterInfo?.email || "-"} />
+                                        <InfoItem label="Phone" value={(() => {
+                                            const p = splitPhone(selectedPayment.reportRequest?.requesterInfo?.phone);
+                                            return p ? `+${p.countryCode} ${p.nationalNumber}` : "-";
+                                        })()} />
+                                        <InfoItem label="Country" value={selectedPayment.reportRequest?.requesterInfo?.country || "-"} />
+                                        <InfoItem label="State" value={selectedPayment.reportRequest?.requesterInfo?.state || "-"} />
+                                        <InfoItem label="Company" value={selectedPayment.reportRequest?.requesterInfo?.company || "-"} />
+                                        <InfoItem label="GST / Tax ID" value={selectedPayment.reportRequest?.requesterInfo?.gst || "-"} />
+                                    </div>
                                 </div>
-                            </section>
 
-                            <Divider />
+                                {/* Target Company Info */}
+                                <div className="flex-1 p-6 bg-gray-50 rounded-xl ">
+                                    <h3 className="text-lg font-semibold text-green-700 mb-4">
+                                        Target Company Info
+                                        <span className="text-primary ml-2">({selectedPayment?.reportRequest?.companyType})</span>
+                                    </h3>
 
-                            {/* Section: Target Company Info */}
-                            <section>
-                                <h3 className="text-lg font-semibold text-green-700 border-b border-gray-200 pb-2 mb-4  tracking-wide">
-                                    Target Company Info
-                                </h3>
-                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                    <InfoItem label="Name" value={selectedPayment.reportRequest?.targetCompany?.name || "-"} />
-                                    <InfoItem label="Address" value={selectedPayment.reportRequest?.targetCompany?.address || "-"} />
-                                    <InfoItem label="Country" value={selectedPayment.reportRequest?.targetCompany?.country || "-"} />
-                                    <InfoItem label="State" value={selectedPayment.reportRequest?.targetCompany?.state || "-"} />
-                                    <InfoItem label="City" value={selectedPayment.reportRequest?.targetCompany?.city || "-"} />
-                                    <InfoItem label="Phone" value={selectedPayment.reportRequest?.targetCompany?.phone || "-"} />
-                                    <InfoItem label="Pincode / Zipcode" value={selectedPayment.reportRequest?.targetCompany?.postalCode || "-"} />
+                                    <div className="grid grid-cols-1 sm:grid-cols-1 gap-4">
+                                        <InfoItem label="Name" value={selectedPayment.reportRequest?.targetCompany?.name || "-"} />
+                                        <InfoItem label="Address" value={selectedPayment.reportRequest?.targetCompany?.address || "-"} />
+                                        <InfoItem label="Country" value={selectedPayment.reportRequest?.targetCompany?.country || "-"} />
+                                        <InfoItem label="State" value={selectedPayment.reportRequest?.targetCompany?.state || "-"} />
+                                        <InfoItem label="City" value={selectedPayment.reportRequest?.targetCompany?.city || "-"} />
+                                        <InfoItem label="Phone" value={(() => {
+                                            const p = splitPhone(selectedPayment.reportRequest?.targetCompany?.phone);
+                                            return p ? `+${p.countryCode} ${p.nationalNumber}` : "-";
+                                        })()}
+                                        />
+                                        <InfoItem label="Postal Code" value={selectedPayment.reportRequest?.targetCompany?.postalCode || "-"} />
+                                    </div>
                                 </div>
-                            </section>
+
+                            </div>
+
                         </div>
                     </div>
                 </div>
             )}
+
+
 
 
 

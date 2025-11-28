@@ -6,6 +6,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { FaArrowRight, FaMailBulk } from "react-icons/fa";
 import { useDropzone } from "react-dropzone";
 import { useAlert } from "@/context/AlertProvider";
+import { splitPhone } from "@/utils/splitPhone";
 
 // Define colors for each status
 const STATUS_COLORS = {
@@ -73,31 +74,7 @@ const ReportsAdmin = ({ defaultTab }) => {
         if (selectedReport) setNewStatus(selectedReport.status);
     }, [selectedReport]);
 
-    // Handle Save button click
-    const handleSaveStatus = async () => {
-        if (!selectedReport) return;
-        setUpdatingStatus(true);
-        try {
-            const { data } = await adminUrl.put(
-                `/update/report-requests/${selectedReport._id}/status`,
-                { status: newStatus }
-            );
-            if (data.success) {
-                // Update local state
-                setReports((prev) =>
-                    prev.map((r) =>
-                        r._id === selectedReport._id ? { ...r, status: newStatus } : r
-                    )
-                );
-                setSelectedReport({ ...selectedReport, status: newStatus });
-                handleClose();
-            }
-        } catch (error) {
-            console.error("Error updating status:", error);
-        } finally {
-            setUpdatingStatus(false);
-        }
-    };
+
 
     // Open modal with existing company info
     useEffect(() => {
@@ -116,7 +93,6 @@ const ReportsAdmin = ({ defaultTab }) => {
     };
 
 
-
     const onDrop = useCallback((acceptedFiles) => {
         setFiles(acceptedFiles);
     }, []);
@@ -131,29 +107,70 @@ const ReportsAdmin = ({ defaultTab }) => {
         multiple: false,
     });
 
-    const handleUpload = async () => {
-
-
-        if (!files.length) return showAlert(`Please select a file`, "error");
-        const formData = new FormData();
-        formData.append("file", files[0]);
-        formData.append("reportRequestId", selectedReport._id);
+    const handleSaveStatus = async () => {
+        if (!selectedReport) return;
+        setUpdatingStatus(true);
 
         try {
-            setLoading(true);
-            const { data } = await adminUrl.post("/report-files/upload", formData, {
-                headers: { "Content-Type": "multipart/form-data" },
-            });
-            if (data.success) {
-                showAlert(`File uploaded successfully`, "success");
-                setFiles([]);
+            // If status is "delivered", ensure a file is uploaded
+            if (newStatus === "delivered") {
+                if (!files.length && !selectedReport.reportFile) {
+                    showAlert(`Please select a file`, "error");
+                    return;
+                }
+
+                // If a new file is selected, upload it first
+                if (files.length) {
+                    const formData = new FormData();
+                    formData.append("file", files[0]);
+                    formData.append("reportRequestId", selectedReport._id);
+
+                    setLoading(true);
+                    const { data: uploadData } = await adminUrl.post("/report-files/upload", formData, {
+                        headers: { "Content-Type": "multipart/form-data" },
+                    });
+                    setLoading(false);
+
+                    if (!uploadData.success) {
+                        showAlert("File upload failed", "error");
+                        return;
+                    }
+
+                    showAlert(`File uploaded successfully`, "success");
+                    setFiles([]);
+                    // Optionally, update selectedReport with uploaded file info
+                    setSelectedReport(prev => ({
+                        ...prev,
+                        reportFile: uploadData.file || files[0],
+                    }));
+                }
             }
-        } catch (err) {
-            console.log("Upload error:", err);
+
+            // Update status (for delivered or other statuses)
+            const { data } = await adminUrl.put(
+                `/update/report-requests/${selectedReport._id}/status`,
+                { status: newStatus }
+            );
+
+            if (data.success) {
+                // Update local state
+                setReports(prev =>
+                    prev.map(r =>
+                        r._id === selectedReport._id ? { ...r, status: newStatus } : r
+                    )
+                );
+                setSelectedReport(prev => ({ ...prev, status: newStatus }));
+                handleClose();
+            }
+        } catch (error) {
+            console.error("Error updating status:", error);
+            showAlert("Failed to update status", "error");
         } finally {
+            setUpdatingStatus(false);
             setLoading(false);
         }
     };
+
 
     const filteredReports =
         activeTab === "all" ? reports : reports.filter((r) => r.status === activeTab);
@@ -216,116 +233,128 @@ const ReportsAdmin = ({ defaultTab }) => {
 
 
             {/* Table */}
-            {filteredReports.length === 0 ? (
-                <p className="text-center mt-10 text-gray-500">
-                    No reports found for "{activeTab}" status.
-                </p>
-            ) : (
-                <>
 
-                    {/* Search Field */}
-                    <div className="mb-4 w-full flex justify-end">
-                        <input
-                            type="text"
-                            value={searchQuery}
-                            onChange={(e) => setSearchQuery(e.target.value)}
-                            placeholder="Search by company name..."
-                            className="w-full md:w-1/3 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                        />
+
+            {
+
+                loading ?
+
+                    <div className="flex justify-center items-center w-full py-20 gap-2">
+                        <div className="w-4 h-4 border-2 border-gray-300 border-t-black rounded-full animate-spin"></div>
+                        <span className="text-sm text-gray-600">Loading</span>
                     </div>
 
+                    :
 
-                    {/* Table for medium and above screens */}
-                    <div className="hidden md:block overflow-x-auto bg-white py-6 rounded-2xl">
-                        <table className="table w-full">
-                            <thead>
-                                <tr className="text-black">
-                                    <th>#</th>
-                                    <th>Company</th>
-                                    <th>Requester</th>
-                                    <th>Requester Country</th>
-                                    <th>Status</th>
-                                    <th>Created At</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
+                    filteredReports.length === 0 ? (
+                        <p className="text-center mt-10 text-gray-500">
+                            No reports found for "{activeTab}" status.
+                        </p>
+                    ) : (
+                        <>
+
+                            {/* Search Field */}
+                            <div className="mb-4 w-full flex justify-end">
+                                <input
+                                    type="text"
+                                    value={searchQuery}
+                                    onChange={(e) => setSearchQuery(e.target.value)}
+                                    placeholder="Search by company name..."
+                                    className="w-full md:w-1/3 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                />
+                            </div>
+
+                            {/* Table for medium and above screens */}
+                            <div className="hidden md:block overflow-x-auto bg-white py-6 rounded-2xl">
+                                <table className="table w-full">
+                                    <thead>
+                                        <tr className="text-black">
+                                            <th>#</th>
+                                            <th>Company</th>
+                                            <th>Requester</th>
+                                            <th>Requester Country</th>
+                                            <th>Status</th>
+                                            <th>Created At</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {displayedReports.map((report, index) => (
+                                            <tr key={report._id}>
+                                                <td>{index + 1}</td>
+                                                <td>{report.targetCompany.name.length > 20 ? report.targetCompany.name.slice(0, 20) + "..." : report.targetCompany.name}</td>
+                                                <td>{report.requesterInfo.name}</td>
+                                                <td>{report.requesterInfo.country}</td>
+                                                <td>
+                                                    <span
+                                                        className={`px-3 py-1 rounded-full text-sm font-medium ${STATUS_COLORS[report.status] || "bg-gray-200 text-gray-800"
+                                                            }`}
+                                                    >
+                                                        {report.status.charAt(0).toUpperCase() + report.status.slice(1)}
+                                                    </span>
+                                                </td>
+                                                <td>{new Date(report.createdAt).toLocaleString("en-IN")}</td>
+                                                <td>
+                                                    <button
+                                                        className="btn btn-sm btn-primary"
+                                                        onClick={() => handleView(report)}
+                                                    >
+                                                        View <FaArrowRight />
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            {/* Card layout for small screens */}
+                            <div className="md:hidden space-y-4">
                                 {displayedReports.map((report, index) => (
-                                    <tr key={report._id}>
-                                        <td>{index + 1}</td>
-                                        <td>{report.targetCompany.name.length > 20 ? report.targetCompany.name.slice(0, 20) + "..." : report.targetCompany.name}</td>
-                                        <td>{report.requesterInfo.name}</td>
-                                        <td>{report.requesterInfo.country}</td>
-                                        <td>
+                                    <div
+                                        key={report._id}
+                                        className="bg-white border border-gray-200 rounded-xl p-5"
+                                    >
+                                        {/* Header: Number + Status */}
+                                        <div className="flex justify-between items-center mb-3">
+                                            <span className="font-semibold text-gray-700">#{index + 1}</span>
                                             <span
                                                 className={`px-3 py-1 rounded-full text-sm font-medium ${STATUS_COLORS[report.status] || "bg-gray-200 text-gray-800"
                                                     }`}
                                             >
                                                 {report.status.charAt(0).toUpperCase() + report.status.slice(1)}
                                             </span>
-                                        </td>
-                                        <td>{new Date(report.createdAt).toLocaleString()}</td>
-                                        <td>
-                                            <button
-                                                className="btn btn-sm btn-primary"
-                                                onClick={() => handleView(report)}
-                                            >
-                                                View <FaArrowRight />
-                                            </button>
-                                        </td>
-                                    </tr>
+                                        </div>
+
+                                        {/* Company & Requester Info */}
+                                        <div className="space-y-1 text-gray-600">
+                                            <p>
+                                                <span className="font-medium text-gray-800">Company:</span>{" "}
+                                                {report.targetCompany.name.length > 20 ? report.targetCompany.name.slice(0, 20) + "..." : report.targetCompany.name}
+                                            </p>
+                                            <p>
+                                                <span className="font-medium text-gray-800">Requester:</span>{" "}
+                                                {report.requesterInfo.name}
+                                            </p>
+                                            <p>
+                                                <span className="font-medium text-gray-800">Created At:</span>{" "}
+                                                {new Date(report.createdAt).toLocaleString()}
+                                            </p>
+                                        </div>
+
+                                        {/* View Button */}
+                                        <button
+                                            className="mt-4 w-[150px] btn btn-primary py-2 shadow-none font-medium rounded-lg"
+                                            onClick={() => handleView(report)}
+                                        >
+                                            View Details
+                                        </button>
+                                    </div>
                                 ))}
-                            </tbody>
-                        </table>
-                    </div>
-
-                    {/* Card layout for small screens */}
-                    <div className="md:hidden space-y-4">
-                        {displayedReports.map((report, index) => (
-                            <div
-                                key={report._id}
-                                className="bg-white border border-gray-200 rounded-xl p-5"
-                            >
-                                {/* Header: Number + Status */}
-                                <div className="flex justify-between items-center mb-3">
-                                    <span className="font-semibold text-gray-700">#{index + 1}</span>
-                                    <span
-                                        className={`px-3 py-1 rounded-full text-sm font-medium ${STATUS_COLORS[report.status] || "bg-gray-200 text-gray-800"
-                                            }`}
-                                    >
-                                        {report.status.charAt(0).toUpperCase() + report.status.slice(1)}
-                                    </span>
-                                </div>
-
-                                {/* Company & Requester Info */}
-                                <div className="space-y-1 text-gray-600">
-                                    <p>
-                                        <span className="font-medium text-gray-800">Company:</span>{" "}
-                                        {report.targetCompany.name.length > 20 ? report.targetCompany.name.slice(0, 20) + "..." : report.targetCompany.name}
-                                    </p>
-                                    <p>
-                                        <span className="font-medium text-gray-800">Requester:</span>{" "}
-                                        {report.requesterInfo.name}
-                                    </p>
-                                    <p>
-                                        <span className="font-medium text-gray-800">Created At:</span>{" "}
-                                        {new Date(report.createdAt).toLocaleString()}
-                                    </p>
-                                </div>
-
-                                {/* View Button */}
-                                <button
-                                    className="mt-4 w-[150px] btn btn-primary py-2 shadow-none font-medium rounded-lg"
-                                    onClick={() => handleView(report)}
-                                >
-                                    View Details
-                                </button>
                             </div>
-                        ))}
-                    </div>
 
-                </>
-            )}
+                        </>
+                    )}
 
 
             {/* Fullscreen Modal */}
@@ -367,8 +396,11 @@ const ReportsAdmin = ({ defaultTab }) => {
                                 <button
                                     className='btn btn-sm btn-primary w-full sm:w-auto'
                                     onClick={handleSaveStatus}
-                                    disabled={updatingStatus || newStatus === selectedReport.status}
-                                >
+                                    disabled={
+                                        updatingStatus ||
+                                        newStatus === selectedReport.status ||
+                                        (newStatus === "delivered" && files.length < 1)
+                                    }                                >
                                     Save
                                 </button>
                                 {updatingStatus && <span className="text-gray-500 ml-2">Updating...</span>}
@@ -409,13 +441,13 @@ const ReportsAdmin = ({ defaultTab }) => {
                                     )}
                                 </div>
 
-                                <button
+                                {/* <button
                                     type="button"
                                     onClick={handleUpload}
                                     className="mt-4 btn btn-primary btn-sm"
                                 >
                                     {loading ? 'Uploading' : 'Upload File'}
-                                </button>
+                                </button> */}
                             </div>
 
                             {/* Company Info */}
@@ -463,7 +495,10 @@ const ReportsAdmin = ({ defaultTab }) => {
                                     {selectedReport.targetCompany.phone && (
                                         <p>
                                             <span className="font-medium">Phone:</span>{" "}
-                                            {selectedReport.targetCompany.phone}
+                                            {(() => {
+                                                const p = splitPhone(selectedReport.targetCompany.phone);
+                                                return p ? `+${p.countryCode} ${p.nationalNumber}` : "-";
+                                            })()}
                                         </p>
                                     )}
                                     {selectedReport.targetCompany.website && (
@@ -497,7 +532,22 @@ const ReportsAdmin = ({ defaultTab }) => {
                                     {selectedReport.requesterInfo.phone && (
                                         <p>
                                             <span className="font-medium">Phone:</span>{" "}
-                                            {selectedReport.requesterInfo.phone}
+                                            {(() => {
+                                                const p = splitPhone(selectedReport.requesterInfo.phone);
+                                                return p ? `+${p.countryCode} ${p.nationalNumber}` : "-";
+                                            })()}
+                                        </p>
+                                    )}
+                                    {selectedReport.requesterInfo.country && (
+                                        <p>
+                                            <span className="font-medium">Country:</span>{" "}
+                                            {selectedReport.requesterInfo.country}
+                                        </p>
+                                    )}
+                                    {selectedReport.requesterInfo.state && (
+                                        <p>
+                                            <span className="font-medium">State:</span>{" "}
+                                            {selectedReport.requesterInfo.state}
                                         </p>
                                     )}
                                     {selectedReport.requesterInfo.company && (
@@ -603,18 +653,18 @@ const ReportsAdmin = ({ defaultTab }) => {
                                                 {selectedReport.payment.details.description}
                                             </p>
                                         )}
-                                        {selectedReport.payment.details?.fee !== undefined && (
+                                        {/* {selectedReport.payment.details?.fee !== undefined && (
                                             <p>
                                                 <span className="font-medium">Fee:</span>{" "}
                                                 {selectedReport.payment.details.fee}
                                             </p>
-                                        )}
-                                        {selectedReport.payment.details?.tax !== undefined && (
+                                        )} */}
+                                        {/* {selectedReport.payment.details?.tax !== undefined && (
                                             <p>
                                                 <span className="font-medium">Tax:</span>{" "}
                                                 {selectedReport.payment.details.tax}
                                             </p>
-                                        )}
+                                        )} */}
                                     </div>
 
 

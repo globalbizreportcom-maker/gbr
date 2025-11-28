@@ -2,29 +2,22 @@
 import dynamic from "next/dynamic";
 import { useState, useEffect } from "react";
 const Select = dynamic(() => import("react-select"), { ssr: false });
+import { State } from "country-state-city";
+import RequiredStar from "./RequiredStar";
 
 const StateInput = ({ country, value, onChange }) => {
+
+
     const [states, setStates] = useState([]);
 
     useEffect(() => {
-        if (country) {
-            fetch("https://countriesnow.space/api/v0.1/countries/states", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ country }),
-            })
-                .then((res) => res.json())
-                .then((data) => {
-                    if (data.data?.states) {
-                        const options = data.data.states.map((s) => ({
-                            value: s.name,
-                            label: s.name,
-                        }));
-                        setStates(options);
-                    } else {
-                        setStates([]);
-                    }
-                });
+        if (country.value) {
+            const stateOptions = State.getStatesOfCountry(country.value).map((s) => ({
+                value: s.isoCode,
+                label: s.name,
+            }));
+            setStates(stateOptions);
+
         } else {
             setStates([]);
         }
@@ -33,13 +26,13 @@ const StateInput = ({ country, value, onChange }) => {
     return (
         <div className="mb-5">
             <label className="block text-sm font-medium mb-1 text-gray-500">
-                State
+                State {country.label === 'India' && <RequiredStar />}
             </label>
             <Select
                 options={states}
-                value={states.find((opt) => opt.value === value) || null}
+                value={states.find((opt) => opt.label === value) || null}
                 onChange={(selected) =>
-                    onChange({ target: { value: selected?.value || "" } })
+                    onChange({ target: { value: selected || "" } })
                 }
                 placeholder={country ? "Select State" : "Select Country First"}
                 // isDisabled={!country}
