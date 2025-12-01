@@ -3,7 +3,7 @@ import { apiUrl } from "@/api/api";
 import { useDashboard } from "@/app/(site)/dashboard/DashboardContext";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { FaUserCircle, FaBars, FaChevronRight } from "react-icons/fa";
+import { FaUserCircle, FaBars, FaChevronRight, FaChartLine } from "react-icons/fa";
 import { useState } from "react";
 
 export default function HeaderMenu() {
@@ -218,7 +218,7 @@ export default function HeaderMenu() {
                                         </li>
 
                                         {/* Order Business Credit Report */}
-                                        <li>
+                                        {/* <li>
                                             <Link
                                                 href="/order-business-credit-report"
                                                 className="items-center justify-between font-semibold text-[16px] text-blue-600 py-2 flex flex-row"
@@ -231,6 +231,33 @@ export default function HeaderMenu() {
                                             >
                                                 Order Business Credit Report <FaChevronRight className="ml-5 font-normal" />
                                             </Link>
+                                        </li> */}
+                                        {/* Order Business Credit Report */}
+                                        <li>
+                                            <Link
+                                                href="/order-business-credit-report"
+                                                className="flex items-center justify-between font-bold text-[16px] py-2 
+               bg-gradient-to-r from-blue-600 via-purple-500 to-pink-600 
+               bg-clip-text text-transparent transition-all duration-300 ease-in-out
+               group"
+                                                onClick={() => {
+                                                    sessionStorage.setItem("credit_report", "direct");
+                                                    setMobileOpen(false);
+                                                }}
+                                            >
+                                                Order Business Credit Report
+                                                <FaChartLine className="ml-5 text-indigo-500 transition-transform duration-300 group-hover:translate-x-2" />
+                                            </Link>
+                                        </li>
+
+                                        {/* Services */}
+                                        <li>
+                                            {renderLink({
+                                                href: "/company-directory/india",
+                                                label: "Company Directory",
+                                                vertical: true,
+                                                onClick: () => setMobileOpen(false),
+                                            })}
                                         </li>
 
                                         {/* Company Directory */}
@@ -334,18 +361,29 @@ export default function HeaderMenu() {
                                         <li>
                                             <Link
                                                 href="/order-business-credit-report"
-                                                className="items-center justify-between font-semibold text-[16px] text-blue-600 py-2 flex flex-row"
+                                                className="flex items-center justify-between font-bold text-[16px] py-2 
+               bg-gradient-to-r from-blue-600 via-purple-500 to-pink-600 
+               bg-clip-text text-transparent transition-all duration-300 ease-in-out
+               group"
                                                 onClick={() => {
-                                                    // if (typeof window !== "undefined") {
                                                     sessionStorage.setItem("credit_report", "direct");
-                                                    // }
                                                     setMobileOpen(false);
                                                 }}
                                             >
-                                                Order Business Credit Report <FaChevronRight className="ml-5 font-normal" />
+                                                Order Business Credit Report
+                                                <FaChartLine className="ml-5 text-indigo-500 transition-transform duration-300 group-hover:translate-x-2" />
                                             </Link>
                                         </li>
 
+                                        {/* Services */}
+                                        <li>
+                                            {renderLink({
+                                                href: "/company-directory/india",
+                                                label: "Company Directory",
+                                                vertical: true,
+                                                onClick: () => setMobileOpen(false),
+                                            })}
+                                        </li>
                                         {/* Company Directory */}
                                         {/* <li>
                                             {renderLink({
