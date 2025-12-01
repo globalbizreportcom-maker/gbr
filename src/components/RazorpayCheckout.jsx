@@ -30,7 +30,7 @@ export default function RazorpayCheckout({ amount = 100, userId }) {
                 key,
                 amount: totalAmountFromBackend * 100,
                 currency: "INR",
-                name: "Your Company Name",
+                name: "Global Biz Report",
                 description: "Business Credit Report",
                 order_id: orderId,
                 handler: async function (response) {
