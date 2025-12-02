@@ -78,6 +78,21 @@ const OrderSuccessPage = () => {
                 }}
             />
 
+            {/* GBRSalesManual conversion event */}
+            <Script
+                id="gbrsalesmanual-conversion"
+                strategy="afterInteractive"
+                dangerouslySetInnerHTML={{
+                    __html: `
+            gtag('event', 'conversion', {
+              'send_to': 'AW-16847786060/nyZZCMahgdAaEMyg0-E-',
+              'transaction_id': ''
+            });
+          `,
+                }}
+            />
+
+
 
             {/* 🎊 Confetti elements */}
             {confetti.map((c, i) => (

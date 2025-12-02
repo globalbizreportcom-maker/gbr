@@ -64,6 +64,25 @@ export default function RootLayout({ children }) {
           `}
         </Script>
 
+        {/* Google tag (gtag.js) Shub */}
+
+        <Script
+          strategy="afterInteractive"
+          src="https://www.googletagmanager.com/gtag/js?id=G-5B48DT575N"
+        />
+        <Script
+          id="google-analytics"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-5B48DT575N');
+          `,
+          }}
+        />
+
 
         <Script id="facebook-pixel" strategy="afterInteractive">
           {`!function(f,b,e,v,n,t,s)
@@ -77,6 +96,11 @@ s.parentNode.insertBefore(t,s)}(window, document,'script',
 fbq('init', '674979842003410');
 fbq('track', 'PageView');`}
         </Script>
+
+
+
+
+
 
         {/* <Script src="//code.tidio.co/mibylcfadd5kvacnf5olu0q8fkptyuto.js" async></Script> */}
 
