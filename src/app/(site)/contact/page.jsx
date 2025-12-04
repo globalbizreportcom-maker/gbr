@@ -24,7 +24,7 @@ export default function Contact() {
             <div className="w-full mx-auto grid md:grid-cols-2 gap-12 items-start">
 
 
-                <div className="grid gap-6 md:grid-cols-1 bg-white p-6 md:p-10 rounded-2xl ">
+                <div className="grid gap-6 md:grid-cols-1 bg-white p-6 md:p-10 rounded-2xl order-2 md:order-1">
 
                     <img
                         src="https://images.pexels.com/photos/8867263/pexels-photo-8867263.jpeg"
@@ -39,6 +39,20 @@ export default function Contact() {
                         <p className="text-gray-400 text-sm mb-10 max-w-md">
                             Please send us your message and we would be happy to help you.
                         </p>
+
+                        {/* US Office */}
+                        <div className="flex items-start gap-3 border border-gray-200 rounded-xl shadow-xs p-2 mb-10">
+                            <div className="text-primary text-xl pt-1">
+                                <FaMapMarkerAlt />
+                            </div>
+                            <div>
+                                <h4 className="font-semibold  mb-1">US Office</h4>
+                                <p className="text-gray-500 text-sm">
+                                    539 W. Commerce #567, Dallas,<br />
+                                    TX 75208, United States
+                                </p>
+                            </div>
+                        </div>
 
                         {/* India Office */}
                         <div className="flex items-start gap-3 border border-gray-200 rounded-xl shadow-xs p-2 mb-10">
@@ -85,7 +99,7 @@ export default function Contact() {
                 </div>
 
                 {/* Right: Contact Form */}
-                <div className="  rounded-xl shadow-xs p-8">
+                <div className="  rounded-xl shadow-xs p-8 order-1 md:order-2">
                     <h3 className="text-xl text-primary font-semibold mb-6">
                         Send a Message
                     </h3>
