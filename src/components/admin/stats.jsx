@@ -26,7 +26,14 @@ const Stats = () => {
         { label: "Total Orders", value: stats.totalOrders || 0, icon: <FaClipboardList className="text-purple-700 text-3xl" />, bg: "bg-purple-50", route: "/admin/order-request/all" },
         { label: "Delivered Orders", value: stats.deliveredOrders || 0, icon: <FaTruck className="text-green-700 text-3xl" />, bg: "bg-green-50", route: "/admin/order-request/delivered" },
         { label: "Pending Orders", value: stats.pendingOrders || 0, icon: <FaClock className="text-amber-600 text-3xl" />, bg: "bg-rose-50", route: "/admin/order-request/initiated" },
-        { label: "Total Revenue", value: `$${stats.totalRevenue || 0}`, icon: <FaDollarSign className="text-green-700 text-3xl" />, bg: "bg-yellow-50", route: "/admin/payments" },
+        {
+            label: "Total Revenue",
+            value:
+                `$${stats?.revenue?.USD || 0} 
+             ₹${new Intl.NumberFormat("en-IN").format(stats?.revenue?.INR || 0)}`,
+            icon: <FaDollarSign className="text-green-700 text-3xl" />,
+            bg: "bg-yellow-50", route: "/admin/payments"
+        },
     ];
 
     const handleClick = (route) => {

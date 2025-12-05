@@ -4,7 +4,7 @@ import { useDashboard } from "../DashboardContext";
 import CountryInput from "@/utils/CountryInput";
 import PhoneNumberInput from "@/utils/PhoneNumberInput";
 import { apiUrl } from "@/api/api";
-import { FaUser, FaBuilding, FaPen, FaMailBulk, FaLocationArrow, FaMobile } from "react-icons/fa";
+import { FaUser, FaBuilding, FaPen, FaMailBulk, FaLocationArrow, FaMobile, FaIdCard } from "react-icons/fa";
 
 const ProfilePage = () => {
 
@@ -21,6 +21,7 @@ const ProfilePage = () => {
         company: "",
         country: "",
         phone: "",
+        gstin: '',
     });
 
     useEffect(() => {
@@ -30,6 +31,7 @@ const ProfilePage = () => {
                 company: user.company || "",
                 country: user.country || "",
                 phone: user.phone || "",
+                gstin: user.gstin || "",
             });
         }
         setLoadingUser(false); // <-- stop loading once user is set
@@ -153,7 +155,7 @@ const ProfilePage = () => {
                     {/* Icon + value row */}
                     <div className="flex items-center gap-3">
                         {icon}
-                        <p className="text-gray-900">{formData[field] || "Not set"}</p>
+                        <p className="text-gray-900">{formData[field] || label}</p>
                     </div>
                     <FaPen
                         className="w-4 h-4 text-gray-400 cursor-pointer"
@@ -242,6 +244,8 @@ const ProfilePage = () => {
                     )}
 
                     {renderField("Company", "company", <FaBuilding className="w-6 h-6 text-gray-400 mr-3" />)}
+
+                    {renderField("GST", "gstin", <FaIdCard className="w-6 h-6 text-gray-400 mr-3" />)}
 
                 </div>
 

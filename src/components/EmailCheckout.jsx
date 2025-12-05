@@ -3,7 +3,6 @@
 
 import { useDashboard } from "@/app/(site)/dashboard/DashboardContext";
 import PayPalCheckout from "@/components/PayPalCheckout";
-import RazorpayCheckout from "@/components/RazorpayCheckout";
 import { useAlert } from "@/context/AlertProvider";
 import PhoneInputWithCountry from "@/utils/PhoneFiled";
 import RequiredStar from "@/utils/RequiredStar";
@@ -11,6 +10,7 @@ import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FaSpinner } from "react-icons/fa";
 import { Country, State, City } from 'country-state-city';
+import { RazorpayCheckout } from "./RazorpayCheckout";
 
 export const dynamic = "force-dynamic";
 

@@ -5,7 +5,8 @@ import { apiUrl } from "@/api/api";
 import { useRouter } from "next/navigation";
 import { useAlert } from "@/context/AlertProvider";
 
-export default function RazorpayCheckout({ amount = 100, userId }) {
+
+export function RazorpayCheckout({ amount = 100, userId }) {
 
     const { showAlert } = useAlert();
 
@@ -18,6 +19,7 @@ export default function RazorpayCheckout({ amount = 100, userId }) {
         const storedData = localStorage.getItem("gbr_form");
         if (storedData) setFormData(JSON.parse(storedData));
     }, []);
+
 
     const handlePayment = async () => {
         setLoading(true);
@@ -33,6 +35,7 @@ export default function RazorpayCheckout({ amount = 100, userId }) {
                 name: "Global Biz Report",
                 description: "Business Credit Report",
                 order_id: orderId,
+                image: "https://www.globalbizreport.com/images/gbr_favicon.jpg",
                 handler: async function (response) {
 
                     // 🔹 Call backend to verify payment

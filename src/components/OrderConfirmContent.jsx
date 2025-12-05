@@ -5,10 +5,10 @@ import React, { useEffect, useRef, useState } from 'react';
 import { FaEye } from 'react-icons/fa';
 import PayPalCheckout from './PayPalCheckout';
 import { useDashboard } from '@/app/(site)/dashboard/DashboardContext';
-import RazorpayCheckout from './RazorpayCheckout';
 import { apiUrl } from '@/api/api';
 import { useRouter, usePathname } from "next/navigation";
 import axios from 'axios';
+import { RazorpayCheckout } from './RazorpayCheckout';
 
 
 const Skeleton = ({ className }) => (
