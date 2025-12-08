@@ -1,7 +1,7 @@
 name: Deploy Frontend to VPS (Prebuilt)
 
 on:
-  push:
+  push: 
     branches: [ "main" ]
 
 jobs: 
