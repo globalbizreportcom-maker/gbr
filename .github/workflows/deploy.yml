@@ -21,7 +21,7 @@ jobs:
  
       - name: Build Next.js app
         run: npm run build
-
+ 
       - name: Archive build for transfer
         run: |
           tar -czf frontend-build.tar.gz \
