@@ -81,7 +81,7 @@ const CompanyPage = async ({ params }) => {
             )}&state=${encodeURIComponent(cleanedState)}&cin=${cin}`,
             { cache: "no-store" }
         );
-
+        console.log(res);
         const data = await res.json();
         companyData = data[0] || null;
     } catch (err) {
@@ -96,7 +96,7 @@ const CompanyPage = async ({ params }) => {
         <div className="max-w-6xl mx-auto flex flex-col pb-24 bg-gray-50 rounded-lg min-h-svh">
             <div className="w-full rounded-2xl bg-gradient-to-br from-blue-100 via-white to-orange-100 p-10 mb-3 text-center">
                 <div className="text-black text-md font-semibold rounded-md mb-5 max-w-fit px-2 py-1 mx-auto">
-                    Order Freshly Investigated Business Credit Report Of
+                    Check Company Profile information
                 </div>
                 <h2 className="max-w-2xl mx-auto text-xl md:text-2xl font-bold mb-6 text-center">
                     <span className="text-primary">{companyData.CompanyName}</span>
@@ -105,7 +105,7 @@ const CompanyPage = async ({ params }) => {
                     className="btn btn-primary px-6 py-3 text-base font-medium justify-center mx-auto flex items-center gap-2 w-fit"
                 >
                     <FaFile className="h-5 w-5" />
-                    <ClientPurchaseButton companyData={companyData} label='Buy Report' bgColor='primary' overlay={1} />
+                    <ClientPurchaseButton companyData={companyData} label='Buy a Company Due-Diligence Report' bgColor='primary' overlay={1} />
                 </div>
             </div>
 
@@ -219,7 +219,7 @@ const CompanyPage = async ({ params }) => {
                             className="btn btn-primary px-6 py-3 z-11 text-base font-medium  items-center gap-2 w-fit"
                         >
                             <FaFile className="h-5 w-5" />
-                            <ClientPurchaseButton companyData={companyData} label='Buy Report' bgColor='primary' overlay={1} />
+                            <ClientPurchaseButton companyData={companyData} label='Buy a Company Due-Diligence Report' bgColor='primary' overlay={1} />
                         </div>
                     </div>
 
@@ -261,14 +261,14 @@ const CompanyPage = async ({ params }) => {
                             {/* <FaFile className="text-white text-5xl mb-4 opacity-80" /> */}
 
                             <p className="text-lg font-semibold text-gray-300 leading-relaxed mb-4">
-                                Buy a Credit Report to find out more about this business.
+                                Order a Comprehensive Business Information Report for detailed company insights
                             </p>
 
                             <div className="btn btn-primary px-6 py-3 text-base font-medium flex items-center gap-2">
                                 <FaFile className="h-5 w-5" />
                                 <ClientPurchaseButton
                                     companyData={companyData}
-                                    label="Buy Report"
+                                    label="Order Full Company Report  "
                                     bgColor="primary"
                                     overlay={1}
                                 />
@@ -314,7 +314,7 @@ const CompanyPage = async ({ params }) => {
                         className="bg-orange-500 rounded-md px-2 text-base font-medium flex items-center gap-2"
                     >
                         <FaFile className="h-5 w-5" />
-                        <ClientPurchaseButton companyData={companyData} label='Order Freshly Investigated Business Credit Report' bgColor='orange' />
+                        <ClientPurchaseButton companyData={companyData} label='Order a Comprehensive Business Information Report for this Company.' bgColor='orange' />
                     </div>
 
                 </div>

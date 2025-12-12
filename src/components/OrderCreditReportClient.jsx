@@ -54,14 +54,14 @@ const OrderCreditReportClient = () => {
 
                     {/* Content */}
                     <div className="relative z-10 flex flex-col justify-evenly h-full ">
-                        <h2 className="text-3xl md:text-4xl xl:text-4xl 2xl:text-5xl max-w-xl font-bold md:font-extrabold mb-5 text-left">
-                            Order Freshly Investigated Business Credit Report for Any Company Worldwide
+                        <h2 className="text-3xl md:text-4xl xl:text-4xl 2xl:text-4xl max-w-xl font-bold md:font-extrabold mb-5 text-left">
+                            Order a Comprehensive Business Information Report for Any Company Worldwide
                         </h2>
 
                         <p className="text-gray-300 text-left max-w-3xl mx-auto mb-5 text-lg md:text-lg xl:text-xl italic">
-                            Verify your partners, vendors, buyers, and suppliers with a comprehensive{' '}
-                            <span className="font-extrabold">Company Credit Report</span>{' '}
-                            covering registration details, financial data, credit rating, risk indicators, and more.
+                            Order a{' '}
+                            <span className="font-extrabold">Full Company Due-Diligence Report </span>{' '}
+                            on your business partners, vendors, buyers, and suppliers, including registration details, financials, credit rating, risk indicators, and more.
                         </p>
 
 

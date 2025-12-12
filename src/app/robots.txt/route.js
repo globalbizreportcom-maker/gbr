@@ -107,17 +107,27 @@
 // }
 
 
+
 import { NextResponse } from "next/server";
 
 export async function GET() {
     try {
         const content = `
-         # Allow Googlebot for web crawling
+# Cloudflare / Custom robots.txt with content signals
+
+# Googlebot - allow search, AI training, AI input
 User-agent: Googlebot
+Content-signal: search=yes, ai-train=yes, ai-input=yes
 Disallow:
 
-# Allow Googlebot-Image for images
+# Googlebot-Image - allow search, AI training, AI input
 User-agent: Googlebot-Image
+Content-signal: search=yes, ai-train=yes, ai-input=yes
+Disallow:
+
+# Bingbot - allow search, AI training, AI input
+User-agent: Bingbot
+Content-signal: search=yes, ai-train=yes, ai-input=yes
 Disallow:
 
 # Block all other bots
@@ -134,12 +144,19 @@ Disallow: /
         console.error("Robots.txt generation error:", err);
 
         const fallback = `
-       # Allow Googlebot for web crawling
+# Googlebot - allow search, AI training, AI input
 User-agent: Googlebot
+Content-signal: search=yes, ai-train=yes, ai-input=yes
 Disallow:
 
-# Allow Googlebot-Image for images
+# Googlebot-Image - allow search, AI training, AI input
 User-agent: Googlebot-Image
+Content-signal: search=yes, ai-train=yes, ai-input=yes
+Disallow:
+
+# Bingbot - allow search, AI training, AI input
+User-agent: Bingbot
+Content-signal: search=yes, ai-train=yes, ai-input=yes
 Disallow:
 
 # Block all other bots
