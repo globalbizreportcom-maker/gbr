@@ -7,7 +7,7 @@ import { DashboardProvider } from "./dashboard/DashboardContext";
 // import { CompanyProvider } from "@/context/CompanyContext";
 import Script from "next/script";
 import { AlertProvider } from "@/context/AlertProvider";
-import TawkMessenger from "@/components/TawkMessenger";
+// import TawkMessenger from "@/components/TawkMessenger";
 
 
 const geistSans = Geist({
@@ -136,7 +136,7 @@ fbq('track', 'PageView');`}
         <DashboardProvider>
           {/* <CompanyProvider> */}
           <AlertProvider>
-            <TawkMessenger />
+            {/* <TawkMessenger /> */}
 
 
             <Header />
