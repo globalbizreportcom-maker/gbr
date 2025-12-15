@@ -105,7 +105,7 @@ const CompanyPage = async ({ params }) => {
                     className="btn btn-primary px-6 py-3 text-base font-medium justify-center mx-auto flex items-center gap-2 w-fit"
                 >
                     <FaFile className="h-5 w-5" />
-                    <ClientPurchaseButton companyData={companyData} label='Buy a Company Due-Diligence Report' bgColor='primary' overlay={1} />
+                    <ClientPurchaseButton companyData={companyData} label='Buy Full Company Due-Diligence Report' bgColor='primary' overlay={1} />
                 </div>
             </div>
 
