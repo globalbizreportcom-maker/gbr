@@ -7,6 +7,7 @@ import { DashboardProvider } from "./dashboard/DashboardContext";
 // import { CompanyProvider } from "@/context/CompanyContext";
 import Script from "next/script";
 import { AlertProvider } from "@/context/AlertProvider";
+import TawkMessenger from "@/components/TawkMessenger";
 
 
 const geistSans = Geist({
@@ -100,7 +101,7 @@ fbq('track', 'PageView');`}
 
 
         {/* tawk */}
-        <Script id="tawk-to" strategy="afterInteractive">
+        {/* <Script id="tawk-to" strategy="lazyOnload" >
           {`
           var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
           (function(){
@@ -113,7 +114,7 @@ fbq('track', 'PageView');`}
             s0.parentNode.insertBefore(s1, s0);
           })();
         `}
-        </Script>
+        </Script> */}
 
         {/* <Script src="//code.tidio.co/mibylcfadd5kvacnf5olu0q8fkptyuto.js" async></Script> */}
 
@@ -135,6 +136,9 @@ fbq('track', 'PageView');`}
         <DashboardProvider>
           {/* <CompanyProvider> */}
           <AlertProvider>
+            <TawkMessenger />
+
+
             <Header />
             {children}
             <ScrollToTop />

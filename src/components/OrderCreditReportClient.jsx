@@ -40,7 +40,7 @@ const OrderCreditReportClient = () => {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 px-0 md:px-10 py-10">
 
                 <div
-                    className="relative  rounded-2xl overflow-hidden text-white px-6 py-5 md:py-10 h-[500px] "
+                    className="relative  rounded-2xl overflow-hidden text-white px-6 py-5 md:py-10 md:h-[500px] "
                     style={{
                         backgroundImage:
                             "url('https://cdn.pixabay.com/photo/2017/03/28/12/10/chairs-2181951_960_720.jpg')",
@@ -77,7 +77,7 @@ const OrderCreditReportClient = () => {
 
                             <button
                                 onClick={() => window.open('/sample-reports', '_blank')}
-                                className="cursor-pointer  font-semibold px-8 py-3 rounded-lg shadow-none hover:shadow-lg hover:scale-105 transition-all duration-300 flex items-center gap-2 btn btn-outline"
+                                className="cursor-pointer hidden md:flex font-semibold px-8 py-3 rounded-lg shadow-none hover:shadow-lg hover:scale-105 transition-all duration-300  items-center gap-2 btn btn-outline"
                             >
                                 View Sample Report
                             </button>
