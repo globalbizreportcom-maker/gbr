@@ -69,7 +69,12 @@ export default function PayPalCheckout({ amount = "1.00", userId, }) {
                                 orderId: data.orderID,
                             });
                             showAlert(`Payment successful`, "success");
-                            router.push("/order-success");
+
+                            // ✅ pass paymentId safely
+                            router.push(
+                                `/order-success?paymentId=${res.paymentId}`
+                            );
+
                         } catch (err) {
                             showAlert(`Payment failed. Please try again`, "error");
                         }

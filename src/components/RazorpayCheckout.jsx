@@ -41,7 +41,11 @@ export function RazorpayCheckout({ amount = 100, userId }) {
                     // 🔹 Call backend to verify payment
                     await apiUrl.post("/api/payment/verify", response);
                     showAlert(`Payment successful`, "success");
-                    router.push('/order-success')
+
+                    // ✅ pass paymentId safely
+                    router.push(
+                        `/order-success?paymentId=${response.razorpay_payment_id}`
+                    );
                 },
                 modal: {
                     ondismiss: async function () {

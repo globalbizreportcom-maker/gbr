@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { FaCheckCircle } from "react-icons/fa";
 import Script from "next/script";
 
@@ -9,6 +9,16 @@ const OrderSuccessPage = () => {
     const router = useRouter();
     const [countdown, setCountdown] = useState(3);
     const [confetti, setConfetti] = useState([]);
+    const searchParams = useSearchParams();
+
+    const paymentId = searchParams.get("paymentId");
+
+    useEffect(() => {
+        if (!paymentId) {
+            router.replace("/");
+        }
+    }, [paymentId, router]);
+
 
     // Event snippet for GBRPur-Jun25 conversion page 
     useEffect(() => {
@@ -46,6 +56,7 @@ const OrderSuccessPage = () => {
         return () => clearTimeout(timer);
     }, [countdown, router]);
 
+    if (!paymentId) return null; // prevents flicker
 
     return (
         <div className="relative min-h-screen flex items-start justify-center bg-white px-4 mt-10 overflow-hidden">
@@ -92,7 +103,18 @@ const OrderSuccessPage = () => {
                 }}
             />
 
-
+            <Script
+                id="gads-conversion-script-3"
+                strategy="afterInteractive"
+                dangerouslySetInnerHTML={{
+                    __html: `
+            gtag('event', 'conversion', {
+                'send_to': 'AW-11290519266/bw4yCNiX6toYEOLN3ocq',
+                'transaction_id': ''
+            });
+          `,
+                }}
+            />
 
             {/* 🎊 Confetti elements */}
             {confetti.map((c, i) => (
@@ -121,7 +143,7 @@ const OrderSuccessPage = () => {
                 </h1>
 
                 <p className="text-gray-600 mb-8 leading-relaxed">
-                    Thank you for your purchase! <br />
+                    Thank you for your purchase ! <br />
                     Your order has been placed successfully. <br />
                     You’ll be redirected to your dashboard shortly.
                 </p>

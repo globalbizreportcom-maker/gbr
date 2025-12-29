@@ -99,6 +99,20 @@ fbq('track', 'PageView');`}
         </Script>
 
 
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-GDQ356RPWK"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics-gbiz" strategy="afterInteractive">
+          {`
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-GDQ356RPWK');
+        `}
+        </Script>
+
+
 
         {/* tawk */}
         {/* <Script id="tawk-to" strategy="lazyOnload" >
