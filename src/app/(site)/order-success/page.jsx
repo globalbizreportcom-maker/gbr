@@ -1,3 +1,5 @@
+
+import { Suspense } from "react";
 import OrderSuccessPage from "@/components/OrderSuccessPage";
 
 export const metadata = {
@@ -14,5 +16,9 @@ export const metadata = {
 };
 
 export default function Page() {
-    return <OrderSuccessPage />;
+    return (
+        <Suspense fallback={null}>
+            <OrderSuccessPage />
+        </Suspense>
+    )
 }
