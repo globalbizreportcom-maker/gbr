@@ -94,7 +94,7 @@ export const metadata = {
     openGraph: {
         title: "Shipping and Delivery",
         description: "What we do at Global Biz Report.",
-        url: "https://globalbizreport.com/shipping-policy",
+        url: "https://www.globalbizreport.com/shipping-policy",
         siteName: "Global Biz Report",
         type: "website",
     },

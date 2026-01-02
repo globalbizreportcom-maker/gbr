@@ -52,7 +52,7 @@ export const metadata = {
     openGraph: {
         title: "order confirm",
         description: "What we do at Global Biz Report.",
-        url: "https://globalbizreport.com/order-confirm",
+        url: "https://www.globalbizreport.com/order-confirm",
         siteName: "Global Biz Report",
         type: "website",
     },

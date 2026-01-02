@@ -8,7 +8,7 @@ export const metadata = {
     openGraph: {
         title: "order business credit report",
         description: "What we do at Global Biz Report.",
-        url: "https://globalbizreport.com/order-business-credit-report",
+        url: "https://www.globalbizreport.com/order-business-credit-report",
         siteName: "Global Biz Report",
         type: "website",
     },
