@@ -43,9 +43,9 @@ export function RazorpayCheckout({ amount = 100, userId }) {
                     showAlert(`Payment successful`, "success");
 
                     // ✅ pass paymentId safely
-                    router.push(
-                        `/order-success?paymentId=${response.razorpay_payment_id}`
-                    );
+                    window.location.href =
+                        `/order-success?paymentId=${response.razorpay_payment_id}`;
+
                 },
                 modal: {
                     ondismiss: async function () {
@@ -67,6 +67,7 @@ export function RazorpayCheckout({ amount = 100, userId }) {
             const rzp = new window.Razorpay(options);
             rzp.open();
         } catch (error) {
+            console.log(error);
             showAlert(`Payment failed. Please try again`, "error");
 
         } finally {
