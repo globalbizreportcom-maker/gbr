@@ -37,16 +37,18 @@ export function RazorpayCheckout({ amount = 100, userId }) {
                 order_id: orderId,
                 image: "https://www.globalbizreport.com/images/gbr_favicon.jpg",
                 handler: async function (response) {
+                    try {
+                        await apiUrl.post("/api/payment/verify", response);
+                        showAlert("Payment successful", "success");
 
-                    // 🔹 Call backend to verify payment
-                    await apiUrl.post("/api/payment/verify", response);
-                    showAlert(`Payment successful`, "success");
-
-                    // ✅ pass paymentId safely
-                    window.location.href =
-                        `/order-success?paymentId=${response.razorpay_payment_id}`;
-
+                        window.location.href =
+                            `/order-success?paymentId=${response.razorpay_payment_id}`;
+                    } catch (e) {
+                        window.location.href =
+                            `/order-success?paymentId=${response.razorpay_payment_id}`;
+                    }
                 },
+
                 modal: {
                     ondismiss: async function () {
                         // console.log("User closed the payment modal", formData);
