@@ -38,14 +38,16 @@ export function RazorpayCheckout({ amount = 100, userId }) {
                 image: "https://www.globalbizreport.com/images/gbr_favicon.jpg",
                 handler: async function (response) {
                     try {
-                        await apiUrl.post("/api/payment/verify", response);
-                        showAlert("Payment successful", "success");
+                        await apiUrl.post("/api/payment/verify", {
+                            razorpay_payment_id: response.razorpay_payment_id,
+                            razorpay_order_id: response.razorpay_order_id,
+                            razorpay_signature: response.razorpay_signature,
+                        });
 
-                        window.location.href =
-                            `/order-success?paymentId=${response.razorpay_payment_id}`;
+                        showAlert("Payment successful", "success");
+                        window.location.href = `/order-success?paymentId=${response.razorpay_payment_id}`;
                     } catch (e) {
-                        window.location.href =
-                            `/order-success?paymentId=${response.razorpay_payment_id}`;
+                        console.log("Verification failed", e);
                     }
                 },
 

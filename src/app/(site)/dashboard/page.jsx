@@ -65,7 +65,7 @@ export default function DashboardHome() {
                         <button
                             onClick={() => {
                                 sessionStorage.setItem("credit_report", "direct");
-                                router.push("/order-business-credit-report");
+                                window.open('/order-business-credit-report', '_blank')
                             }}
                             className="cursor-pointer   font-semibold px-8 py-3 rounded-lg shadow-none hover:shadow-lg hover:scale-105 transition-all duration-300 flex items-center gap-2 btn btn-warning "
                         >
