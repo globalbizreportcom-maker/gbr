@@ -79,6 +79,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
+
       # 1️⃣ Checkout code
       - name: Checkout code
         uses: actions/checkout@v3
@@ -89,25 +90,25 @@ jobs:
         with:
           node-version: '20'
 
-      # 3️⃣ Install dependencies and build
+      # 3️⃣ Install dependencies
       - name: Install dependencies
         run: npm install --production --legacy-peer-deps
 
-
+      # 4️⃣ Build Next.js app
       - name: Build Next.js app
         run: npm run build
 
-      # 4️⃣ Archive only the necessary build files
+      # 5️⃣ Archive only the necessary build files
       - name: Archive build for transfer
         run: |
           tar -czf frontend-build.tar.gz \
-          package.json \  
-          package-lock.json \
-          public \
-          .next \
-          next.config.mjs
+            package.json \
+            package-lock.json \
+            public \
+            .next \
+            next.config.mjs
 
-      # 5️⃣ Deploy over SSH: remove old build
+      # 6️⃣ Clean old build files on server
       - name: Clean old files on server
         uses: appleboy/ssh-action@v0.1.10
         with:
@@ -120,7 +121,7 @@ jobs:
             echo "Removing old build files..."
             rm -rf .next public package.json package-lock.json next.config.mjs
 
-      # 6️⃣ Copy new build archive
+      # 7️⃣ Copy new build archive to server
       - name: Copy build to server
         uses: appleboy/scp-action@v0.1.6
         with:
@@ -131,7 +132,7 @@ jobs:
           source: "frontend-build.tar.gz"
           target: "/var/www/frontend/"
 
-      # 7️⃣ Extract build and install fresh node_modules, then restart PM2
+      # 8️⃣ Extract build and install fresh node_modules on server, then restart PM2
       - name: Extract build & install on server
         uses: appleboy/ssh-action@v0.1.10
         with:
@@ -146,7 +147,7 @@ jobs:
             rm frontend-build.tar.gz
 
             echo "Installing fresh dependencies..."
-           npm install --production --legacy-peer-deps
+            npm install --production --legacy-peer-deps
 
             echo "Restarting PM2..."
             pm2 restart frontend || pm2 start npm --name "frontend" -- start
