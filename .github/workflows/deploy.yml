@@ -69,7 +69,7 @@ jobs:
             pm2 save
 
 
-# name: Deploy Frontend to VPS (Prebuilt & Safe)
+# name: Deploy Frontend to VPS (Prebuilt &  Safe)
 
 # on:
 #   push:
