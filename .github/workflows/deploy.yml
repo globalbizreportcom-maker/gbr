@@ -132,7 +132,7 @@ jobs:
           source: "frontend-build.tar.gz"
           target: "/var/www/frontend/"
 
-      # 8️⃣ Extract build and install fresh node_modules on server, then restart  PM2
+      # 8️⃣ Extract build and install fresh node_modules on server, then restart PM2
       - name: Extract build & install on server
         uses: appleboy/ssh-action@v0.1.10
         with:
