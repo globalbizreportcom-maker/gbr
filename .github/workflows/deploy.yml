@@ -103,7 +103,7 @@ jobs:
             next.config.mjs \
             public \
             .next
- 
+
       - name: Clean old build on server
         uses: appleboy/ssh-action@v0.1.10
         with:
@@ -141,4 +141,3 @@ jobs:
 
             pm2 restart frontend || pm2 start npm --name "frontend" -- start
             pm2 save
-  
