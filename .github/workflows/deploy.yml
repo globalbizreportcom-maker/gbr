@@ -1,115 +1,38 @@
-# name: Deploy Frontend to VPS (Prebuilt)
-
-# on:
-#   push: 
-#     branches: [ "main" ]
-
-# jobs: 
-#   deploy:
-#     runs-on: ubuntu-latest
-#     steps:
-#       - name: Checkout code 
-#         uses: actions/checkout@v3
-
-#       - name: Setup Node.js
-#         uses: actions/setup-node@v3
-#         with:
-#           node-version: '20'
-
-#       - name: Install dependencies
-#         run: npm install 
- 
-#       - name: Build Next.js app
-#         run: npm run build
- 
-#       - name: Archive build for transfer
-#         run: |
-#           tar -czf frontend-build.tar.gz \
-#           package.json \
-#           package-lock.json \
-#           public \
-#           .next \
-#           next.config.mjs \
-#           node_modules
-
-#       - name: Deploy over SSH
-#         uses: appleboy/ssh-action@v0.1.10
-#         with:
-#           host: ${{ secrets.HOST }}
-#           username: ${{ secrets.USERNAME }}
-#           key: ${{ secrets.SSH_KEY }}
-#           port: ${{ secrets.PORT }}
-#           script: |
-#             cd /var/www/frontend
-#             # Remove old files
-#             rm -rf .next public node_modules package.json package-lock.json next.config.mjs
-          
-#       - name: Copy build to server
-#         uses: appleboy/scp-action@v0.1.6
-#         with:
-#           host: ${{ secrets.HOST }}
-#           username: ${{ secrets.USERNAME }}
-#           key: ${{ secrets.SSH_KEY }}
-#           port: ${{ secrets.PORT }}
-#           source: "frontend-build.tar.gz"
-#           target: "/var/www/frontend/"
-
-#       - name: Extract build on server & start PM2
-#         uses: appleboy/ssh-action@v0.1.10
-#         with:
-#           host: ${{ secrets.HOST }}
-#           username: ${{ secrets.USERNAME }}
-#           key: ${{ secrets.SSH_KEY }}
-#           port: ${{ secrets.PORT }}
-#           script: |
-#             cd /var/www/frontend
-#             tar -xzf frontend-build.tar.gz
-#             rm frontend-build.tar.gz
-#             pm2 restart frontend || pm2 start npm --name "frontend" -- start
-#             pm2 save
-
-
-name: Deploy Frontend to VPS (Prebuilt & Safe)
+name: Deploy Frontend to VPS (Prebuilt)
 
 on:
-  push:
-    branches: ["main"]
+  push: 
+    branches: [ "main" ]
 
-jobs:
+jobs: 
   deploy:
     runs-on: ubuntu-latest
     steps:
-
-      # 1️⃣ Checkout code
-      - name: Checkout code
+      - name: Checkout code 
         uses: actions/checkout@v3
 
-      # 2️⃣ Setup Node.js
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '20'
 
-      # 3️⃣ Install dependencies
       - name: Install dependencies
-        run: npm install --legacy-peer-deps
-
-      # 4️⃣ Build Next.js app
+        run: npm install 
+ 
       - name: Build Next.js app
         run: npm run build
-
-      # 5️⃣ Archive only the necessary build files
+ 
       - name: Archive build for transfer
         run: |
           tar -czf frontend-build.tar.gz \
-            package.json \
-            package-lock.json \
-            public \
-            .next \
-            next.config.mjs
+          package.json \
+          package-lock.json \
+          public \
+          .next \
+          next.config.mjs \
+          node_modules
 
-      # 6️⃣ Clean old build files on server
-      - name: Clean old files on server
+      - name: Deploy over SSH
         uses: appleboy/ssh-action@v0.1.10
         with:
           host: ${{ secrets.HOST }}
@@ -118,10 +41,9 @@ jobs:
           port: ${{ secrets.PORT }}
           script: |
             cd /var/www/frontend
-            echo "Removing old build files..."
-            rm -rf .next public package.json package-lock.json next.config.mjs
-
-      # 7️⃣ Copy new build archive to server
+            # Remove old files
+            rm -rf .next public node_modules package.json package-lock.json next.config.mjs
+          
       - name: Copy build to server
         uses: appleboy/scp-action@v0.1.6
         with:
@@ -132,8 +54,7 @@ jobs:
           source: "frontend-build.tar.gz"
           target: "/var/www/frontend/"
 
-      # 8️⃣ Extract build and install fresh node_modules on server, then restart PM2
-      - name: Extract build & install on server
+      - name: Extract build on server & start PM2
         uses: appleboy/ssh-action@v0.1.10
         with:
           host: ${{ secrets.HOST }}
@@ -142,13 +63,92 @@ jobs:
           port: ${{ secrets.PORT }}
           script: |
             cd /var/www/frontend
-            echo "Extracting build..."
             tar -xzf frontend-build.tar.gz
             rm frontend-build.tar.gz
-
-            echo "Installing fresh dependencies..."
-            npm install --legacy-peer-deps
-
-            echo "Restarting PM2..."
             pm2 restart frontend || pm2 start npm --name "frontend" -- start
             pm2 save
+
+
+# name: Deploy Frontend to VPS (Prebuilt & Safe)
+
+# on:
+#   push:
+#     branches: ["main"]
+
+# jobs:
+#   deploy:
+#     runs-on: ubuntu-latest
+#     steps:
+
+#       # 1️⃣ Checkout code
+#       - name: Checkout code
+#         uses: actions/checkout@v3
+
+#       # 2️⃣ Setup Node.js
+#       - name: Setup Node.js
+#         uses: actions/setup-node@v3
+#         with:
+#           node-version: '20'
+
+#       # 3️⃣ Install dependencies
+#       - name: Install dependencies
+#         run: npm install --legacy-peer-deps
+
+#       # 4️⃣ Build Next.js app
+#       - name: Build Next.js app
+#         run: npm run build
+
+#       # 5️⃣ Archive only the necessary build files
+#       - name: Archive build for transfer
+#         run: |
+#           tar -czf frontend-build.tar.gz \
+#             package.json \
+#             package-lock.json \
+#             public \
+#             .next \
+#             next.config.mjs
+
+#       # 6️⃣ Clean old build files on server
+#       - name: Clean old files on server
+#         uses: appleboy/ssh-action@v0.1.10
+#         with:
+#           host: ${{ secrets.HOST }}
+#           username: ${{ secrets.USERNAME }}
+#           key: ${{ secrets.SSH_KEY }}
+#           port: ${{ secrets.PORT }}
+#           script: |
+#             cd /var/www/frontend
+#             echo "Removing old build files..."
+#             rm -rf .next public package.json package-lock.json next.config.mjs
+
+#       # 7️⃣ Copy new build archive to server
+#       - name: Copy build to server
+#         uses: appleboy/scp-action@v0.1.6
+#         with:
+#           host: ${{ secrets.HOST }}
+#           username: ${{ secrets.USERNAME }}
+#           key: ${{ secrets.SSH_KEY }}
+#           port: ${{ secrets.PORT }}
+#           source: "frontend-build.tar.gz"
+#           target: "/var/www/frontend/"
+
+#       # 8️⃣ Extract build and install fresh node_modules on server, then restart PM2
+#       - name: Extract build & install on server
+#         uses: appleboy/ssh-action@v0.1.10
+#         with:
+#           host: ${{ secrets.HOST }}
+#           username: ${{ secrets.USERNAME }}
+#           key: ${{ secrets.SSH_KEY }}
+#           port: ${{ secrets.PORT }}
+#           script: |
+#             cd /var/www/frontend
+#             echo "Extracting build..."
+#             tar -xzf frontend-build.tar.gz
+#             rm frontend-build.tar.gz
+
+#             echo "Installing fresh dependencies..."
+#             npm install --legacy-peer-deps
+
+#             echo "Restarting PM2..."
+#             pm2 restart frontend || pm2 start npm --name "frontend" -- start
+#             pm2 save
