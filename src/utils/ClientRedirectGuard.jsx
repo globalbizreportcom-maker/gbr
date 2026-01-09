@@ -18,7 +18,7 @@ export default function ClientRedirectGuard() {
             }
         }
 
-        // Block unsafe window.open
+        // Block unsafe  window.open
         const originalOpen = window.open;
         window.open = function (url, ...args) {
             if (!url || !isAllowed(url)) {
