@@ -107,14 +107,12 @@ export default function SampleReports() {
 
                                 {/* Buttons */}
                                 <div className="mt-4 flex flex-col sm:flex-col gap-3">
-                                    <a
-                                        href={report.url}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="flex-1 text-center border border-gray-300 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-100 transition"
+                                    <button
+                                        className="flex-1 cursor-pointer text-center border border-gray-300 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-100 transition"
+                                        onClick={() => { window.open(report.url, "_blank", "noopener,noreferrer"); }}
                                     >
                                         View Sample Report
-                                    </a>
+                                    </button>
 
                                     <a
                                         href="/order-business-credit-report"

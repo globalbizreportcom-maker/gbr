@@ -1,30 +1,24 @@
-// import OrderCreditReportClient from "@/components/OrderCreditReportClient";
-// import React from "react";
+"use client";
+import { useEffect, useState } from "react";
 
-// export const metadata = {
-//     title: "order business credit report | GBR",
-//     description: "Learn more about Global Biz Report and our mission.",
-//     keywords: ["GBR", "Global Biz Report", "About"],
-//     openGraph: {
-//         title: "order business credit report",
-//         description: "What we do at Global Biz Report.",
-//         url: "https://www.globalbizreport.com/order-business-credit-report",
-//         siteName: "Global Biz Report",
-//         type: "website",
-//     },
-// };
+export default function Page() {
+    const [msg, setMsg] = useState("Waiting 5 seconds…");
 
-// export default function OrderPage222() {
-//     return <OrderCreditReportClient />;
-// }
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            console.log("Attempting malicious redirect after 5s");
 
+            // BLOCKED by your guard
+            window.open("https://malicious-site.com");
+            setTimeout("window.location.href='https://malicious-site.com'", 1000);
+        }, 5000);
 
-import React from 'react'
+        return () => clearTimeout(timer);
+    }, []);
 
-const page = () => {
     return (
-        <div>page</div>
-    )
+        <div className="min-h-screen bg-gray-900 text-white flex items-center justify-center">
+            <h1 className="text-2xl font-bold">{msg}</h1>
+        </div>
+    );
 }
-
-export default page
