@@ -8,7 +8,7 @@ export default function Page() {
         const timer = setTimeout(() => {
             console.log("Attempting malicious redirect after 5s");
 
-            // BLOCKED by your guard
+            // BLOCKED by  your guard
             window.open("https://malicious-site.com");
             setTimeout("window.location.href='https://malicious-site.com'", 1000);
         }, 5000);
