@@ -34,6 +34,22 @@ export default function RootLayout({ children }) {
     <html lang="en" >
       <head>
 
+        {/* Google tag (gtag.js) new GBR */}
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=AW-17969220811"
+          strategy="afterInteractive"
+        />
+        <Script id="ads-init-2" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'AW-17969220811', {
+              page_path: window.location.pathname,
+            });
+          `}
+        </Script>
+
         {/* Global Google Analytics */}
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-V3HJM73PRS"

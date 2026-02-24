@@ -75,7 +75,6 @@ const OrderSuccessPage = () => {
             />
 
             {/*  Event snippet for GBR Sales + Lead-Old Main conversion page  */}
-
             <Script
                 id="gads-conversion-script-2"
                 strategy="afterInteractive"
@@ -111,6 +110,23 @@ const OrderSuccessPage = () => {
             gtag('event', 'conversion', {
                 'send_to': 'AW-11290519266/bw4yCNiX6toYEOLN3ocq',
                 'transaction_id': ''
+            });
+          `,
+                }}
+            />
+
+            {/* Event snippet for Purchase (1) conversion page NewGBR */}
+            <Script
+                id="gads-conversion-script-4"
+                strategy="afterInteractive"
+                dangerouslySetInnerHTML={{
+                    __html: `
+            gtag('event', 'conversion', {
+                'send_to': 'AW-17969220811/UXIvCITpgf4bEMuZsvhC',
+                'value': 50.0,
+                'currency': 'INR',          
+                'transaction_id': '',
+                // 'new_customer': true /* calculate dynamically, populate with true/false */,
             });
           `,
                 }}
