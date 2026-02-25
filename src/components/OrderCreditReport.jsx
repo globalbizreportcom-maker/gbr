@@ -163,7 +163,7 @@ const OrderCreditReport = () => {
         if (!formData.country) missingFields.push('Country');
         if (!formData.city) missingFields.push('City');
         if ((formData.country === 'India' || formData.country?.label === 'India') && !formData.state) missingFields.push('State');
-        if (!formData.postalCode && directOrder) missingFields.push('Postal Code');
+        // if (!formData.postalCode && directOrder) missingFields.push('Postal Code');
 
         if (missingFields.length > 0) {
             setSnackbarMessage(`Please fill in: ${missingFields.join(', ')}`);
@@ -302,56 +302,71 @@ const OrderCreditReport = () => {
         <div className="bg-white rounded-2xl px-8  py-2">
 
             <div className="flex flex-col gap-3">
-                <label className=" text-lg font-bold text-gray-700">Order Report Of </label>
 
-                <div className="flex  flex-col md:flex-row items-start md:items-center gap-6">
+                {
+                    step === 2 ?
+                        <label className=" text-lg font-bold text-gray-700">Your Contact Information </label>
+                        :
+                        <label className=" text-lg font-bold text-gray-700">Order Report Of </label>
 
-                    {/* My Company */}
-                    <label className="flex items-center gap-2 cursor-pointer select-none">
-                        <input
-                            type="radio"
-                            name="companyType"
-                            value="my_company"
-                            checked={formData.companyType === "my_company"}
-                            onChange={(e) => {
-                                setFormData((prev) => ({
-                                    ...prev,
-                                    companyType: e.target.value,
-                                }));
-                                setSnackbarMessage('');
-                                setShowSnackbar(true);
-                            }
-                            }
-                            className="w-4 h-4 cursor-pointer appearance-none border-2 border-gray-400  rounded-full checked:bg-primary checked:border-white checked:ring-4 checked:ring-gray-200 transition-all"
+                }
 
-                        />
-                        <span>My Company</span>
-                    </label>
 
-                    {/* Other Company */}
-                    <label className="flex items-center gap-2 cursor-pointer select-none">
-                        <input
-                            type="radio"
-                            name="companyType"
-                            value="other_company"
-                            checked={formData.companyType === "other_company"}
-                            onChange={(e) => {
-                                setFormData((prev) => ({
-                                    ...prev,
-                                    companyType: e.target.value,
-                                }));
-                                setSnackbarMessage('');
-                                setShowSnackbar(true);
-                            }
-                            }
-                            className="w-4 h-4 cursor-pointer appearance-none border-2 border-gray-400  rounded-full checked:bg-primary checked:border-white checked:ring-4 checked:ring-gray-200 transition-all"
-                        />
-                        <span>Other Company</span>
-                    </label>
+                {
+                    step !== 2 ?
 
-                    <label className='text-red-500 italic text-xs'>(Select an option to continue)</label>
+                        <div className="flex  flex-col md:flex-row items-start md:items-center gap-6">
 
-                </div>
+
+                            {/* My Company */}
+                            <label className="flex items-center gap-2 cursor-pointer select-none">
+                                <input
+                                    type="radio"
+                                    name="companyType"
+                                    value="my_company"
+                                    checked={formData.companyType === "my_company"}
+                                    onChange={(e) => {
+                                        setFormData((prev) => ({
+                                            ...prev,
+                                            companyType: e.target.value,
+                                        }));
+                                        setSnackbarMessage('');
+                                        setShowSnackbar(true);
+                                    }
+                                    }
+                                    className="w-4 h-4 cursor-pointer appearance-none border-2 border-gray-400  rounded-full checked:bg-primary checked:border-white checked:ring-4 checked:ring-gray-200 transition-all"
+
+                                />
+                                <span>My Company</span>
+                            </label>
+
+                            {/* Other Company */}
+                            <label className="flex items-center gap-2 cursor-pointer select-none">
+                                <input
+                                    type="radio"
+                                    name="companyType"
+                                    value="other_company"
+                                    checked={formData.companyType === "other_company"}
+                                    onChange={(e) => {
+                                        setFormData((prev) => ({
+                                            ...prev,
+                                            companyType: e.target.value,
+                                        }));
+                                        setSnackbarMessage('');
+                                        setShowSnackbar(true);
+                                    }
+                                    }
+                                    className="w-4 h-4 cursor-pointer appearance-none border-2 border-gray-400  rounded-full checked:bg-primary checked:border-white checked:ring-4 checked:ring-gray-200 transition-all"
+                                />
+                                <span>Other Company</span>
+                            </label>
+
+                            <label className='text-red-500 italic text-xs'>(Select an option to continue)</label>
+
+                        </div>
+                        :
+                        <></>
+                }
             </div>
 
             {formData.companyType === "my_company" && (
@@ -492,7 +507,7 @@ const OrderCreditReport = () => {
                                     onChange={(e) =>
                                         setFormData({ ...formData, postalCode: e.target.value })
                                     }
-                                    required
+                                // required
                                 />
                             </div>
 
@@ -553,15 +568,15 @@ const OrderCreditReport = () => {
                         )}
 
                         {/* BUTTON */}
-                        <div className="mt-8 gap-5 flex flex-col md:flex-row justify-between md:justify-between">
+                        <div className="mt-8 gap-5 flex flex-col md:flex-row justify-between md:justify-end ">
 
-                            <button
+                            {/* <button
                                 type="button"
                                 onClick={() => window.open("/sample-reports", "_blank")}
                                 className="btn btn-link text-lg lg:text-lg font-medium text-blue-500 underline"
                             >
                                 View Sample Report
-                            </button>
+                            </button> */}
 
                             <button
                                 type="button"
@@ -575,8 +590,6 @@ const OrderCreditReport = () => {
                     </div>
                 </>
             )}
-
-
 
             {formData.companyType && formData.companyType === 'other_company' &&
                 <>
@@ -676,7 +689,7 @@ const OrderCreditReport = () => {
                                         onChange={(e) =>
                                             setFormData({ ...formData, [e.target.name]: e.target.value })
                                         }
-                                        required={directOrder}
+                                    // required={directOrder}
                                     />
                                 </div>
 
@@ -710,16 +723,16 @@ const OrderCreditReport = () => {
                                 </div>
                             )}
 
-                            <div className="flex justify-between mt-10">
+                            <div className="flex justify-end mt-10">
 
 
-                                <button
+                                {/* <button
                                     type="button"
                                     onClick={() => window.open("/sample-reports", "_blank")}
                                     className="btn btn-link text-sm font-medium text-blue-500 underline"
                                 >
                                     Sample Report
-                                </button>
+                                </button> */}
 
                                 <button
                                     type="button"
@@ -979,22 +992,22 @@ const OrderCreditReport = () => {
                     <div className="flex justify-between mt-10">
 
 
-                        <button
+                        {/* <button
                             type="button"
                             onClick={() => window.open("/sample-reports", "_blank")}
                             className="btn btn-link text-sm font-medium text-blue-500 underline"
                         >
                             Sample Report
-                        </button>
+                        </button> */}
 
 
-                        <button
+                        {/* <button
                             type="button"
                             onClick={() => handleNext()}
                             className="btn btn-primary px-8 py-2 text-sm font-medium"
                         >
                             Next
-                        </button>
+                        </button> */}
                     </div>
                 </>
             }

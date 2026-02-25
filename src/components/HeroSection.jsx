@@ -5,6 +5,8 @@ import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation"; // Next.js 13 app dir
 import Image from "next/image";
 import { Country, State, City } from "country-state-city";
+import Link from "next/link";
+import { FaArrowRight, FaChartLine } from "react-icons/fa";
 
 const Select = dynamic(() => import("react-select"), { ssr: false });
 
@@ -93,24 +95,31 @@ const HeroSection = () => {
                 <p className="text-gray-600 mt-4 max-w-2xl mx-auto">
                     Verify your Business Partners, Vendors, Buyers, Suppliers and more with GBR Reports. Check details on company's reliability, credibility, financial data, credit rating & more.
                 </p>
+
+                <Link
+                    href="/order-business-credit-report"
+                    className="cursor-pointer w-full md:w-auto bg-indigo-500 hover:bg-indigo-600 text-white px-4 py-2 rounded-md
+                      btn border-0 mt-4 md:mt-10 "
+                >
+                    Order Business Credit Report <FaChartLine />
+                </Link>
             </div>
 
 
 
             {/* Bottom: Search */}
-            <div className="w-full max-w-4xl mx-auto mt-10 px-2 mb-20 relative z-10 overflow-visible">
+            <div className="w-full max-w-4xl mx-auto mt-10 px-2 mb-10 relative z-10 overflow-visible">
 
 
 
-                <div className="w-full mb-4 md:mb-0 md:flex md:gap-4">
+                {/* <div className=" w-full mb-4 md:mb-0 md:flex md:gap-4">
                     <form
                         onSubmit={(e) => {
-                            e.preventDefault(); // prevent page reload
+                            e.preventDefault();
                             handleSearch();
                         }}
-                        className="w-full mb-4 md:mb-0 md:flex md:gap-4"
+                        className="w-full mb-4 md:mb-0 md:flex md:gap-4 "
                     >
-                        {/* Country Selector */}
                         <div className="w-full md:w-48">
                             <Select
                                 options={countries} // ✅ use country options
@@ -155,7 +164,6 @@ const HeroSection = () => {
                         </div>
 
 
-                        {/* Company Input */}
                         <input
                             type="text"
                             placeholder="Enter Company Name"
@@ -165,7 +173,6 @@ const HeroSection = () => {
                             className="w-full md:flex-1 px-4 py-2 border border-gray-300 rounded-md bg-white text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-400 mt-4 md:mt-0"
                         />
 
-                        {/* Search Button */}
                         <button
                             onClick={handleSearch}
                             // disabled={!countryCode || !companyName}
@@ -175,7 +182,9 @@ const HeroSection = () => {
                         </button>
                     </form>
 
-                </div>
+                </div> */}
+
+
                 {error && (
                     <div className=" text-red-400 px-4 py-3 text-center w-full max-w-6xl rounded mb-4">
                         Kindly, fill either of the above fields to search!

@@ -6,7 +6,7 @@ const Footer = () => {
         <>
             {/* Main Footer */}
             <footer className="bg-gradient-to-r from-[#0f172a] via-[#1b2636] to-[#0f172a] text-white text-sm border-t border-gray-700">
-                <div className="max-w-7xl mx-auto px-6 py-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
+                <div className="max-w-7xl mx-auto px-6 py-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
 
                     {/* About */}
                     <div>
@@ -38,22 +38,24 @@ const Footer = () => {
                         </ul>
                     </div>
 
+
+
                     {/* Contact Info + Social */}
-                    <div>
-                        <h3 className="text-lg font-bold text-white mb-3">Social Media</h3>
-                        {/* <p className="mb-2 text-gray-400">
+                    {/* <div>
+                        <h3 className="text-lg font-bold text-white mb-3">Social Media</h3> */}
+                    {/* <p className="mb-2 text-gray-400">
                             <strong>India Office:</strong><br />
                             1st Floor, Landmark Cyber Park, Sector 67, Gurugram, Haryana 122102<br />
                             Phone: +91-9811160294
                         </p> */}
-                        <div className="flex gap-4 mt-2 text-blue-300 text-xl">
+                    {/* <div className="flex gap-4 mt-2 text-blue-300 text-xl">
                             <a href="#" aria-label="Whatsapp"><FaWhatsapp /></a>
                             <a href="#" aria-label="Instagram"><FaInstagram /></a>
                             <a href="#" aria-label="Facebook"><FaFacebookF /></a>
                             <a href="#" aria-label="Twitter"><FaTwitter /></a>
                             <a href="#" aria-label="YouTube"><FaYoutube /></a>
                         </div>
-                    </div>
+                    </div> */}
 
                 </div>
             </footer>

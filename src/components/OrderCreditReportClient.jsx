@@ -37,69 +37,62 @@ const OrderCreditReportClient = () => {
         <section className="py-0 md:py-5  max-w-7xl mx-auto px-1 bg-white text-gray-800">
 
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 px-0 md:px-10 py-10">
-
-                <div
-                    className="relative  rounded-2xl overflow-hidden text-white px-6 py-5 md:py-10 md:h-[500px] "
-                    style={{
-                        backgroundImage:
-                            "url('https://cdn.pixabay.com/photo/2017/03/28/12/10/chairs-2181951_960_720.jpg')",
-                        backgroundSize: "cover",
-                        backgroundRepeat: "no-repeat",
-                        backgroundPosition: "center",
-                    }}
-                >
-                    {/* Overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-br from-[#0a1c28]/90 via-[#0c2331]/95 to-[#0f2b3b]/90"></div>
-
-                    {/* Content */}
-                    <div className="relative z-10 flex flex-col justify-evenly h-full ">
-                        <h2 className="text-3xl md:text-4xl xl:text-4xl 2xl:text-4xl max-w-xl font-bold md:font-extrabold mb-5 text-left">
-                            Order a Comprehensive Business Information Report for Any Company Worldwide
-                        </h2>
-
-                        <p className="text-gray-300 text-left max-w-3xl mx-auto mb-5 text-lg md:text-lg xl:text-xl italic">
-                            Order a{' '}
-                            <span className="font-extrabold">Full Company Due-Diligence Report </span>{' '}
-                            on your business partners, vendors, buyers, and suppliers, including registration details, financials, credit rating, risk indicators, and more.
-                        </p>
+            <div className="grid grid-cols-1 xl:grid-cols-2 gap-8 px-0 md:px-10 py-10">
 
 
-                        <div className="flex flex-col md:hidden justify-start mb-5 gap-4">
+                <div className="relative z-10 flex flex-col py-2 md:py-10 bg-gray-50 px-3" >
 
+                    <h2 className="text-2xl md:text-3xl  max-w-2xl font-bold  mb-5 text-left italic">
+                        Order a Business Credit Report on Any Company Worldwide
+                    </h2>
 
-                            <button
-                                onClick={handleScrollToForm}
-                                className="cursor-pointer   font-semibold px-8 py-3 rounded-lg shadow-none hover:shadow-lg hover:scale-105 transition-all duration-300 items-center gap-2 btn btn-warning "
-                            >
-                                Order Report Now <FaChevronRight />
-                            </button>
+                    <p className="text-gray-600 text-left max-w-3xl mb-5 text-md  xl:text-lg italic">
+                        Access Freshly Investigated Company Credit Reports on Businesses across 220+ Countries. Make Confident Decisions by Verifying your Business Partners, Vendors, Buyers, and Suppliers with GBR Reports. Gain detailed insights into a company's reliability, credibility, financials, credit ratings, and more — all with simple {' '}
+                        <span className="font-extrabold ">Pay-per-Report  </span>{' '}pricing.
+                    </p>
 
-                            <button
-                                onClick={() => window.open('/sample-reports', '_blank')}
-                                className="cursor-pointer hidden md:flex font-semibold px-8 py-3 rounded-lg shadow-none hover:shadow-lg hover:scale-105 transition-all duration-300  items-center gap-2 btn btn-outline"
-                            >
-                                View Sample Report
-                            </button>
-
-
-                        </div>
-
-                        <div className="grid grid-cols-1 gap-6">
-                            {["Trusted by 20,000+ Global Companies"].map((service, idx) => (
-                                <div
-                                    key={idx}
-                                    className="p-2 text-left"
-                                >
-                                    <h4 className="font-medium text-sm md:text-base text-gray-100">
-                                        {service}
-                                    </h4>
-                                </div>
-                            ))}
-                        </div>
+                    <div className="w-[100%] mx-auto hidden md:block py-5">
+                        <img
+                            src='https://images.pexels.com/photos/7693705/pexels-photo-7693705.jpeg'
+                            alt="Example"
+                            className="rounded-xl h-50 w-[100%] object-cover"
+                        />
                     </div>
+
+
+                    <div className="flex flex-col md:hidden justify-start mb-5 gap-4">
+                        <button
+                            onClick={handleScrollToForm}
+                            className="cursor-pointer font-semibold px-8 py-3 rounded-lg shadow-none hover:shadow-lg hover:scale-105 transition-all duration-300 items-center gap-2 btn btn-primary "
+                        >
+                            Order Report Now <FaChevronRight />
+                        </button>
+
+                        {/* <button
+                            onClick={() => window.open('/sample-reports', '_blank')}
+                            className="cursor-pointer hidden md:flex font-semibold px-8 py-3 rounded-lg shadow-none hover:shadow-lg hover:scale-105 transition-all duration-300  items-center gap-2 btn btn-outline"
+                        >
+                            View Sample Report
+                        </button> */}
+                    </div>
+
+                    <ul className="grid grid-cols-1 gap-3 list-disc list-inside text-left">
+                        {[
+                            "Trusted by 20,000+ Global Companies",
+                            "10,000+ Reports delivered Monthly",
+                        ].map((service, idx) => (
+                            <li
+                                key={idx}
+                                className="font-medium text-sm md:text-base text-gray-600"
+                            >
+                                {service}
+                            </li>
+                        ))}
+                    </ul>
                 </div>
+
                 {/* Order Form Section */}
+
                 <div ref={formRef} className="">
                     <OrderCreditReport />
                 </div>
