@@ -51,6 +51,8 @@ const URLS_PER_SITEMAP = 2000;
 export async function GET() {
     try {
         const metaRes = await fetch(META_URL, { next: { revalidate: 86400 } });
+        if (!metaRes.ok) throw new Error("Failed to fetch backend meta");
+
         const metaData = await metaRes.json();
         const totalBackendPages = metaData.totalPages || 0;
         const PER_PAGE = 20;
@@ -61,9 +63,9 @@ export async function GET() {
         let xml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
         xml += `<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n`;
 
-        // ✅ Add static sitemap first
+        // Add static sitemap
         xml += `  <sitemap>\n`;
-        xml += `    <loc>https://www.globalbizreport.com/sitemaps/static</loc>\n`;
+        xml += `    <loc>${BASE_URL}/sitemaps/static</loc>\n`;
         xml += `    <lastmod>${new Date().toISOString()}</lastmod>\n`;
         xml += `  </sitemap>\n`;
 
@@ -75,10 +77,62 @@ export async function GET() {
         }
 
         xml += `</sitemapindex>`;
-        return new NextResponse(xml, { headers: { "Content-Type": "application/xml" } });
+
+        return new NextResponse(xml, { headers: { "Content-Type": "text/xml" } });
 
     } catch (err) {
         console.error("Sitemap index error:", err);
-        return NextResponse.json({ error: "Failed to generate sitemap index" }, { status: 500 });
+
+        // Even in case of error, return minimal valid XML
+        const fallbackXml = `<?xml version="1.0" encoding="UTF-8"?>
+<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <sitemap>
+    <loc>${BASE_URL}/sitemaps/static</loc>
+    <lastmod>${new Date().toISOString()}</lastmod>
+  </sitemap>
+</sitemapindex>`;
+
+        return new NextResponse(fallbackXml, { headers: { "Content-Type": "text/xml" } });
     }
 }
+
+// import { NextResponse } from "next/server";
+
+// const META_URL = "https://backend.globalbizreport.com/companies-meta";
+// const BASE_URL = "https://www.globalbizreport.com";
+// const URLS_PER_SITEMAP = 2000;
+
+// export async function GET() {
+//     try {
+//         const metaRes = await fetch(META_URL, { next: { revalidate: 86400 } });
+//         const metaData = await metaRes.json();
+//         const totalBackendPages = metaData.totalPages || 0;
+//         const PER_PAGE = 20;
+
+//         const totalUrls = totalBackendPages * PER_PAGE;
+//         const totalSitemaps = Math.ceil(totalUrls / URLS_PER_SITEMAP);
+
+//         let xml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
+//         xml += `<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n`;
+
+//         // ✅ Add static sitemap first
+//         xml += `  <sitemap>\n`;
+//         xml += `    <loc>https://www.globalbizreport.com/sitemaps/static</loc>\n`;
+//         xml += `    <lastmod>${new Date().toISOString()}</lastmod>\n`;
+//         xml += `  </sitemap>\n`;
+
+//         for (let i = 1; i <= totalSitemaps; i++) {
+//             xml += `  <sitemap>\n`;
+//             xml += `    <loc>${BASE_URL}/sitemaps/sitemap/${i}</loc>\n`;
+//             xml += `    <lastmod>${new Date().toISOString()}</lastmod>\n`;
+//             xml += `  </sitemap>\n`;
+//         }
+
+//         xml += `</sitemapindex>`;
+//         return new NextResponse(xml, { headers: { "Content-Type": "application/xml" } });
+
+//     } catch (err) {
+//         console.error("Sitemap index error:", err);
+//         return NextResponse.json({ error: "Failed to generate sitemap index" }, { status: 500 });
+//     }
+// }
