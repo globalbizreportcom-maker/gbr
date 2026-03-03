@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { useRouter, useSearchParams } from "next/navigation";
-import { FaArrowRight, FaAngleDoubleLeft, FaAngleLeft, FaAngleRight, FaAngleDoubleRight, FaTrash, FaSearch, FaChevronUp, FaChevronDown } from "react-icons/fa";
+import { FaArrowRight, FaAngleDoubleLeft, FaAngleLeft, FaAngleRight, FaAngleDoubleRight, FaTrash, FaSearch, FaChevronUp, FaChevronDown, FaRedo } from "react-icons/fa";
 import { apiUrl } from "@/api/api";
 
 const CompanyDirectory = () => {
@@ -518,7 +518,21 @@ const CompanyDirectory = () => {
                 !loading && !firstLoad && results.length < 1 && (
                     <div className="flex flex-col items-center justify-center py-16 text-gray-500">
                         <FaSearch className="text-4xl mb-3 text-gray-300" />
-                        <p className="text-lg text-gray-400 font-medium">No results found for this search!</p>
+
+                        <p className="text-lg text-gray-400 font-medium mb-6">
+                            No results found for this search!
+                        </p>
+
+                        <button
+                            onClick={() => window.location.reload()}
+                            className="flex btn btn-outline shadow-none items-center gap-2 px-5 py-2.5 
+                                 border border-gray-300 text-gray-600 
+                                 rounded-lg hover:bg-gray-100 
+                                 transition-all duration-200"
+                        >
+                            <FaRedo className="text-sm" />
+                            Try Again
+                        </button>
                     </div>
                 )
             }

@@ -17,7 +17,7 @@ export default function HeaderMenu() {
         { href: "/about", label: "About" },
         // { href: "/company-directory/india", label: "Company Directory" },
         { href: "/services", label: "Services" },
-        // { href: "/pricing", label: "Pricing" },
+        { href: "/pricing", label: "Pricing" },
         { href: "/contact", label: "Contact" },
     ];
 
@@ -57,7 +57,7 @@ export default function HeaderMenu() {
     // ---------------- Desktop UI ----------------
     const DesktopMenu = () => (
         <ul className="hidden md:flex menu menu-horizontal px-1 gap-1 items-center text-black">
-            {user ? (
+            {user && user ? (
                 <>
                     <li>{renderLink({ href: "/dashboard", label: "Dashboard" })}</li>
                     {mainNav.map((item) => (
@@ -281,14 +281,14 @@ export default function HeaderMenu() {
                                         </li>
 
                                         {/* Pricing */}
-                                        {/* <li>
+                                        <li>
                                             {renderLink({
                                                 href: "/pricing",
                                                 label: "Pricing",
                                                 vertical: true,
                                                 onClick: () => setMobileOpen(false),
                                             })}
-                                        </li> */}
+                                        </li>
 
                                         {/* Contact */}
                                         <li>
@@ -405,14 +405,14 @@ export default function HeaderMenu() {
                                         </li>
 
                                         {/* Pricing */}
-                                        {/* <li>
+                                        <li>
                                             {renderLink({
                                                 href: "/pricing",
                                                 label: "Pricing",
                                                 vertical: true,
                                                 onClick: () => setMobileOpen(false),
                                             })}
-                                        </li> */}
+                                        </li>
 
                                         {/* Contact */}
                                         <li>

@@ -39,7 +39,7 @@ const DateWiseChart = ({ data, title = "Activity Overview", link }) => {
     }, [data, fromDate, toDate, defaultFilteredData]);
 
     return (
-        <div className="bg-white p-6 rounded-2xl border border-gray-100 ">
+        <div className="bg-white md:p-6 rounded-2xl border border-gray-100 ">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 gap-3">
                 <h2 className="text-lg font-semibold text-gray-800">{title} <span className="cursor-pointer text-blue-500 text-sm ml-1" onClick={() => router.push(link)}>View</span></h2>
 
