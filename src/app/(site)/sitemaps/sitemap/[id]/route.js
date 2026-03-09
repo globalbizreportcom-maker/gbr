@@ -15,7 +15,7 @@ export async function GET(req, context) {
         // Calculate the starting lastId for this page
         const lastId = (sitemapId - 1) * URLS_PER_SITEMAP;
 
-        // Fetch 10,000 companies after lastId
+        // Fetch 10,000 comp anies after lastId
         const res = await fetch(`${BACKEND_URL}?lastId=${lastId}&perPage=${URLS_PER_SITEMAP}`, {
             cache: "no-store",
         });
