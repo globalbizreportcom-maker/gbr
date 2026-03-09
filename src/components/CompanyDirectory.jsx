@@ -20,27 +20,6 @@ const CompanyDirectory = () => {
     const [initialized, setInitialized] = useState(false);
     const [firstLoad, setFirstLoad] = useState(true);
 
-    // ----------------- Fetch Companies -----------------
-    // const fetchCompanies = async (pageNumber = 1, companyVal = company, appliedFilters = filters, signal) => {
-    //     try {
-    //         setLoading(true);
-    //         const params = {
-    //             company: companyVal,
-    //             page: pageNumber,
-    //             perPage: 20,
-    //             ...appliedFilters
-    //         };
-    //         const res = await apiUrl.get("/companies-directory", { params, signal });
-    //         setResults(res.data.rows);
-    //         setTotalPages(res.data.totalPages);
-    //         setPage(res.data.page);
-    //     } catch (err) {
-    //         if (axios.isCancel(err)) return;
-    //         console.log("Error fetching companies:", err);
-    //     } finally {
-    //         setLoading(false);
-    //     }
-    // };
 
     const fetchCompanies = async (
         pageNumber = 1,
@@ -58,7 +37,7 @@ const CompanyDirectory = () => {
             };
 
             // ✅ Use the new fast API
-            const res = await apiUrl.get("/companies-fast", { params, signal });
+            const res = await apiUrl.get("/user/companies-dir", { params, signal });
             const data = res.data || {};
 
             // Safely extract keys with defaults
@@ -153,11 +132,11 @@ const CompanyDirectory = () => {
 
     // -----------------  handle row click -----------------
     const handleClick = (company) => {
-        const companyName = encodeURIComponent(
-            company.CompanyName?.replace(/\s+/g, "-") || "unknown"
+        const companyname = encodeURIComponent(
+            company.companyname?.replace(/\s+/g, "-") || "unknown"
         );
 
-        const cin = encodeURIComponent(company.CIN || "na");
+        const cin = encodeURIComponent(company.cin || "na");
 
         // Determine country safely
         let country =
@@ -170,10 +149,10 @@ const CompanyDirectory = () => {
 
         // const stateCode = encodeURIComponent(company.CompanyStateCode?.toLowerCase() || "na");
         const stateCode = encodeURIComponent(
-            (company.CompanyStateCode?.toLowerCase().replace(/\s+/g, "_")) || "na"
+            (company.companystatecode?.toLowerCase().replace(/\s+/g, "_")) || "na"
         );
 
-        const path = `/${companyName}/${cin}/${country}/${stateCode}/company-business-financial-credit-report`;
+        const path = `/${companyname}/${cin}/${country}/${stateCode}/company-business-financial-credit-report`;
         router.push(path);
     };
 
@@ -403,9 +382,9 @@ const CompanyDirectory = () => {
                                             <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700 w-2/5">
                                                 Company Name
                                             </th>
-                                            <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700 w-1/5">
+                                            {/* <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700 w-1/5">
                                                 CIN
-                                            </th>
+                                            </th> */}
                                             <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700 w-1/5">
                                                 Status
                                             </th>
@@ -422,19 +401,18 @@ const CompanyDirectory = () => {
                                             <tr key={idx} className="hover:bg-gray-50 transition">
                                                 <td className="px-4 py-3 text-sm text-gray-800 align-top w-2/5">
                                                     <div className="text-blue-700 font-semibold cursor-pointer" onClick={() => handleClick(c)}>
-                                                        {c.CompanyName}
+                                                        {c.companyname}
+                                                    </div>
+
+                                                    <div className="text-gray-500 cursor-pointer">
+                                                        CIN:   {c.cin}
                                                     </div>
                                                 </td>
                                                 <td className="px-4 py-3 text-sm text-gray-700 align-top w-1/5">
-                                                    <div className="text-blue-700 cursor-pointer" onClick={() => handleClick(c)}>
-                                                        {c.CIN}
-                                                    </div>
-                                                </td>
-                                                <td className="px-4 py-3 text-sm text-gray-700 align-top w-1/5">
-                                                    <div className="font-medium">{c.CompanyStatus}</div>
+                                                    <div className="font-medium">{c.companystatus}</div>
                                                 </td>
                                                 <td className="px-4 py-3 text-sm text-gray-700 w-2/5">
-                                                    {c.Registered_Office_Address}
+                                                    {c.registered_office_address}
                                                 </td>
                                                 <td className="px-4 py-3 text-center align-middle w-1/5">
                                                     <button
@@ -464,7 +442,7 @@ const CompanyDirectory = () => {
                                         onClick={() => handleClick(c)}
                                     >
                                         <h3 className="text-indigo-700 font-semibold text-base hover:underline">
-                                            {c.CompanyName}
+                                            {c.companyname}
                                         </h3>
                                     </div>
 
@@ -711,3 +689,6 @@ const CompanyDirectory = () => {
 
 export default CompanyDirectory;
 
+// CREATE INDEX idx_companies_filters ON companies (
+// companystatecode, companyindustrialclassification, companyclass, companystatus, companyname
+// );

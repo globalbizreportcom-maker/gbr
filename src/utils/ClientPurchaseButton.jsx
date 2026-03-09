@@ -74,7 +74,7 @@ const ClientPurchaseButton = ({ companyData, label, bgColor = 'orange', overlay 
     return (
         <button
             onClick={handlePurchaseReport}
-            className={`z-${overlay} cursor-pointer flex items-center text-sm md:text-md gap-2 bg-${bgColor}-500 px-4 py-1 lg:py-2 rounded-lg hover:bg-${bgColor}-600 transition shadow-lg`}
+            className={`z-${overlay} cursor-pointer flex items-center text-sm md:text-md gap-2 bg-${bgColor}-500 px-4 py-1 lg:py-2 rounded-md hover:bg-${bgColor}-600 transition shadow-lg`}
         >
             {/* <FaLock /> */}
             {label}

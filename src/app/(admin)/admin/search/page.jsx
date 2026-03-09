@@ -27,42 +27,7 @@ export default function CompanySearch() {
 
     const normalize = (str) => str?.toLowerCase().trim();
 
-    // ------------------- Helper Functions -------------------
-    // const fetchCountries = async () => {
-    //     try {
-    //         const res = await fetch("https://countriesnow.space/api/v0.1/countries");
-    //         const json = await res.json();
-    //         const options = json.data.map(c => ({
-    //             value: c.iso2.toLowerCase(),
-    //             label: c.country
-    //         }));
-    //         setCountries(options);
-    //     } catch (err) {
-    //         console.error("Error fetching countries:", err);
-    //     }
-    // };
 
-    // const fetchStates = async () => {
-    //     if (normalize(selectedCountry?.value) !== "in") {
-    //         setStates([]);
-    //         setSelectedState(null);
-    //         return;
-    //     }
-    //     try {
-    //         const res = await fetch("https://countriesnow.space/api/v0.1/countries/states");
-    //         const json = await res.json();
-    //         const india = json.data.find(c => normalize(c.name) === "india");
-    //         if (india?.states?.length) {
-    //             const formattedStates = india.states.map(s => ({
-    //                 value: s.name,
-    //                 label: s.name
-    //             }));
-    //             setStates(formattedStates);
-    //         }
-    //     } catch (err) {
-    //         console.error("Error fetching states:", err);
-    //     }
-    // };
 
     const fetchCountries = () => {
         const result = Country.getAllCountries().map(c => ({

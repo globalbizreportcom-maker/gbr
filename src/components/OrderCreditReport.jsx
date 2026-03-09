@@ -37,51 +37,6 @@ const OrderCreditReport = () => {
     const [showLoginModal, setShowLoginModal] = useState(false); // NEW
     const [directOrder, setDirectOrder] = useState(false); // NEW
 
-    // const [formData, setFormData] = useState(() => {
-    //     // lazy initializer → runs only once
-
-    //     if (typeof window !== "undefined") {
-
-    //         const isDirect = sessionStorage.getItem('credit_report') === 'direct';
-    //         if (!isDirect) {
-    //             const stored = localStorage.getItem("gbr_form");
-    //             if (stored) {
-    //                 console.log(stored);
-    //                 try {
-    //                     const parsed = JSON.parse(stored);
-    //                     return {
-    //                         ...parsed,
-    //                         companyType: parsed.companyType || '',
-    //                         agreedToTerms: parsed.agreedToTerms ?? true,
-    //                     };
-    //                 } catch (err) {
-    //                     console.error("Failed to parse localStorage:", err);
-    //                 }
-    //             }
-    //         }
-
-
-    //     }
-    //     return {
-    //         companyType: '',
-    //         companyName: '',
-    //         address: '',
-    //         city: '',
-    //         state: '',
-    //         country: '',
-    //         postalCode: '',
-    //         telephone: '',
-    //         website: '',
-    //         contactName: '',
-    //         contactEmail: '',
-    //         contactCountry: '',
-    //         contactPhone: '',
-    //         contactCompany: '',
-    //         companyGst: '',
-    //         optionalEmail: '',
-    //         agreedToTerms: true,
-    //     };
-    // });
 
     const [formData, setFormData] = useState({
         companyType: '',
@@ -138,7 +93,9 @@ const OrderCreditReport = () => {
                 contactCompany: user.company || prev.contactCompany,
                 companyGst: user.gstin || prev.companyGst,
             }));
+            setSnackbarMessage('');
         }
+
     }, [user?._id]);
 
 

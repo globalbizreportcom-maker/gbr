@@ -42,14 +42,15 @@ const OrderCreditReportClient = () => {
 
                 <div className="relative z-10 flex flex-col py-2 md:py-10 bg-gray-50 px-3" >
 
-                    <h2 className="text-2xl md:text-3xl  max-w-2xl font-bold  mb-5 text-left italic">
+                    <h2 className="text-2xl md:text-3xl  max-w-2xl font-bold  mb-5 text-left ">
                         Order a Business Credit Report on Any Company Worldwide
                     </h2>
 
-                    <p className="text-gray-600 text-left max-w-3xl mb-5 text-md  xl:text-lg italic">
-                        Access Freshly Investigated Company Credit Reports on Businesses across 220+ Countries. Make Confident Decisions by Verifying your Business Partners, Vendors, Buyers, and Suppliers with GBR Reports. Gain detailed insights into a company's reliability, credibility, financials, credit ratings, and more — all with simple {' '}
-                        <span className="font-extrabold ">Pay-per-Report  </span>{' '}pricing.
-                    </p>
+                    <ul className="text-gray-600 text-left max-w-3xl mb-5 text-md xl:text-md  list-disc list-inside space-y-2">
+                        <li>Access freshly investigated company credit reports on businesses across 220+ countries.</li>
+                        <li>Make confident decisions by verifying your business partners, vendors, buyers, and suppliers with GBR reports.</li>
+                        <li>Gain detailed insights into a company's reliability, credibility, financials, credit ratings, and more — all with simple <span className="font-extrabold">Pay-per-Report</span> pricing.</li>
+                    </ul>
 
                     <div className="w-[100%] mx-auto hidden md:block py-5">
                         <img

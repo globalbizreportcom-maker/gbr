@@ -12,51 +12,36 @@ export async function GET(req, context) {
     }
 
     try {
-        const offset = (sitemapId - 1) * URLS_PER_SITEMAP;
+        // Calculate the starting lastId for this page
+        const lastId = (sitemapId - 1) * URLS_PER_SITEMAP;
 
-        const res = await fetch(
-            `${BACKEND_URL}?perPage=${URLS_PER_SITEMAP}&offset=${offset}`,
-            { cache: "no-store" }
-        );
-
-        if (!res.ok) {
-            return new NextResponse("Backend error", { status: 500 });
-        }
-
+        // Fetch 10,000 companies after lastId
+        const res = await fetch(`${BACKEND_URL}?lastId=${lastId}&perPage=${URLS_PER_SITEMAP}`, {
+            cache: "no-store",
+        });
         const data = await res.json();
 
-        if (!data.rows || data.rows.length === 0) {
+        if (!data.rows || !data.rows.length) {
             return new NextResponse("No data", { status: 404 });
         }
 
+        // Generate sitemap XML
         let xml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
         xml += `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n`;
 
         for (const c of data.rows) {
-            const name = encodeURIComponent(
-                c.CompanyName?.replace(/\s+/g, "-").toUpperCase()
-            );
+            const name = encodeURIComponent(c.companyname?.replace(/\s+/g, "-").toUpperCase());
+            const cin = encodeURIComponent(c.cin || "");
+            const state = encodeURIComponent(c.companystatecode?.toLowerCase().replace(/\s+/g, "_") || "unknown");
 
-            const cin = encodeURIComponent(c.CIN || "");
-
-            const state = encodeURIComponent(
-                c.CompanyStateCode?.toLowerCase().replace(/\s+/g, "_") || "unknown"
-            );
-
-            xml += `
-<url>
-  <loc>${BASE_URL}/${name}/${cin}/india/${state}/company-business-financial-credit-report</loc>
-</url>\n`;
+            xml += `<url><loc>${BASE_URL}/${name}/${cin}/india/${state}/company-business-financial-credit-report</loc></url>\n`;
         }
 
         xml += `</urlset>`;
 
         return new NextResponse(xml, {
-            headers: {
-                "Content-Type": "application/xml",
-            },
+            headers: { "Content-Type": "application/xml" },
         });
-
     } catch (err) {
         console.error(err);
         return new NextResponse("Server error", { status: 500 });

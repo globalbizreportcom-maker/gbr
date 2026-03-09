@@ -91,7 +91,6 @@ const AdminHeader = () => {
                         <Link href="/admin/order-request/all" className="hover:text-primary">Order Requests</Link>
                         <Link href="/admin/inbox" className="hover:text-primary">Inbox</Link>
                         <Link href="/admin/payments" className="hover:text-primary">Payments</Link>
-                        <Link href="/admin/search" className="hover:text-primary">Company Search</Link>
                         <Link href="/admin/payment-visitors" className="hover:text-primary">Visitors</Link>
 
                         {/* <div className="relative group">

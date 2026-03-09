@@ -65,29 +65,6 @@ export default function CompanySearch() {
         }
     };
 
-
-    // const fetchStates = async () => {
-    //     if (normalize(selectedCountry?.value) !== "in") {
-    //         setStates([]);
-    //         setSelectedState(null);
-    //         return;
-    //     }
-    //     try {
-    //         const res = await fetch("https://countriesnow.space/api/v0.1/countries/states");
-    //         const json = await res.json();
-    //         const india = json.data.find(c => normalize(c.name) === "india");
-    //         if (india?.states?.length) {
-    //             const formattedStates = india.states.map(s => ({
-    //                 value: s.name,
-    //                 label: s.name
-    //             }));
-    //             setStates(formattedStates);
-    //         }
-    //     } catch (err) {
-    //         console.error("Error fetching states:", err);
-    //     }
-    // };
-
     const fetchCompanies = async (
         pageNumber = 1,
         companyVal = company,
@@ -98,7 +75,7 @@ export default function CompanySearch() {
         try {
             setLoading(true);
             const params = { company: companyVal, country: countryVal, state: stateVal || "", page: pageNumber, perPage: 20 };
-            const res = await apiUrl.get(`/api/companies`, { params, signal });
+            const res = await apiUrl.get(`/search-companies`, { params, signal });
             setResults(res.data.rows);
             setTotalPages(res.data.totalPages);
             setPage(res.data.page);
@@ -109,28 +86,6 @@ export default function CompanySearch() {
             setLoading(false);
         }
     };
-
-    // const handleSearch = (pageNumber = 1) => {
-    //     if (selectedCountry?.label !== "India") {
-    //         console.log("Navigating to order-business-credit-report...");
-    //         router.push('/order-business-credit-report');
-    //         return
-    //     }
-
-
-    //     const params = new URLSearchParams();
-    //     if (company) params.set("company", company);
-    //     if (selectedCountry) params.set("country", selectedCountry.label);
-    //     if (selectedCountry?.label === "India" && selectedState) {
-    //         params.set("state", selectedState.label);
-    //     }
-    //     params.set("page", pageNumber);
-
-    //     router.push(`?${params.toString()}`);
-    //     setPage(pageNumber); // triggers fetch
-
-    //     fetchCompanies(pageNumber)
-    // };
 
 
     const handleSearch = (pageNumber = 1) => {
@@ -158,7 +113,7 @@ export default function CompanySearch() {
 
 
     const handleClick = (company) => {
-        const companyName = encodeURIComponent(company.CompanyName.replace(/\s+/g, "-"));
+        const companyname = encodeURIComponent(company.companyname.replace(/\s+/g, "-"));
         const cin = encodeURIComponent(company.CIN);
 
         let country =
@@ -171,7 +126,7 @@ export default function CompanySearch() {
         );
 
         // const stateCode = encodeURIComponent(company.CompanyStateCode?.toLowerCase() || "na");
-        router.push(`/${companyName}/${cin}/${country}/${stateCode}/company-business-financial-credit-report`);
+        router.push(`/${companyname}/${cin}/${country}/${stateCode}/company-business-financial-credit-report`);
     };
 
     // ------------------- useEffect Hooks in Correct Order -------------------
@@ -336,14 +291,14 @@ export default function CompanySearch() {
                                             {results.map((c, idx) => (
                                                 <tr key={idx} className="hover:bg-gray-50 transition">
                                                     <td className="px-4 py-3 text-sm text-gray-800 align-top max-w-sm">
-                                                        <div className="font-bold">{c.CompanyName}</div>
+                                                        <div className="font-bold">{c.companyname}</div>
                                                     </td>
                                                     <td className="px-4 py-3 text-sm text-gray-700 align-top">
                                                         <div className="break-words max-w-xs">
-                                                            <span className="font-medium">Address:</span> {c.Registered_Office_Address}
+                                                            <span className="font-medium">Address:</span> {c.registered_office_address}
                                                         </div>
                                                         <div className="mt-1">
-                                                            <span className="font-medium">Status:</span> {c.CompanyStatus}
+                                                            <span className="font-medium">Status:</span> {c.companystatus}
                                                         </div>
                                                     </td>
                                                     <td className="px-4 py-3 text-center align-middle">
@@ -352,14 +307,14 @@ export default function CompanySearch() {
 
                                                             {/* View Button */}
                                                             <button
-                                                                className="cursor-pointer flex items-center gap-1 py-2 rounded-md px-2 bg-indigo-500 text-white text-xs font-semibold hover:bg-black hover:shadow-md transition-all duration-300"
+                                                                className="cursor-pointer border w-full max-w-[100px] flex items-center gap-1 py-2 rounded-md px-2 text-indigo-500 text-xs font-semibold  hover:border-1  transition-all duration-300 justify-between"
                                                                 onClick={() => handleClick(c)}
                                                             >
-                                                                View <FaArrowRight className="text-white" />
+                                                                View <FaArrowRight className="text-indigo-500" />
                                                             </button>
 
                                                             {/* New Button */}
-                                                            <ClientPurchaseButton companyData={c} label='Buy Report' bgColor='orange' />
+                                                            <ClientPurchaseButton companyData={c} label='Buy Report' bgColor='indigo' />
 
 
                                                         </div>
@@ -377,13 +332,13 @@ export default function CompanySearch() {
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:hidden w-full">
                                 {results.map((c, idx) => (
                                     <div key={idx} className="p-4 bg-gray-100  rounded-lg ">
-                                        <div className="font-bold text-gray-800">{c.CompanyName}</div>
+                                        <div className="font-bold text-gray-800">{c.companyname}</div>
                                         <div className="text-gray-600 text-sm mt-1 line-clamp-2">
-                                            Address: {c.Registered_Office_Address}
+                                            Address: {c.registered_office_address}
                                         </div>
                                         <div className="text-gray-700 text-sm mt-2 space-y-1">
                                             <div>
-                                                <span className="font-medium">Status:</span> {c.CompanyStatus}
+                                                <span className="font-medium">Status:</span> {c.companystatus}
                                             </div>
                                         </div>
                                         <div className="flex flex-row w-full gap-2 mt-3 justify-end">
@@ -401,22 +356,6 @@ export default function CompanySearch() {
                             </div>
                         </div>
 
-                        {/* Right: Ads / Tips */}
-                        {/* <div className="w-full lg:w-1/4 flex flex-col gap-4">
-                            <div className="p-4 bg-gray-100  rounded-lg">
-                                <h3 className="font-semibold text-gray-800 mb-2">Ad / Promotion</h3>
-                                <p className="text-sm text-gray-600">
-                                    Promote your business here or display relevant content.
-                                </p>
-                            </div>
-
-                            <div className="p-4 bg-gray-100 rounded-lg">
-                                <h3 className="font-semibold text-gray-800 mb-2">Tip</h3>
-                                <p className="text-sm text-gray-600">
-                                    Search using company name or country to quickly find corporate records.
-                                </p>
-                            </div>
-                        </div> */}
                     </div>
 
                     {/* Pagination */}
