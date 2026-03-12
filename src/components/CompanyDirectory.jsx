@@ -449,7 +449,7 @@ const CompanyDirectory = () => {
                                     {/* Status Chip */}
                                     <div
                                         className={`text-xs font-semibold px-3 py-1 rounded-full w-fit self-end sm:self-auto
-      ${c.CompanyStatus?.toLowerCase() === 'active'
+      ${c.companystatus?.toLowerCase() === 'active'
                                                 ? 'bg-green-100 text-green-700'
                                                 : 'bg-red-100 text-red-700'}
     `}
@@ -688,7 +688,3 @@ const CompanyDirectory = () => {
 }
 
 export default CompanyDirectory;
-
-// CREATE INDEX idx_companies_filters ON companies (
-// companystatecode, companyindustrialclassification, companyclass, companystatus, companyname
-// );

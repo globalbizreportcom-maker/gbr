@@ -86,7 +86,7 @@ export default function Page() {
                     {/* Company Info */}
                     <div className="absolute bottom-[-30px] md:bottom-[-50px] left-10 flex items-center gap-5">
 
-                        <div className="bg-white border rounded-xl p-1 md:p-2">
+                        <div className="bg-white rounded-xl p-1 md:p-2">
                             <img
                                 src={company.logo}
                                 alt="logo"
@@ -197,7 +197,7 @@ export default function Page() {
                                             </h3>
 
                                             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                                                <div className="border rounded-lg p-5 bg-gray-50">
+                                                <div className=" rounded-lg p-5 bg-gray-50">
                                                     <h4 className="font-semibold text-black mb-2">
                                                         Web Development
                                                     </h4>
@@ -208,7 +208,7 @@ export default function Page() {
                                                     </p>
                                                 </div>
 
-                                                <div className="border rounded-lg p-5 bg-gray-50">
+                                                <div className=" rounded-lg p-5 bg-gray-50">
                                                     <h4 className="font-semibold text-black mb-2">
                                                         Branding & Design
                                                     </h4>
@@ -219,7 +219,7 @@ export default function Page() {
                                                     </p>
                                                 </div>
 
-                                                <div className="border rounded-lg p-5 bg-gray-50">
+                                                <div className=" rounded-lg p-5 bg-gray-50">
                                                     <h4 className="font-semibold text-black mb-2">
                                                         Digital Marketing
                                                     </h4>
@@ -238,7 +238,7 @@ export default function Page() {
                                         {/* Mission + Vision */}
                                         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
 
-                                            <div className="border rounded-lg p-6 bg-gray-50">
+                                            <div className=" rounded-lg p-6 bg-gray-50">
                                                 <h3 className="font-semibold text-black mb-3">
                                                     Our Mission
                                                 </h3>
@@ -250,7 +250,7 @@ export default function Page() {
                                                 </p>
                                             </div>
 
-                                            <div className="border rounded-lg p-6 bg-gray-50">
+                                            <div className=" rounded-lg p-6 bg-gray-50">
                                                 <h3 className="font-semibold text-black mb-3">
                                                     Our Vision
                                                 </h3>
@@ -342,7 +342,7 @@ export default function Page() {
 
                                         {services.map((service, i) => (
 
-                                            <div key={i} className="border rounded-lg bg-gray-50 p-5">
+                                            <div key={i} className=" rounded-lg bg-gray-50 p-5">
 
                                                 <h3 className="font-semibold text-black">
                                                     {service.title}
@@ -445,7 +445,7 @@ export default function Page() {
                                 credibility and trustworthiness.
                             </p>
 
-                            <button className="btn btn-md btn-warning border-none rounded-md shadow-none px-5 w-full">
+                            <button className="btn btn-md btn-warning border-none rounded-md shadow-none px-5 w-fit">
 
                                 <SelfReportButton label="Get Self Report" />
 
