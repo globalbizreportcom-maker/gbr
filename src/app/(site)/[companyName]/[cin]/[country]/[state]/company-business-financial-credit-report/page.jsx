@@ -7,54 +7,59 @@ import { FaCheckCircle, FaFile, FaUserAlt } from "react-icons/fa";
 export const dynamic = "force-dynamic";
 
 const CompanyPage = async ({ params }) => {
-    const { companyName, cin, state } = await params;
+    const { companyName, cin, state } = params;
 
     let companyData = null;
 
-    try {
-        const cleanedState = state?.replace(/[^a-zA-Z0-9\s]/g, " ") || "";
+    if (cin) {
 
-        const res = await fetch(
-            `https://backend.globalbizreport.com/api/company-details?query=${decodeURIComponent(
-                companyName.replace(/-/g, " ")
-            )}&state=${encodeURIComponent(cleanedState)}&cin=${cin}`,
-            { cache: "no-store" }
-        );
+        try {
+            const cleanedState = state?.replace(/[^a-zA-Z0-9\s]/g, " ") || "";
 
-        const data = await res.json();
-        const d = Array.isArray(data) ? data[0] : data;
-        if (d) {
-            companyData = companyData = {
-                CIN: d.cin,
-                CompanyName: d.companyname,
-                CompanyROCcode: d.companyroccode,
-                CompanyCategory: d.companycategory,
-                CompanySubCategory: d.companysubcategory,
-                CompanyClass: d.companyclass,
-                AuthorizedCapital: d.authorizedcapital,
-                PaidupCapital: d.paidupcapital,
-                CompanyRegistrationdate_date: d.companyregistrationdate_date,
-                Registered_Office_Address: d.registered_office_address,
-                Listingstatus: d.listingstatus,
-                CompanyStatus: d.companystatus,
-                CompanyStateCode: d.companystatecode,
-                CompanyIndian: { "Foreign Company": d["CompanyIndian/Foreign Company"] },
-                nic_code: d.nic_code,
-                CompanyIndustrialClassification: d.companyindustrialclassification,
-            };
+            const res = await fetch(
+                `https://backend.globalbizreport.com/api/company-details?cin=${cin}`,
+                { cache: "no-store" }
+            );
+
+            const data = await res.json();
+            const d = Array.isArray(data) ? data[0] : data;
+            if (d) {
+                companyData = companyData = {
+                    CIN: d.cin,
+                    CompanyName: d.companyname,
+                    CompanyROCcode: d.companyroccode,
+                    CompanyCategory: d.companycategory,
+                    CompanySubCategory: d.companysubcategory,
+                    CompanyClass: d.companyclass,
+                    AuthorizedCapital: d.authorizedcapital,
+                    PaidupCapital: d.paidupcapital,
+                    CompanyRegistrationdate_date: d.companyregistrationdate_date,
+                    Registered_Office_Address: d.registered_office_address,
+                    Listingstatus: d.listingstatus,
+                    CompanyStatus: d.companystatus,
+                    CompanyStateCode: d.companystatecode,
+                    CompanyIndian: { "Foreign Company": d["CompanyIndian/Foreign Company"] },
+                    nic_code: d.nic_code,
+                    CompanyIndustrialClassification: d.companyindustrialclassification,
+                };
+            }
+        } catch (err) {
+            console.log("Error fetching company data:", err);
         }
-    } catch (err) {
-        console.log("Error fetching company data:", err);
+
+        if (!companyData) {
+            return (
+                <p className="text-center text-gray-600 py-10 mt-20">
+                    No company found.
+                </p>
+            );
+        }
+
     }
 
-    if (!companyData) {
-        return (
-            <p className="text-center text-gray-600 py-10 mt-20">
-                No company found.
-            </p>
-        );
+    if (!cin) {
+        return <p className="text-center"> Loading</p>
     }
-
 
     return (
         <div className="max-w-6xl mx-auto flex flex-col pb-24 bg-gray-50 rounded-lg min-h-svh">
