@@ -434,7 +434,7 @@ export default function Page() {
                             </div>
                         </div>
 
-                        {/* --- BANNER 2 --- */}
+                        {/* --- BANNER 2  --- */}
 
                         {/* Content */}
                         <div className="relative z-10 text-left p-5 flex flex-col items-start bg-gray-200 rounded-2xl" >
