@@ -417,7 +417,7 @@ export default function Page() {
 
                         {/* Content */}
                         <div className="relative z-10 text-left p-5 flex flex-col items-start bg-gray-200  rounded-2xl" >
-                            {/* <FaFile className="text-white text-5xl mb-4 opacity-80" /> */}
+                            {/* <FaFile className= "text-white text-5xl mb-4 opacity-80" /> */}
 
                             <p className="text-md font-semibold leading-relaxed mb-4 text-gray-600">
                                 Order a Comprehensive Business Information Report for detailed company insights
