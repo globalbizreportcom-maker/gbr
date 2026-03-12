@@ -1,21 +1,18 @@
 "use client";
 
-import OrderCreditReport from "@/components/OrderCreditReport";
 import React, { useRef, useState } from "react";
-import { FaGlobe, FaBolt, FaTrophy, FaCheckCircle, FaLock, FaStar, FaChevronRight, FaMoneyBill, FaFile, FaGlobeAsia, FaShieldAlt, FaInfo, FaUserCheck, FaFileAlt, FaBuilding } from "react-icons/fa";
-import { Splide, SplideSlide } from "@splidejs/react-splide";
+import { FaGlobe, FaBolt, FaTrophy, FaCheckCircle, FaLock, FaStar, FaChevronRight, FaMoneyBill, FaFile, FaGlobeAsia, FaShieldAlt, FaInfo } from "react-icons/fa";
 import "@splidejs/splide/dist/css/splide.min.css";
-import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import Testimonials from "./Testimonials";
 import Image from "next/image";
+import ClaimyourcompanyForm from "./ClaimyourcompanyForm";
 
 
 
 
-const OrderCreditReportClient = () => {
+const ClaimyourCompanyClient = () => {
 
-    const router = useRouter();
     const formRef = useRef(null);
 
     const handleScrollToForm = () => {
@@ -46,10 +43,10 @@ const OrderCreditReportClient = () => {
                         Order a Business Credit Report on Any Company Worldwide
                     </h2>
 
-                    <ul className="text-gray-600 text-left max-w-3xl mb-5 text-md  list-disc list-inside space-y-2">
-                        <li>Access <span className="font-bold">Freshly Investigated Company</span> Credit Reports on businesses across <span className="font-bold">220+ Countries.</span></li>
-                        <li><span className="font-bold">Verify Authenticity & Trustworthiness </span> of your Business Partners, Vendors, Buyers, and Suppliers with GBR reports.</li>
-                        <li>Gain detailed insights into a company's Reliability, Credibility, Financials, Credit Ratings, and more — with simple <span className="font-bold">Pay-per-Report pricing. </span></li>
+                    <ul className="text-gray-600 text-left max-w-3xl mb-5 text-md xl:text-md  list-disc list-inside space-y-2">
+                        <li>Access freshly investigated company credit reports on businesses across 220+ countries.</li>
+                        <li>Make confident decisions by verifying your business partners, vendors, buyers, and suppliers with GBR reports.</li>
+                        <li>Gain detailed insights into a company's reliability, credibility, financials, credit ratings, and more — all with simple <span className="font-extrabold">Pay-per-Report</span> pricing.</li>
                     </ul>
 
                     <div className="w-[100%] mx-auto hidden md:block py-5">
@@ -69,39 +66,18 @@ const OrderCreditReportClient = () => {
                             Order Report Now <FaChevronRight />
                         </button>
 
-                        {/* <button
-                            onClick={() => window.open('/sample-reports', '_blank')}
-                            className="cursor-pointer hidden md:flex font-semibold px-8 py-3 rounded-lg shadow-none hover:shadow-lg hover:scale-105 transition-all duration-300  items-center gap-2 btn btn-outline"
-                        >
-                            View Sample Report
-                        </button> */}
                     </div>
 
-                    <ul className="grid grid-cols-1 gap-3 list-none text-left">
+                    <ul className="grid grid-cols-1 gap-3 list-disc list-inside text-left">
                         {[
-                            {
-                                text: "Trusted by 20,000+ Global Companies",
-                                icon: <FaBuilding className="text-gray-500 mr-4" />
-                            },
-                            {
-                                text: "Detailed 2026 Company Reports",
-                                icon: <FaFileAlt className="text-gray-500 mr-4" />
-                            },
-                            {
-                                text: "Human-Verified B2B Intelligence",
-                                icon: <FaUserCheck className="text-gray-500 mr-4" />
-                            },
-                            {
-                                text: "Quick Digital Delivery at the Lowest Price",
-                                icon: <FaBolt className="text-gray-500 mr-4" />
-                            }
-                        ].map((item, idx) => (
+                            "Trusted by 20,000+ Global Companies",
+                            "10,000+ Reports delivered Monthly",
+                        ].map((service, idx) => (
                             <li
                                 key={idx}
-                                className="flex items-center font-medium text-sm text-gray-600"
+                                className="font-medium text-sm md:text-base text-gray-600"
                             >
-                                {item.icon}
-                                {item.text}
+                                {service}
                             </li>
                         ))}
                     </ul>
@@ -110,7 +86,7 @@ const OrderCreditReportClient = () => {
                 {/* Order Form Section */}
 
                 <div ref={formRef} className="">
-                    <OrderCreditReport />
+                    <ClaimyourcompanyForm />
                 </div>
             </div>
 
@@ -281,4 +257,4 @@ const OrderCreditReportClient = () => {
     );
 };
 
-export default OrderCreditReportClient;
+export default ClaimyourCompanyClient;

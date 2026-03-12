@@ -1,0 +1,999 @@
+'use client';
+
+import React, { useEffect, useRef, useState } from 'react';
+import dynamic from 'next/dynamic';
+import { useRouter } from 'next/navigation';
+import { useDashboard } from '@/app/(site)/dashboard/DashboardContext';
+import { LoginModalButton } from '@/utils/LoginModalButton';
+import { apiUrl } from '@/api/api';
+import RequiredStar from '@/utils/RequiredStar';
+import { useAlert } from '@/context/AlertProvider';
+import Link from 'next/link';
+// import { useCompany } from '@/context/CompanyContext';
+
+const CountryDropdown = dynamic(() => import('@/utils/CountryDropdown'), {
+    ssr: false,
+});
+
+
+const PhoneInputWithCountry = dynamic(() => import('@/utils/PhoneFiled'), {
+    ssr: false,
+});
+
+const ClaimyourcompanyForm = () => {
+
+
+    const router = useRouter();
+    const { user, setUser } = useDashboard();
+    const { showAlert } = useAlert();
+    const step2ref = useRef(null);
+    const step1ref = useRef(null);
+
+    const [step, setStep] = useState(1);
+    const [selectedCountry, setSelectedCountry] = useState('');
+    const [selectedState, setSelectedState] = useState('');
+    const [showSnackbar, setShowSnackbar] = useState(false);
+    const [snackbarMessage, setSnackbarMessage] = useState('');
+    const [showLoginModal, setShowLoginModal] = useState(false); // NEW
+    const [directOrder, setDirectOrder] = useState(false); // NEW
+
+
+    const [formData, setFormData] = useState({
+        companyType: '',
+        companyName: '',
+        address: '',
+        city: '',
+        state: '',
+        country: '',
+        postalCode: '',
+        telephone: '',
+        website: '',
+        contactName: '',
+        contactEmail: '',
+        contactCountry: '',
+        contactState: '',
+        contactPhone: '',
+        contactCompany: '',
+        companyGst: '',
+        optionalEmail: '',
+        agreedToTerms: true,
+    });
+
+
+    useEffect(() => {
+        const isDirect = sessionStorage.getItem('credit_report') === 'direct';
+
+        if (isDirect) return setDirectOrder(true);
+
+        const stored = localStorage.getItem('gbr_form');
+        if (!stored) return;
+
+        try {
+            const parsed = JSON.parse(stored);
+            setFormData(prev => ({
+                ...prev,
+                ...parsed,
+                agreedToTerms: parsed.agreedToTerms ?? true,
+            }));
+        } catch (e) {
+            console.error("JSON parse error", e);
+        }
+    }, []);
+
+
+    useEffect(() => {
+        if (user) {
+            setFormData(prev => ({
+                ...prev,
+                contactName: user.name || prev.contactName,
+                contactEmail: user.email || prev.contactEmail,
+                contactCountry: user.country || prev.contactCountry,
+                contactState: user.state || prev.contactState,
+                contactPhone: user.phone || prev.contactPhone,
+                contactCompany: user.company || prev.contactCompany,
+                companyGst: user.gstin || prev.companyGst,
+            }));
+            setSnackbarMessage('');
+        }
+
+    }, [user?._id]);
+
+
+
+    // const { companies, setCompanies } = useCompany();
+
+
+
+    // form 1 Validation handler
+    const handleNext = () => {
+        const missingFields = [];
+
+        if (!formData.companyType) {
+            setSnackbarMessage(`Select Company Type to continue!`);
+            setShowSnackbar(true);
+            setTimeout(() => setShowSnackbar(false), 3000);
+            return;
+        }
+
+        if (!formData.companyName) missingFields.push('Company Name');
+        if (!formData.address) missingFields.push('Address');
+        if (!formData.country) missingFields.push('Country');
+        if (!formData.city) missingFields.push('City');
+        if ((formData.country === 'India' || formData.country?.label === 'India') && !formData.state) missingFields.push('State');
+        // if (!formData.postalCode && directOrder) missingFields.push('Postal Code');
+
+        if (missingFields.length > 0) {
+            setSnackbarMessage(`Please fill in: ${missingFields.join(', ')}`);
+            setShowSnackbar(true);
+            setTimeout(() => setShowSnackbar(false), 3000);
+            return;
+        }
+
+        setStep(2);
+
+        setTimeout(() => {
+            const offset = -100; // adjust this (-50, -80, -120) as you like
+
+            if (step2ref.current) {
+                const top =
+                    step2ref.current.getBoundingClientRect().top +
+                    window.scrollY +
+                    offset;
+
+                window.scrollTo({
+                    top,
+                    behavior: "smooth",
+                });
+            }
+        }, 50);
+
+    };
+
+    const handlePreview = async () => {
+
+        // Build finalData WITHOUT setState()
+        let finalData = { ...formData };
+
+
+        if (formData.companyType === "my_company") {
+            finalData = {
+                ...finalData,
+                // The “contactCompany” MUST become the companyName
+                contactCompany: formData.companyName,
+                // Company address fields override finalData
+                address: formData.address,
+                city: formData.city,
+                state: formData.contactState,
+                postalCode: formData.postalCode,
+                country: finalData.contactCountry?.label || finalData.contactCountry || "",
+            };
+        }
+
+        const missingFields = [];
+
+        if (formData.companyType === "my_company") {
+            if (!finalData.companyName) missingFields.push("Company Name");
+            if (!finalData.address) missingFields.push("Company Address");
+            if (!finalData.contactName) missingFields.push("Name");
+            if (!finalData.contactEmail) missingFields.push("Email");
+            if (!finalData.contactPhone) missingFields.push("Phone");
+            if ((finalData.contactCountry?.label === 'India' || finalData.contactCountry === 'India') && !finalData?.contactState) missingFields.push("State");
+            // if (!finalData.state) missingFields.push("State");
+            if (!finalData.city) missingFields.push("City");
+            if (!finalData.postalCode) missingFields.push("Postalcode");
+            if (!finalData.agreedToTerms) missingFields.push("Privacy Policy");
+        } else {
+
+            // Use finalData everywhere instead of formData
+            if (!finalData.contactName) missingFields.push("Name");
+            if (!finalData.contactEmail) missingFields.push("Email");
+            if (!finalData.contactCountry) missingFields.push("Country");
+            if ((finalData.contactCountry?.label === 'India' || finalData.contactCountry === 'India') && !finalData?.contactState) missingFields.push("State");
+            if (!finalData.contactPhone) missingFields.push("Phone");
+            if (!finalData.agreedToTerms) missingFields.push("Privacy Policy");
+
+        }
+
+
+        if (missingFields.length > 0) {
+            setSnackbarMessage(`Please provide your ${missingFields.join(", ")}.`);
+            setShowSnackbar(true);
+            return;
+        }
+
+
+
+        try {
+            let activeUser = user;
+
+            if (!activeUser) {
+                const res = await apiUrl.post("/api/users/check-or-create", {
+                    name: finalData.contactName,
+                    email: finalData.contactEmail,
+                    country: finalData.contactCountry?.label || finalData.contactCountry || "",
+                    phone: finalData.contactPhone,
+                    company: finalData.contactCompany,
+                    gst: finalData.companyGst || '',
+                });
+
+                if (res.data.exists) {
+                    setSnackbarMessage(res.data.message);
+                    setShowSnackbar(true);
+                    setShowLoginModal(true);
+                    return;
+                }
+
+                activeUser = res.data.user;
+                setUser(res.data.user);
+            }
+
+            if (!activeUser?._id) {
+                setSnackbarMessage("Error identifying user. Please try again.");
+                setShowSnackbar(true);
+                return;
+            }
+
+            const payload = {
+                ...finalData,
+                userId: activeUser._id,
+                country: formData.companyType === "my_company" ? finalData.contactCountry?.label || finalData.contactCountry : finalData.country?.label || finalData.country,
+            };
+
+            if (!sessionStorage.getItem("visitor_payment_submitted")) {
+                await apiUrl.post("/visitors/payments", payload);
+                sessionStorage.setItem("visitor_payment_submitted", "true");
+            }
+
+            localStorage.setItem("gbr_form", JSON.stringify(finalData));
+            router.push("/order-confirm");
+
+        } catch (error) {
+            setSnackbarMessage("Something went wrong. Please try again.");
+            setShowSnackbar(true);
+        }
+    };
+
+
+
+    return (
+        <div className="bg-white rounded-2xl px-8  py-2">
+
+            <div className="flex flex-col gap-3">
+
+                {
+                    step === 2 ?
+                        <label className=" text-lg font-bold text-gray-700">Your Contact Information </label>
+                        :
+                        <label className=" text-lg font-bold text-gray-700">Order Report Of </label>
+
+                }
+
+
+                {
+                    step !== 2 ?
+
+                        <div className="flex  flex-col md:flex-row items-start md:items-center gap-6">
+
+
+                            {/* My Company */}
+                            <label className="flex items-center gap-2 cursor-pointer select-none">
+                                <input
+                                    type="radio"
+                                    name="companyType"
+                                    value="my_company"
+                                    checked={formData.companyType === "my_company"}
+                                    onChange={(e) => {
+                                        setFormData((prev) => ({
+                                            ...prev,
+                                            companyType: e.target.value,
+                                        }));
+                                        setSnackbarMessage('');
+                                        setShowSnackbar(true);
+                                    }
+                                    }
+                                    className="w-4 h-4 cursor-pointer appearance-none border-2 border-gray-400  rounded-full checked:bg-primary checked:border-white checked:ring-4 checked:ring-gray-200 transition-all"
+
+                                />
+                                <span>My Company</span>
+                            </label>
+
+                            {/* Other Company */}
+                            <label className="flex items-center gap-2 cursor-pointer select-none">
+                                <input
+                                    type="radio"
+                                    name="companyType"
+                                    value="other_company"
+                                    checked={formData.companyType === "other_company"}
+                                    onChange={(e) => {
+                                        setFormData((prev) => ({
+                                            ...prev,
+                                            companyType: e.target.value,
+                                        }));
+                                        setSnackbarMessage('');
+                                        setShowSnackbar(true);
+                                    }
+                                    }
+                                    className="w-4 h-4 cursor-pointer appearance-none border-2 border-gray-400  rounded-full checked:bg-primary checked:border-white checked:ring-4 checked:ring-gray-200 transition-all"
+                                />
+                                <span>Other Company</span>
+                            </label>
+
+                            <label className='text-red-500 italic text-xs'>(Select an option to continue)</label>
+
+                        </div>
+                        :
+                        <></>
+                }
+            </div>
+
+            {formData.companyType === "my_company" && (
+                <>
+                    <div className="w-full bg-white/70 rounded-xl mt-5">
+
+                        {/* FORM GRID */}
+                        <form className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                            {/* Company Name – FULL WIDTH */}
+                            <div className="col-span-1 md:col-span-2">
+                                <Input
+                                    label="Company Name"
+                                    name="companyName"
+                                    value={formData.companyName || ""}
+                                    onChange={(e) =>
+                                        setFormData({ ...formData, companyName: e.target.value })
+                                    }
+                                    required
+                                />
+                            </div>
+
+                            {/* Company Address – FULL WIDTH */}
+                            <div className="col-span-1 md:col-span-2">
+                                <Input
+                                    label="Company Address"
+                                    name="address"
+                                    value={formData.address || ""}
+                                    onChange={(e) =>
+                                        setFormData({ ...formData, address: e.target.value })
+                                    }
+                                    required
+                                />
+                            </div>
+
+                            {/* Contact Name */}
+                            <div>
+                                <Input
+                                    label="Name"
+                                    name="contactName"
+                                    value={formData.contactName || ""}
+                                    onChange={(e) =>
+                                        setFormData({ ...formData, contactName: e.target.value })
+                                    }
+                                    required
+                                />
+                            </div>
+
+                            {/* Email */}
+                            <div>
+                                <Input
+                                    label="Your Email (Report will be sent to this email)"
+                                    name="contactEmail"
+                                    type='email'
+                                    value={user?.email || formData.contactEmail || ''}
+                                    onChange={(e) => {
+                                        const value = e.target.value;
+                                        setFormData({ ...formData, [e.target.name]: value });
+
+                                        // Basic Email Validation
+                                        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                                        if (value && !emailRegex.test(value)) {
+                                            showAlert("Please enter a valid email address", "warning");
+                                        }
+                                    }}
+                                    disable={user?.email}
+                                    required={!user?.email}
+                                />
+                            </div>
+
+                            {/* Phone */}
+                            <div className="md:col-span-1">
+                                <label className="block text-sm font-medium text-gray-700">
+                                    Phone <RequiredStar />
+                                </label>
+                                <PhoneInputWithCountry
+                                    defaultCountry={formData.contactCountry?.value || ""}
+                                    value={formData.contactPhone || ""}
+                                    onChange={(phone) =>
+                                        setFormData({ ...formData, contactPhone: phone })
+                                    }
+                                />
+                            </div>
+
+                            {/* Country */}
+                            <div className="md:col-span-1">
+                                <CountryDropdown
+                                    value={formData.contactCountry || ""}
+                                    onChange={(selected) => {
+
+                                        setSelectedCountry(selected);
+                                        setFormData((prev) => ({
+                                            ...prev,
+                                            contactCountry: selected,
+                                            contactState: selected !== "India" ? "" : prev.contactState,
+                                            companyGst: selected !== "India" ? "" : prev.companyGst,
+                                        }));
+                                    }}
+                                    required
+                                />
+                            </div>
+
+                            {/* State */}
+                            {
+                                formData.contactCountry === 'India' &&
+                                <div>
+                                    <Input
+                                        label="State"
+                                        name="state"
+                                        value={formData.contactState || ""}
+                                        onChange={(e) =>
+                                            setFormData({ ...formData, contactState: e.target.value })
+                                        }
+                                        required
+                                    />
+                                </div>
+                            }
+
+                            {/* City */}
+                            <div>
+                                <Input
+                                    label="City"
+                                    name="city"
+                                    value={formData.city || ""}
+                                    onChange={(e) =>
+                                        setFormData({ ...formData, city: e.target.value })
+                                    }
+                                    required
+                                />
+                            </div>
+
+                            {/* Postal Code */}
+                            <div>
+                                <Input
+                                    label="Postal Code"
+                                    name="postalCode"
+                                    value={formData.postalCode || ""}
+                                    onChange={(e) =>
+                                        setFormData({ ...formData, postalCode: e.target.value })
+                                    }
+                                // required
+                                />
+                            </div>
+
+                            {/* GST */}
+                            {formData.contactCountry === "India" && (
+                                <div>
+                                    <Input
+                                        label="GST (optional)"
+                                        name="companyGst"
+                                        value={formData.companyGst || ""}
+                                        onChange={(e) =>
+                                            setFormData({ ...formData, companyGst: e.target.value })
+                                        }
+                                    />
+                                </div>
+                            )}
+
+                            {/* Website */}
+                            <div>
+                                <Input
+                                    label="Website (optional)"
+                                    name="website"
+                                    value={formData.website || ""}
+                                    onChange={(e) =>
+                                        setFormData({ ...formData, [e.target.name]: e.target.value })
+                                    }
+                                />
+                            </div>
+
+
+                        </form>
+
+                        {/* USER AGREEMENT */}
+                        <div className="mt-6 mb-5">
+                            <label className="flex items-start gap-2 text-sm text-gray-700">
+                                <input
+                                    type="checkbox"
+                                    checked={formData.agreedToTerms}
+                                    onChange={(e) =>
+                                        setFormData({ ...formData, agreedToTerms: e.target.checked })
+                                    }
+                                    className="checkbox checkbox-primary mt-1"
+                                />
+
+                                <span className="leading-5">
+                                    I agree to the&nbsp;
+                                    <a href="/terms" className="text-primary underline">User Agreement</a>
+                                    &nbsp;and&nbsp;
+                                    <a href="/privacy-policy" className="text-primary underline">Privacy Policy</a>
+                                </span>
+                            </label>
+                        </div>
+
+                        {showSnackbar && (
+                            <div className="bg-grey-500 text-red-600 px-4 py-3 text-end text-sm font-medium">
+                                {snackbarMessage}
+                            </div>
+                        )}
+
+                        {/* BUTTON */}
+                        <div className="mt-8 gap-5 flex flex-col md:flex-row justify-between md:justify-end ">
+
+                            {/* <button
+                                type="button"
+                                onClick={() => window.open("/sample-reports", "_blank")}
+                                className="btn btn-link text-lg lg:text-lg font-medium text-blue-500 underline"
+                            >
+                                View Sample Report
+                            </button> */}
+
+                            <button
+                                type="button"
+                                className="btn btn-primary px-8 w-full md:w-auto"
+                                onClick={handlePreview}
+                            >
+
+                                Preview and Order
+                            </button>
+                        </div>
+                    </div>
+                </>
+            )}
+
+            {formData.companyType && formData.companyType === 'other_company' &&
+                <>
+
+                    {step === 1 && (
+                        <>
+                            <div className="flex flex-col md:flex-row items-start md:items-center justify-start mb-6 gap-2 "
+                                ref={step1ref}
+                            >
+
+                                {/* Right: Title + Subtitle */}
+                                {/* <div className="text-right md:text-left">
+                                    <h3 className="text-xl font-semibold text-gray-800">
+                                        Target Company Details
+                                    </h3>
+                                    <p className="text-sm text-gray-500 mt-1">
+                                        Fill in the details of the company for which you want Business Credit Report.
+                                    </p>
+                                </div> */}
+                            </div>
+
+
+                            <form className="grid grid-cols-1 md:grid-cols-6 gap-x-6 gap-y-5">
+                                <div className="md:col-span-6">
+                                    <Input
+                                        label="Target Company Name"
+                                        name="companyName"
+                                        value={formData.companyName || ''}
+                                        onChange={(e) =>
+                                            setFormData({ ...formData, [e.target.name]: e.target.value })
+                                        }
+                                        required
+                                    />
+                                </div>
+
+                                <div className="md:col-span-6">
+                                    <Input
+                                        label="Address"
+                                        name="address"
+                                        value={formData.address || ''}
+                                        onChange={(e) =>
+                                            setFormData({ ...formData, [e.target.name]: e.target.value })
+                                        }
+                                        required
+                                    />
+                                </div>
+
+                                <div className="md:col-span-3">
+                                    <CountryDropdown
+                                        value={formData.country || ''}
+                                        onChange={(selected) => {
+                                            setSelectedCountry(selected);
+                                            setFormData((prev) => ({
+                                                ...prev,
+                                                country: selected,
+                                                state: selected?.label !== "India" || selected !== 'India' ? "" : prev.state,
+                                            }));
+                                        }}
+                                        required
+                                    />
+                                </div>
+
+                                {
+                                    (formData.country === 'India' || formData.country?.label === 'India') && (
+
+                                        <div className="md:col-span-3">
+                                            <Input
+                                                label="State"
+                                                name="state"
+                                                value={formData.state || ''}
+                                                onChange={(e) =>
+                                                    setFormData({ ...formData, [e.target.name]: e.target.value })
+                                                }
+                                            // required={directOrder}
+
+                                            />
+                                        </div>
+                                    )}
+
+                                <div className="md:col-span-3">
+                                    <Input
+                                        label="City"
+                                        name="city"
+                                        value={formData.city || ''}
+                                        onChange={(e) =>
+                                            setFormData({ ...formData, [e.target.name]: e.target.value })
+                                        }
+                                        required
+                                    />
+                                </div>
+
+                                <div className="md:col-span-3">
+                                    <Input
+                                        label="Postal Code"
+                                        name="postalCode"
+                                        value={formData.postalCode || ''}
+                                        onChange={(e) =>
+                                            setFormData({ ...formData, [e.target.name]: e.target.value })
+                                        }
+                                    // required={directOrder}
+                                    />
+                                </div>
+
+                                <div className="md:col-span-3">
+                                    <label className="block text-sm font-medium mb-1 text-gray-700">Phone</label>
+                                    <PhoneInputWithCountry
+                                        defaultCountry={formData.country?.value || ''} // string code
+                                        value={formData.telephone || ''}
+                                        onChange={(phone) =>
+                                            setFormData({ ...formData, telephone: phone })
+                                        }
+                                    />
+                                </div>
+
+                                <div className="md:col-span-3">
+                                    <Input
+                                        label="Company Website (if available)"
+                                        name="website"
+                                        value={formData.website || ''}
+                                        onChange={(e) =>
+                                            setFormData({ ...formData, [e.target.name]: e.target.value })
+                                        }
+                                    />
+                                </div>
+                            </form>
+
+
+                            {showSnackbar && (
+                                <div className="bg-grey-500 text-red-600 px-4 py-3 text-end text-sm font-medium">
+                                    {snackbarMessage}
+                                </div>
+                            )}
+
+                            <div className="flex justify-end mt-10">
+
+
+                                {/* <button
+                                    type="button"
+                                    onClick={() => window.open("/sample-reports", "_blank")}
+                                    className="btn btn-link text-sm font-medium text-blue-500 underline"
+                                >
+                                    Sample Report
+                                </button> */}
+
+                                <button
+                                    type="button"
+                                    onClick={() => handleNext()}
+                                    className="btn btn-primary px-8 py-2 text-sm font-medium"
+                                >
+                                    Next
+                                </button>
+                            </div>
+                        </>
+                    )}
+
+                    {step === 2 && (
+                        <>
+                            <div className="flex flex-col md:flex-row items-start md:items-center justify-start mb-6 gap-2" ref={step2ref}>
+
+                                {/* <div className="text-right md:text-left">
+                                    <h3 className="text-xl font-semibold text-gray-800" >
+                                        Your Contact Information
+                                    </h3>
+                                    <p className="text-sm text-gray-500 mt-1">
+                                        Fill your details to get a Freshly Investigated Report
+                                    </p>
+                                </div> */}
+                            </div>
+                            <form className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <Input
+                                    label="Your Name"
+                                    name="contactName"
+                                    value={formData.contactName || ''}
+                                    onChange={(e) =>
+                                        setFormData({ ...formData, [e.target.name]: e.target.value })
+                                    }
+                                    required
+                                />
+
+                                <Input
+                                    label="Your Email (Report will be sent to this email)"
+                                    name="contactEmail"
+                                    type='email'
+                                    value={user?.email || formData.contactEmail || ''}
+                                    onChange={(e) => {
+                                        const value = e.target.value;
+                                        setFormData({ ...formData, [e.target.name]: value });
+
+                                        // Basic Email Validation
+                                        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                                        if (value && !emailRegex.test(value)) {
+                                            showAlert("Please enter a valid email address", "warning");
+                                        }
+                                    }}
+                                    disable={user?.email}
+                                    required={!user?.email}
+                                />
+
+
+                                <CountryDropdown
+                                    value={formData.contactCountry || ''}
+                                    onChange={(selected) => {
+                                        setSelectedCountry(selected);
+
+                                        setFormData((prev) => ({
+                                            ...prev,
+                                            contactCountry: selected,
+                                            contactState: selected?.label !== "India" || selected !== 'India' ? "" : prev.contactState,
+                                            companyGst: selected?.label !== "India" || selected !== 'India' ? "" : prev.companyGst,
+                                        }));
+                                    }}
+                                    required={true}
+                                />
+
+                                {
+                                    (formData.contactCountry === 'India' || formData.contactCountry?.label === 'India') && (
+                                        <Input
+                                            label="State"
+                                            // name="state"
+                                            value={formData.contactState || ""}
+                                            onChange={(e) => {
+                                                console.log(e);
+                                                setFormData({ ...formData, contactState: e.target.value })
+                                            }}
+                                            required={true}
+                                        />
+                                    )
+                                }
+
+
+                                <div>
+                                    <label className="block text-sm font-medium mb-1 text-gray-700">Phone <RequiredStar /></label>
+                                    <PhoneInputWithCountry
+                                        key={formData.contactCountry?.value || 'default'}  // 🧩 forces re-render
+                                        defaultCountry={formData.contactCountry?.value?.toLowerCase() || ''}
+                                        value={formData.contactPhone || ''}
+                                        onChange={(phone) =>
+                                            setFormData({ ...formData, contactPhone: phone })
+                                        }
+                                    />
+                                </div>
+
+                                <Input
+                                    label="Your Company"
+                                    name="contactCompany"
+                                    value={formData.contactCompany || ''}
+                                    onChange={(e) =>
+                                        setFormData({ ...formData, [e.target.name]: e.target.value })
+                                    }
+                                />
+
+                                {
+                                    (formData.contactCountry === 'India' || formData.contactCountry?.label === 'India') && (
+
+                                        <Input
+                                            autoComplete="gst"
+                                            label="Gst"
+                                            name="companyGst"
+                                            type='text'
+                                            id="companyGstField"
+                                            value={formData.companyGst || ''}
+                                            onChange={(e) =>
+                                                setFormData({ ...formData, [e.target.name]: e.target.value })
+                                            }
+                                        // className={formData.contactCompany ? 'block' : 'hidden'} // show only if company exists
+
+                                        />
+                                    )}
+
+                                <div>
+                                    <label className="block text-xs font-medium  text-gray-400">Optional Email: (Report will be send to this email too)</label>
+                                    <Input
+                                        name="optionalEmail"
+                                        value={formData.optionalEmail || ''}
+                                        onChange={(e) =>
+                                            setFormData({ ...formData, [e.target.name]: e.target.value })
+                                        }
+                                    />
+                                </div>
+
+
+                            </form>
+
+                            <h3 className='text-base-100 mt-10 font-semibold' >User Agreement and Privacy Policy</h3>
+
+                            <div className="mt-6 mb-5">
+                                <label className="flex items-start gap-2 text-sm text-gray-700">
+                                    <input
+                                        type="checkbox"
+                                        checked={formData.agreedToTerms}
+                                        onChange={(e) =>
+                                            setFormData({ ...formData, agreedToTerms: e.target.checked })
+                                        }
+                                        className="checkbox checkbox-primary mt-1"
+                                    />
+
+                                    <span className='mt-2'>
+                                        I have read and agreed to the <a href="/terms" className="text-primary underline">User Agreement</a> and <a href="/privacy-policy" className="text-primary underline">Privacy Policy</a> of GlobalBizReport.com
+                                    </span>
+                                </label>
+                            </div>
+
+                            {showSnackbar && (
+                                <div className="bg-grey-500 text-red-600 px-4 py-3 text-end text-sm font-medium">
+                                    {snackbarMessage}
+                                </div>
+                            )}
+
+                            {/* <button
+                                type="button"
+                                onClick={() => window.open("/sample-reports", "_blank")}
+                                className="btn btn-link text-sm font-medium text-blue-500 underline"
+                            >
+                                Sample Report
+                            </button> */}
+
+                            <div className="flex justify-between mt-8">
+                                <button onClick={() => {
+                                    setStep(1);
+                                    setTimeout(() => {
+                                        const offset = -100; // adjust (e.g., -50, -80, -120)
+
+                                        if (step1ref.current) {
+                                            const top =
+                                                step1ref.current.getBoundingClientRect().top +
+                                                window.scrollY +
+                                                offset;
+
+                                            window.scrollTo({
+                                                top,
+                                                behavior: "smooth",
+                                            });
+                                        }
+                                    }, 50);
+
+                                }}
+                                    className="btn btn-outline px-6"
+                                >
+                                    Back
+                                </button>
+                                <button
+                                    className="btn btn-primary px-6"
+                                    onClick={() => handlePreview()}
+                                >
+                                    Preview and Order
+                                </button>
+                            </div>
+                        </>
+                    )}
+
+                </>
+            }
+
+            <LoginModalButton
+                btnTitle="E-mail already registered. Confirm to continue"
+                btnDisplay="none"
+                open={showLoginModal}
+                onClose={() => setShowLoginModal(false)}
+            />
+
+            {!formData.companyType &&
+
+                <>
+
+
+                    <form className="grid grid-cols-1 md:grid-cols-6 gap-x-6 gap-y-5 mt-5 cursor-not-allowed">
+
+                        {[
+                            { label: "Company Name", name: "companyName", required: true },
+                            { label: "Address", name: "address", required: true },
+                            { label: "Country", name: "country" },
+                            { label: "State", name: "state" },
+                            { label: "City", name: "city", required: true },
+                            { label: "Postal Code", name: "postalCode" },
+                            { label: "Phone", name: "telephone", required: true },
+                            { label: "Company Website (if available)", name: "website" },
+                        ].map((field, index) => (
+                            <div
+                                key={index}
+                                className="md:col-span-3"
+                            >
+                                <Input
+                                    label={field.label}
+                                    name={field.name}
+                                    value={formData[field.name] || ""}
+                                    required={field.required}
+                                    disable
+                                />
+                            </div>
+                        ))}
+
+                    </form>
+
+                    {showSnackbar && (
+                        <div className="bg-grey-500 text-red-600 px-4 py-3 text-end text-sm font-medium">
+                            {snackbarMessage}
+                        </div>
+                    )}
+
+                    <div className="flex justify-between mt-10">
+
+
+                        {/* <button
+                            type="button"
+                            onClick={() => window.open("/sample-reports", "_blank")}
+                            className="btn btn-link text-sm font-medium text-blue-500 underline"
+                        >
+                            Sample Report
+                        </button> */}
+
+
+                        {/* <button
+                            type="button"
+                            onClick={() => handleNext()}
+                            className="btn btn-primary px-8 py-2 text-sm font-medium"
+                        >
+                            Next
+                        </button> */}
+                    </div>
+                </>
+            }
+
+        </div >
+
+    );
+};
+
+const Input = ({ label, name, value, onChange, required = false, disable = false, autoComplete = "on", className = "", type = 'text' }) => (
+    <div className={className}>
+
+        <label className="label text-sm font-medium text-gray-700">
+            {label} {required && <span className="text-red-500">*</span>}
+        </label>
+        <input
+            autoComplete={autoComplete}
+            type={type}
+            name={name}
+            value={value}
+            placeholder={label}
+            className="input border w-full bg-white border-gray-300 "
+            onChange={onChange}
+            disabled={disable}
+            required={required}
+        />
+    </div>
+);
+
+
+
+export default ClaimyourcompanyForm;

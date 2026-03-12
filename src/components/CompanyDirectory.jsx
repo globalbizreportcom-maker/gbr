@@ -454,17 +454,17 @@ const CompanyDirectory = () => {
                                                 : 'bg-red-100 text-red-700'}
     `}
                                     >
-                                        {c.CompanyStatus}
+                                        {c.companystatus}
                                     </div>
 
 
 
                                     <p className="text-sm text-gray-700">
-                                        <span className="font-semibold text-gray-800">CIN:</span> {c.CIN}
+                                        <span className="font-semibold text-gray-800">CIN:</span> {c.cin}
                                     </p>
 
                                     <p className="text-sm text-gray-700">
-                                        <span className="font-semibold text-gray-800">Address:</span> {c.Registered_Office_Address}
+                                        <span className="font-semibold text-gray-800">Address:</span> {c.registered_office_address}
                                     </p>
 
                                     <div className="flex justify-end mt-2">
