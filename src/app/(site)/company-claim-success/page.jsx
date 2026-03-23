@@ -1,3 +1,6 @@
+export const dynamic = "force-dynamic";
+
+
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
@@ -7,6 +10,7 @@ import axios from "axios";
 import { apiUrl } from "@/api/api";
 
 export default function CompanyClaimSuccess() {
+
     const router = useRouter();
     const searchParams = useSearchParams();
     const paymentId = searchParams.get("id"); // ?id=razorpayPaymentId
