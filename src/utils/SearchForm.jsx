@@ -171,7 +171,7 @@ export default function CompanySearch() {
         );
 
         // ✅ Open in new tab
-        const url = `http://localhost:3000/${companyname}/${cin}/${country}/${stateCode}/company-business-financial-credit-report`;
+        const url = `https://www.globalbizreport.com/${companyname}/${cin}/${country}/${stateCode}/company-business-financial-credit-report`;
         window.open(url, "_blank"); // _blank opens in a new tab
     };
 
