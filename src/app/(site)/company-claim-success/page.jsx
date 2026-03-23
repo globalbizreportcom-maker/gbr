@@ -1,13 +1,17 @@
-export const dynamic = "force-dynamic";
 
 
 "use client";
+
+
 
 import { useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { FaCheckCircle } from "react-icons/fa";
 import axios from "axios";
 import { apiUrl } from "@/api/api";
+
+export const dynamic = "force-dynamic";
+
 
 export default function CompanyClaimSuccess() {
 
