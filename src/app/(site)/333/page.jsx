@@ -1,3 +1,13 @@
+'use client';
+
+export const page = () => {
+    return (
+        <div>page</div>
+    )
+}
+
+
+
 // "use client";
 
 // import { useEffect, useState } from "react";
@@ -223,8 +233,3 @@
 //     );
 // }
 
-export const page = () => {
-    return (
-        <div>page</div>
-    )
-}
