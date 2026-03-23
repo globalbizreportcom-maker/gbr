@@ -211,6 +211,7 @@ const OrderCreditReport = () => {
                     name: finalData.contactName,
                     email: finalData.contactEmail,
                     country: finalData.contactCountry?.label || finalData.contactCountry || "",
+                    state: finalData.contactState?.label || finalData.contactState || "",
                     phone: finalData.contactPhone,
                     company: finalData.contactCompany,
                     gst: finalData.companyGst || '',

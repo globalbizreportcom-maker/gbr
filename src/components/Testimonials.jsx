@@ -8,49 +8,49 @@ const testimonials = [
         name: "Sarah L.",
         role: "Procurement Head, USA",
         text: "GBR's report on our new supplier saved us from a potential $50K loss – detailed payment history and credit rating were spot on!",
-        img: "https://cdn-icons-png.flaticon.com/128/149/149071.png",
+        img: "https://randomuser.me/api/portraits/women/44.jpg", // US
     },
     {
         name: "Raj Patel",
         role: "CEO & MD, India",
         text: "Quick delivery and accurate global data helped us expand safely into Europe. Highly recommend for due diligence!",
-        img: "https://cdn-icons-png.flaticon.com/128/149/149071.png",
+        img: "https://randomuser.me/api/portraits/men/81.jpg", // India
     },
     {
         name: "Emily Chen",
         role: "Risk Analyst, Global Finance Advisor, Singapore",
         text: "As a Business Analyst, GBR reports are my go-to for client assessments. Fresh insights every time – transformed my workflow.",
-        img: "https://cdn-icons-png.flaticon.com/128/149/149071.png",
+        img: "https://randomuser.me/api/portraits/women/65.jpg", // Singapore/Asian
     },
     {
         name: "Sarah Emiley",
         role: "CFO, Financial Institution, Hong-Kong",
         text: "The Report coverage and turnaround time is exceptional. We needed urgent verification for a potential partner, and GBR delivered a detailed report quickly and saved us from making a costly mistake.",
-        img: "https://cdn-icons-png.flaticon.com/128/149/149071.png",
+        img: "https://randomuser.me/api/portraits/women/12.jpg", // Hong-Kong/Asian
     },
     {
         name: "TaeYong Kim",
         role: "Owner, Market Research, South Korea",
         text: "GlobalBizReport helped us verify international suppliers before placing large orders. The comprehensive reports gave us the confidence to expand our business globally without unnecessary risks.",
-        img: "https://cdn-icons-png.flaticon.com/128/149/149071.png",
+        img: "https://randomuser.me/api/portraits/men/29.jpg", // South Korea/Asian
     },
     {
         name: "Michael Roberts",
         role: "B2B Platform, United Kingdom",
         text: "As a B2B marketplace, we rely on GBR for vendor verification. The depth of information in their reports is outstanding, and their support team is always helpful and responsive.",
-        img: "https://cdn-icons-png.flaticon.com/128/149/149071.png",
+        img: "https://randomuser.me/api/portraits/men/33.jpg", // UK/European
     },
     {
         name: "David Martinez",
         role: "Consulting Firm, Canada",
         text: "We've been using GlobalBizReport for three years now. The global coverage is unmatched. We operate in 15 countries, and GBR provides consistent, reliable reports regardless of location.",
-        img: "https://cdn-icons-png.flaticon.com/128/149/149071.png",
+        img: "https://randomuser.me/api/portraits/men/72.jpg", // Canada/North America
     },
     {
         name: "Aisha Mohammed",
         role: "Trading Company, UAE",
         text: "The reports include everything we need - financials, credit ratings, legal information - all in one place. Highly recommended for any business doing international trade.",
-        img: "https://cdn-icons-png.flaticon.com/128/149/149071.png",
+        img: "https://randomuser.me/api/portraits/women/55.jpg", // UAE/Middle Eastern
     },
 ];
 
@@ -98,11 +98,11 @@ export default function Testimonials() {
 
 
                                 {/* Left: Image */}
-                                {/* <img
+                                <img
                                     src={t.img}
                                     alt={t.name}
-                                    className="w-20 h-20 rounded-full object-cover flex-shrink-0"
-                                /> */}
+                                    className="w-15 h-15 rounded-md object-cover flex-shrink-0"
+                                />
 
                                 {/* Right: Details */}
                                 <div className="flex flex-col">

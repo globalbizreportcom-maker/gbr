@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { useDashboard } from "../DashboardContext";
 import CountryInput from "@/utils/CountryInput";
+import StateInput from "@/utils/StateInput";
 import PhoneNumberInput from "@/utils/PhoneNumberInput";
 import { apiUrl } from "@/api/api";
 import { FaUser, FaBuilding, FaPen, FaMailBulk, FaLocationArrow, FaMobile, FaIdCard } from "react-icons/fa";
@@ -20,6 +21,7 @@ const ProfilePage = () => {
         name: "",
         company: "",
         country: "",
+        state: "",
         phone: "",
         gstin: '',
     });
@@ -32,6 +34,8 @@ const ProfilePage = () => {
                 country: user.country || "",
                 phone: user.phone || "",
                 gstin: user.gstin || "",
+                state: user.state || "",
+
             });
         }
         setLoadingUser(false); // <-- stop loading once user is set
@@ -42,7 +46,7 @@ const ProfilePage = () => {
     const handleChange = (field, valueOrEvent) => {
         let value;
 
-        if (field === "country" && valueOrEvent?.target?.value !== undefined) {
+        if ((field === "country" || field === 'state') && valueOrEvent?.target?.value !== undefined) {
             // For CountryInput, extract value from event
             value = valueOrEvent.target.value;
         } else {
@@ -109,6 +113,8 @@ const ProfilePage = () => {
         );
     }
 
+    console.log(formData);
+
     const renderField = (label, field, icon, InputComponent = null) => (
         <div className="flex flex-col p-5 rounded-xl bg-white border border-gray-100">
             {editableField === field ? (
@@ -168,8 +174,8 @@ const ProfilePage = () => {
 
 
     return (
-        <div className="max-w-xl mx-auto mt-6 p-1">
-            <h1 className="text-md font-bold mb-10 text-center text-gray-900">Profile Details</h1>
+        <div className="max-w-3xl mx-auto mt-6 p-1">
+            <h1 className="text-md font-bold mb-10 text-left text-gray-900">Profile Details</h1>
 
             {alertMsg && (
                 <div
@@ -185,12 +191,8 @@ const ProfilePage = () => {
                 </div>
             )}
 
-            {!user ? (
-                <div className="text-center mt-10 text-gray-500">
-                    No user data available
-                </div>
-            ) : loading ? (
-                <div className="flex flex-col items-center justify-center mt-10">
+            {loading ? (
+                <div className="flex flex-col  items-center justify-center mt-10">
                     <svg
                         className="animate-spin h-8 w-8 text-blue-600 mb-2"
                         xmlns="http://www.w3.org/2000/svg"
@@ -213,19 +215,18 @@ const ProfilePage = () => {
                     </svg>
                     <p className="text-gray-600">Loading user data...</p>
                 </div>
-            ) : (
+            ) :
 
 
 
-
-                <div className="grid grid-cols-1 sm:grid-cols-1 gap-6 w-full">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full">
                     {renderField("Name", "name", <FaUser className="w-6 h-6 text-gray-400 mr-3" />)}
 
                     {/* Email read-only */}
                     <div className="flex items-center p-5 rounded-xl bg-white border border-gray-100">
                         <FaMailBulk className="w-6 h-6 text-gray-400 mr-3" />
-                        <p className="flex-1 text-gray-900 bg-gray-50 px-2 py-1 rounded cursor-not-allowed">
-                            {user.email}
+                        <p className="flex-1 text-gray-900  px-2 py-1 rounded cursor-not-allowed">
+                            {user?.email}
                         </p>
                     </div>
 
@@ -236,12 +237,42 @@ const ProfilePage = () => {
                         PhoneNumberInput
                     )}
 
-                    {renderField(
+
+                    <div className="flex items-center p-5 rounded-xl bg-white border border-gray-100">
+                        <FaLocationArrow className="w-6 h-6 text-gray-400 mr-3" />
+                        <p className="flex-1 text-gray-900  px-2 py-1 rounded cursor-not-allowed">
+                            {user?.country}
+                        </p>
+                    </div>
+
+                    <div className="flex items-center p-5 rounded-xl bg-white border border-gray-100">
+                        <FaLocationArrow className="w-6 h-6 text-gray-400 mr-3" />
+                        <p className="flex-1 text-gray-900  px-2 py-1 rounded cursor-not-allowed">
+                            {user?.state || 'State'}
+                        </p>
+                    </div>
+
+                    <div className="flex items-center p-5 rounded-xl bg-white border border-gray-100">
+                        <FaLocationArrow className="w-6 h-6 text-gray-400 mr-3" />
+                        <p className="flex-1 text-gray-900  px-2 py-1 rounded cursor-not-allowed">
+                            {user?.city || 'City'}
+                        </p>
+                    </div>
+
+
+                    {/* {renderField(
                         "Country",
                         "country",
                         <FaLocationArrow className="w-6 h-6 text-gray-400 mr-3" />,
                         CountryInput
-                    )}
+                    )} */}
+
+                    {/* {renderField(
+                        "State",
+                        "state",
+                        <FaLocationArrow className="w-6 h-6 text-gray-400 mr-3" />,
+                        StateInput
+                    )} */}
 
                     {renderField("Company", "company", <FaBuilding className="w-6 h-6 text-gray-400 mr-3" />)}
 
@@ -249,7 +280,15 @@ const ProfilePage = () => {
 
                 </div>
 
+
+            }
+
+            {!loading && !user && (
+                <div className="text-center mt-10 text-gray-500">
+                    No user data available
+                </div>
             )}
+
         </div>
     );
 };

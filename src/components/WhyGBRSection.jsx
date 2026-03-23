@@ -60,7 +60,7 @@ const WhyGBRSection = () => {
                         <img
                             src="https://images.pexels.com/photos/3184287/pexels-photo-3184287.jpeg"
                             alt="Credit Report"
-                            className="w-full h-[300px] sm:h-[500px] sm:object-contain md:object-cover rounded-xl"
+                            className="w-full h-[300px] sm:h-[500px] object-cover rounded-xl"
                         />
                     </div>
                 </div>

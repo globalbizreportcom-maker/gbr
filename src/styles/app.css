@@ -77,3 +77,34 @@ textarea::-ms-input-placeholder {
 .input:is(:disabled, [disabled]) {
     background-color: #efefef !important;
 }
+
+@keyframes gradientMove {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+.animate-gradientMove {
+    animation: gradientMove 4s ease infinite;
+}
+
+
+/* global.css or styles.css */
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+
+.no-scrollbar {
+    -ms-overflow-style: none;
+    /* IE & Edge */
+    scrollbar-width: none;
+    /* Firefox */
+}

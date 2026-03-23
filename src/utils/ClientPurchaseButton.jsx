@@ -12,7 +12,7 @@ const ClientPurchaseButton = ({ companyData, label, bgColor = 'orange', overlay 
 
         sessionStorage.removeItem('credit_report');
 
-        const addressParts = companyData.Registered_Office_Address
+        const addressParts = companyData.registered_office_address
             ?.split(",")
             .map(p => p.trim()) || [];
 
@@ -30,15 +30,15 @@ const ClientPurchaseButton = ({ companyData, label, bgColor = 'orange', overlay 
             }
         }
 
-        const stateLabel = companyData?.CompanyStateCode
-            ? companyData.CompanyStateCode.charAt(0).toUpperCase() + companyData.CompanyStateCode.slice(1).toLowerCase()
+        const stateLabel = companyData?.companystatecode
+            ? companyData.companystatecode.charAt(0).toUpperCase() + companyData.companystatecode.slice(1).toLowerCase()
             : "";
         const cityLabel = addressParts[addressParts.length - 4] || "";
 
         const formData = {
             companyType: 'other_company' || '',
-            companyName: companyData.CompanyName || "",
-            address: companyData.Registered_Office_Address || "",
+            companyName: companyData.companyname || "",
+            address: companyData.registered_office_address || "",
             city: cityLabel,
             state: stateLabel,
             country: {

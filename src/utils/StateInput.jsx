@@ -10,8 +10,9 @@ const StateInput = ({ country, value, onChange }) => {
 
     const [states, setStates] = useState([]);
 
+    console.log(value, country);
     useEffect(() => {
-        if (country.value) {
+        if (country) {
             const stateOptions = State.getStatesOfCountry(country.value).map((s) => ({
                 value: s.isoCode,
                 label: s.name,
@@ -26,11 +27,11 @@ const StateInput = ({ country, value, onChange }) => {
     return (
         <div className="mb-5">
             <label className="block text-sm font-medium mb-1 text-gray-500">
-                State {country.label === 'India' && <RequiredStar />}
+                State {country?.label === 'India' && <RequiredStar />}
             </label>
             <Select
                 options={states}
-                value={states.find((opt) => opt.label === value) || null}
+                value={states.find((opt) => opt.label === value?.label || opt.label === value) || null}
                 onChange={(selected) =>
                     onChange({ target: { value: selected || "" } })
                 }

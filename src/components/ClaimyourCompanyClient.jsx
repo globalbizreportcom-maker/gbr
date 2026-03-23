@@ -9,8 +9,6 @@ import Image from "next/image";
 import ClaimyourcompanyForm from "./ClaimyourcompanyForm";
 
 
-
-
 const ClaimyourCompanyClient = () => {
 
     const formRef = useRef(null);
@@ -31,85 +29,73 @@ const ClaimyourCompanyClient = () => {
 
 
     return (
-        <section className="py-0 md:py-5  max-w-7xl mx-auto px-1 bg-white text-gray-800">
 
+        <div>
 
-            <div className="grid grid-cols-1 xl:grid-cols-2 gap-8 px-0 md:px-10 py-10">
+            <section className="py-0 md:py-5 mt-5 mb-10  mx-auto max-w-[1600px] w-full rounded-2xl bg-gradient-to-t from-gray-50 via-white to-blue-200 text-gray-800">
 
+                <div className="grid grid-cols-1 xl:grid-cols-2 gap-8 px-0 md:px-10 py-10">
 
-                <div className="relative z-10 flex flex-col py-2 md:py-10 bg-gray-50 px-3" >
+                    {/* Left Content */}
+                    <div className="rounded-2xl px-6">
+                        <h1 className="text-4xl lg:text-5xl font-bold text-gray-900 leading-tight">
+                            Grow Your Business with Our Corporate Solutions
+                        </h1>
 
-                    <h2 className="text-2xl md:text-3xl  max-w-2xl font-bold  mb-5 text-left ">
-                        Order a Business Credit Report on Any Company Worldwide
-                    </h2>
+                        <p className="mt-6 text-lg text-gray-600">
+                            Join thousands of companies using our platform to manage operations,
+                            increase visibility, and reach new customers. Claim your company
+                            profile today and start growing faster.
+                        </p>
 
-                    <ul className="text-gray-600 text-left max-w-3xl mb-5 text-md xl:text-md  list-disc list-inside space-y-2">
-                        <li>Access freshly investigated company credit reports on businesses across 220+ countries.</li>
-                        <li>Make confident decisions by verifying your business partners, vendors, buyers, and suppliers with GBR reports.</li>
-                        <li>Gain detailed insights into a company's reliability, credibility, financials, credit ratings, and more — all with simple <span className="font-extrabold">Pay-per-Report</span> pricing.</li>
-                    </ul>
-
-                    <div className="w-[100%] mx-auto hidden md:block py-5">
-                        <img
-                            src='https://images.pexels.com/photos/7693705/pexels-photo-7693705.jpeg'
-                            alt="Example"
-                            className="rounded-xl h-50 w-[100%] object-cover"
-                        />
-                    </div>
-
-
-                    <div className="flex flex-col md:hidden justify-start mb-5 gap-4">
-                        <button
-                            onClick={handleScrollToForm}
-                            className="cursor-pointer font-semibold px-8 py-3 rounded-lg shadow-none hover:shadow-lg hover:scale-105 transition-all duration-300 items-center gap-2 btn btn-primary "
-                        >
-                            Order Report Now <FaChevronRight />
-                        </button>
-
-                    </div>
-
-                    <ul className="grid grid-cols-1 gap-3 list-disc list-inside text-left">
-                        {[
-                            "Trusted by 20,000+ Global Companies",
-                            "10,000+ Reports delivered Monthly",
-                        ].map((service, idx) => (
-                            <li
-                                key={idx}
-                                className="font-medium text-sm md:text-base text-gray-600"
+                        <div className="mt-8 flex gap-4">
+                            <button
+                                onClick={() =>
+                                    formRef.current?.scrollIntoView({ behavior: "smooth" })
+                                }
+                                className="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700"
                             >
-                                {service}
-                            </li>
-                        ))}
-                    </ul>
+                                Claim Your Company
+                            </button>
+
+                        </div>
+
+                        <div className="mt-10 text-sm text-gray-500">
+                            ⭐ Trusted by 10,000+ companies worldwide
+                        </div>
+                    </div>
+
+                    {/* Right Form */}
+                    <div
+                        ref={formRef}
+                        className="rounded-2xl p-1"
+                    >
+
+                        <ClaimyourcompanyForm />
+                    </div>
                 </div>
 
-                {/* Order Form Section */}
+            </section>
 
-                <div ref={formRef} className="">
-                    <ClaimyourcompanyForm />
-                </div>
-            </div>
-
-
-            <section className="bg-gray-50 py-2 md:py-10 px-6 md:px-10 lg:px-20 text-gray-800 w-full">
+            <section className=" py-2 md:py-10 px-6 md:px-10 lg:px-20 text-gray-800 w-full">
                 <div className="max-w-6xl mx-auto text-center mb-5 md:mb-10">
                     <h2 className="text-2xl md:text-4xl font-extrabold text-gray-900 mb-4">
-                        Make  <span className="text-indigo-500">Informed <span className="text-gray-900">&</span> Smarter</span>  Business Decisions
+                        Make  <span className="text-blue-500">Informed <span className="text-gray-900">&</span> Smarter</span>  Business Decisions
                     </h2>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-1 md:gap-6 max-w-6xl mx-auto mb-12">
 
                     {/* Point 1 */}
                     <div className="bg-white rounded-xl p-3 md:p-6 text-left flex items-start gap-3">
-                        <FaCheckCircle className="text-indigo-400 text-2xl flex-shrink-0 mt-1" />
+                        <FaCheckCircle className="text-blue-600 text-2xl flex-shrink-0 mt-1" />
                         <p className="text-gray-700 text-md leading-relaxed">
-                            Find out if your business partners, suppliers, or buyers are trustworthy.
+                            Gain detailed insights into a company's Reliability, Credibility, Financials, Credit Ratings, and more
                         </p>
                     </div>
 
                     {/* Point 2 */}
                     <div className="bg-white rounded-xl p-3 md:p-6 text-left flex items-start gap-3">
-                        <FaCheckCircle className="text-indigo-400 text-2xl flex-shrink-0 mt-1" />
+                        <FaCheckCircle className="text-blue-600 text-2xl flex-shrink-0 mt-1" />
                         <p className="text-gray-700 text-md leading-relaxed">
                             Get a Self-Assessment Report for your own company to build credibility and transparency.
                         </p>
@@ -117,7 +103,7 @@ const ClaimyourCompanyClient = () => {
 
                     {/* Point 3 */}
                     <div className="bg-white rounded-xl p-3 md:p-6 text-left flex items-start gap-3">
-                        <FaCheckCircle className="text-indigo-400 text-2xl flex-shrink-0 mt-1" />
+                        <FaCheckCircle className="text-blue-600 text-2xl flex-shrink-0 mt-1" />
                         <p className="text-gray-700 text-md leading-relaxed">
                             Quick & effortless Ordering Process. Worldwide Coverage.
                         </p>
@@ -125,7 +111,7 @@ const ClaimyourCompanyClient = () => {
 
                     {/* Point 4 */}
                     <div className="bg-white rounded-xl p-3 md:p-6 text-left flex items-start gap-3">
-                        <FaCheckCircle className="text-indigo-400 text-2xl flex-shrink-0 mt-1" />
+                        <FaCheckCircle className="text-blue-600 text-2xl flex-shrink-0 mt-1" />
                         <p className="text-gray-700 text-md leading-relaxed">
                             No contracts. No minimums. No annual fees. Just simple pay-per-report pricing.
                         </p>
@@ -133,7 +119,7 @@ const ClaimyourCompanyClient = () => {
 
                     {/* Point 5 */}
                     <div className="bg-white rounded-xl p-3 md:p-6 text-left flex items-start gap-3">
-                        <FaCheckCircle className="text-indigo-400 text-2xl flex-shrink-0 mt-1" />
+                        <FaCheckCircle className="text-blue-600 text-2xl flex-shrink-0 mt-1" />
                         <p className="text-gray-700 text-md leading-relaxed ">
                             <strong>Pricing of the credit</strong>   report varies based on the country of the company
                             to be verified, and you will find the pricing for the required Credit
@@ -143,7 +129,7 @@ const ClaimyourCompanyClient = () => {
 
                     {/* Point 6 */}
                     <div className="bg-white rounded-xl p-3 md:p-6 text-left flex items-start gap-3">
-                        <FaCheckCircle className="text-indigo-400 text-2xl flex-shrink-0 mt-1" />
+                        <FaCheckCircle className="text-blue-600 text-2xl flex-shrink-0 mt-1" />
                         <p className="text-gray-700 text-md leading-relaxed ">
                             <strong>You will receive</strong>  a freshly investigated credit report digitally on your
                             email within the expected delivery time of 1–3 business days.
@@ -177,7 +163,7 @@ const ClaimyourCompanyClient = () => {
                 {/* Why Choose Section */}
                 <div className="max-w-5xl mx-auto py-10">
                     <h3 className="text-xl md:text-3xl font-extrabold text-center mb-8 text-gray-900">
-                        Why Choose <span className="text-indigo-500">GlobalBizReport?</span>
+                        Why Choose <span className="text-blue-500">GlobalBizReport?</span>
                     </h3>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-1 md:gap-6 ">
@@ -192,7 +178,7 @@ const ClaimyourCompanyClient = () => {
                         ].map((item, idx) => (
                             <div
                                 key={idx}
-                                className="bg-white  rounded-2xl p-3 md:p-6 text-center  hover:border-indigo-300"
+                                className="bg-white  rounded-2xl p-3 md:p-6 text-center  hover:border-blue-300"
                             >
                                 <div className="flex justify-center">{item.icon}</div>
                                 <h4 className="font-semibold text-gray-900 text-base md:text-lg mb-2 mt-2">
@@ -208,15 +194,15 @@ const ClaimyourCompanyClient = () => {
 
 
             {/* testimonials */}
-            <div className='max-w-lg mx-auto py-10' >
+            <div className='max-w-6xl mx-auto py-10' >
                 <Testimonials />
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-2 md:gap-6 px-2 py-2 max-w-6xl mx-auto">
 
                 {/* 2. Global Coverage */}
-                <div className="flex items-start gap-3  p-4 rounded-lg bg-gray-50">
-                    <span className="w-7 h-7 text-indigo-500 flex items-center justify-center rounded-sm text-lg">
+                <div className="flex items-start gap-3  p-4 rounded-lg bg-gray-50 text-gray-700">
+                    <span className="w-7 h-7 text-blue-500 flex items-center justify-center rounded-sm text-lg">
                         <FaGlobeAsia />
                     </span>
                     <p className=" text-sm md:text-md">
@@ -225,8 +211,8 @@ const ClaimyourCompanyClient = () => {
                 </div>
 
                 {/* 3. Safer Business Decisions */}
-                <div className="flex items-start gap-3  p-4 rounded-lg bg-gray-50">
-                    <span className="w-7 h-7 text-indigo-500 flex items-center justify-center rounded-sm text-lg">
+                <div className="flex items-start gap-3  p-4 rounded-lg bg-gray-50 text-gray-700">
+                    <span className="w-7 h-7 text-blue-500 flex items-center justify-center rounded-sm text-lg">
                         <FaShieldAlt />
                     </span>
                     <p className=" text-sm md:text-md">
@@ -235,8 +221,8 @@ const ClaimyourCompanyClient = () => {
                 </div>
 
                 {/* 1. Fresh Reports */}
-                <div className="flex items-start gap-3  p-4 rounded-lg bg-gray-50">
-                    <span className="w-7 h-7 text-indigo-500 flex items-center justify-center rounded-sm text-lg">
+                <div className="flex items-start gap-3  p-4 rounded-lg bg-gray-50 text-gray-700">
+                    <span className="w-7 h-7 text-blue-500 flex items-center justify-center rounded-sm text-lg">
                         <FaFile />
                     </span>
                     <p className=" text-sm md:text-md">
@@ -253,7 +239,7 @@ const ClaimyourCompanyClient = () => {
                 <FaInfo className="mr-5 bg-gray-100" />    Over 20,000+ global businesses trust GBR for company assessment and due-diligence checks – join them and safeguard your growth!
             </p>
 
-        </section>
+        </div>
     );
 };
 

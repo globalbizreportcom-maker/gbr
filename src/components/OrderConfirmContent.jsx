@@ -8,7 +8,7 @@ import { useDashboard } from '@/app/(site)/dashboard/DashboardContext';
 import { apiUrl } from '@/api/api';
 import { useRouter, usePathname } from "next/navigation";
 import axios from 'axios';
-import { RazorpayCheckout } from './RazorpayCheckout';
+import { RazorpayCheckout } from './payments/RazorpayCheckout';
 
 
 const Skeleton = ({ className }) => (

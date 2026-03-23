@@ -21,7 +21,7 @@ export const Highlights = () => {
     ];
 
     return (
-        <section className="bg-gray-50 py-12 px-4">
+        <section className="bg-gray-50 py-2 md:py-12 px-4">
             <div className="max-w-7xl mx-auto">
                 <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
                     {items.map((item, idx) => (
@@ -29,11 +29,11 @@ export const Highlights = () => {
                             key={idx}
                             className="bg-gray-100 rounded-xl p-6 transition-all duration-300 "
                         >
-                            <div className="flex flex-col items-start gap-4">
+                            <div className="flex flex-row md:flex-col items-start md:items-center gap-4">
                                 <div className="bg-primary/10 text-primary p-3 rounded-full">
                                     {item.icon}
                                 </div>
-                                <p className="text-gray-800 text-base font-medium leading-snug">
+                                <p className="text-gray-800 text-base font-medium leading-snug md:text-center">
                                     {item.text}
                                 </p>
                             </div>

@@ -10,7 +10,7 @@ import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FaSpinner } from "react-icons/fa";
 import { Country, State, City } from 'country-state-city';
-import { RazorpayCheckout } from "./RazorpayCheckout";
+import { RazorpayCheckout } from "./payments/RazorpayCheckout";
 
 export const dynamic = "force-dynamic";
 

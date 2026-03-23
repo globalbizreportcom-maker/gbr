@@ -6,6 +6,7 @@ const Select = dynamic(() => import("react-select"), { ssr: false });
 import { Country } from "country-state-city";
 
 const CountryInput = ({ value, onChange }) => {
+
     const [countries, setCountries] = useState([]);
 
     useEffect(() => {
@@ -27,7 +28,7 @@ const CountryInput = ({ value, onChange }) => {
             <Select
                 required
                 options={countries}
-                value={countries.find((opt) => opt.label === value) || null}
+                value={countries.find((opt) => opt.label === value?.label || opt.label === value) || null}
                 onChange={(selected) =>
                     onChange({ target: { value: selected || "" } })
                 }

@@ -12,7 +12,7 @@ export default async function SearchPage({ searchParams }) {
     const initialCompany = params?.company || "";
 
     return (
-        <div className="min-h-screen bg-gray-50 px-6 py-6 md:px-12 lg:px-20">
+        <div className="min-h-screen bg-gray-50 px-6 py-2 md:px-12 lg:px-20">
 
             {/* Search Form Section */}
             <div className="max-w-7xl mx-auto  rounded-2xl">

@@ -502,7 +502,7 @@ const CompanyDirectory = () => {
                         </p>
 
                         <button
-                            onClick={() => window.location.reload()}
+                            onClick={() => window.location.href = '/company-directory/india'}
                             className="flex btn btn-outline shadow-none items-center gap-2 px-5 py-2.5 
                                  border border-gray-300 text-gray-600 
                                  rounded-lg hover:bg-gray-100 

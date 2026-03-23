@@ -56,7 +56,7 @@ const Features = () => {
                     {featureList.map((feature, index) => (
                         <div
                             key={index}
-                            className="card bg-white shadow-xs p-6 hover:shadow-xs transition rounded-lg hover:bg-primary group"
+                            className="card bg-white shadow-xs p-6 hover:shadow-xs transition rounded-lg hover:bg-primary group items-center"
                         >
                             <div className="text-primary text-3xl mb-4 group-hover:text-white ">
                                 {feature.icon}

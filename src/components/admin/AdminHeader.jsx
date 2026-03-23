@@ -70,6 +70,7 @@ const AdminHeader = () => {
         { href: "/admin/users", label: "Users", color: 'black' },
         { href: "/admin/abandon-checkout", label: "Abandon Checkout", color: 'black' },
         { href: "/admin/order-request/all", label: "Orders", color: 'black' },
+        { href: "/admin/company-claim-payments", label: "Claimed Payments", color: 'black' },
         { href: "/admin/payments", label: "Payments", color: 'black' },
         { href: "/admin/inbox", label: "Inbox", color: 'black' },
         { href: "/admin/search", label: "Search Company", color: 'black' },
@@ -88,6 +89,7 @@ const AdminHeader = () => {
 
                         <Link href="/admin/users" className="hover:text-primary">Users</Link>
                         <Link href="/admin/abandon-checkout" className="hover:text-primary">Abandon Checkout</Link>
+                        <Link href="/admin/company-claim-payments" className="hover:text-primary">Claimed Payments</Link>
                         <Link href="/admin/order-request/all" className="hover:text-primary">Order Requests</Link>
                         <Link href="/admin/inbox" className="hover:text-primary">Inbox</Link>
                         <Link href="/admin/payments" className="hover:text-primary">Payments</Link>

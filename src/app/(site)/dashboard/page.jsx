@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { apiUrl } from "@/api/api";
 import { useDashboard } from "./DashboardContext";
-import { FaChevronRight } from "react-icons/fa";
+import { FaBox, FaBuilding, FaChevronRight, FaFile, FaFileAlt, FaFlag, FaFlagCheckered, FaSearch, FaStar } from "react-icons/fa";
 
 export default function DashboardHome() {
     const { user } = useDashboard();
@@ -14,6 +14,7 @@ export default function DashboardHome() {
         totalOrders: 0,
         receivedReports: 0,
         trackOrders: 0,
+        totalClaimPayments: 0
     });
 
     useEffect(() => {
@@ -33,7 +34,7 @@ export default function DashboardHome() {
 
 
     return (
-        <div className="min-h-screen bg-gray-50 p-0  lg:p-4 max-w-5xl mx-auto">
+        <div className="min-h-screen bg-gray-50 p-0  lg:p-4 max-w-7xl mx-auto">
 
             <div
                 className="relative rounded-2xl overflow-hidden text-white px-4 md:px-6 py-5 md:py-7 "
@@ -98,21 +99,21 @@ export default function DashboardHome() {
             </div>
 
             {/* Header */}
-            <div className="mb-6 sm:mb-8 py-5">
+            <div className="mb-6 sm:mb-4 mt-5 py-5">
                 <h1 className="text-xl font-semibold text-gray-800">
                     Welcome, {user?.name || "User"}
                 </h1>
             </div>
 
             {/* Stats Cards */}
-            <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-6 sm:mb-8">
+            <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-4 sm:gap-6 mb-6 sm:mb-8">
 
                 {/* Track Orders (Optional, you can remove if not needed) */}
                 <div
                     onClick={() => router.push("/dashboard/orders-tracking")}
                     className="cursor-pointer bg-white rounded-lg p-4 sm:p-6 flex flex-col items-center justify-center border border-gray-200 hover:shadow-md transition"
                 >
-                    <div className="text-2xl sm:text-3xl mb-1 sm:mb-2">⏳</div>
+                    <FaFlagCheckered className="text-2xl sm:text-3xl mb-1 sm:mb-2 text-cyan-600" />
                     <p className="text-gray-500 text-sm sm:text-base">Track Orders</p>
                     <p className="text-xl sm:text-2xl font-bold text-gray-800 mt-1">{stats.trackOrders}</p>
                 </div>
@@ -122,7 +123,7 @@ export default function DashboardHome() {
                     onClick={() => router.push("/dashboard/reports")}
                     className="cursor-pointer bg-white rounded-lg p-4 sm:p-6 flex flex-col items-center justify-center border border-gray-200 hover:shadow-md transition"
                 >
-                    <div className="text-2xl sm:text-3xl mb-1 sm:mb-2">📑</div>
+                    <FaFileAlt className="text-2xl sm:text-3xl mb-1 sm:mb-2 text-indigo-400" />
                     <p className="text-gray-500 text-sm sm:text-base">Delivered Reports</p>
                     <p className="text-xl sm:text-2xl font-bold text-gray-800 mt-1">{stats.receivedReports}</p>
                 </div>
@@ -133,9 +134,28 @@ export default function DashboardHome() {
                     onClick={() => router.push("/dashboard/total/orders")}
                     className="cursor-pointer bg-white rounded-lg p-4 sm:p-6 flex flex-col items-center justify-center border border-gray-200 hover:shadow-md transition"
                 >
-                    <div className="text-2xl sm:text-3xl mb-1 sm:mb-2">📦</div>
+                    <FaBox className="text-2xl sm:text-3xl mb-1 sm:mb-2 text-yellow-500" />
                     <p className="text-gray-500 text-sm sm:text-base">Total Orders</p>
                     <p className="text-xl sm:text-2xl font-bold text-gray-800 mt-1">{stats.totalOrders}</p>
+                </div>
+
+                {/* Claimed Companies */}
+                {/* Your Companies */}
+                <div
+                    onClick={() => router.push("/dashboard/claimed-companies")}
+                    className="relative cursor-pointer bg-white rounded-lg p-4 sm:p-6 flex flex-col items-center justify-center border border-gray-200 hover:shadow-md transition"
+                >
+                    {/* Star/Reward Badge */}
+                    <div className="absolute -top-1 -right-1 flex items-center bg-orange-500 text-white text-xs sm:text-sm font-semibold  p-1 rounded-md shadow-md">
+                        <FaStar className=" text-white text-[10px] sm:text-lg" />
+                        {/* Exclusive */}
+                    </div>
+
+                    <FaBuilding className="text-2xl sm:text-3xl mb-1 sm:mb-2 text-gray-500" />
+                    <p className="text-gray-500 text-sm sm:text-base">Claimed Companies</p>
+                    <p className="text-xl sm:text-2xl font-bold text-gray-800 mt-1">
+                        {stats.totalClaimPayments}
+                    </p>
                 </div>
 
                 {/* Search Reports */}
@@ -143,7 +163,7 @@ export default function DashboardHome() {
                     onClick={() => router.push("/search")}
                     className="cursor-pointer bg-white rounded-lg p-4 sm:p-6 flex flex-col items-center justify-center border border-gray-200 hover:shadow-md transition"
                 >
-                    <div className="text-2xl sm:text-3xl mb-1 sm:mb-2">🔍</div>
+                    <FaSearch className="text-2xl sm:text-3xl mb-1 sm:mb-2 text-gray-500" />
                     <p className="text-gray-500 text-sm sm:text-base">Search Company</p>
                     <p className="text-blue-500 text-sm underline">Search</p>
                 </div>

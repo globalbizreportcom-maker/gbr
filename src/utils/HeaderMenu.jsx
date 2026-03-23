@@ -3,7 +3,7 @@ import { apiUrl } from "@/api/api";
 import { useDashboard } from "@/app/(site)/dashboard/DashboardContext";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { FaUserCircle, FaBars, FaChevronRight, FaChartLine } from "react-icons/fa";
+import { FaUserCircle, FaBars, FaChevronRight, FaChartLine, FaGripHorizontal } from "react-icons/fa";
 import { useState } from "react";
 
 export default function HeaderMenu() {
@@ -21,12 +21,13 @@ export default function HeaderMenu() {
         { href: "/contact", label: "Contact" },
     ];
 
-    const renderLink = ({ href, label, vertical, onClick }) => (
+    const renderLink = ({ href, label, icon, vertical, onClick }) => (
         <Link
             href={href}
             onClick={onClick} // <-- add this
             className={`font-normal sm:font-semibold text-[16px] relative group ${vertical ? "block py-2" : ""}`}
         >
+            {/* <span>  {icon}  </span> */}
             <span className="after:content-[''] after:absolute after:left-0 after:-bottom-1 after:w-0 after:h-[2px] after:bg-primary after:transition-all after:duration-400 group-hover:after:w-full">
                 {label}
             </span>
@@ -56,10 +57,10 @@ export default function HeaderMenu() {
 
     // ---------------- Desktop UI ----------------
     const DesktopMenu = () => (
-        <ul className="hidden md:flex menu menu-horizontal px-1 gap-1 items-center text-black">
+        <ul className="hidden lg:flex menu menu-horizontal px-1 gap-1 items-center text-black">
             {user && user ? (
                 <>
-                    <li>{renderLink({ href: "/dashboard", label: "Dashboard" })}</li>
+                    <li> {renderLink({ href: "/dashboard", label: "Dashboard", icon: <FaGripHorizontal className="text-gray-600" /> })}</li>
                     {mainNav.map((item) => (
                         <li key={item.href}>{renderLink(item)}</li>
                     ))}
@@ -68,9 +69,9 @@ export default function HeaderMenu() {
                             href="/order-business-credit-report"
                             className="btn btn-primary"
                             onClick={() => {
-                                if (typeof window !== "undefined") {
-                                    sessionStorage.setItem("credit_report", "direct");
-                                }
+                                // if (typeof window !== "undefined") {
+                                sessionStorage.setItem("credit_report", "direct");
+                                // }
                             }}
                         >
                             Order Business Credit Report
@@ -81,7 +82,7 @@ export default function HeaderMenu() {
                         <div className="dropdown dropdown-hover dropdown-end">
                             <div
                                 tabIndex={0}
-                                className="flex items-center gap-1 text-black font-semibold p-2 cursor-pointer"
+                                className="flex items-center gap-1 text-black font-semibold cursor-pointer"
                             >
                                 <FaUserCircle size={24} className="text-gray-700" />
                                 {/* <span className="font-semibold">{user.name}</span> */}
@@ -157,7 +158,7 @@ export default function HeaderMenu() {
 
     // ---------------- Mobile UI ----------------
     const MobileMenu = () => (
-        <div className="md:hidden">
+        <div className="lg:hidden">
             <button
                 className="text-gray-700 p-2"
                 onClick={() => setMobileOpen(!mobileOpen)}

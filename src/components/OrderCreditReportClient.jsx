@@ -34,31 +34,42 @@ const OrderCreditReportClient = () => {
 
 
     return (
-        <section className="py-0 md:py-5  max-w-7xl mx-auto px-1 bg-white text-gray-800">
+        <section className="py-0 md:py-5  max-w-[1500px] mx-auto px-1 bg-white text-gray-800">
 
 
-            <div className="grid grid-cols-1 xl:grid-cols-2 gap-8 px-0 md:px-10 py-10">
+            <div className="grid grid-cols-1 xl:grid-cols-2 rounded-2xl gap-8  px-0 md:px-10 py-10 md:py-15 bg-gradient-to-t from-white via-white to-indigo-100">
 
 
-                <div className="relative z-10 flex flex-col py-2 md:py-10 bg-gray-50 px-3" >
+                <div className="relative z-10 flex flex-col py-2 md:py-0  px-3" >
 
-                    <h2 className="text-2xl md:text-3xl  max-w-2xl font-bold  mb-5 text-left ">
-                        Order a Business Credit Report on Any Company Worldwide
-                    </h2>
+                    <h1 className="text-4xl lg:text-5xl font-bold text-gray-900 leading-tight">
+                        Order a Business Credit Report on Any Company <span className="text-primary">Worldwide </span>
+                    </h1>
 
-                    <ul className="text-gray-600 text-left max-w-3xl mb-5 text-md  list-disc list-inside space-y-2">
-                        <li>Access <span className="font-bold">Freshly Investigated Company</span> Credit Reports on businesses across <span className="font-bold">220+ Countries.</span></li>
-                        <li><span className="font-bold">Verify Authenticity & Trustworthiness </span> of your Business Partners, Vendors, Buyers, and Suppliers with GBR reports.</li>
-                        <li>Gain detailed insights into a company's Reliability, Credibility, Financials, Credit Ratings, and more — with simple <span className="font-bold">Pay-per-Report pricing. </span></li>
-                    </ul>
+                    <div className="relative max-w-3xl mb-5">
+                        <div
+                            className="relative p-6 md:p-4 rounded-xl overflow-hidden"
+                        // style={{
+                        //     backgroundImage: "url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Y29ycG9yYXRlfGVufDB8fDB8fHww')",
+                        //     backgroundSize: "cover",
+                        //     backgroundPosition: "center",
+                        // }}
+                        >
+                            {/* Overlay for text readability */}
+                            {/* <div className="absolute inset-0 bg-black/80"></div> */}
 
-                    <div className="w-[100%] mx-auto hidden md:block py-5">
-                        <img
-                            src='https://images.pexels.com/photos/7693705/pexels-photo-7693705.jpeg'
-                            alt="Example"
-                            className="rounded-xl h-50 w-[100%] object-cover"
-                        />
+                            {/* Content */}
+                            <ul className="relative  text-left text-md list-disc  space-y-4">
+                                <li className="text-gray-700">
+                                    Access <span className="font-semibold text-gray-900">Freshly Investigated Company</span> Credit Reports on businesses across <span className="font-bold">220+ Countries.</span>
+                                </li>
+                                <li className="text-gray-700">
+                                    <span className="font-semibold text-gray-900">Verify Authenticity & Trustworthiness</span> of your Business Partners, Vendors, Buyers, and Suppliers with GBR reports.
+                                </li>
+                            </ul>
+                        </div>
                     </div>
+
 
 
                     <div className="flex flex-col md:hidden justify-start mb-5 gap-4">
@@ -68,13 +79,6 @@ const OrderCreditReportClient = () => {
                         >
                             Order Report Now <FaChevronRight />
                         </button>
-
-                        {/* <button
-                            onClick={() => window.open('/sample-reports', '_blank')}
-                            className="cursor-pointer hidden md:flex font-semibold px-8 py-3 rounded-lg shadow-none hover:shadow-lg hover:scale-105 transition-all duration-300  items-center gap-2 btn btn-outline"
-                        >
-                            View Sample Report
-                        </button> */}
                     </div>
 
                     <ul className="grid grid-cols-1 gap-3 list-none text-left">
@@ -92,13 +96,13 @@ const OrderCreditReportClient = () => {
                                 icon: <FaUserCheck className="text-gray-500 mr-4" />
                             },
                             {
-                                text: "Quick Digital Delivery at the Lowest Price",
+                                text: "Lowest pay per report pricing",
                                 icon: <FaBolt className="text-gray-500 mr-4" />
                             }
                         ].map((item, idx) => (
                             <li
                                 key={idx}
-                                className="flex items-center font-medium text-sm text-gray-600"
+                                className="flex items-center text-sm text-gray-600"
                             >
                                 {item.icon}
                                 {item.text}
@@ -115,7 +119,7 @@ const OrderCreditReportClient = () => {
             </div>
 
 
-            <section className="bg-gray-50 py-2 md:py-10 px-6 md:px-10 lg:px-20 text-gray-800 w-full">
+            <section className=" py-2 md:py-10 px-6 md:px-10 lg:px-20 text-gray-800 w-full">
                 <div className="max-w-6xl mx-auto text-center mb-5 md:mb-10">
                     <h2 className="text-2xl md:text-4xl font-extrabold text-gray-900 mb-4">
                         Make  <span className="text-indigo-500">Informed <span className="text-gray-900">&</span> Smarter</span>  Business Decisions
@@ -127,7 +131,7 @@ const OrderCreditReportClient = () => {
                     <div className="bg-white rounded-xl p-3 md:p-6 text-left flex items-start gap-3">
                         <FaCheckCircle className="text-indigo-400 text-2xl flex-shrink-0 mt-1" />
                         <p className="text-gray-700 text-md leading-relaxed">
-                            Find out if your business partners, suppliers, or buyers are trustworthy.
+                            Gain detailed insights into a company's Reliability, Credibility, Financials, Credit Ratings, and more
                         </p>
                     </div>
 
@@ -232,7 +236,7 @@ const OrderCreditReportClient = () => {
 
 
             {/* testimonials */}
-            <div className='max-w-lg mx-auto py-10' >
+            <div className='max-w-6xl mx-auto py-10' >
                 <Testimonials />
             </div>
 
