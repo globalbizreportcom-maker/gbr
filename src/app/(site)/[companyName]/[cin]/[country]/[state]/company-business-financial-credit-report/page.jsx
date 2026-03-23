@@ -326,7 +326,7 @@ const CompanyPage = async ({ params }) => {
                             <FaFile className="h-5 w-5" />
                             <ClientPurchaseButton
                                 companyData={companyData}
-                                label="Order a Comprehensive Business Information Report for this Company."
+                                label="Order Business Credit Report For This Company."
                                 bgColor="orange"
                             />
                         </div>
