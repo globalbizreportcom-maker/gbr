@@ -26,13 +26,13 @@ const testimonials = [
         name: "Sarah Emiley",
         role: "CFO, Financial Institution, Hong-Kong",
         text: "The Report coverage and turnaround time is exceptional. We needed urgent verification for a potential partner, and GBR delivered a detailed report quickly and saved us from making a costly mistake.",
-        img: "https://randomuser.me/api/portraits/women/12.jpg", // Hong-Kong/Asian
+        img: "https://randomuser.me/api/portraits/women/0.jpg", // Hong-Kong/Asian
     },
     {
         name: "TaeYong Kim",
         role: "Owner, Market Research, South Korea",
         text: "GlobalBizReport helped us verify international suppliers before placing large orders. The comprehensive reports gave us the confidence to expand our business globally without unnecessary risks.",
-        img: "https://randomuser.me/api/portraits/men/29.jpg", // South Korea/Asian
+        img: "https://randomuser.me/api/portraits/men/4.jpg", // South Korea/Asian
     },
     {
         name: "Michael Roberts",
