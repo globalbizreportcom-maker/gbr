@@ -322,12 +322,12 @@ const CompanyPage = async ({ params }) => {
 
                     {/* Bottom Fixed CTA */}
                     <div className="fixed bottom-0 left-0 w-full bg-gray-600 text-white p-4 flex justify-between xl:justify-end items-center shadow-lg z-50">
-                        <div className="bg-orange-500 rounded-md px-2 text-base font-medium flex items-center gap-2">
+                        <div className=" rounded-md px-2 text-base font-medium flex items-center gap-2">
                             <FaFile className="h-5 w-5" />
                             <ClientPurchaseButton
                                 companyData={companyData}
                                 label="Order Business Credit Report For This Company."
-                                bgColor="orange"
+                                bgColor="gray"
                             />
                         </div>
                     </div>

@@ -38,7 +38,7 @@ const AboutPage = () => {
                         <h3 className="text-3xl md:text-4xl font-bold mb-4">
                             About Global Biz Report
                         </h3>
-                        <p className="text-gray-700 mb-6 leading-relaxed">
+                        <p className="text-gray-700 mb-6 leading-relaxed white">
                             We are a leading provider of business credit reports and information solutions. With a strong focus on accuracy, reliability and comprehensive insights, we have established ourselves as a trusted resource for businesses worldwide. Our mission is to empower businesses with the knowledge they need to make informed decisions, mitigate risks and drive success.
                         </p>
 
@@ -140,7 +140,7 @@ const AboutPage = () => {
 
                 <section className="py-20 text-gray-800">
 
-                    <h2 className="mx-auto text-md border-0 bg-violet-100 p-2 text-center rounded-md w-[400px] font-bold text-primary mb-5">
+                    <h2 className="mx-auto text-md border-0 bg-violet-100 p-2 text-center rounded-md max-w-[400px] font-bold text-primary mb-5">
                         BUSINESS CREDIT REPORTS
                     </h2>
 
