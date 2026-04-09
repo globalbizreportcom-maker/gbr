@@ -7,7 +7,6 @@ import { FaCalendarAlt, FaCheckCircle, FaFile, FaIndustry, FaUsers } from "react
 
 export default function EditedCompany({ govtData, editedValue }) {
 
-    console.log(govtData);
     const [activeTab, setActiveTab] = useState("Overview")
     const contentRef = useRef(null)
 
@@ -451,58 +450,103 @@ export default function EditedCompany({ govtData, editedValue }) {
 
                     <div className="md:col-span-1 flex flex-col items-center justify-start gap-6 px-2 py-10">
 
-                        {/* --- BANNER 1 --- */}
-                        <div
-                            className="relative rounded-2xl w-full overflow-hidden"
-                            style={{
-                                backgroundImage: "url('https://images.unsplash.com/photo-1532619187608-e5375cab36aa?q=80&w=1600')",
-                                backgroundSize: "cover",
-                                backgroundPosition: "center",
-                            }}
-                        >
-                            {/* Overlay */}
-                            <div className="absolute inset-0 bg-black/70 rounded-2xl"></div>
+                        {/* Banner 2: Deep Obsidian & Gold (Executive Variant) */}
+                        <div className="relative w-full rounded-xl p-6 bg-[#0a0a0a] border-t-2 border-amber-500 shadow-2xl flex flex-col justify-between overflow-hidden group">
 
-                            {/* Content */}
-                            <div className="relative z-10 text-left p-5 flex flex-col items-start">
-                                <p className="text-md font-semibold leading-relaxed mb-4 text-gray-300">
-                                    Order a Comprehensive Business Information Report for detailed company insights
+                            {/* 1. Background Architecture (Gold Technical Grid) */}
+                            <div className="absolute inset-0 opacity-[0.05] pointer-events-none"
+                                style={{ backgroundImage: `linear-gradient(#f59e0b 1px, transparent 1px), linear-gradient(90deg, #f59e0b 1px, transparent 1px)`, backgroundSize: '40px 40px' }}></div>
+
+                            {/* Dynamic Radial Glow (Amber/Gold) */}
+                            <div className="absolute -top-24 -right-24 w-64 h-64 bg-amber-600/10 rounded-full blur-[80px] group-hover:bg-amber-600/20 transition-all duration-700"></div>
+
+                            {/* 2. Abstract Security Mark (Gold Outline) */}
+                            <div className="absolute top-8 right-8 text-white/5 group-hover:text-amber-500/10 transition-colors duration-500">
+                                <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1">
+                                    {/* Document Outline */}
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" strokeLinecap="round" strokeLinejoin="round" />
+                                    <path d="M14 2v6h6" strokeLinecap="round" strokeLinejoin="round" />
+                                    {/* Data/Bar Chart inside the report */}
+                                    <path d="M8 13v4" strokeLinecap="round" strokeLinejoin="round" opacity="0.6" />
+                                    <path d="M12 11v6" strokeLinecap="round" strokeLinejoin="round" />
+                                    <path d="M16 15v2" strokeLinecap="round" strokeLinejoin="round" opacity="0.6" />
+                                </svg>
+                            </div>
+
+                            {/* 3. Main Content Section */}
+                            <div className="relative z-10">
+                                <h2 className="text-2xl font-bold text-amber-600 leading-tight tracking-tight">
+                                    Self Company<br />
+                                    <span className="text-orange-200"> Report</span>
+                                </h2>
+
+                                <p className="text-slate-400 text-xs leading-relaxed py-4 max-w-[240px] font-medium  ">
+                                    Buy a Credit Report of your own company to boost credibility and trustworthiness.
                                 </p>
+                            </div>
 
-                                <div className="btn btn-primary px-1 py-3 text-base font-medium flex items-center gap-2">
-                                    <FaFile className="h-5 w-5" />
+                            {/* 4. Action Section */}
+                            <div className="relative z-10 flex items-center justify-between">
+                                <div className="transform transition-transform active:scale-95">
+                                    <button className="btn btn-md btn-warning shadow-2xl rounded-md px-5 w-fit">
+                                        <SelfReportButton label="Get Self Report" />
+                                    </button>
+                                </div>
+
+                            </div>
+
+                            {/* Bottom Accent Line (Amber Gradient) */}
+                            <div className="absolute bottom-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-amber-500/40 to-transparent"></div>
+                        </div>
+
+                        {/* Banner 3: Strategic Emerald & Graphite */}
+                        <div className="relative w-full rounded-xl p-6 bg-[#0f1110] border-t-2 border-emerald-500 shadow-2xl flex flex-col justify-between overflow-hidden group transition-all duration-500 hover:shadow-emerald-900/20">
+
+                            {/* 1. Background Architecture (Emerald Technical Grid) */}
+                            <div className="absolute inset-0 opacity-[0.03] pointer-events-none"
+                                style={{ backgroundImage: `linear-gradient(#10b981 1px, transparent 1px), linear-gradient(90deg, #10b981 1px, transparent 1px)`, backgroundSize: '40px 40px' }}></div>
+
+                            {/* Dynamic Radial Glow (Emerald/Forest) */}
+                            <div className="absolute -top-24 -right-24 w-64 h-64 bg-emerald-600/10 rounded-full blur-[80px] group-hover:bg-emerald-500/20 transition-all duration-700"></div>
+
+                            {/* 2. Self Report SVG Mark */}
+                            <div className="absolute top-8 right-8 text-white/5 group-hover:text-emerald-500/10 transition-colors duration-500">
+                                <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" strokeLinecap="round" strokeLinejoin="round" />
+                                    <path d="M14 2v6h6" strokeLinecap="round" strokeLinejoin="round" />
+                                    <path d="M8 13v4" strokeLinecap="round" strokeLinejoin="round" opacity="0.6" />
+                                    <path d="M12 11v6" strokeLinecap="round" strokeLinejoin="round" />
+                                    <path d="M16 15v2" strokeLinecap="round" strokeLinejoin="round" opacity="0.6" />
+                                </svg>
+                            </div>
+
+                            {/* 3. Main Content Section */}
+                            <div className="relative z-10">
+                                <h2 className="text-2xl font-bold text-emerald-500 leading-tight tracking-tight">
+                                    Business<br />
+                                    <span className="text-slate-100">Credit Report</span>
+                                </h2>
+
+                                <p className="text-slate-400 text-xs leading-relaxed py-4 max-w-[240px] font-medium ">
+                                    Order a Comprehensive Business Information Report for detailed company insights.
+                                </p>
+                            </div>
+
+                            {/* 4. Action Section */}
+                            <div className="relative z-10 flex items-center justify-between">
+                                <div className="transform transition-transform active:scale-95">
+                                    {/* Custom Button Style: Sharp Emerald */}
                                     <ClientPurchaseButton
                                         companyData={govtData}
-                                        label="Full Company Report"
-                                        bgColor="primary"
-                                        overlay={1}
+                                        label="Request Full Report"
+                                        bgColor="emerald"
+                                        className="!bg-blue-600 !hover:bg-blue-700 !text-white !rounded-none !px-6 !py-3 !text-[10px] !uppercase !tracking-widest !font-bold !transition-all"
                                     />
                                 </div>
                             </div>
-                        </div>
 
-                        {/* --- BANNER 2 --- */}
-                        <div
-                            className="relative rounded-2xl w-full overflow-hidden"
-                            style={{
-                                backgroundImage: "url('https://images.unsplash.com/photo-1521791136064-7986c2920216?q=80&w=1600')",
-                                backgroundSize: "cover",
-                                backgroundPosition: "center",
-                            }}
-                        >
-                            {/* Overlay */}
-                            <div className="absolute inset-0 bg-black/70 rounded-2xl"></div>
-
-                            {/* Content */}
-                            <div className="relative z-10 text-left p-5 flex flex-col items-start">
-                                <p className="text-md font-semibold leading-relaxed mb-4 text-gray-300">
-                                    Buy a Credit Report of your own company to boost credibility and trustworthiness.
-                                </p>
-
-                                <button className="btn btn-md btn-warning border-none rounded-md shadow-none px-5 w-fit">
-                                    <SelfReportButton label="Get Self Report" />
-                                </button>
-                            </div>
+                            {/* Bottom Accent Line */}
+                            <div className="absolute bottom-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-emerald-500/40 to-transparent"></div>
                         </div>
 
                     </div>

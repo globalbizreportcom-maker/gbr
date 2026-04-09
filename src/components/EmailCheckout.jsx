@@ -686,23 +686,23 @@ const EmailCheckout = () => {
 
                     {/* 🔹 Payment Section */}
                     <div className="w-full md:w-auto flex flex-col md:flex-row items-center justify-center  gap-4">
-                        {isINR ? (
-                            <div className="w-full md:w-auto flex flex-col md:flex-row items-center justify-between p-4 border border-gray-200 rounded-xl  hover:bg-gray-50 transition">
-                                <span className="font-medium text-gray-600 text-center md:text-left mb-2 md:mb-0 md:mr-4">
-                                    Pay via Razorpay{" "}
-                                    <span className="text-xs text-gray-500">(INR payments only)</span>
-                                </span>
-                                <div className="w-full md:w-auto flex justify-center">
-                                    {paymentAmount && (
-                                        <RazorpayCheckout
-                                            key={`razor-${paymentAmount}-${formData?.currency}`}
-                                            amount={paymentAmount.toString()}
-                                            userId={formData.user || user?._id || ""}
-                                        />
-                                    )}
-                                </div>
+                        {/* {isINR ? ( */}
+                        <div className="w-full md:w-auto flex flex-col md:flex-row items-center justify-between p-4 border border-gray-200 rounded-xl  hover:bg-gray-50 transition">
+                            <span className="font-medium text-gray-600 text-center md:text-left mb-2 md:mb-0 md:mr-4">
+                                Pay via Razorpay{" "}
+                                <span className="text-xs text-gray-500">(INR payments only)</span>
+                            </span>
+                            <div className="w-full md:w-auto flex justify-center">
+                                {paymentAmount && (
+                                    <RazorpayCheckout
+                                        key={`razor-${paymentAmount}-${formData?.currency}`}
+                                        amount={paymentAmount.toString()}
+                                        userId={formData.user || user?._id || ""}
+                                    />
+                                )}
                             </div>
-                        ) : (
+                        </div>
+                        {/* ) : (
                             <div className="w-full md:w-auto flex flex-col md:flex-row items-center justify-between p-4 border border-gray-200 rounded-xl  hover:bg-gray-50 transition">
                                 <span className="font-medium text-gray-600 text-center md:text-left mb-2 md:mb-0 md:mr-4">
                                     Pay via PayPal
@@ -717,7 +717,7 @@ const EmailCheckout = () => {
                                     )}
                                 </div>
                             </div>
-                        )}
+                        )} */}
                     </div>
                 </div>
             )}

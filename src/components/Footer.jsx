@@ -50,7 +50,7 @@
 //                         <div className="flex items-center gap-4 border-b sm:border-b-0 sm:border-r border-slate-700/50 pb-4 sm:pb-0 last:border-0">
 //                             <FaChartLine className="text-indigo-400 text-3xl shrink-0" />
 //                             <div>
-//                                 <p className="text-white font-black text-xl">Thousands</p>
+//                                 <p className="text-white font-black text-xl">s</p>
 //                                 <p className="text-[10px] uppercase tracking-widest font-bold text-slate-500 leading-tight">Reports Delivered Worldwide</p>
 //                             </div>
 //                         </div>
@@ -271,11 +271,11 @@ const Footer = () => {
     if (!mounted) return <footer className="bg-[#0f172a] h-96" />;
 
     return (
-        <footer className="bg-[#0f172a] text-slate-400 font-sans border-t border-slate-800 mt-20">
+        <footer className="bg-[#0f172a] text-slate-400 font-sans border-t border-slate-800 mt-25">
             {/* 1. Metrics & Trust Bar - Responsive Grid */}
             <div className="max-w-7xl mx-auto px-6 lg:px-8">
                 <div className="relative">
-                    <div className="relative  md:absolute left-0 right-0 -top-6 md:-top-12 bg-slate-800/90 backdrop-blur-xl border border-slate-700/50 rounded-3xl p-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8 shadow-2xl">
+                    <div className="relative  md:absolute left-0 right-0 -top-12 md:-top-12 bg-slate-800/90 backdrop-blur-xl border border-slate-700/50 rounded-3xl p-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8 shadow-2xl">
                         <div className="flex items-center gap-4 border-b sm:border-b-0 sm:border-r border-slate-700/50 pb-4 sm:pb-0 last:border-0">
                             <FaGlobeAmericas className="text-indigo-400 text-3xl shrink-0" />
                             <div>
@@ -293,7 +293,7 @@ const Footer = () => {
                         <div className="flex items-center gap-4 border-b sm:border-b-0 sm:border-r border-slate-700/50 pb-4 sm:pb-0 last:border-0">
                             <FaChartLine className="text-indigo-400 text-3xl shrink-0" />
                             <div>
-                                <p className="text-white font-black text-xl">Thousands</p>
+                                <p className="text-white font-black text-xl">1000</p>
                                 <p className="text-[10px] uppercase tracking-widest font-bold text-slate-500 leading-tight">Reports Delivered Worldwide</p>
                             </div>
                         </div>
@@ -308,13 +308,12 @@ const Footer = () => {
                         <div className="flex items-center gap-4 border-b sm:border-b-0 sm:border-r border-slate-700/50 pb-4 sm:pb-0 last:border-0">
                             <FaGlobeAmericas className="text-indigo-400 text-3xl shrink-0" />
                             <div>
-                                <p className="text-white font-black text-xl">220+</p>
-                                <p className="text-[10px] uppercase tracking-widest font-bold text-slate-500 leading-tight">
-                                    Countries Covered
-                                </p>
-                                <p className="text-[9px] text-indigo-300/60 font-medium leading-tight mt-1">
+                                <p className="text-white font-black text-xl md:text-lg">Global Coverage</p>
+                                <p className="text-[10px] md:text-[8px] uppercase tracking-widest font-bold text-slate-500 leading-tight">
                                     Global Coverage Across Major Industries and Markets
                                 </p>
+                                {/* <p className="text-[9px] text-indigo-300/60 font-medium leading-tight mt-1">
+                                </p> */}
                             </div>
                         </div>
                     </div>
@@ -322,14 +321,14 @@ const Footer = () => {
             </div>
 
             {/* 2. Main Content Container */}
-            <div className="max-w-7xl mx-auto px-6 lg:px-8 pb-16 pt-10 md:pt-32 lg:pt-32">
+            <div className="max-w-7xl mx-auto px-6 lg:px-8 pb-16 pt-8 md:pt-32 lg:pt-32">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-12 lg:gap-8">
                     {/* About Section */}
-                    <div className="lg:col-span-4 space-y-6">
+                    <div className="lg:col-span-full space-y-6">
                         <h2 className="text-white text-2xl font-extrabold tracking-tighter">
                             About <span className="text-indigo-400">GlobalBizReport</span>
                         </h2>
-                        <div className="space-y-4 text-xs leading-relaxed text-slate-400">
+                        <div className="space-y-4 text-sm leading-relaxed text-slate-400">
                             <p>
                                 <strong className="text-slate-200">GlobalBizReport (GBR Business Reports)</strong> is a <span className='font-bold text-gray-400'> leading global business intelligence and credit reporting platform</span>  that provides  <span className='font-bold text-gray-400'>Business Credit Reports, Company Credit Reports, Business Information Reports, and Company Due-Diligence Reports on businesses across 220+ countries </span> .
                             </p>
@@ -346,8 +345,54 @@ const Footer = () => {
                         </div>
                     </div>
 
+                    {/* 3. Detailed Description Section with REF */}
+                    <div
+                        ref={detailsRef}
+                        className={`lg:col-span-full transition-all duration-700 ease-in-out ${isExpanded ? 'max-h-[2000px] opacity-100 mt-5 pb-10' : 'max-h-0 opacity-0'
+                            } overflow-hidden`}
+                    >
+                        {/* Grid Container */}
+                        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
+
+                            {/* Left Side: Detailed Content (Spans 8 columns) */}
+                            <div className="lg:col-span-8 space-y-5 text-sm leading-relaxed text-slate-500 text-justify">
+                                <p>
+                                    GBR specializes in delivering <span className='font-bold text-gray-400'> freshly investigated and comprehensive Business Information Reports and International Company Credit Reports </span>
+                                    that provide deep insights into <span className='font-bold text-gray-400'> company background, ownership structure, operational status, financial strength, creditworthiness, payment behavior, and potential risk indicators</span>.
+                                    These reports help organizations <span className='font-bold text-gray-400'> reduce credit risk, prevent fraud, strengthen compliance, and conduct reliable business due diligence</span>.
+                                </p>
+
+                                <p>
+                                    GlobalBizReport is a <span className='font-bold text-gray-400'> preferred Business Credit Reporting and Company Verification partner </span>
+                                    for <span className='font-bold text-gray-400'> Corporates, SMEs, B2B Marketplaces, Banks, Financial Institutions, Global Consulting Firms, Trade Organizations, and Market Research Companies worldwide </span>
+                                    that require trusted business intelligence before entering into commercial relationships or international trade agreements.
+                                </p>
+
+                                <p>
+                                    Our reports are <span className='font-bold text-gray-400'> professionally researched and freshly investigated using verified local sources and global research networks </span>,
+                                    ensuring <span className='font-bold text-gray-400'> high accuracy, reliability, and actionable business intelligence </span> to support critical business decisions.
+                                </p>
+                            </div>
+
+                            {/* Right Side: Online Ordering Platform Card (Spans 4 columns) */}
+                            <div className="lg:col-span-4">
+                                <div className="bg-slate-900/40 p-6 rounded-2xl border border-slate-800/50 backdrop-blur-sm">
+                                    <h4 className="text-white text-[13px] font-bold uppercase tracking-widest mb-4">Online Ordering Platform</h4>
+                                    <p className="text-[12px] leading-relaxed text-slate-400">
+                                        Through the GlobalBizReport online platform, businesses can easily <span className='font-bold text-gray-400'> order Business Credit Reports, International Company Reports, Business Verification Reports, and Company Due-Diligence Reports on any company worldwide</span>,
+                                        enabling organizations to <span className='font-bold text-gray-400'> verify business partners, evaluate suppliers and vendors, assess buyers, and conduct cross-border risk analysis with confidence.</span>
+                                    </p>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-12 lg:gap-8">
                     {/* Navigation Columns (Takes 4 columns split into two) */}
-                    <div className="lg:col-span-2 space-y-6">
+                    <div className="lg:col-span-4 space-y-6">
                         <h4 className="text-white text-xs font-bold uppercase tracking-[0.2em] border-b border-slate-800 pb-2">Quick Links</h4>
                         <ul className="space-y-3 text-sm">
                             {navLinks.map((link) => (
@@ -364,7 +409,7 @@ const Footer = () => {
                         </ul>
                     </div>
 
-                    <div className="lg:col-span-2 space-y-6">
+                    <div className="lg:col-span-4 space-y-6">
                         <h4 className="text-white text-xs font-bold uppercase tracking-[0.2em] border-b border-slate-800 pb-2">Main Links</h4>
                         <ul className="space-y-3 text-sm">
                             {mainLinks.map((link) => (
@@ -403,32 +448,6 @@ const Footer = () => {
                     </div>
                 </div>
 
-                {/* 3. Detailed Description Section with REF */}
-                <div
-                    ref={detailsRef} // Attach the ref here
-                    className={`overflow-hidden transition-all duration-700 ease-in-out ${isExpanded ? 'max-h-[2000px] opacity-100 mt-16 pb-10' : 'max-h-0 opacity-0'
-                        }`}
-                >
-                    <div className="pt-12 border-t border-slate-800 grid grid-cols-1 lg:grid-cols-12 gap-12">
-                        {/* Full Detailed Content (No wording missed) */}
-                        <div className="lg:col-span-8 space-y-5 text-xs leading-relaxed text-slate-500 text-justify">
-                            <p>GBR specializes in delivering <span className='font-bold text-gray-400'> freshly investigated and comprehensive Business Information Reports and International Company Credit Reports </span> that provide deep insights into <span className='font-bold text-gray-400'> company background, ownership structure, operational status, financial strength, creditworthiness, payment behavior, and potential risk indicators</span>. These reports help organizations <span className='font-bold text-gray-400'> reduce credit risk, prevent fraud, strengthen compliance, and conduct reliable business due diligence</span>.</p>
-
-                            <p>GlobalBizReport is a <span className='font-bold text-gray-400'>  preferred Business Credit Reporting and Company Verification partner </span> for <span className='font-bold text-gray-400'>  Corporates, SMEs, B2B Marketplaces, Banks, Financial Institutions, Global Consulting Firms, Trade Organizations, and Market Research Companies worldwide </span> that require trusted business intelligence before entering into commercial relationships or international trade agreements.</p>
-
-                            <p>Our reports are  <span className='font-bold text-gray-400'>  professionally researched and freshly investigated using verified local sources and global research networks </span>, ensuring <span className='font-bold text-gray-400'>  high accuracy, reliability, and actionable business intelligence </span> to support critical business decisions.</p>
-                        </div>
-
-                        <div className="lg:col-span-4">
-                            <div className="bg-slate-900/40 p-3 md:p-6 rounded-2xl border border-slate-800/50">
-                                <h4 className="text-white text-[13px] font-bold uppercase tracking-widest mb-3">Online Ordering Platform</h4>
-                                <p className="text-[12px] leading-relaxed text-slate-400">
-                                    Through the GlobalBizReport online platform, businesses can easily  <span className='font-bold text-gray-400'> order Business Credit Reports, International Company Reports, Business Verification Reports, and Company Due-Diligence Reports on any company worldwide</span>, enabling organizations to  <span className='font-bold text-gray-400'> verify business partners, evaluate suppliers and vendors, assess buyers, and conduct cross-border risk analysis with confidence.</span>
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
                 {/* 4. Closing Statement Section */}
                 <div className="mt-12 p-6 bg-indigo-500/5 rounded-2xl border border-indigo-500/10 text-center">

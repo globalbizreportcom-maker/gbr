@@ -4,7 +4,7 @@ import { useEffect } from "react";
 export default function ClientRedirectGuard() {
     useEffect(() => {
         const allowedDomains = [
-            // 'localhost',
+            'localhost',
             'globalbizreport.com',
             'cloudinary.com'
         ];

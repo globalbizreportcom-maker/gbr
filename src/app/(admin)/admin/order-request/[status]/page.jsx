@@ -14,9 +14,12 @@ const STATUS_COLORS = {
     "in-progress": "bg-yellow-500 text-white",
     "completed": "bg-blue-500 text-white",
     "delivered": "bg-green-600 text-white",
+    "cancelled": "bg-red-400 text-white",
+    "refunded": "bg-orange-400 text-white",
+
 };
 
-const STATUS_TABS = ["all", "initiated", "in-progress", "completed", "delivered"];
+const STATUS_TABS = ["all", "initiated", "in-progress", "completed", "delivered", "cancelled", "refunded"];
 
 
 const ReportsAdmin = ({ defaultTab }) => {
@@ -287,7 +290,7 @@ const ReportsAdmin = ({ defaultTab }) => {
                                                 <td>{report.requesterInfo.country}</td>
                                                 <td>
                                                     <span
-                                                        className={`px-3 py-1 rounded-full text-sm font-medium ${STATUS_COLORS[report.status] || "bg-gray-200 text-gray-800"
+                                                        className={`px-3 py-1 rounded-lg text-sm font-medium ${STATUS_COLORS[report.status] || "bg-gray-200 text-gray-800"
                                                             }`}
                                                     >
                                                         {report.status.charAt(0).toUpperCase() + report.status.slice(1)}
@@ -319,7 +322,7 @@ const ReportsAdmin = ({ defaultTab }) => {
                                         <div className="flex justify-between items-center mb-3">
                                             <span className="font-semibold text-gray-700">#{index + 1}</span>
                                             <span
-                                                className={`px-3 py-1 rounded-full text-sm font-medium ${STATUS_COLORS[report.status] || "bg-gray-200 text-gray-800"
+                                                className={`px-3 py-1 rounded-lg text-sm font-medium ${STATUS_COLORS[report.status] || "bg-gray-200 text-gray-800"
                                                     }`}
                                             >
                                                 {report.status.charAt(0).toUpperCase() + report.status.slice(1)}
@@ -344,7 +347,7 @@ const ReportsAdmin = ({ defaultTab }) => {
 
                                         {/* View Button */}
                                         <button
-                                            className="mt-4 w-[150px] btn btn-primary py-2 shadow-none font-medium rounded-lg"
+                                            className="mt-4 w-fit  btn-primary btn btn-sm shadow-none font-medium rounded-lg"
                                             onClick={() => handleView(report)}
                                         >
                                             View Details

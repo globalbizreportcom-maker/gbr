@@ -109,7 +109,7 @@ export default function SampleReports() {
                                 <div className="mt-4 flex flex-col sm:flex-col gap-3">
                                     <button
                                         className="flex-1 cursor-pointer text-center border border-gray-300 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-100 transition"
-                                        onClick={() => { window.open(report.url, "_blank", "noopener,noreferrer"); }}
+                                        onClick={() => { window.open(`/sample-report/${report.country.toLocaleLowerCase()}`, "_blank", "noopener,noreferrer"); }}
                                     >
                                         View Sample Report
                                     </button>

@@ -27,7 +27,7 @@ const OtpVerificationDialog = ({
                 email,
                 otp
             });
-
+            console.log(res.data);
             onSuccess?.(res.data);
             onClose();
         } catch (err) {

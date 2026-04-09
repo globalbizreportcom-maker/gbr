@@ -13,6 +13,8 @@ import { FaBuilding, FaUser } from "react-icons/fa";
 import RazorpayClaimCompany from "./payments/RazorpayClaimCompany";
 import OtpVerificationDialog from "./OtpVerificationDialog";
 
+const Select = dynamic(() => import("react-select"), { ssr: false });
+
 const CountryDropdown = dynamic(() => import('@/utils/CountryDropdown'), { ssr: false })
 const PhoneInputWithCountry = dynamic(() => import('@/utils/PhoneFiled'), { ssr: false })
 
@@ -22,6 +24,9 @@ export default function ClaimyourcompanyForm() {
 
     const router = useRouter()
     const { user, setUser } = useDashboard();
+
+    console.log(user);
+
     const { showAlert } = useAlert();
 
     const [step, setStep] = useState(1)
@@ -34,6 +39,51 @@ export default function ClaimyourcompanyForm() {
     const [otpEmail, setOtpEmail] = useState("");
     const [otp, setOtp] = useState("");
 
+    const designationOptions = [
+        {
+            label: "Executive",
+            options: [
+                { value: "CEO / Founder", label: "CEO / Founder" },
+                { value: "Managing Director", label: "Managing Director" },
+                { value: "CFO", label: "CFO" },
+                { value: "CTO / CIO", label: "CTO / CIO" }
+            ]
+        },
+        {
+            label: "Management",
+            options: [
+                { value: "General Manager", label: "General Manager" },
+                { value: "Department Head", label: "Department Head" },
+                { value: "Project Manager", label: "Project Manager" },
+                { value: "Operations Manager", label: "Operations Manager" }
+            ]
+        },
+        {
+            label: "Legal & Finance",
+            options: [
+                { value: "Company Secretary", label: "Company Secretary" },
+                { value: "Chartered Accountant", label: "Chartered Accountant" },
+                { value: "Legal Counsel", label: "Legal Counsel" }
+            ]
+        },
+        {
+            label: "Technical/Professional",
+            options: [
+                { value: "Business Analyst", label: "Business Analyst" },
+                { value: "Marketing Head", label: "Marketing Head" },
+                { value: "Sales Lead", label: "Sales Lead" },
+                { value: "Consultant", label: "Consultant" }
+            ]
+        },
+        {
+            label: "Other",
+            options: [
+                { value: "Proprietor", label: "Proprietor" },
+                { value: "Partner", label: "Partner" },
+                { value: "Other", label: "Other" }
+            ]
+        }
+    ];
 
     useEffect(() => {
         const stored = sessionStorage.getItem("claim_company")
@@ -47,6 +97,7 @@ export default function ClaimyourcompanyForm() {
         address: "",
         contactName: "",
         contactEmail: "",
+        designation: "",
         contactPhone: "",
         contactCountry: "",
         contactState: "",
@@ -56,6 +107,8 @@ export default function ClaimyourcompanyForm() {
         website: "",
         agreedToTerms: true
     })
+
+    console.log(formData);
 
     /* ---------- PREFILL USER ---------- */
 
@@ -68,7 +121,9 @@ export default function ClaimyourcompanyForm() {
                 contactPhone: user.phone || prev.contactPhone,
                 contactCountry: user.country || prev.contactCountry,
                 contactState: user.state || prev.contactState,
-                companyGst: user.gstin || prev.companyGst
+                companyGst: user.gstin || prev.companyGst,
+                // designation: user.designation || prev.designation
+
             }))
         }
     }, [user])
@@ -84,6 +139,7 @@ export default function ClaimyourcompanyForm() {
             { key: "contactCountry", label: "Country" },
             { key: "contactState", label: "State" },
             { key: "city", label: "City" },
+            { key: "designation", label: "Designation" },
             { key: "companyGst", label: "GST" },
             { key: "postalCode", label: "Zip Code" },
             { key: "agreedToTerms", label: "Accept our Terms and Policies" },
@@ -102,12 +158,11 @@ export default function ClaimyourcompanyForm() {
 
     /* ---------- PAYMENT ---------- */
 
-    const handlePayment = async () => {
-
+    const handlePayment = async (passedUser = null) => {
         try {
 
-            let activeUser = user
-
+            let activeUser = passedUser || user;
+            console.log(activeUser);
             const payload = {
                 ...formData,
                 companyName: company?.name,
@@ -124,6 +179,7 @@ export default function ClaimyourcompanyForm() {
                     email: formData.contactEmail,
                     phone: formData.contactPhone,
                     company: company?.name,
+                    designation: formData.designation,
                     country: formData.contactCountry?.label || formData.contactCountry,
                     state: formData.contactState?.label || formData.contactState,
                     city: formData.city || '',
@@ -145,8 +201,8 @@ export default function ClaimyourcompanyForm() {
             }
 
             const orderRes = await apiUrl.post("/claim-company/create-order", {
-                amount: 49900,
-                userId: user._id,
+                amount: 90000,
+                userId: activeUser._id,
                 companyName: company.companyname,
                 cin: company.cin,
                 address: company.registered_office_address,
@@ -165,6 +221,48 @@ export default function ClaimyourcompanyForm() {
     const update = (key, value) => {
         setFormData(prev => ({ ...prev, [key]: value }))
     }
+
+    const DesignationDropdown = ({ value, onChange, required = false }) => {
+        // Helper to find the current option object based on the string value in formData
+        const currentOption = designationOptions
+            .flatMap(group => group.options)
+            .find(opt => opt.value === value) || null;
+
+        const customStyles = {
+            control: (base, state) => ({
+                ...base,
+                minHeight: '2.8rem',
+                borderRadius: '0.5rem',
+                borderColor: state.isFocused ? '#94a3b8' : '#d1d5db', // slate-400 focus
+                boxShadow: state.isFocused ? '0 0 0 2px rgba(148, 163, 184, 0.2)' : 'none',
+                '&:hover': { borderColor: '#94a3b8' },
+            }),
+            placeholder: (base) => ({ ...base, fontSize: '14px', color: '#9ca3af' }),
+            option: (base, state) => ({
+                ...base,
+                fontSize: '14px',
+                backgroundColor: state.isSelected ? '#4f46e5' : state.isFocused ? '#f1f5f9' : 'white',
+                color: state.isSelected ? 'white' : '#1e293b',
+            })
+        };
+
+        return (
+            <div className="flex flex-col">
+                <label className="label text-sm font-medium">
+                    Designation {required && <span className="text-red-500">*</span>}
+                </label>
+                <Select
+                    options={designationOptions}
+                    value={currentOption}
+                    onChange={(selected) => onChange(selected.value)}
+                    placeholder="Select Designation"
+                    styles={customStyles}
+                    isSearchable={true}
+                    classNamePrefix="react-select"
+                />
+            </div>
+        );
+    };
 
     return (
 
@@ -424,6 +522,7 @@ export default function ClaimyourcompanyForm() {
                         type="email"
                         required
                         value={formData.contactEmail}
+                        disabled={user?.email}
                         onChange={e => update("contactEmail", e.target.value)}
                     />
 
@@ -436,6 +535,13 @@ export default function ClaimyourcompanyForm() {
                         />
 
                     </div>
+
+                    {/* Inside step === 2 grid */}
+                    <DesignationDropdown
+                        value={formData.designation}
+                        onChange={(val) => update("designation", val)} // Changed from e.target.value to val
+                        required
+                    />
 
                     <CountryDropdown
                         value={formData.contactCountry}
@@ -614,12 +720,23 @@ export default function ClaimyourcompanyForm() {
                     state: formData.contactState?.label || formData.contactState,
                     city: formData.city || '',
                     website: formData.website || '',
-                    gst: formData.companyGst || ""
+                    gst: formData.companyGst || "",
+                    designation: formData.designation,
+
                 }}
                 onClose={() => setOtpDialogOpen(false)}
                 onSuccess={(data) => {
-                    console.log("User created:", data);
-                    setUser(data?.user)
+                    const verifiedUser = data?.user;
+
+                    // 1. Update state for the rest of the app
+                    setUser(verifiedUser);
+
+                    showAlert(`Otp verified Successfully, Continue your payment`, "success");
+
+                    // 2. Pass the fresh user directly to the function
+                    setTimeout(() => {
+                        handlePayment(verifiedUser);
+                    }, 2000);
                 }}
             />
 
@@ -635,6 +752,7 @@ const Input = ({
     label,
     value,
     onChange,
+    disabled = false,
     required = false,
     type = "text"
 }) => (
@@ -646,6 +764,7 @@ const Input = ({
         </label>
 
         <input
+            disabled={disabled}
             type={type}
             value={value}
             placeholder={label}

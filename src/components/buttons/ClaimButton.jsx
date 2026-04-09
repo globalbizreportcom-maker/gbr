@@ -14,7 +14,7 @@ export default function ClaimButton({ company, label = 'Claim Your Company' }) {
     return (
         <button
             onClick={handleClaimNow}
-            className="group cursor-pointer relative inline-flex items-center gap-2 px-7 py-3 text-base font-semibold text-white
+            className="group cursor-pointer relative inline-flex items-center gap-2 px-7 py-2 text-base font-semibold text-white
   rounded-lg shadow-lg hover:shadow-xl
   bg-[linear-gradient(90deg,#10b981,#14b8a6,#10b981)]
   bg-[length:200%_200%] animate-gradientMove"

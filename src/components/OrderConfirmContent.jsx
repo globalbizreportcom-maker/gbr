@@ -262,8 +262,15 @@ const OrderConfirmContent = () => {
                     <Skeleton className="h-4 w-full" />
                     <Skeleton className="h-32 w-full" />
                     <Skeleton className="h-10 w-full" />
+                    <Skeleton className="h-6 w-1/3" />
+                    <Skeleton className="h-4 w-full" />
+                    <Skeleton className="h-32 w-full" />
+                    <Skeleton className="h-10 w-full" />
                 </div>
                 <div className="lg:col-span-4 p-6 border border-gray-200 rounded-xl space-y-4">
+                    <Skeleton className="h-6 w-1/2" />
+                    <Skeleton className="h-4 w-full" />
+                    <Skeleton className="h-32 w-full" />
                     <Skeleton className="h-6 w-1/2" />
                     <Skeleton className="h-4 w-full" />
                     <Skeleton className="h-32 w-full" />
@@ -322,9 +329,9 @@ const OrderConfirmContent = () => {
                                     <td className="py-3 text-right text-xl">{displayPrice}</td>
                                 </tr>
                                 {isINR &&
-                                    <tr className="border-t border-gray-300 font-semibold">
+                                    <tr className="border-t border-gray-300  font-semibold">
                                         <td className="py-3 pr-4 text-xl"></td>
-                                        <td className="py-3 text-right text-sm">
+                                        <td className="py-3 text-end text-xs">
                                             (including GST)
                                         </td>
                                     </tr>
@@ -336,16 +343,19 @@ const OrderConfirmContent = () => {
                     </div>
 
                     <div className="w-full mx-auto mt-6 flex flex-col space-y-4 ">
-                        {isINR ? (
-                            <label className="flex flex-col md:flex-row items-center justify-between p-4 border border-gray-200 rounded-xl  hover:bg-gray-50">
-                                <span className="font-medium text-gray-600 mb-2 md:mb-0 md:mr-4 text-center md:text-left">
-                                    Pay via Razorpay <span className="text-xs">(For payments in INR from India)</span>
-                                </span>
-                                <div className="w-full md:w-auto flex justify-center z-10">
-                                    <RazorpayCheckout amount={paymentAmount.toString()} userId={user?._id || ""} />
-                                </div>
-                            </label>
-                        ) : (
+                        {/* {isINR ? ( */}
+                        <label className="flex flex-col md:flex-row items-center justify-between p-4 border border-gray-200 rounded-xl  hover:bg-gray-50">
+                            <span className="font-medium text-gray-600 mb-2 md:mb-0 md:mr-4 text-center md:text-left">
+                                Pay via Razorpay
+                                {/* <span className="text-xs">(For payments in INR from India)</span> */}
+                            </span>
+                            <div className="w-full md:w-auto flex justify-center z-10">
+                                <RazorpayCheckout amount={paymentAmount.toString()} userId={user?._id || ""} />
+                            </div>
+                        </label>
+                        {/* ) : */}
+
+                        {/* {!isINR && (
                             <label className="flex flex-col md:flex-row items-center justify-between p-4 border border-gray-200 rounded-xl  hover:bg-gray-50">
                                 <span className="font-medium text-gray-600 mb-2 md:mb-0 md:mr-4 text-center md:text-left">
                                     Pay via PayPal
@@ -354,7 +364,7 @@ const OrderConfirmContent = () => {
                                     <PayPalCheckout amount={paymentAmount.toString()} userId={user?._id || ""} />
                                 </div>
                             </label>
-                        )}
+                        )} */}
                     </div>
 
                     <h6 className="text-xs text-center text-gray-600 mb-4 pb-4 border-b border-gray-300 mt-5">WE ACCEPT</h6>

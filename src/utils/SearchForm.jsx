@@ -161,14 +161,29 @@ export default function CompanySearch() {
 
         const companyname = encodeURIComponent(company.companyname.replace(/\s+/g, "-"));
         const cin = encodeURIComponent(company.cin);
-        const country = encodeURIComponent(
-            ((company["CompanyIndian/Foreign Company"] || "india")
-                // .toLowerCase().slice(0, -1)
-            )
-        );
+        // const country = encodeURIComponent(
+        //     ((company["CompanyIndian/Foreign Company"] || "india")
+        //         // .toLowerCase().slice(0, -1)
+        //     )
+        // );
+        // const stateCode = encodeURIComponent(
+        //     (company.CompanyStateCode?.replace(/[^a-zA-Z0-9]/g, "_").toLowerCase()) || "na"
+        // );
+
+        // Determine country safely
+        let country =
+            company.CompanyIndian?.["Foreign Company"]?.toLowerCase() ||
+            company["CompanyIndian/Foreign Company"]?.toLowerCase() ||
+            "";
+
+        // Trim last character only if not empty
+        country = country ? encodeURIComponent(country.slice(0, -1)) : "na";
+
         const stateCode = encodeURIComponent(
-            (company.CompanyStateCode?.replace(/[^a-zA-Z0-9]/g, "_").toLowerCase()) || "na"
+            (company.companystatecode?.toLowerCase().replace(/\s+/g, "_")) || "na"
         );
+
+
 
         // ✅ Open in new tab
         const url = `https://www.globalbizreport.com/${companyname}/${cin}/${country}/${stateCode}/company-business-financial-credit-report`;
