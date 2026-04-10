@@ -6,7 +6,6 @@ import { useRouter } from "next/navigation";
 import { useDashboard } from "@/app/(site)/dashboard/DashboardContext";
 import { apiUrl } from "@/api/api";
 import { useAlert } from "@/context/AlertProvider";
-import { RazorpayCheckout } from "./payments/RazorpayCheckout";
 import RequiredStar from "@/utils/RequiredStar";
 import { LoginModalButton } from "@/utils/LoginModalButton";
 import { FaBuilding, FaUser } from "react-icons/fa";

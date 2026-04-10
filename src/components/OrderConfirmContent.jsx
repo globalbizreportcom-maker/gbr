@@ -355,7 +355,7 @@ const OrderConfirmContent = () => {
                         </label>
                         {/* ) : */}
 
-                        {/* {!isINR && (
+                        {!isINR && (
                             <label className="flex flex-col md:flex-row items-center justify-between p-4 border border-gray-200 rounded-xl  hover:bg-gray-50">
                                 <span className="font-medium text-gray-600 mb-2 md:mb-0 md:mr-4 text-center md:text-left">
                                     Pay via PayPal
@@ -364,7 +364,7 @@ const OrderConfirmContent = () => {
                                     <PayPalCheckout amount={paymentAmount.toString()} userId={user?._id || ""} />
                                 </div>
                             </label>
-                        )} */}
+                        )}
                     </div>
 
                     <h6 className="text-xs text-center text-gray-600 mb-4 pb-4 border-b border-gray-300 mt-5">WE ACCEPT</h6>

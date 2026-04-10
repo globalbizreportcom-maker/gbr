@@ -702,7 +702,9 @@ const EmailCheckout = () => {
                                 )}
                             </div>
                         </div>
-                        {/* ) : (
+                        {/* ) : ( */}
+
+                        {!isINR && (
                             <div className="w-full md:w-auto flex flex-col md:flex-row items-center justify-between p-4 border border-gray-200 rounded-xl  hover:bg-gray-50 transition">
                                 <span className="font-medium text-gray-600 text-center md:text-left mb-2 md:mb-0 md:mr-4">
                                     Pay via PayPal
@@ -717,7 +719,7 @@ const EmailCheckout = () => {
                                     )}
                                 </div>
                             </div>
-                        )} */}
+                        )}
                     </div>
                 </div>
             )}
