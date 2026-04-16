@@ -55,7 +55,7 @@ export default function DashboardHome() {
                         Order a Business Credit Report for Any Company Worldwide
                     </h2>
 
-                    <p className="text-gray-300 text-left  mb-5 text-sm md:text-lg  italic">
+                    <p className="text-gray-300 text-left  mb-5 text-sm md:text-lg max-w-4xl italic">
                         Verify your partners, vendors, buyers, and suppliers with a comprehensive Business Information Report
                         covering registration details, financial data, credit rating, risk indicators, and more.
                     </p>

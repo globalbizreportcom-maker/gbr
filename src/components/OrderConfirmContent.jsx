@@ -393,7 +393,7 @@ const OrderConfirmContent = () => {
                     </table>
 
                     <p className="text-xs text-black mt-4 p-4 border border-green-200 bg-green-100 rounded-lg text-center">
-                        You will receive freshly investigated business credit report on your email within 1–3 business days.
+                        You will receive freshly investigated business credit report on your email within <span className="font-extrabold">3-5 business days</span>.
                     </p>
                 </div>
             </div>

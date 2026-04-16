@@ -174,7 +174,7 @@ const OrderCreditReportClient = () => {
                         <FaCheckCircle className="text-indigo-400 text-2xl flex-shrink-0 mt-1" />
                         <p className="text-gray-700 text-md leading-relaxed ">
                             <strong>You will receive</strong>  a freshly investigated credit report digitally on your
-                            email within the expected delivery time of 1–3 business days.
+                            email within the expected delivery time of <span className="font-extrabold">3-5 business days</span>.
                         </p>
                     </div>
 

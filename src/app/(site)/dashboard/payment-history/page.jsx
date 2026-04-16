@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { useDashboard } from "../DashboardContext";
 import { apiUrl } from "@/api/api";
 
@@ -9,121 +9,189 @@ export default function PaymentHistory() {
     const [claimedPayments, setClaimedPayments] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    const [activeTab, setActiveTab] = useState("report"); // "report" or "claim"
+    const [activeTab, setActiveTab] = useState("report");
+    const [reportSubTab, setReportSubTab] = useState("success");
     const [searchTerm, setSearchTerm] = useState("");
 
-    const [openIndex, setOpenIndex] = useState(null); // accordion for report
-    const [openClaimIndex, setOpenClaimIndex] = useState(null); // accordion for claim
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 6;
 
     useEffect(() => {
         const fetchPayments = async () => {
             if (!user?._id) return;
-
             try {
-                const res = await apiUrl.get(`/user/payments`, {
-                    params: { userId: user._id },
-                });
-
+                const res = await apiUrl.get(`/user/payments`, { params: { userId: user._id } });
                 setPayments(res.data.reportPayments || []);
                 setClaimedPayments(res.data.claimPayments || []);
-            } catch (err) {
-                console.log("Error fetching payments:", err);
-            } finally {
-                setLoading(false);
-            }
+            } catch (err) { console.log("Error:", err); }
+            finally { setLoading(false); }
         };
-
         fetchPayments();
     }, [user?._id]);
 
-    if (loading) return <p className="p-6 text-gray-500">Loading payments...</p>;
-
-    const filterPayments = (list) =>
-        list.filter(
-            (p) =>
-                (p.reportRequest?.targetCompany?.name || p.company?.name || "")
-                    .toLowerCase()
-                    .includes(searchTerm.toLowerCase()) ||
-                (p.orderId || p.razorpayOrderId || "").toLowerCase().includes(searchTerm.toLowerCase())
+    // Derived filtered list
+    const filteredData = useMemo(() => {
+        let list = activeTab === "report" ? payments : claimedPayments;
+        if (activeTab === "report") {
+            list = list.filter(p => reportSubTab === "success" ? p.status === "paid" : p.status !== "paid");
+        }
+        return list.filter((p) =>
+            (p.reportRequest?.targetCompany?.name || p.company?.name || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
+            (p.orderId || p.razorpayOrderId || "").toLowerCase().includes(searchTerm.toLowerCase())
         );
+    }, [activeTab, reportSubTab, payments, claimedPayments, searchTerm]);
 
-    const activePayments =
-        activeTab === "report" ? filterPayments(payments) : filterPayments(claimedPayments);
+    // Reset page on filter change
+    useEffect(() => { setCurrentPage(1); }, [activeTab, reportSubTab, searchTerm]);
+
+    if (loading) return <p className="p-6 text-gray-500">Loading payments...</p>;
 
     return (
         <div className="min-h-screen bg-gray-50 p-4 lg:p-8 max-w-5xl mx-auto">
-            <h1 className="text-lg sm:text-xl font-bold text-gray-600 mb-6">
-                Payment History
-            </h1>
+            <h1 className="text-lg sm:text-xl font-bold text-gray-600 mb-6">Payment History</h1>
 
-            {/* Tabs */}
-            <div className="flex space-x-4 mb-4 border-b border-gray-300">
-                <button
-                    onClick={() => setActiveTab("report")}
-                    className={`px-4 py-2 -mb-1 text-sm font-medium cursor-pointer ${activeTab === "report"
-                        ? "border-b-2 border-blue-600 text-blue-600"
-                        : "text-gray-500 hover:text-gray-700"
-                        }`}
-                >
-                    Report Payments
-                </button>
-                <button
-                    onClick={() => setActiveTab("claim")}
-                    className={`px-4 py-2 -mb-1 text-sm font-medium cursor-pointer ${activeTab === "claim"
-                        ? "border-b-2 border-blue-600 text-blue-600"
-                        : "text-gray-500 hover:text-gray-700"
-                        }`}
-                >
-                    Claimed Payments
-                </button>
-            </div>
+            <Tabs activeTab={activeTab} setActiveTab={setActiveTab} />
 
-            {/* Search Input */}
-            <div className="mb-4 py-5 w-full flex justify-end ">
-                <input
-                    type="text"
-                    placeholder="Search by company, order ID, or Razorpay ID"
-                    className="w-full max-w-sm px-4 py-2 text-gray-700 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                />
-            </div>
+            <SearchAndFilters
+                searchTerm={searchTerm}
+                setSearchTerm={setSearchTerm}
+                activeTab={activeTab}
+                reportSubTab={reportSubTab}
+                setReportSubTab={setReportSubTab}
+            />
 
-            {/* Payments List */}
-            {activePayments.length === 0 ? (
-                <p className="text-gray-500 p-4 bg-white rounded-md border border-gray-200">
-                    No payments found.
-                </p>
-            ) : (
-                <div className="space-y-4">
-                    {activeTab === "report"
-                        ? activePayments.map((payment, idx) => (
-                            <ReportPaymentAccordion
-                                key={payment._id}
-                                payment={payment}
-                                idx={idx}
-                                openIndex={openIndex}
-                                setOpenIndex={setOpenIndex}
-                            />
-                        ))
-                        : activePayments.map((payment, idx) => (
-                            <ClaimPaymentAccordion
-                                key={payment._id}
-                                payment={payment}
-                                idx={idx}
-                                openClaimIndex={openClaimIndex}
-                                setOpenClaimIndex={setOpenClaimIndex}
-                            />
-                        ))}
-                </div>
-            )}
+            <PaymentList
+                data={filteredData}
+                activeTab={activeTab}
+                currentPage={currentPage}
+                itemsPerPage={itemsPerPage}
+            />
+
+            <Pagination
+                totalItems={filteredData.length}
+                itemsPerPage={itemsPerPage}
+                currentPage={currentPage}
+                onPageChange={setCurrentPage}
+            />
         </div>
     );
 }
 
+const PaymentList = ({ data, activeTab, currentPage, itemsPerPage }) => {
+    const [openIndex, setOpenIndex] = useState(null);
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const paginatedData = data.slice(startIndex, startIndex + itemsPerPage);
+
+    if (data.length === 0) {
+        return (
+            <div className="text-center py-10 bg-white rounded-xl border border-dashed border-gray-300">
+                <p className="text-gray-400 italic">No payments found.</p>
+            </div>
+        );
+    }
+
+    return (
+        <div className="space-y-4">
+            {paginatedData.map((payment, idx) => (
+                activeTab === "report" ? (
+                    <ReportPaymentAccordion
+                        key={payment._id}
+                        payment={payment}
+                        idx={startIndex + idx}
+                        openIndex={openIndex}
+                        setOpenIndex={setOpenIndex}
+                    />
+                ) : (
+                    <ClaimPaymentAccordion
+                        key={payment._id}
+                        payment={payment}
+                        idx={startIndex + idx}
+                        openClaimIndex={openIndex}
+                        setOpenClaimIndex={setOpenIndex}
+                    />
+                )
+            ))}
+        </div>
+    );
+};
+const Pagination = ({ totalItems, itemsPerPage, currentPage, onPageChange }) => {
+    const totalPages = Math.ceil(totalItems / itemsPerPage);
+    if (totalPages <= 1) return null;
+
+    return (
+        <div className="flex items-center justify-between mt-8 px-2">
+            <button
+                disabled={currentPage === 1}
+                onClick={() => onPageChange(currentPage - 1)}
+                className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50"
+            >
+                Previous
+            </button>
+
+            <div className="hidden sm:block text-sm text-gray-500">
+                Page <span className="font-semibold text-gray-700">{currentPage}</span> of {totalPages}
+            </div>
+
+            <button
+                disabled={currentPage === totalPages}
+                onClick={() => onPageChange(currentPage + 1)}
+                className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50"
+            >
+                Next
+            </button>
+        </div>
+    );
+};
+const Tabs = ({ activeTab, setActiveTab }) => (
+    <div className="flex space-x-4 mb-4 border-b border-gray-300">
+        {["report", "claim"].map((tab) => (
+            <button
+                key={tab}
+                onClick={() => setActiveTab(tab)}
+                className={`px-4 py-2 -mb-1 text-sm font-medium capitalize cursor-pointer transition-colors ${activeTab === tab ? "border-b-2 border-blue-600 text-blue-600" : "text-gray-500"
+                    }`}
+            >
+                {tab === "report" ? "Report Payments" : "Claimed Payments"}
+            </button>
+        ))}
+    </div>
+);
+
+const SearchAndFilters = ({ searchTerm, setSearchTerm, activeTab, reportSubTab, setReportSubTab }) => (
+    <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+        <div className="flex-1">
+            {activeTab === "report" && (
+                <div className="flex bg-gray-200/50 p-1 rounded-lg w-fit">
+                    <button
+                        onClick={() => setReportSubTab("success")}
+                        className={`px-4 py-1.5 text-xs font-semibold rounded-md transition-all ${reportSubTab === "success" ? "bg-white text-blue-600 shadow-sm" : "text-gray-500"
+                            }`}
+                    >
+                        Successful Transfers
+                    </button>
+                    <button
+                        onClick={() => setReportSubTab("failed")}
+                        className={`px-4 py-1.5 text-xs font-semibold rounded-md transition-all ${reportSubTab === "failed" ? "bg-white text-red-600 shadow-sm" : "text-gray-500"
+                            }`}
+                    >
+                        Failed Attempts
+                    </button>
+                </div>
+            )}
+        </div>
+        <input
+            type="text"
+            placeholder="Search payments..."
+            className="w-full max-w-sm px-4 py-2 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400 outline-none text-black"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+        />
+    </div>
+);
+
 // Report Accordion Component
 const ReportPaymentAccordion = ({ payment, idx, openIndex, setOpenIndex }) => (
-    <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+    <div className="bg-white rounded-xl border border-gray-100 overflow-hidden">
         <button
             onClick={() => setOpenIndex(openIndex === idx ? null : idx)}
             className="cursor-pointer w-full flex flex-col sm:flex-row sm:justify-between sm:items-center p-4 sm:p-5 focus:outline-none"
@@ -185,7 +253,7 @@ const ReportPaymentAccordion = ({ payment, idx, openIndex, setOpenIndex }) => (
                         {
                             label: "Paid At",
                             value: payment.paidAt
-                                ? new Date(payment.paidAt).toLocaleString()
+                                ? new Date(payment.paidAt).toLocaleString("en-GB")
                                 : "-",
                         },
                         {
@@ -231,7 +299,7 @@ const ReportPaymentAccordion = ({ payment, idx, openIndex, setOpenIndex }) => (
                             <div className="flex flex-col">
                                 <span className="text-gray-500 text-sm">Requested On</span>
                                 <span className="text-black font-medium">
-                                    {new Date(payment.reportRequest.createdAt).toLocaleDateString()}
+                                    {new Date(payment.reportRequest.createdAt).toLocaleString("en-GB")}
                                 </span>
                             </div>
 

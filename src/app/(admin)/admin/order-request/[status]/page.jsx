@@ -3,10 +3,11 @@
 import { adminUrl, apiUrl } from "@/api/api";
 import { useRouter } from "next/navigation";
 import React, { useCallback, useEffect, useState } from "react";
-import { FaArrowRight, FaMailBulk } from "react-icons/fa";
+import { FaArrowRight, FaBuilding, FaMailBulk, FaRupeeSign, FaUser } from "react-icons/fa";
 import { useDropzone } from "react-dropzone";
 import { useAlert } from "@/context/AlertProvider";
 import { splitPhone } from "@/utils/splitPhone";
+import { FiPrinter } from "react-icons/fi";
 
 // Define colors for each status
 const STATUS_COLORS = {
@@ -37,6 +38,7 @@ const ReportsAdmin = ({ defaultTab }) => {
     const [newStatus, setNewStatus] = useState(selectedReport?.status || STATUS_TABS[0]);
     const [searchQuery, setSearchQuery] = useState("");
     const [files, setFiles] = useState([]);
+    const [invoiceLoading, setInvoiceLoading] = useState(false);
 
     const [forwardModalOpen, setForwardModalOpen] = useState(false);
     const [forwardCompany, setForwardCompany] = useState({});
@@ -174,6 +176,46 @@ const ReportsAdmin = ({ defaultTab }) => {
         }
     };
 
+    const handleDownload = async () => {
+
+        console.log(selectedReport);
+
+        if (!selectedReport?.payment?.paymentId) return;
+
+        try {
+            setInvoiceLoading(true);
+
+            // Change from ?paymentId= to /${id}
+            const response = await adminUrl.get(
+                `/download/invoice/${selectedReport.payment.paymentId}`,
+                { responseType: 'blob' }
+            );
+
+            console.log(response);
+
+
+            const file = new Blob([response.data], { type: 'application/pdf' });
+            const fileURL = window.URL.createObjectURL(file);
+
+            const link = document.createElement('a');
+            link.href = fileURL;
+            link.setAttribute('download', `Invoice_${selectedReport.targetCompany.name}.pdf`);
+
+            document.body.appendChild(link);
+            link.click();
+
+            link.parentNode.removeChild(link);
+            window.URL.revokeObjectURL(fileURL);
+
+            showAlert("Invoice downloaded successfully", "success");
+
+        } catch (error) {
+            console.log("Download Error:", error);
+            showAlert("Failed to download invoice", "error");
+        } finally {
+            setInvoiceLoading(false);
+        }
+    };
 
     const filteredReports =
         activeTab === "all" ? reports : reports.filter((r) => r.status === activeTab);
@@ -188,6 +230,7 @@ const ReportsAdmin = ({ defaultTab }) => {
         );
     });
 
+    console.log(selectedReport);
 
 
     return (
@@ -268,7 +311,7 @@ const ReportsAdmin = ({ defaultTab }) => {
                             </div>
 
                             {/* Table for medium and above screens */}
-                            <div className="hidden md:block overflow-x-auto bg-white py-6 rounded-2xl">
+                            <div className="hidden md:block overflow-x-auto bg-white py-6 rounded-2xl ">
                                 <table className="table w-full">
                                     <thead>
                                         <tr className="text-black">
@@ -277,13 +320,14 @@ const ReportsAdmin = ({ defaultTab }) => {
                                             <th>Requester</th>
                                             <th>Requester Country</th>
                                             <th>Status</th>
+                                            <th>Amount</th>
                                             <th>Created At</th>
                                             <th>Actions</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         {displayedReports.map((report, index) => (
-                                            <tr key={report._id}>
+                                            <tr key={report._id} className="bg-gray-50 border-b-1 border-gray-200 hover:bg-white">
                                                 <td>{index + 1}</td>
                                                 <td>{report.targetCompany.name.length > 20 ? report.targetCompany.name.slice(0, 20) + "..." : report.targetCompany.name}</td>
                                                 <td>{report.requesterInfo.name}</td>
@@ -296,10 +340,19 @@ const ReportsAdmin = ({ defaultTab }) => {
                                                         {report.status.charAt(0).toUpperCase() + report.status.slice(1)}
                                                     </span>
                                                 </td>
+                                                <td>
+                                                    <span
+                                                        className={`px-3 py-1 rounded-lg text-sm font-medium  text-gray-800"
+                                                            }`}
+                                                    >
+                                                        {report.payment.amount}{" "}
+                                                        {report.payment.currency}
+                                                    </span>
+                                                </td>
                                                 <td>{new Date(report.createdAt).toLocaleString("en-IN")}</td>
                                                 <td>
                                                     <button
-                                                        className="btn btn-sm btn-primary"
+                                                        className="btn btn-xs btn-primary"
                                                         onClick={() => handleView(report)}
                                                     >
                                                         View <FaArrowRight />
@@ -365,10 +418,10 @@ const ReportsAdmin = ({ defaultTab }) => {
                 <div className="fixed inset-0 z-50 bg-gray-50 bg-opacity-50 flex justify-center items-start overflow-auto p-4">
                     <div className="bg-white w-full max-w-6xl mx-auto rounded-lg overflow-y-auto relative">
                         {/* Header */}
-                        <div className="flex justify-between items-center p-4 sticky top-0 bg-gray-100 z-10 border-b border-gray-200">
-                            <h2 className="text-xl font-bold text-gray-500">Report Details</h2>
+                        <div className="flex justify-between items-center p-4 fixed w-full max-w-6xl top-0 bg-gray-600 z-10 border-b border-gray-200 ">
+                            <h2 className="text-xl font-bold text-gray-100">Report Details</h2>
                             <button
-                                className="btn btn-sm btn-circle btn-ghost"
+                                className="btn btn-sm btn-circle btn-ghost text-white"
                                 onClick={handleClose}
                             >
                                 ✕
@@ -380,9 +433,9 @@ const ReportsAdmin = ({ defaultTab }) => {
                         </div>
 
                         {/* Status Dropdown */}
-                        <div className="flex flex-col sm:flex-row sm:flex-wrap justify-between items-center gap-3 p-4 border-b border-gray-200 bg-gray-50 rounded-md">
+                        <div className="flex flex-col sm:flex-row sm:flex-wrap justify-between items-center gap-3 p-4  bg-gray-50 rounded-md mt-10">
                             {/* Status */}
-                            <div className="flex flex-col sm:flex-row sm:items-center gap-2 w-full sm:w-auto">
+                            <div className="flex flex-col sm:flex-row sm:items-center gap-2 w-full sm:w-auto ">
                                 <span className="font-medium text-gray-600 whitespace-nowrap">Update Status:</span>
                                 <select
                                     value={newStatus}
@@ -417,13 +470,36 @@ const ReportsAdmin = ({ defaultTab }) => {
                                 >
                                     Forward to Mira <FaMailBulk />
                                 </button> */}
+                                {
+                                    (selectedReport.status !== "refunded" && selectedReport.status !== "cancelled") && (
+                                        <button
+                                            onClick={handleDownload}
+                                            // disabled={invoiceLoading} // Now safely enabled
+                                            className={`btn btn-sm flex items-center gap-2 w-full sm:w-auto transition-all ${invoiceLoading
+                                                ? "btn-primary opacity-70 cursor-not-allowed text-white"
+                                                : "btn-primary text-white"
+                                                }`}
+                                        >
+                                            {invoiceLoading ? (
+                                                <>
+                                                    <span className="loading loading-spinner loading-xs"></span>
+                                                    Downloading...
+                                                </>
+                                            ) : (
+                                                <>
+                                                    Download Invoice <FiPrinter />
+                                                </>
+                                            )}
+                                        </button>
+                                    )
+                                }
+
                             </div>
                         </div>
 
 
-
                         {/* Content */}
-                        <div className="p-0 space-y-6">
+                        <div className="p-0 space-y-6 bg-gray-50">
 
                             {/* File Upload Section */}
                             <div className="bg-white rounded-lg p-5 border border-gray-200">
@@ -453,139 +529,149 @@ const ReportsAdmin = ({ defaultTab }) => {
                                 </button> */}
                             </div>
 
-                            {/* Company Info */}
-                            <div className="bg-white rounded-lg p-5 border border-gray-200">
-                                <h3 className="text-gray-500 font-semibold text-lg mb-4">
-                                    Company Info
-                                </h3>
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                                    {selectedReport.targetCompany.name && (
-                                        <p>
-                                            <span className="font-medium">Name:</span>{" "}
-                                            {selectedReport.targetCompany.name}
-                                        </p>
-                                    )}
-                                    {selectedReport.targetCompany.address && (
-                                        <p>
-                                            <span className="font-medium">Address:</span>{" "}
-                                            {selectedReport.targetCompany.address}
-                                        </p>
-                                    )}
-                                    {selectedReport.targetCompany.country && (
-                                        <p>
-                                            <span className="font-medium">Country:</span>{" "}
-                                            {selectedReport.targetCompany.country}
-                                        </p>
-                                    )}
-                                    {selectedReport.targetCompany.state && (
-                                        <p>
-                                            <span className="font-medium">State:</span>{" "}
-                                            {selectedReport.targetCompany.state}
-                                        </p>
-                                    )}
-                                    {selectedReport.targetCompany.city && (
-                                        <p>
-                                            <span className="font-medium">City:</span>{" "}
-                                            {selectedReport.targetCompany.city}
-                                        </p>
-                                    )}
-                                    {selectedReport.targetCompany.postalCode && (
-                                        <p>
-                                            <span className="font-medium">Postal Code:</span>{" "}
-                                            {selectedReport.targetCompany.postalCode}
-                                        </p>
-                                    )}
-                                    {selectedReport.targetCompany.phone && (
-                                        <p>
-                                            <span className="font-medium">Phone:</span>{" "}
-                                            {(() => {
-                                                const p = splitPhone(selectedReport.targetCompany.phone);
-                                                return p ? `+${p.countryCode} ${p.nationalNumber}` : "-";
-                                            })()}
-                                        </p>
-                                    )}
-                                    {selectedReport.targetCompany.website && (
-                                        <p>
-                                            <span className="font-medium">Website:</span>{" "}
-                                            {selectedReport.targetCompany.website}
-                                        </p>
-                                    )}
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
 
+                                {/* Company Info */}
+                                <div className="bg-white rounded-lg p-5 border border-gray-200">
+                                    <h3 className="text-blue-500 flex items-center font-semibold text-lg mb-4">
+                                        <FaBuilding className="mr-3" />   Company Info
+                                    </h3>
+                                    <div className="grid grid-cols-1 md:grid-cols-1 gap-3">
+                                        {selectedReport.targetCompany.name && (
+                                            <p>
+                                                <span className="font-medium">Name:</span>{" "}
+                                                {selectedReport.targetCompany.name}
+                                            </p>
+                                        )}
+                                        {selectedReport.targetCompany.address && (
+                                            <p>
+                                                <span className="font-medium">Address:</span>{" "}
+                                                {selectedReport.targetCompany.address}
+                                            </p>
+                                        )}
+                                        {selectedReport.targetCompany.country && (
+                                            <p>
+                                                <span className="font-medium">Country:</span>{" "}
+                                                {selectedReport.targetCompany.country}
+                                            </p>
+                                        )}
+                                        {selectedReport.targetCompany.state && (
+                                            <p>
+                                                <span className="font-medium">State:</span>{" "}
+                                                {selectedReport.targetCompany.state}
+                                            </p>
+                                        )}
+                                        {selectedReport.targetCompany.city && (
+                                            <p>
+                                                <span className="font-medium">City:</span>{" "}
+                                                {selectedReport.targetCompany.city}
+                                            </p>
+                                        )}
+                                        {selectedReport.targetCompany.postalCode && (
+                                            <p>
+                                                <span className="font-medium">Postal Code:</span>{" "}
+                                                {selectedReport.targetCompany.postalCode}
+                                            </p>
+                                        )}
+                                        {selectedReport.targetCompany.phone && (
+                                            <p>
+                                                <span className="font-medium">Phone:</span>{" "}
+                                                {(() => {
+                                                    const p = splitPhone(selectedReport.targetCompany.phone);
+                                                    return p ? `+${p.countryCode} ${p.nationalNumber}` : "-";
+                                                })()}
+                                            </p>
+                                        )}
+                                        {selectedReport.targetCompany.website && (
+                                            <p>
+                                                <span className="font-medium">Website:</span>{" "}
+                                                {selectedReport.targetCompany.website}
+                                            </p>
+                                        )}
+
+                                    </div>
                                 </div>
-                            </div>
 
-                            {/* Requester Info */}
-                            <div className="bg-white rounded-lg p-5 border border-gray-200">
-                                <h3 className="text-gray-500 font-semibold text-lg mb-4">
-                                    Requester Info
-                                </h3>
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                                    {selectedReport.requesterInfo.name && (
-                                        <p>
-                                            <span className="font-medium">Name:</span>{" "}
-                                            {selectedReport.requesterInfo.name}
-                                        </p>
-                                    )}
-                                    {selectedReport.requesterInfo.email && (
-                                        <p>
-                                            <span className="font-medium">Email:</span>{" "}
-                                            {selectedReport.requesterInfo.email}
-                                        </p>
-                                    )}
-                                    {selectedReport.requesterInfo.phone && (
-                                        <p>
-                                            <span className="font-medium">Phone:</span>{" "}
-                                            {(() => {
-                                                const p = splitPhone(selectedReport.requesterInfo.phone);
-                                                return p ? `+${p.countryCode} ${p.nationalNumber}` : "-";
-                                            })()}
-                                        </p>
-                                    )}
-                                    {selectedReport.requesterInfo.country && (
-                                        <p>
-                                            <span className="font-medium">Country:</span>{" "}
-                                            {selectedReport.requesterInfo.country}
-                                        </p>
-                                    )}
-                                    {selectedReport.requesterInfo.state && (
-                                        <p>
-                                            <span className="font-medium">State:</span>{" "}
-                                            {selectedReport.requesterInfo.state}
-                                        </p>
-                                    )}
-                                    {selectedReport.requesterInfo.company && (
-                                        <p>
-                                            <span className="font-medium">Company:</span>{" "}
-                                            {selectedReport.requesterInfo.company}
-                                        </p>
-                                    )}
-                                    {selectedReport.requesterInfo.gst && (
-                                        <p>
-                                            <span className="font-medium">Gst:</span>{" "}
-                                            {selectedReport.requesterInfo.gst}
-                                        </p>
-                                    )}
-                                    {selectedReport.requesterInfo.optionalEmail && (
-                                        <p>
-                                            <span className="font-medium">Optional Email:</span>{" "}
-                                            {selectedReport.requesterInfo.optionalEmail}
-                                        </p>
-                                    )}
+                                {/* Requester Info */}
+                                <div className="bg-white rounded-lg p-5 border border-gray-200">
+                                    <h3 className="text-indigo-500 flex items-center font-semibold text-lg mb-4">
+                                        <FaUser className="mr-3" />    Requester Info
+                                    </h3>
+                                    <div className="grid grid-cols-1 md:grid-cols-1 gap-3">
+                                        {selectedReport.requesterInfo.name && (
+                                            <p>
+                                                <span className="font-medium">Name:</span>{" "}
+                                                {selectedReport.requesterInfo.name}
+                                            </p>
+                                        )}
+                                        {selectedReport.requesterInfo.email && (
+                                            <p>
+                                                <span className="font-medium">Email:</span>{" "}
+                                                {selectedReport.requesterInfo.email}
+                                            </p>
+                                        )}
+                                        {selectedReport.requesterInfo.phone && (
+                                            <p>
+                                                <span className="font-medium">Phone:</span>{" "}
+                                                {(() => {
+                                                    const p = splitPhone(selectedReport.requesterInfo.phone);
+                                                    return p ? `+${p.countryCode} ${p.nationalNumber}` : "-";
+                                                })()}
+                                            </p>
+                                        )}
+                                        {selectedReport.requesterInfo.country && (
+                                            <p>
+                                                <span className="font-medium">Country:</span>{" "}
+                                                {selectedReport.requesterInfo.country}
+                                            </p>
+                                        )}
+                                        {selectedReport.requesterInfo.state && (
+                                            <p>
+                                                <span className="font-medium">State:</span>{" "}
+                                                {selectedReport.requesterInfo.state}
+                                            </p>
+                                        )}
+                                        {selectedReport.requesterInfo.company && (
+                                            <p>
+                                                <span className="font-medium">Company:</span>{" "}
+                                                {selectedReport.requesterInfo.company}
+                                            </p>
+                                        )}
+                                        {selectedReport.requesterInfo.gst && (
+                                            <p>
+                                                <span className="font-medium">Gst:</span>{" "}
+                                                {selectedReport.requesterInfo.gst}
+                                            </p>
+                                        )}
+                                        {selectedReport.requesterInfo.optionalEmail && (
+                                            <p>
+                                                <span className="font-medium">Optional Email:</span>{" "}
+                                                {selectedReport.requesterInfo.optionalEmail}
+                                            </p>
+                                        )}
 
+                                    </div>
                                 </div>
+
                             </div>
 
                             {/* Payment Info */}
                             {selectedReport.payment && (
                                 <div className="bg-white rounded-lg p-5 border border-gray-200">
-                                    <h3 className="text-gray-500 font-semibold text-lg mb-4">
-                                        Payment Info
+                                    <h3 className="text-green-700 font-semibold flex items-center text-lg mb-4">
+                                        <FaRupeeSign className="mr-2" />    Payment Info
                                     </h3>
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                                         {selectedReport.payment.status && (
                                             <p>
                                                 <span className="font-medium">Status:</span>{" "}
                                                 <span className={`${selectedReport.payment.status === 'paid' ? 'text-green-600 font-bold uppercase' : 'text-black'}`}>{selectedReport.payment.status}</span>
+                                            </p>
+                                        )}
+                                        {selectedReport.payment?.paymentId && (
+                                            <p>
+                                                <span className="font-medium">Payment Id:</span>{" "}
+                                                {selectedReport.payment?.paymentId}
                                             </p>
                                         )}
                                         {selectedReport.payment.method && (
@@ -605,7 +691,7 @@ const ReportsAdmin = ({ defaultTab }) => {
                                         {selectedReport.payment.paidAt && (
                                             <p>
                                                 <span className="font-medium">Paid At:</span>{" "}
-                                                {new Date(selectedReport.payment.paidAt).toLocaleString()}
+                                                {new Date(selectedReport.payment.paidAt).toLocaleString("en-GB")}
                                             </p>
                                         )}
                                         {selectedReport.payment.details?.payerName && (

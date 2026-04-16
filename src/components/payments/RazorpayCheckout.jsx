@@ -28,11 +28,12 @@ export function RazorpayCheckout({ amount = 100, userId }) {
             // 🔹 Call backend to create order
             const res = await apiUrl.post("/api/payment/create-order", { amount, userId, formData });
             const { orderId, key, currency, amount: totalAmountFromBackend } = res.data;
+            console.log(orderId, currency, totalAmountFromBackend);
 
             const options = {
                 key,
-                amount: totalAmountFromBackend * 100,
-                currency: currency, // <--- CHANGE THIS from 'USD' to the dynamic variable
+                amount: totalAmountFromBackend,
+                currency: currency,
                 name: "Global Biz Report",
                 description: "Business Credit Report",
                 order_id: orderId,
@@ -76,7 +77,7 @@ export function RazorpayCheckout({ amount = 100, userId }) {
                 },
 
                 prefill: { name: formData?.contactName || "", email: formData?.contactEmail || "", contact: formData?.contactPhone || "" },
-                theme: { color: "#000000" },
+                theme: { color: "royalblue" },
             };
 
             const rzp = new window.Razorpay(options);
@@ -93,7 +94,6 @@ export function RazorpayCheckout({ amount = 100, userId }) {
     return (
         <>
             <Script src="https://checkout.razorpay.com/v1/checkout.js" strategy="afterInteractive" />
-            {/* <button onClick={handlePayment} className=" btn flex items-center border border-transparent justify-center px-16 py-1 bg-indigo-500 rounded-md text-white shadow-none text-lg hover:bg-blue-600 transition-all ">  {loading ? "Processing..." : "Pay Now"}</button> */}
 
             <button
                 onClick={handlePayment}

@@ -135,7 +135,7 @@ export default function Home() {
                             },
                             {
                                 title: "Fast Turnaround",
-                                desc: "Get your business report within 1–3 business days — no waiting for weeks.",
+                                desc: "Get your business report within 3-5 business days — no waiting for weeks.",
                             },
                             {
                                 title: "Global Reach",

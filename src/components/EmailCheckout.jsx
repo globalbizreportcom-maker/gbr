@@ -650,7 +650,7 @@ const EmailCheckout = () => {
                     </div>
 
                     <div className="bg-green-100 rounded-2xl p-4">
-                        <p className="text-xs">You will receive freshly investigated business credit report on your email within 1–3 business days.</p>
+                        <p className="text-xs">You will receive freshly investigated business credit report on your email within  <span className="font-extrabold">3-5 business days</span>.</p>
                     </div>
                 </div>
 

@@ -223,8 +223,12 @@ const ServicesPage = () => {
                             {
                                 icon: <FaClock />,
                                 title: "Quick Delivery Time",
-                                description:
-                                    "We prioritize speed—most credit reports are delivered within 2 to 3 business days from the time of order.",
+                                description: (
+                                    <>
+                                        We prioritize speed—most credit reports are delivered within{" "}
+                                        <span className="font-extrabold">3-5 business days</span>  from the time of order.
+                                    </>
+                                ),
                             },
                             {
                                 icon: <FaDollarSign />,

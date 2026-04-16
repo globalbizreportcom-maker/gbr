@@ -17,8 +17,12 @@ const WhyGBRSection = () => {
         {
             icon: <FaClock className="text-primary text-2xl" />,
             title: "Quick Delivery Time",
-            description:
-                "Time is money. Most credit reports are delivered within 2 to 3 days of your order.",
+            description: (
+                <>
+                    Time is money. Most credit reports are delivered within{" "}
+                    <span className="font-extrabold">3-5 days</span>  of your order.
+                </>
+            ),
         },
         {
             icon: <FaMoneyBillWave className="text-primary text-2xl" />,
