@@ -42,8 +42,8 @@ const OrderCreditReportClient = () => {
 
                 <div className="relative z-10 flex flex-col py-2 md:py-0  px-3" >
 
-                    <h1 className="text-4xl lg:text-5xl font-bold text-gray-900 leading-tight">
-                        Order a Business Credit Report on Any Company <span className="text-primary">Worldwide </span>
+                    <h1 className="text-4xl lg:text-4xl font-bold text-gray-900">
+                        Buy a Company Due Diligence Report on Any Business <span className="text-primary">Worldwide </span>
                     </h1>
 
                     <div className="relative max-w-3xl mb-5">
@@ -61,10 +61,13 @@ const OrderCreditReportClient = () => {
                             {/* Content */}
                             <ul className="relative  text-left text-md list-disc  space-y-4">
                                 <li className="text-gray-700">
-                                    Access <span className="font-semibold text-gray-900">Freshly Investigated Company</span> Credit Reports on businesses across <span className="font-bold">220+ Countries.</span>
+                                    $ Reports starting from <span className="font-semibold text-gray-900">USD 49/ INR 4720</span>  | Pricing varies by country.
                                 </li>
                                 <li className="text-gray-700">
-                                    <span className="font-semibold text-gray-900">Verify Authenticity & Trustworthiness</span> of your Business Partners, Vendors, Buyers, and Suppliers with GBR reports.
+                                    <span className="font-semibold text-gray-900">Order Freshly Investigated Business Credit Report</span> on Any Company across 220+ Countries.
+                                </li>
+                                <li className="text-gray-700">
+                                    <span className="font-semibold text-gray-900">Verify the Authenticity & Credibility</span> of your Partners, Vendors, Buyers, and Suppliers to Avoid Potential Risks.
                                 </li>
                             </ul>
                         </div>
@@ -155,7 +158,7 @@ const OrderCreditReportClient = () => {
                     <div className="bg-white rounded-xl p-3 md:p-6 text-left flex items-start gap-3">
                         <FaCheckCircle className="text-indigo-400 text-2xl flex-shrink-0 mt-1" />
                         <p className="text-gray-700 text-md leading-relaxed">
-                            No contracts. No minimums. No annual fees. Just simple pay-per-report pricing.
+                            No contracts. No minimums. No annual fees. Just simple <span className="font-bold text-gray-700">Pay-Per-Report</span>   pricing.
                         </p>
                     </div>
 
@@ -174,7 +177,7 @@ const OrderCreditReportClient = () => {
                         <FaCheckCircle className="text-indigo-400 text-2xl flex-shrink-0 mt-1" />
                         <p className="text-gray-700 text-md leading-relaxed ">
                             <strong>You will receive</strong>  a freshly investigated credit report digitally on your
-                            email within the expected delivery time of <span className="font-extrabold">3-5 business days</span>.
+                            email within the expected delivery time of <span className="font-bold">3-5 business days</span>.
                         </p>
                     </div>
 

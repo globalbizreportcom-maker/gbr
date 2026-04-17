@@ -89,7 +89,7 @@ const Pricing = () => {
                                 <div>
                                     <h4 className="text-lg font-bold text-primary mb-1">Delivery Time</h4>
                                     <p className="text-gray-700 text-sm leading-relaxed">
-                                        You will receive freshly investigated credit report digitally on your email within the expected delivery time of <span className="font-extrabold">3-5</span>  business days.
+                                        You will receive freshly investigated credit report digitally on your email within the expected delivery time of <span className="font-extrabold">3-5 business days</span>  .
                                     </p>
                                 </div>
                             </div>
