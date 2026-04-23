@@ -37,26 +37,19 @@ const OrderCreditReportClient = () => {
         <section className="py-0 md:py-5  max-w-[1500px] mx-auto px-1 bg-white text-gray-800">
 
 
-            <div className="grid grid-cols-1 xl:grid-cols-2 rounded-2xl gap-8  px-0 md:px-10 py-10 md:py-15 bg-gradient-to-t from-white via-white to-indigo-100">
+            <div className="grid grid-cols-1 xl:grid-cols-2 rounded-2xl gap-8  px-0 md:px-10 py-2 md:py-10 bg-gradient-to-t from-white via-white to-indigo-100">
 
 
                 <div className="relative z-10 flex flex-col py-2 md:py-0  px-3" >
 
-                    <h1 className="text-3xl lg:text-3xl xl:text-4xl font-bold text-gray-900">
-                        <span className="text-primary"> Verify Any Company Worldwide</span>     -  Order a Comprehensive Due Diligence & Risk Report on any Business in 220+ countries.
+                    <h1 className="text-xl lg:text-3xl xl:text-4xl font-bold text-gray-900">
+                        <span className="text-primary"> Verify Any Company Worldwide</span>     -  Order a Comprehensive Due Diligence & Risk Report on Any Business in 220+ countries.
                     </h1>
 
-                    <div className="relative max-w-3xl mb-5">
+                    <div className="relative max-w-3xl">
                         <div
                             className="relative p-6 md:p-4 rounded-xl overflow-hidden"
-                        // style={{
-                        //     backgroundImage: "url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Y29ycG9yYXRlfGVufDB8fDB8fHww')",
-                        //     backgroundSize: "cover",
-                        //     backgroundPosition: "center",
-                        // }}
                         >
-                            {/* Overlay for text readability */}
-                            {/* <div className="absolute inset-0 bg-black/80"></div> */}
 
                             {/* Content */}
                             <ul className="relative  text-left text-md list-disc  space-y-4">
@@ -69,15 +62,6 @@ const OrderCreditReportClient = () => {
                                 <li>
                                     <span className="font-semibold text-gray-900">  International Company Reports starting from USD 49 </span> (pricing varies by country)
                                 </li>
-                                {/* <li className="text-gray-700">
-                                    $ Reports starting from <span className="font-semibold text-gray-900">USD 49/ INR 4720</span>  | Pricing varies by country.
-                                </li>
-                                <li className="text-gray-700">
-                                    <span className="font-semibold text-gray-900">Order Freshly Investigated Business Credit Report</span> on Any Company across 220+ Countries.
-                                </li>
-                                <li className="text-gray-700">
-                                    <span className="font-semibold text-gray-900">Verify the Authenticity & Credibility</span> of your Partners, Vendors, Buyers, and Suppliers to Avoid Potential Risks.
-                                </li> */}
                             </ul>
                         </div>
                     </div>
@@ -93,38 +77,54 @@ const OrderCreditReportClient = () => {
                         </button>
                     </div>
 
-                    <p className="text-sm text-orange-800 mb-3 font-semibold">
+                    <p className="text-md text-orange-800 mb-5 font-semibold">
                         Why Businesses Trust Us
                     </p>
 
-                    <ul className="grid grid-cols-1 gap-3 list-none text-left">
+                    <div className="flex flex-col justify-between items-start gap-4">
                         {[
                             {
-                                text: "Trusted by 20,000+ Global Companies",
+                                text: (
+                                    <>
+                                        Trusted by <span className="font-bold">20,000+ Global Companies</span>
+                                    </>
+                                ),
                                 icon: <FaBuilding className="text-gray-500 mr-4" />
                             },
                             {
-                                text: "10,000+ Reports delivered Monthly ",
+                                text: (
+                                    <>
+                                        <span className="font-bold">10,000+ Reports</span> delivered Monthly
+                                    </>
+                                ),
                                 icon: <FaFileAlt className="text-gray-500 mr-4" />
                             },
                             {
-                                text: "Human-Verified B2B data & insights ",
+                                text: (
+                                    <>
+                                        <span className="font-bold">Human-Verified</span> B2B data & insights
+                                    </>
+                                ),
                                 icon: <FaUserCheck className="text-gray-500 mr-4" />
                             },
                             {
-                                text: "	No Minimums. No Contracts. Just simple Pay-Per-Report Pricing",
+                                text: (
+                                    <>
+                                        No Minimums. No Contracts. Just simple{" "}
+                                        <span className="font-bold">Pay-Per-Report Pricing</span>
+                                    </>
+                                ),
                                 icon: <FaBolt className="text-gray-500 mr-4" />
                             }
                         ].map((item, idx) => (
-                            <li
-                                key={idx}
-                                className="flex items-center text-sm text-gray-600"
-                            >
+                            <div key={idx} className="flex items-center">
                                 {item.icon}
-                                {item.text}
-                            </li>
+                                <span className="text-md md:text-base text-gray-700">
+                                    {item.text}
+                                </span>
+                            </div>
                         ))}
-                    </ul>
+                    </div>
 
                     <div className="flex items-center gap-4 p-4 border border-blue-100 bg-blue-50/50 rounded-xl mt-3">
                         <div className="text-blue-600">
