@@ -42,8 +42,8 @@ const OrderCreditReportClient = () => {
 
                 <div className="relative z-10 flex flex-col py-2 md:py-0  px-3" >
 
-                    <h1 className="text-4xl lg:text-4xl font-bold text-gray-900">
-                        Buy a Company Due Diligence Report on Any Business <span className="text-primary">Worldwide </span>
+                    <h1 className="text-3xl lg:text-3xl xl:text-4xl font-bold text-gray-900">
+                        <span className="text-primary"> Verify Any Company Worldwide</span>     -  Order a Comprehensive Due Diligence & Risk Report on any Business in 220+ countries.
                     </h1>
 
                     <div className="relative max-w-3xl mb-5">
@@ -60,7 +60,16 @@ const OrderCreditReportClient = () => {
 
                             {/* Content */}
                             <ul className="relative  text-left text-md list-disc  space-y-4">
-                                <li className="text-gray-700">
+                                <li>
+                                    Get <span className="font-semibold text-gray-900"> Freshly investigated Business Credit Reports, Company Status & Risk Reports </span>on any Global company.
+                                </li>
+                                <li>
+                                    <span className="font-semibold text-gray-900">    Verify the Authenticity, Credibility & Financial stability </span> of Partners, Vendors, Buyers, & Suppliers.
+                                </li>
+                                <li>
+                                    <span className="font-semibold text-gray-900">  International Company Reports starting from USD 49 </span> (pricing varies by country)
+                                </li>
+                                {/* <li className="text-gray-700">
                                     $ Reports starting from <span className="font-semibold text-gray-900">USD 49/ INR 4720</span>  | Pricing varies by country.
                                 </li>
                                 <li className="text-gray-700">
@@ -68,7 +77,7 @@ const OrderCreditReportClient = () => {
                                 </li>
                                 <li className="text-gray-700">
                                     <span className="font-semibold text-gray-900">Verify the Authenticity & Credibility</span> of your Partners, Vendors, Buyers, and Suppliers to Avoid Potential Risks.
-                                </li>
+                                </li> */}
                             </ul>
                         </div>
                     </div>
@@ -84,6 +93,10 @@ const OrderCreditReportClient = () => {
                         </button>
                     </div>
 
+                    <p className="text-sm text-orange-800 mb-3 font-semibold">
+                        Why Businesses Trust Us
+                    </p>
+
                     <ul className="grid grid-cols-1 gap-3 list-none text-left">
                         {[
                             {
@@ -91,15 +104,15 @@ const OrderCreditReportClient = () => {
                                 icon: <FaBuilding className="text-gray-500 mr-4" />
                             },
                             {
-                                text: "Detailed 2026 Company Reports",
+                                text: "10,000+ Reports delivered Monthly ",
                                 icon: <FaFileAlt className="text-gray-500 mr-4" />
                             },
                             {
-                                text: "Human-Verified B2B Intelligence",
+                                text: "Human-Verified B2B data & insights ",
                                 icon: <FaUserCheck className="text-gray-500 mr-4" />
                             },
                             {
-                                text: "Lowest pay per report pricing",
+                                text: "	No Minimums. No Contracts. Just simple Pay-Per-Report Pricing",
                                 icon: <FaBolt className="text-gray-500 mr-4" />
                             }
                         ].map((item, idx) => (
@@ -112,6 +125,17 @@ const OrderCreditReportClient = () => {
                             </li>
                         ))}
                     </ul>
+
+                    <div className="flex items-center gap-4 p-4 border border-blue-100 bg-blue-50/50 rounded-xl mt-3">
+                        <div className="text-blue-600">
+                            <FaInfo size={16} />
+                        </div>
+                        <div className="flex-1">
+                            <p className="text-sm text-slate-800 font-medium">
+                                Check if a company is legit  – Order Your Report Now.
+                            </p>
+                        </div>
+                    </div>
                 </div>
 
                 {/* Order Form Section */}
