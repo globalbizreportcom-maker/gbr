@@ -42,8 +42,8 @@ const OrderCreditReportClient = () => {
 
                 <div className="relative z-10 flex flex-col py-2 md:py-0  px-3" >
 
-                    <h1 >
-                        <span className="text-primary text-xl lg:text-3xl xl:text-4xl font-extrabold "> Verify Any Company Worldwide</span>    <span className="text-lg text-gray-900 font-bold lg:text-3xl">  -  Order a Comprehensive Due Diligence & Risk Report on Any Company in 220+ Countries.</span>
+                    <h1 className=" text-2xl lg:text-3xl font-extrabold text-gray-600">
+                        <span className="text-gray-900">Verify Any Company Worldwide</span>  -  Order a Comprehensive Due Diligence & Risk Report on Any Company in 220+ Countries.
                     </h1>
 
                     <div className="relative max-w-3xl">
@@ -52,12 +52,12 @@ const OrderCreditReportClient = () => {
                         >
 
                             {/* Content */}
-                            <ul className="relative  text-left text-md list-disc  space-y-4">
+                            <ul className="relative text-left text-lg list-disc space-y-4">
                                 <li>
-                                    Get <span className="font-semibold text-gray-900"> Freshly investigated Business Credit Reports & Company Status Reports </span>on any Business Worldwide.
+                                    Get <span className="font-bold text-gray-900"> Freshly investigated Business Credit Reports & Company Status Reports </span>on any Business Worldwide.
                                 </li>
                                 <li>
-                                    <span className="font-semibold text-gray-900">    Access Authenticity, Credibility & Financial stability </span> of Partners, Vendors, Buyers, & Suppliers.
+                                    <span className="font-bold text-gray-900">    Access Authenticity, Credibility & Financial stability </span> of Partners, Vendors, Buyers, & Suppliers.
                                 </li>
                             </ul>
                         </div>
@@ -74,10 +74,6 @@ const OrderCreditReportClient = () => {
                         </button>
                     </div>
 
-                    {/* <p className="text-md text-orange-800 mb-5 font-semibold">
-                        Why Businesses Trust Us
-                    </p> */}
-
                     <div className="flex flex-col justify-between items-start gap-4">
                         {[
                             {
@@ -88,14 +84,14 @@ const OrderCreditReportClient = () => {
                                 ),
                                 icon: <FaBuilding className="text-gray-500 mr-4" />
                             },
-                            {
-                                text: (
-                                    <>
-                                        <span className="font-bold">10,000+ Reports</span> delivered Monthly
-                                    </>
-                                ),
-                                icon: <FaFileAlt className="text-gray-500 mr-4" />
-                            },
+                            // {
+                            //     text: (
+                            //         <>
+                            //             <span className="font-bold">10,000+ Reports</span> delivered Monthly
+                            //         </>
+                            //     ),
+                            //     icon: <FaFileAlt className="text-gray-500 mr-4" />
+                            // },
                             {
                                 text: (
                                     <>
@@ -107,9 +103,7 @@ const OrderCreditReportClient = () => {
                             {
                                 text: (
                                     <>
-                                        <span className="font-bold">Pay-Per-Report Pricing</span>.
-                                        No Minimums.
-                                        <span className="font-bold">Starts from USD 49 </span>
+                                        <span className="font-bold">Pay-Per-Report Pricing. Starts from USD 49</span>.
                                         (varies by country)
                                     </>
                                 ),
@@ -118,7 +112,7 @@ const OrderCreditReportClient = () => {
                         ].map((item, idx) => (
                             <div key={idx} className="flex items-center">
                                 {item.icon}
-                                <span className="text-md md:text-base text-gray-700">
+                                <span className="text-lg md:text-base text-gray-700">
                                     {item.text}
                                 </span>
                             </div>
@@ -297,7 +291,7 @@ const OrderCreditReportClient = () => {
                 <FaInfo className="mr-5 bg-gray-100" />    Over 20,000+ global businesses trust GBR for company assessment and due-diligence checks – join them and safeguard your growth!
             </p>
 
-        </section>
+        </section >
     );
 };
 
