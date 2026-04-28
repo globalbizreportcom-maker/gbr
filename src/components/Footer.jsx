@@ -293,8 +293,8 @@ const Footer = () => {
                         <div className="flex items-center gap-4 border-b sm:border-b-0 sm:border-r border-slate-700/50 pb-4 sm:pb-0 last:border-0">
                             <FaChartLine className="text-indigo-400 text-3xl shrink-0" />
                             <div>
-                                <p className="text-white font-black text-xl">1000</p>
-                                <p className="text-[10px] uppercase tracking-widest font-bold text-slate-500 leading-tight">Reports Delivered Worldwide</p>
+                                <p className="text-white font-black text-xl">10,000+</p>
+                                <p className="text-[10px] uppercase tracking-widest font-bold text-slate-500 leading-tight">Reports Delivered Monthly</p>
                             </div>
                         </div>
                         <div className="flex items-center gap-4">

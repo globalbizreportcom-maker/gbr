@@ -42,8 +42,8 @@ const OrderCreditReportClient = () => {
 
                 <div className="relative z-10 flex flex-col py-2 md:py-0  px-3" >
 
-                    <h1 className="text-xl lg:text-3xl xl:text-4xl font-bold text-gray-900">
-                        <span className="text-primary"> Verify Any Company Worldwide</span>     -  Order a Comprehensive Due Diligence & Risk Report on Any Business in 220+ countries.
+                    <h1 >
+                        <span className="text-primary text-xl lg:text-3xl xl:text-4xl font-extrabold "> Verify Any Company Worldwide</span>    <span className="text-lg text-gray-900 font-bold lg:text-3xl">  -  Order a Comprehensive Due Diligence & Risk Report on Any Company in 220+ Countries.</span>
                     </h1>
 
                     <div className="relative max-w-3xl">
@@ -54,13 +54,10 @@ const OrderCreditReportClient = () => {
                             {/* Content */}
                             <ul className="relative  text-left text-md list-disc  space-y-4">
                                 <li>
-                                    Get <span className="font-semibold text-gray-900"> Freshly investigated Business Credit Reports, Company Status & Risk Reports </span>on any Global company.
+                                    Get <span className="font-semibold text-gray-900"> Freshly investigated Business Credit Reports & Company Status Reports </span>on any Business Worldwide.
                                 </li>
                                 <li>
-                                    <span className="font-semibold text-gray-900">    Verify the Authenticity, Credibility & Financial stability </span> of Partners, Vendors, Buyers, & Suppliers.
-                                </li>
-                                <li>
-                                    <span className="font-semibold text-gray-900">  International Company Reports starting from USD 49 </span> (pricing varies by country)
+                                    <span className="font-semibold text-gray-900">    Access Authenticity, Credibility & Financial stability </span> of Partners, Vendors, Buyers, & Suppliers.
                                 </li>
                             </ul>
                         </div>
@@ -77,9 +74,9 @@ const OrderCreditReportClient = () => {
                         </button>
                     </div>
 
-                    <p className="text-md text-orange-800 mb-5 font-semibold">
+                    {/* <p className="text-md text-orange-800 mb-5 font-semibold">
                         Why Businesses Trust Us
-                    </p>
+                    </p> */}
 
                     <div className="flex flex-col justify-between items-start gap-4">
                         {[
@@ -110,8 +107,10 @@ const OrderCreditReportClient = () => {
                             {
                                 text: (
                                     <>
-                                        No Minimums. No Contracts. Just simple{" "}
-                                        <span className="font-bold">Pay-Per-Report Pricing</span>
+                                        <span className="font-bold">Pay-Per-Report Pricing</span>.
+                                        No Minimums.
+                                        <span className="font-bold">Starts from USD 49 </span>
+                                        (varies by country)
                                     </>
                                 ),
                                 icon: <FaBolt className="text-gray-500 mr-4" />
@@ -126,16 +125,6 @@ const OrderCreditReportClient = () => {
                         ))}
                     </div>
 
-                    <div className="flex items-center gap-4 p-4 border border-blue-100 bg-blue-50/50 rounded-xl mt-3">
-                        <div className="text-blue-600">
-                            <FaInfo size={16} />
-                        </div>
-                        <div className="flex-1">
-                            <p className="text-sm text-slate-800 font-medium">
-                                Check if a company is legit  – Order Your Report Now.
-                            </p>
-                        </div>
-                    </div>
                 </div>
 
                 {/* Order Form Section */}
