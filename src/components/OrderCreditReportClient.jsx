@@ -40,87 +40,65 @@ const OrderCreditReportClient = () => {
             <div className="grid grid-cols-1 xl:grid-cols-2 rounded-2xl gap-8  px-0 md:px-10 py-2 md:py-10 bg-gradient-to-t from-white via-white to-indigo-100">
 
 
-                <div className="relative z-10 flex flex-col py-2 md:py-0  px-3" >
-
-                    <h1 className=" text-2xl lg:text-3xl font-extrabold text-gray-600">
-                        <span className="text-gray-900">Verify Any Company Worldwide</span>  -  Order a Comprehensive Due Diligence & Risk Report on Any Company in 220+ Countries.
+                <div className="relative z-10 flex flex-col py-6 md:py-0 px-4 md:px-6">
+                    {/* Headline Section */}
+                    <h1 className="text-2xl md:text-3xl lg:text-4xl font-[800] md:font-extrabold text-gray-600 leading-tight">
+                        <span className="text-gray-900 block md:inline">Verify Any Company Worldwide</span>
+                        <span className="hidden md:inline"> - </span>
+                        <span className="mt-2 block md:inline text-xl md:text-2xl lg:text-3xl font-[800] md:font-extrabold">
+                            Order a Comprehensive Due Diligence & Risk Report on Any Company in 220+ Countries.
+                        </span>
                     </h1>
 
-                    <div className="relative max-w-3xl">
-                        <div
-                            className="relative p-6 md:p-4 rounded-xl overflow-hidden"
-                        >
-
-                            {/* Content */}
-                            <ul className="relative text-left text-lg list-disc space-y-4">
+                    {/* Bullet Points Container */}
+                    <div className="relative max-w-3xl mt-4">
+                        <div className="relative py-4 md:p-4 rounded-xl overflow-hidden">
+                            <ul className="relative text-left text-base md:text-lg list-disc pl-5 space-y-4 text-gray-700">
                                 <li>
-                                    Get <span className="font-bold text-gray-900"> Freshly investigated Business Credit Reports & Company Status Reports </span>on any Business Worldwide.
+                                    Get <span className="font-bold text-gray-900">Freshly investigated Business Credit Reports</span> on any Business Worldwide.
                                 </li>
                                 <li>
-                                    <span className="font-bold text-gray-900">    Access Authenticity, Credibility & Financial stability </span> of Partners, Vendors, Buyers, & Suppliers.
+                                    <span className="font-bold text-gray-900">Assess Authenticity & Financial stability</span> of Partners, Vendors, and Suppliers.
                                 </li>
                             </ul>
                         </div>
                     </div>
 
-
-
-                    <div className="flex flex-col md:hidden justify-start mb-5 gap-4">
+                    {/* Mobile CTA Button */}
+                    <div className="flex flex-col md:hidden justify-start mt-2 mb-4">
                         <button
                             onClick={handleScrollToForm}
-                            className="cursor-pointer font-semibold px-8 py-3 rounded-lg shadow-none hover:shadow-lg hover:scale-105 transition-all duration-300 items-center gap-2 btn btn-primary "
+                            className="flex items-center justify-center cursor-pointer font-bold px-8 py-3 rounded-lg bg-blue-600 text-white shadow-lg active:scale-95 transition-all duration-300 gap-2"
                         >
                             Order Report Now <FaChevronRight />
                         </button>
                     </div>
 
-                    <div className="flex flex-col justify-between items-start gap-4">
+                    {/* Trust Badges / Info List */}
+                    <div className="flex flex-col justify-between items-start gap-5 mt-2">
                         {[
                             {
-                                text: (
-                                    <>
-                                        Trusted by <span className="font-bold">20,000+ Global Companies</span>
-                                    </>
-                                ),
-                                icon: <FaBuilding className="text-gray-500 mr-4" />
-                            },
-                            // {
-                            //     text: (
-                            //         <>
-                            //             <span className="font-bold">10,000+ Reports</span> delivered Monthly
-                            //         </>
-                            //     ),
-                            //     icon: <FaFileAlt className="text-gray-500 mr-4" />
-                            // },
-                            {
-                                text: (
-                                    <>
-                                        <span className="font-bold">Human-Verified</span> B2B data & insights
-                                    </>
-                                ),
-                                icon: <FaUserCheck className="text-gray-500 mr-4" />
+                                text: (<>Trusted by <span className="font-bold text-gray-900">20,000+ Global Companies</span></>),
+                                icon: <FaBuilding className="text-gray-400 text-xl shrink-0" />
                             },
                             {
-                                text: (
-                                    <>
-                                        <span className="font-bold">Pay-Per-Report Pricing. Starts from USD 49</span>.
-                                        (varies by country)
-                                    </>
-                                ),
-                                icon: <FaBolt className="text-gray-500 mr-4" />
+                                text: (<><span className="font-bold text-gray-900">Human-Verified</span> B2B data & insights</>),
+                                icon: <FaUserCheck className="text-gray-400 text-xl shrink-0" />
+                            },
+                            {
+                                text: (<><span className="font-bold text-gray-900">Pay-Per-Report Pricing</span>. Starts from USD 49. (varies by country)</>),
+                                icon: <FaBolt className="text-gray-400 text-xl shrink-0" />
                             }
                         ].map((item, idx) => (
-                            <div key={idx} className="flex items-center">
+                            <div key={idx} className="flex items-start md:items-center gap-4">
                                 {item.icon}
-                                <span className="text-lg md:text-base text-gray-700">
+                                <span className="text-base md:text-lg text-gray-700 leading-snug">
                                     {item.text}
                                 </span>
                             </div>
                         ))}
                     </div>
-
                 </div>
-
                 {/* Order Form Section */}
 
                 <div ref={formRef} className="">
