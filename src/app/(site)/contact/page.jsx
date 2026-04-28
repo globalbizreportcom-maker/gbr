@@ -71,7 +71,7 @@ export default function Contact() {
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 text-sm">
 
                             {/* Phone */}
-                            <div className="flex items-start gap-3  ">
+                            {/* <div className="flex items-start gap-3  ">
                                 <div className="text-primary text-xl pt-1">
                                     <FaPhoneAlt />
                                 </div>
@@ -80,7 +80,7 @@ export default function Contact() {
                                     <p className="text-gray-500">
                                         +91 9811160294</p>
                                 </div>
-                            </div>
+                            </div> */}
 
                             {/* Email */}
                             <div className="flex items-start gap-3  ">
