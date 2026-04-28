@@ -5,12 +5,18 @@
   --background: #ffffff;
 }
 
+@theme {
+  /* This maps Tailwind's 'font-sans' to the Geist variable */
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+}
+
 html {
   background-color: white;
 }
 
 body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: var(--font-geist-sans);
+  /* font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; */
 }
 
 input:-webkit-autofill,

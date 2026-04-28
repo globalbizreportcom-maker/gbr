@@ -14,6 +14,7 @@ import TawkMessenger from "@/components/TawkMessenger";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
+  weight: ["400", "600", "700", "800", "900"], // Explicitly ask for 800
 });
 
 const geistMono = Geist_Mono({
