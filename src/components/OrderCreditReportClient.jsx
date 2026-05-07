@@ -55,10 +55,10 @@ const OrderCreditReportClient = () => {
                         <div className="relative py-4 md:p-4 rounded-xl overflow-hidden">
                             <ul className="relative text-left text-base md:text-lg list-disc pl-5 space-y-4 text-gray-700">
                                 <li>
-                                    Get <span className="font-bold text-gray-900">Freshly investigated Business Credit Reports</span> on any Business Worldwide.
+                                    Get <span className="font-bold text-gray-900">Freshly investigated Business Credit Report</span> on any Company Worldwide.
                                 </li>
                                 <li>
-                                    <span className="font-bold text-gray-900">Assess Authenticity & Financial stability</span> of Partners, Vendors, and Suppliers.
+                                    <span className="font-bold text-gray-900">Access Authenticity & Credibility </span> of Partners, Vendors, Buyers & Suppliers.
                                 </li>
                             </ul>
                         </div>
