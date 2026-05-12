@@ -14,6 +14,8 @@ export async function GET() {
       throw new Error("Failed to fetch meta");
     }
 
+    // test
+
     const metaData = await metaRes.json();
 
     const totalUrls = metaData.total || 0;
