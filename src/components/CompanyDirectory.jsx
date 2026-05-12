@@ -142,10 +142,10 @@ const CompanyDirectory = () => {
         let country =
             company.CompanyIndian?.["Foreign Company"]?.toLowerCase() ||
             company["CompanyIndian/Foreign Company"]?.toLowerCase() ||
-            "india";
+            "";
 
         // Trim last character only if not empty
-        country = country ? encodeURIComponent(country.slice(0, -1)) : "na";
+        country = country ? encodeURIComponent(country.slice(0, -1)) : "india";
 
         // const stateCode = encodeURIComponent(company.CompanyStateCode?.toLowerCase() || "na");
         const stateCode = encodeURIComponent(
