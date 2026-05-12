@@ -41,6 +41,7 @@ export async function GET(req, context) {
 
         return new NextResponse(xml, {
             headers: { "Content-Type": "application/xml" },
+            "Cache-Control": "public, max-age=43200, stale-while-revalidate=3600" // Cache 12 hours
         });
     } catch (err) {
         console.error(err);

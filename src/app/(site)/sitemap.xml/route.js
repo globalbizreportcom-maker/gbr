@@ -33,7 +33,7 @@ export async function GET() {
     for (let i = 1; i <= totalSitemaps; i++) {
       xml += `
 <sitemap>
-  <loc>${BASE_URL}/sitemaps/sitemap/${i}</loc>
+  <loc>${BASE_URL}/sitemaps/sitemap/${i}.xml</loc>
   <lastmod>${new Date().toISOString()}</lastmod>
 </sitemap>\n`;
     }

@@ -43,6 +43,41 @@ const ReportsAdmin = ({ defaultTab }) => {
     const [forwardModalOpen, setForwardModalOpen] = useState(false);
     const [forwardCompany, setForwardCompany] = useState({});
 
+    // 1️⃣ Pagination State
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 15; // Adjust this number to change items per page
+
+    // 2️⃣ Reset to Page 1 when the user types in the search field
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [searchQuery]);
+
+    const filteredReports =
+        activeTab === "all" ? reports : reports.filter((r) => r.status === activeTab);
+
+    const displayedReports = filteredReports.filter((r) => {
+        const query = searchQuery.trim().toLowerCase();
+        return (
+            (r.targetCompany?.name || "").toLowerCase().includes(query) ||
+            (r.requesterInfo?.name || "").toLowerCase().includes(query) ||
+            (r.requesterInfo?.country || "").toLowerCase().includes(query)
+
+        );
+    });
+
+
+    // 3️⃣ Pagination Calculations
+    const totalPages = Math.ceil(displayedReports.length / itemsPerPage);
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const paginatedReports = displayedReports.slice(startIndex, startIndex + itemsPerPage);
+
+    // Helper to handle page changes safely
+    const handlePageChange = (pageNumber) => {
+        if (pageNumber >= 1 && pageNumber <= totalPages) {
+            setCurrentPage(pageNumber);
+        }
+    };
+
 
     useEffect(() => {
         const segments = window.location.pathname.split("/").filter(Boolean);
@@ -217,20 +252,6 @@ const ReportsAdmin = ({ defaultTab }) => {
         }
     };
 
-    const filteredReports =
-        activeTab === "all" ? reports : reports.filter((r) => r.status === activeTab);
-
-    const displayedReports = filteredReports.filter((r) => {
-        const query = searchQuery.trim().toLowerCase();
-        return (
-            (r.targetCompany?.name || "").toLowerCase().includes(query) ||
-            (r.requesterInfo?.name || "").toLowerCase().includes(query) ||
-            (r.requesterInfo?.country || "").toLowerCase().includes(query)
-
-        );
-    });
-
-    console.log(selectedReport);
 
 
     return (
@@ -298,7 +319,6 @@ const ReportsAdmin = ({ defaultTab }) => {
                         </p>
                     ) : (
                         <>
-
                             {/* Search Field */}
                             <div className="mb-4 w-full flex justify-end">
                                 <input
@@ -321,16 +341,24 @@ const ReportsAdmin = ({ defaultTab }) => {
                                             <th>Requester Country</th>
                                             <th>Status</th>
                                             <th>Amount</th>
-                                            <th>Created At</th>
+                                            <th>Order Date</th>
                                             <th>Actions</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {displayedReports.map((report, index) => (
+                                        {paginatedReports.map((report, index) => (
                                             <tr key={report._id} className="bg-gray-50 border-b-1 border-gray-200 hover:bg-white">
-                                                <td>{index + 1}</td>
+                                                {/* Reversed continuous numbering: total items minus absolute offset */}
+                                                <td>{displayedReports.length - (startIndex + index)}</td>
                                                 <td>{report.targetCompany.name.length > 20 ? report.targetCompany.name.slice(0, 20) + "..." : report.targetCompany.name}</td>
-                                                <td>{report.requesterInfo.name}</td>
+                                                <td className="flex flex-col">
+                                                    <span className="text-xs text-gray-800 font-semibold">
+                                                        {report.requesterInfo.name}
+                                                    </span>
+                                                    <span className="text-xs text-gray-400 font-normal">
+                                                        {report.requesterInfo.email}
+                                                    </span>
+                                                </td>
                                                 <td>{report.requesterInfo.country}</td>
                                                 <td>
                                                     <span
@@ -341,12 +369,8 @@ const ReportsAdmin = ({ defaultTab }) => {
                                                     </span>
                                                 </td>
                                                 <td>
-                                                    <span
-                                                        className={`px-3 py-1 rounded-lg text-sm font-medium  text-gray-800"
-                                                            }`}
-                                                    >
-                                                        {report.payment.amount}{" "}
-                                                        {report.payment.currency}
+                                                    <span className="px-3 py-1 rounded-lg text-sm font-medium text-gray-800">
+                                                        {report.payment.amount} {report.payment.currency}
                                                     </span>
                                                 </td>
                                                 <td>{new Date(report.createdAt).toLocaleString("en-IN")}</td>
@@ -366,14 +390,15 @@ const ReportsAdmin = ({ defaultTab }) => {
 
                             {/* Card layout for small screens */}
                             <div className="md:hidden space-y-4">
-                                {displayedReports.map((report, index) => (
+                                {paginatedReports.map((report, index) => (
                                     <div
                                         key={report._id}
                                         className="bg-white border border-gray-200 rounded-xl p-5"
                                     >
                                         {/* Header: Number + Status */}
                                         <div className="flex justify-between items-center mb-3">
-                                            <span className="font-semibold text-gray-700">#{index + 1}</span>
+                                            {/* Reversed continuous numbering */}
+                                            <span className="font-semibold text-gray-700">#{displayedReports.length - (startIndex + index)}</span>
                                             <span
                                                 className={`px-3 py-1 rounded-lg text-sm font-medium ${STATUS_COLORS[report.status] || "bg-gray-200 text-gray-800"
                                                     }`}
@@ -393,14 +418,14 @@ const ReportsAdmin = ({ defaultTab }) => {
                                                 {report.requesterInfo.name}
                                             </p>
                                             <p>
-                                                <span className="font-medium text-gray-800">Created At:</span>{" "}
+                                                <span className="font-medium text-gray-800">Order Date:</span>{" "}
                                                 {new Date(report.createdAt).toLocaleString()}
                                             </p>
                                         </div>
 
                                         {/* View Button */}
                                         <button
-                                            className="mt-4 w-fit  btn-primary btn btn-sm shadow-none font-medium rounded-lg"
+                                            className="mt-4 w-fit btn-primary btn btn-sm shadow-none font-medium rounded-lg"
                                             onClick={() => handleView(report)}
                                         >
                                             View Details
@@ -409,6 +434,58 @@ const ReportsAdmin = ({ defaultTab }) => {
                                 ))}
                             </div>
 
+                            {/* 4️⃣ Responsive Pagination Controls */}
+                            {totalPages > 1 && (
+                                <div className="mt-6 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-gray-200 pt-4">
+                                    {/* Entries Count Metadata */}
+                                    <div className="text-sm text-gray-700">
+                                        Showing{" "}
+                                        <span className="font-semibold">{startIndex + 1}</span> to{" "}
+                                        <span className="font-semibold">
+                                            {Math.min(startIndex + itemsPerPage, displayedReports.length)}
+                                        </span>{" "}
+                                        of <span className="font-semibold">{displayedReports.length}</span> entries
+                                    </div>
+
+                                    {/* Page Navigation Buttons */}
+                                    <div className="inline-flex rounded-md shadow-sm " role="group">
+                                        {/* Previous Button */}
+                                        <button
+                                            type="button"
+                                            onClick={() => handlePageChange(currentPage - 1)}
+                                            disabled={currentPage === 1}
+                                            className="cursor-pointer px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-50 focus:z-10 focus:ring-2 focus:ring-indigo-500 focus:text-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                                        >
+                                            Previous
+                                        </button>
+
+                                        {/* Page Numbers */}
+                                        {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                                            <button
+                                                key={page}
+                                                type="button"
+                                                onClick={() => handlePageChange(page)}
+                                                className={`cursor-pointer px-4 py-2 text-sm font-medium border-y border-r border-gray-300 hover:bg-gray-50 focus:z-10 focus:ring-2 focus:ring-indigo-500 ${currentPage === page
+                                                    ? "bg-indigo-50 text-indigo-600 border-indigo-500 z-10"
+                                                    : "bg-white text-gray-700"
+                                                    }`}
+                                            >
+                                                {page}
+                                            </button>
+                                        ))}
+
+                                        {/* Next Button */}
+                                        <button
+                                            type="button"
+                                            onClick={() => handlePageChange(currentPage + 1)}
+                                            disabled={currentPage === totalPages}
+                                            className="cursor-pointer px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-50 focus:z-10 focus:ring-2 focus:ring-indigo-500 focus:text-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                                        >
+                                            Next
+                                        </button>
+                                    </div>
+                                </div>
+                            )}
                         </>
                     )}
 
