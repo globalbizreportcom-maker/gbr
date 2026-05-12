@@ -158,7 +158,7 @@ const CompanyDirectory = () => {
 
     const handleClick = (company) => {
         // 1. Format name: replace spaces with hyphens and force uppercase.
-        // Keeps symbols like '&', dots, and dashes perfectly intact.
+        // Keeps symbols like '&', dots, and dashes perfectly intact as literal characters.
         const companyname = company.companyname?.replace(/\s+/g, "-").toUpperCase() || "UNKNOWN";
 
         const cin = encodeURIComponent(company.cin || "na");
@@ -177,9 +177,9 @@ const CompanyDirectory = () => {
             (company.companystatecode?.toLowerCase().replace(/\s+/g, "_")) || "na"
         );
 
-        // 4. Generate identical literal path
-        const path = `/${companyname}/${cin}/${country}/${stateCode}/company-business-financial-credit-report`;
-        router.push(path);
+        // 4. Generate identical literal path and open in a new tab
+        const url = `https://www.globalbizreport.com/${companyname}/${cin}/${country}/${stateCode}/company-business-financial-credit-report`;
+        window.open(url, "_blank"); // _blank opens in a new tab
     };
 
     const [openSection, setOpenSection] = useState(null);
