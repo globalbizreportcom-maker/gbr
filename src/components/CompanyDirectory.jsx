@@ -131,55 +131,31 @@ const CompanyDirectory = () => {
     }, [initialized, company, page, filters]);
 
     // -----------------  handle row click -----------------
-    // const handleClick = (company) => {
-    //     const companyname = encodeURIComponent(
-    //         company.companyname?.replace(/\s+/g, "-") || "unknown"
-    //     );
-
-    //     const cin = encodeURIComponent(company.cin || "na");
-
-    //     // Determine country safely
-    //     let country =
-    //         company.CompanyIndian?.["Foreign Company"]?.toLowerCase() ||
-    //         company["CompanyIndian/Foreign Company"]?.toLowerCase() ||
-    //         "";
-
-    //     // Trim last character only if not empty
-    //     country = country ? encodeURIComponent(country.slice(0, -1)) : "na";
-
-    //     // const stateCode = encodeURIComponent(company.CompanyStateCode?.toLowerCase() || "na");
-    //     const stateCode = encodeURIComponent(
-    //         (company.companystatecode?.toLowerCase().replace(/\s+/g, "_")) || "na"
-    //     );
-
-    //     const path = `/${companyname}/${cin}/${country}/${stateCode}/company-business-financial-credit-report`;
-    //     router.push(path);
-    // };
-
     const handleClick = (company) => {
-        // 1. Format name: replace spaces with hyphens and force uppercase.
-        // Keeps symbols like '&', dots, and dashes perfectly intact as literal characters.
-        const companyname = company.companyname?.replace(/\s+/g, "-").toUpperCase() || "UNKNOWN";
+        const companyname = encodeURIComponent(
+            company.companyname?.replace(/\s+/g, "-") || "unknown"
+        );
 
         const cin = encodeURIComponent(company.cin || "na");
 
-        // 2. Determine country safely
-        let country =
-            company.CompanyIndian?.["Foreign Company"]?.toLowerCase() ||
-            company["CompanyIndian/Foreign Company"]?.toLowerCase() ||
-            "";
+        // Determine country safely
+        let country = company.CompanyIndian?.["Foreign Company"]?.toLowerCase() || company["CompanyIndian/Foreign Company"]?.toLowerCase() || "";
 
         // Trim last character only if not empty
         country = country ? encodeURIComponent(country.slice(0, -1)) : "na";
 
-        // 3. Format state code
+        // const stateCode = encodeURIComponent(company.CompanyStateCode?.toLowerCase() || "na");
         const stateCode = encodeURIComponent(
             (company.companystatecode?.toLowerCase().replace(/\s+/g, "_")) || "na"
         );
 
+        // const path = `/${companyname}/${cin}/${country}/${stateCode}/company-business-financial-credit-report`;
+        // router.push(path);
+
         // 4. Generate identical literal path and open in a new tab
         const url = `https://www.globalbizreport.com/${companyname}/${cin}/${country}/${stateCode}/company-business-financial-credit-report`;
         window.open(url, "_blank"); // _blank opens in a new tab
+
     };
 
     const [openSection, setOpenSection] = useState(null);
