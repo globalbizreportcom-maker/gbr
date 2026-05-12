@@ -132,9 +132,11 @@ const CompanyDirectory = () => {
 
     // -----------------  handle row click -----------------
     const handleClick = (company) => {
-        const companyname = encodeURIComponent(
-            company.companyname?.replace(/\s+/g, "-") || "unknown"
-        );
+        // const companyname = encodeURIComponent(
+        //     company.companyname?.replace(/\s+/g, "-") || "unknown"
+        // );
+
+        const companyname = company.companyname?.replace(/\s+/g, "-").toUpperCase() || "UNKNOWN";
 
         const cin = encodeURIComponent(company.cin || "na");
 
