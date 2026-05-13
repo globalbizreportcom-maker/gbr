@@ -107,7 +107,7 @@ export default function PrivacyPolicy() {
                             globalbizreport.com shall not be responsible for any failure on the part of any linked
                             websites to comply with any privacy policy posted on this website. In addition, other
                             websites, which may contain material not suitable for children, may also link to the
-                            globalbizreport.com website without globalbizreport.com's knowledge or consent. We
+                            globalbizreport.com website without globalbizreport.com's knowledge or consent. Vist our <a href="/sitemap.xml">Site Map</a>. We
                             have no responsibility for the content, policies or actions of these websites.
                             Children should always check with a parent, guardian or other adult before linking to
                             any new sites.

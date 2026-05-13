@@ -63,7 +63,7 @@ const TermsOfService = () => {
                     <div>
                         <h2 className="font-semibold">5. Content Submission</h2>
                         <p>
-                            Certain areas of the globalbizreport.com Web Site allow for the exchange of information between you, the USER, and globalbizreport.com. Any submission by the USER
+                            Certain areas of the globalbizreport.com Web Site allow for the exchange of information between you, the USER, and globalbizreport.com. Vist our <a href="/sitemap.xml">Site Map</a>. Any submission by the USER
                             becomes the property of globalbizreport.com, and the USER implicitly grants GBR the authority and right to use that content in accordance with globalbizreport.com
                             corporate privacy policies.
                         </p>
