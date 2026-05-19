@@ -10,7 +10,7 @@ Sitemap: https://www.globalbizreport.com/sitemap.xml`;
         return new NextResponse(content, {
             headers: {
                 "Content-Type": "text/plain; charset=utf-8",
-                "Cache-Control": "public, max-age=86400, stale-while-revalidate=3600",
+                // "Cache-Control": "public, max-age=86400, stale-while-revalidate=3600",
             },
         });
     } catch (err) {
