@@ -7,6 +7,13 @@ import { FaArrowRight, FaCheckCircle, FaFile, FaShoppingCart, } from "react-icon
 
 export const dynamic = "force-dynamic";
 
+// ─── GENERATE CURRENT DATE STRING FOR SEO ────────────────────────
+// Formats date nicely, e.g., "21 May 2026"
+const currentDateStr = new Date().toLocaleDateString('en-GB', {
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric'
+});
 
 export async function generateMetadata({ params }) {
     const { cin } = await params;
@@ -39,8 +46,8 @@ export async function generateMetadata({ params }) {
             ? `${companyData.companyname} | GBR`
             : "Company Report | GBR",
         description: companyData
-            ? `Check ${companyData.companyname}'s financial profile and order a detailed company report.`
-            : "Check company profile information and order a comprehensive company report.",
+            ? `Check ${companyData.companyname}'s financial profile and order a detailed company report. Last updated: ${currentDateStr}.`
+            : `Check company profile information and order a comprehensive company report. Last updated: ${currentDateStr}.`,
     };
 }
 
@@ -54,7 +61,7 @@ const CompanyPage = async ({ params }) => {
     let claimedCompany = null;
     let fetchError = null;
 
-    console.log(claimedCompany);
+    // console.log(claimedCompany);
 
     if (cin) {
 
@@ -116,7 +123,7 @@ const CompanyPage = async ({ params }) => {
             <div className="max-w-6xl mx-auto flex flex-col pb-24  rounded-lg min-h-svh">
                 <div className="w-full rounded-2xl bg-gradient-to-br from-blue-100 via-white to-orange-100 p-5 mb-3 text-center">
                     <div className="text-gray-600 text-md font-semibold rounded-md mb-2 max-w-fit px-2 py-1 mx-auto">
-                        Check Company Profile information
+                        Check Company Profile information. As on {currentDateStr}.
                     </div>
                     <h2 className="max-w-2xl mx-auto text-lg md:text-2xl font-bold mb-3 text-center">
                         <span className="text-primary">{companyData.companyname}</span>
