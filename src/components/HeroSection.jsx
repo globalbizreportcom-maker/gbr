@@ -77,12 +77,12 @@ const HeroSection = () => {
     return (
         <div className="relative flex flex-col justify-between bg-gradient-to-br from-blue-100 via-white to-orange-100 p-10 overflow-visible h-auto 2xl:h-150">
             {/* Background Image Layer */}
-            <Image
-                src={require("../../public/images/hero_section.png")}
+            <img
+                src='https://res.cloudinary.com/dwccr86av/image/upload/v1773825772/company/U51909GA2020PTC014499/banner/xztqz8dcbh6mhnudlf7u.webp'
                 alt="Decorative"
-                fill
+                // fill
                 className="absolute top-0 left-0 w-screen h-full object-cover opacity-15 pointer-events-none select-none z-0"
-                priority
+            // priority
             />
 
 
