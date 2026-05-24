@@ -71,7 +71,7 @@ import { NextResponse } from "next/server";
 
 const BACKEND_URL = "https://backend.globalbizreport.com/companies-directory";
 const BASE_URL = "https://www.globalbizreport.com";
-const URLS_PER_SITEMAP = 10000;
+const URLS_PER_SITEMAP = 2000;
 
 function cleanUrlSegment(text, type = "lowercase") {
     if (!text) return "na";

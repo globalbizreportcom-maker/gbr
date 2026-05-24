@@ -59,7 +59,7 @@ import { NextResponse } from "next/server";
 
 const META_URL = "https://backend.globalbizreport.com/companies-meta";
 const BASE_URL = "https://www.globalbizreport.com";
-const URLS_PER_SITEMAP = 10000;
+const URLS_PER_SITEMAP = 2000;
 
 export async function GET() {
   try {
