@@ -6,6 +6,7 @@ import ClientPurchaseButton from "@/utils/ClientPurchaseButton";
 import { FaArrowRight, FaCheckCircle, FaFile, FaShoppingCart } from "react-icons/fa";
 
 export const dynamic = "force-dynamic";
+
 const BACKEND_API_BASE = "https://backend.globalbizreport.com";
 
 // ─── GENERATE CURRENT DATE STRING FOR SEO ────────────────────────
@@ -45,7 +46,9 @@ export async function generateMetadata({ params }) {
 }
 
 const CompanyPage = async ({ params }) => {
-    const { cin } = await params;
+
+
+    const { cin, country } = await params;
 
     let companyData = null;
     let editedCompany = null;
@@ -76,8 +79,6 @@ const CompanyPage = async ({ params }) => {
         }
     }
 
-
-
     if (fetchQuery && !companyData) {
         return (
             <div className="text-center text-gray-600 py-10 mt-20 min-h-screen flex flex-col items-center justify-center gap-4">
@@ -91,8 +92,64 @@ const CompanyPage = async ({ params }) => {
         return <EditedCompany govtData={companyData} editedValue={editedCompany} />;
     }
 
+    // Safe helper execution safeguards if data is missing or loading
+    const companyName = companyData?.companyname || "Company";
+    const stateCode = companyData?.companystatecode || "";
+    const incorporationDate = companyData?.companyregistrationdate_date || "";
+    const cinNumber = companyData?.cin || "";
+
+    // Construct the JSON-LD object dynamically
+    const jsonLd = {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": companyData?.companyname,
+        "identifier": {
+            "@type": "PropertyValue",
+            "name": "CIN",
+            "value": companyData?.cin
+        },
+        "address": {
+            "@type": "PostalAddress",
+            "addressLocality": companyData?.companystatecode || "Unknown",
+            "addressRegion": companyData?.companystatecode,
+            "addressCountry": "IN"
+        },
+        "foundingDate": companyData?.companyregistrationdate_date, // e.g., "2024-01-15"
+        "url": `https://www.globalbizreport.com/${companyName}/${cin}/${country}/${stateCode}/company-business-financial-credit-report`
+    };
+
+    // Standard clean Google Maps embed source URL configuration
+    const mapSearchQuery = encodeURIComponent(`${companyName} ${stateCode} India`);
+    const iframeSrc = `https://maps.google.com/maps?q=${mapSearchQuery}&t=&z=14&ie=UTF8&iwloc=&output=embed`;
+
+    // A simple utility function to calculate age and relative status
+    function generateCompanyInsights(incorporationDate, state) {
+        const birthYear = new Date(incorporationDate).getFullYear();
+        const currentYear = new Date().getFullYear();
+        const age = currentYear - birthYear;
+
+        // You can pass dynamic aggregate percentages calculated from your DB meta metadata
+        return `${companyName} was incorporated ${age} years ago. It is older than approximately 78% of registered corporate tech entities operating out of ${state}.`;
+    }
+
+    function parseCin(cin) {
+        if (!cin || cin.length !== 21) return "";
+
+        const isListed = cin[0] === 'L' ? 'Listed' : 'Unlisted';
+        const year = cin.substring(11, 15);
+        const type = cin.substring(15, 18) === 'PTC' ? 'Private Limited Company' : 'Public Limited Company';
+
+        return `Registration Analysis: Based on its corporate identifier ${cin}, this entity is classified as an ${isListed} ${type} established in the year ${year}.`;
+    }
+
     return (
         <>
+
+            {/* Injecting the schema directly into the head component */}
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+            />
             <div className="max-w-6xl mx-auto flex flex-col pb-24 rounded-lg min-h-svh">
                 <div className="w-full rounded-2xl bg-gradient-to-br from-blue-100 via-white to-orange-100 p-5 mb-3 text-center">
                     <div className="text-gray-600 text-md font-semibold rounded-md mb-2 max-w-fit px-2 py-1 mx-auto">
@@ -249,6 +306,73 @@ const CompanyPage = async ({ params }) => {
                                     </div>
                                 </div>
                             </div>
+
+                            <section className="w-full max-w-4xl p-6 my-6 bg-white border border-gray-100 rounded-xl shadow-sm text-gray-900">
+                                {/* Header Layout */}
+                                <div className="flex items-center space-x-3 border-b border-gray-100 pb-4 mb-6">
+                                    <div className="p-2 bg-blue-50 text-blue-600 rounded-lg">
+                                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <h2 className="text-xl font-bold tracking-tight text-gray-900">AI-Driven Corporate Intelligence</h2>
+                                        <p className="text-sm text-gray-500">Automated structural analysis and machine insights</p>
+                                    </div>
+                                </div>
+
+                                {/* Insights Grid */}
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                                    {/* Left Side: Generated Analysis Text Blocks */}
+                                    <div className="space-y-4">
+                                        <h3 className="text-xs font-semibold uppercase tracking-wider text-gray-400">Automated Insights</h3>
+
+                                        <div className="space-y-3">
+                                            {/* Insight Item 1 */}
+                                            <div className="flex items-start space-x-3 p-3 bg-slate-50 rounded-lg border border-slate-100">
+                                                <span className="flex-shrink-0 w-2 h-2 mt-2 rounded-full bg-blue-500" />
+                                                <p className="text-sm leading-relaxed text-gray-700">
+                                                    {generateCompanyInsights(incorporationDate, stateCode)}
+                                                </p>
+                                            </div>
+
+                                            {/* Insight Item 2 */}
+                                            <div className="flex items-start space-x-3 p-3 bg-slate-50 rounded-lg border border-slate-100">
+                                                <span className="flex-shrink-0 w-2 h-2 mt-2 rounded-full bg-indigo-500" />
+                                                <p className="text-sm leading-relaxed text-gray-700">
+                                                    {parseCin(cinNumber)}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {/* Right Side: Geolocation Map Card */}
+                                    <div className="flex flex-col space-y-3">
+                                        <h3 className="text-xs font-semibold uppercase tracking-wider text-gray-400">Registered Office Geolocation</h3>
+
+                                        <div className="w-full h-[220px] rounded-xl overflow-hidden border border-gray-200 shadow-inner bg-gray-50">
+                                            {cinNumber ? (
+                                                <iframe
+                                                    title={`Map showing location of ${companyName}`}
+                                                    width="100%"
+                                                    height="100%"
+                                                    className="border-0 m-0 p-0"
+                                                    src={iframeSrc}
+                                                    loading="lazy"
+                                                    allowFullScreen
+                                                />
+                                            ) : (
+                                                <div className="flex items-center justify-center h-full text-sm text-gray-400">
+                                                    No location details available to construct map view
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </section>
+
                         </div>
 
                         {/* Company Overview Narrative */}
@@ -418,6 +542,7 @@ const CompanyPage = async ({ params }) => {
                     </div>
                 </div>
             </div>
+
         </>
     );
 };

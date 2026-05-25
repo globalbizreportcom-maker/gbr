@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 export async function GET() {
     try {
         const content = `User-Agent: *
-Disallow: 
+Allow: /
 
 Sitemap: https://www.globalbizreport.com/sitemap.xml`;
 
