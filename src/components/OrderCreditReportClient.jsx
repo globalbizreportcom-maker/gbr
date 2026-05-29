@@ -34,37 +34,37 @@ const OrderCreditReportClient = () => {
 
 
     return (
-        <section className="py-0 md:py-5  max-w-[1500px] mx-auto px-1 bg-white text-gray-800">
+        <section className="py-0 md:py-5  max-w-[1500px] mx-auto px-1  text-gray-800">
 
 
-            <div className="grid grid-cols-1 xl:grid-cols-2 rounded-2xl gap-8  px-0 md:px-10 py-2 md:py-10 bg-gradient-to-t from-white via-white to-indigo-100">
+            {/* <div className="grid grid-cols-1 xl:grid-cols-2 rounded-2xl gap-8  px-0 md:px-10 py-2 md:py-10 
+            bg-gradient-to-t from-white via-white to-indigo-100
+            "> */}
+            <div className="grid grid-cols-1 xl:grid-cols-2 rounded-2xl gap-8  px-0 md:px-10 py-2 md:py-10     ">
 
-
-                <div className="relative z-10 flex flex-col py-6 md:py-0 px-4 md:px-6">
-                    {/* Headline Section */}
+                {/* <div className="relative z-10 flex flex-col py-6 md:py-0 px-4 md:px-6">
                     <h1 className="text-2xl md:text-3xl lg:text-4xl font-[800] md:font-extrabold text-gray-600 leading-tight">
-                        <span className="text-gray-900 block md:inline">Verify Any Company Worldwide</span>
+                        <span className="text-gray-900 block md:inline">Verify Any Company Worldwide -</span>
                         <span className="hidden md:inline"> - </span>
                         <span className="mt-2 block md:inline text-xl md:text-2xl lg:text-3xl font-[800] md:font-extrabold">
-                            Order a Comprehensive Due Diligence & Risk Report on Any Company in 220+ Countries.
+                            Order a Freshly investigated Company Due Diligence & Business Credit Report on any Company Worldwide.
                         </span>
                     </h1>
 
-                    {/* Bullet Points Container */}
                     <div className="relative max-w-3xl mt-4">
                         <div className="relative py-4 md:p-4 rounded-xl overflow-hidden">
                             <ul className="relative text-left text-base md:text-lg list-disc pl-5 space-y-4 text-gray-700">
                                 <li>
-                                    Get <span className="font-bold text-gray-900">Freshly investigated Business Credit Report</span> on any Company Worldwide.
+                                    Verify your Business Partners, Vendors, Buyers & Suppliers in Any Country
                                 </li>
                                 <li>
-                                    <span className="font-bold text-gray-900">Access Authenticity & Credibility </span> of Partners, Vendors, Buyers & Suppliers.
+                                    Get  <span className="font-bold text-gray-900">Comprehensive Company Reports </span>on Authenticity, Credibility, Financial Info, Credit Rating, & Risk Indicators on Worldwide Companies.
                                 </li>
+                    
                             </ul>
                         </div>
                     </div>
 
-                    {/* Mobile CTA Button */}
                     <div className="flex flex-col md:hidden justify-start mt-2 mb-4">
                         <button
                             onClick={handleScrollToForm}
@@ -74,7 +74,6 @@ const OrderCreditReportClient = () => {
                         </button>
                     </div>
 
-                    {/* Trust Badges / Info List */}
                     <div className="flex flex-col justify-between items-start gap-5 mt-2">
                         {[
                             {
@@ -98,7 +97,80 @@ const OrderCreditReportClient = () => {
                             </div>
                         ))}
                     </div>
+                </div> */}
+
+                <div className="relative overflow-hidden rounded-2xl bg-[url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=2000&q=80')] bg-cover bg-center">
+                    {/* Dark Overlay to ensure readability */}
+                    <div className="absolute inset-0 bg-black/90 z-0"></div>
+
+                    {/* Content Container */}
+                    <div className="relative z-10 flex flex-col py-8 md:py-12 px-4 md:px-6">
+                        {/* Headline Section */}
+                        <h1 className="text-2xl md:text-3xl lg:text-4xl font-[800] md:font-extrabold text-gray-200 leading-tight">
+                            <span className="text-white block md:inline">Verify Any Company Worldwide </span>
+                            <span className="hidden md:inline"> - </span>
+                            <span className="mt-2 block md:inline text-xl md:text-2xl lg:text-3xl font-[800] md:font-extrabold text-gray-400">
+                                Order a Freshly investigated Company Due Diligence & Business Credit Report on any Company Worldwide.
+                            </span>
+                        </h1>
+
+                        {/* Bullet Points Container */}
+                        <div className="relative max-w-3xl mt-4">
+                            <div className="relative py-4 md:p-4 rounded-xl overflow-hidden">
+                                <ul className="relative text-left text-base md:text-lg list-disc pl-5 space-y-4 text-gray-300">
+                                    <li>
+                                        Verify your Business Partners, Vendors, Buyers & Suppliers in Any Country
+                                    </li>
+                                    <li>
+                                        Get <span className="font-bold text-white">Comprehensive Company Reports </span>on Authenticity, Credibility, Financial Info, Credit Rating, & Risk Indicators on Worldwide Companies.
+                                    </li>
+                                    {/* <li>
+                        Get <span className="font-bold text-white">Freshly investigated Business Credit Report</span> on any Company Worldwide.
+                    </li>
+                    <li>
+                        <span className="font-bold text-white">Access Authenticity & Credibility </span> of Partners, Vendors, Buyers & Suppliers.
+                    </li> */}
+                                </ul>
+                            </div>
+                        </div>
+
+                        {/* Mobile CTA Button */}
+                        <div className="flex flex-col md:hidden justify-start mt-2 mb-4">
+                            <button
+                                onClick={handleScrollToForm}
+                                className="flex items-center justify-center cursor-pointer font-bold px-8 py-3 rounded-lg bg-indigo-600 text-white gap-2"
+                            >
+                                Order Report Now <FaChevronRight />
+                            </button>
+                        </div>
+
+                        {/* Trust Badges / Info List */}
+                        <div className="flex flex-col justify-between items-start gap-5 mt-2 text-gray-300">
+                            {[
+                                {
+                                    text: (<>Trusted by <span className="font-bold text-white">20,000+ Global Companies</span></>),
+                                    icon: <FaBuilding className="text-gray-300 text-xl shrink-0" />
+                                },
+                                {/* {
+                    text: (<><span className="font-bold text-white">Human-Verified</span> B2B data & insights</>),
+                    icon: <FaUserCheck className="text-gray-300 text-xl shrink-0" />
+                },
+                {
+                    text: (<><span className="font-bold text-white">Pay-Per-Report Pricing</span>. Starts from USD 49. (varies by country)</>),
+                    icon: <FaBold className="text-gray-300 text-xl shrink-0" />
+                } */}
+                            ].map((item, idx) => (
+                                <div key={idx} className="flex items-start md:items-center gap-4">
+                                    {item.icon}
+                                    <span className="text-base md:text-lg text-gray-200 leading-snug">
+                                        {item.text}
+                                    </span>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
                 </div>
+
                 {/* Order Form Section */}
 
                 <div ref={formRef} className="">

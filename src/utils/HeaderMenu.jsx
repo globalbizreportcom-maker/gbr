@@ -62,7 +62,7 @@ export default function HeaderMenu() {
         const showAuthenticatedState = isMounted && !!user;
 
         return (
-            <ul className="hidden lg:flex menu menu-horizontal px-1 gap-1 items-center text-black">
+            <ul className="hidden xl:flex menu menu-horizontal px-1 gap-1 items-center text-black">
                 {showAuthenticatedState ? (
                     <>
                         <li>
@@ -160,7 +160,7 @@ export default function HeaderMenu() {
         const showAuthenticatedState = isMounted && !!user;
 
         return (
-            <div className="lg:hidden">
+            <div className=" xl:hidden">
                 <button
                     className="text-gray-700 p-2"
                     onClick={() => setMobileOpen(!mobileOpen)}
