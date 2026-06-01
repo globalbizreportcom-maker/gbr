@@ -21,7 +21,7 @@ export default function HeaderMenu() {
     const mainNav = [
         { href: "/", label: "Home" },
         { href: "/about", label: "About" },
-        { href: "/company-directory/india", label: "Company Directory" },
+        // { href: "/company-directory/india", label: "Company Directory" },
         { href: "/services", label: "Services" },
         { href: "/pricing", label: "Pricing" },
         { href: "/contact", label: "Contact" },
@@ -225,14 +225,14 @@ export default function HeaderMenu() {
                                                     <FaChartLine className="ml-5 text-indigo-500 transition-transform duration-300 group-hover:translate-x-2" />
                                                 </Link>
                                             </li>
-                                            <li>
+                                            {/* <li>
                                                 {renderLink({
                                                     href: "/company-directory/india",
                                                     label: "Company Directory",
                                                     vertical: true,
                                                     onClick: () => setMobileOpen(false),
                                                 })}
-                                            </li>
+                                            </li> */}
                                             <li>
                                                 {renderLink({
                                                     href: "/services",
@@ -318,14 +318,14 @@ export default function HeaderMenu() {
                                                     <FaChartLine className="ml-5 text-indigo-500 transition-transform duration-300 group-hover:translate-x-2" />
                                                 </Link>
                                             </li>
-                                            <li>
+                                            {/* <li>
                                                 {renderLink({
                                                     href: "/company-directory/india",
                                                     label: "Company Directory",
                                                     vertical: true,
                                                     onClick: () => setMobileOpen(false),
                                                 })}
-                                            </li>
+                                            </li> */}
                                             <li>
                                                 {renderLink({
                                                     href: "/services",

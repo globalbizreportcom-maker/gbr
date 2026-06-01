@@ -108,7 +108,7 @@ const HeroSection = () => {
 
 
             {/* Bottom: Search */}
-            <div className="w-full max-w-4xl mx-auto mt-10  mb-10 relative z-10 overflow-visible">
+            <div className="w-full hidden max-w-4xl mx-auto mt-10  mb-10 relative z-10 overflow-visible">
 
 
 

@@ -104,13 +104,12 @@ const OrderCreditReportClient = () => {
                     <div className="absolute inset-0 bg-black/90 z-0"></div>
 
                     {/* Content Container */}
-                    <div className="relative z-10 flex flex-col py-8 md:py-12 px-4 md:px-6">
+                    <div className="relative z-10 flex flex-col py-4 md:py-8 px-4 md:px-6">
                         {/* Headline Section */}
                         <h1 className="text-2xl md:text-3xl lg:text-4xl font-[800] md:font-extrabold text-gray-200 leading-tight">
-                            <span className="text-white block md:inline">Verify Any Company Worldwide </span>
-                            <span className="hidden md:inline"> - </span>
-                            <span className="mt-2 block md:inline text-xl md:text-2xl lg:text-3xl font-[800] md:font-extrabold text-gray-400">
-                                Order a Freshly investigated Company Due Diligence & Business Credit Report on any Company Worldwide.
+
+                            <span className="mt-2 block md:inline text-2xl md:text-2xl lg:text-3xl font-[800] md:font-extrabold text-gray-400">
+                                Order a Freshly investigated Company  <span className="text-white block md:inline">Due Diligence & Business Credit Report </span>  on any Company Worldwide.
                             </span>
                         </h1>
 
