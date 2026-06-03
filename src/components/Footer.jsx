@@ -224,10 +224,10 @@ const Footer = () => {
                                 "Supplier, Vendor & Buyer Risk Assessment",
                                 "Overseas Company Reports & Global Business Intelligence    "
                             ].map((service) => (
-                                <li key={service} className="flex items-center gap-2 text-slate-400 hover:text-white transition-colors cursor-default">
+                                <a href='/order-business-credit-report' key={service} className="cursor-pointer flex items-center gap-2 text-slate-400 hover:text-white  transition-colors">
                                     <FaCheckCircle className="text-indigo-500/50 text-[12px] shrink-0" />
                                     {service}
-                                </li>
+                                </a>
                             ))}
                         </ul>
                     </div>
