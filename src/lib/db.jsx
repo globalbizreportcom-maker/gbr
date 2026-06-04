@@ -18,7 +18,7 @@ const poolConfig = {
     }
 };
 
-if (process.env.NODE_ENV === 'production') {
+if ('production' === 'production') {
     pool = new Pool(poolConfig);
 } else {
     // Preserves the single instance across dev hot-reloads
