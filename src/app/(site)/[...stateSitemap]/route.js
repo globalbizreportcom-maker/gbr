@@ -1,14 +1,5 @@
 // app/[stateSitemap]/route.js
-import { Pool } from 'pg';
-
-const pool = new Pool({
-    host: process.env.PG_HOST_REMOTE || "195.35.23.249",
-    port: Number(process.env.PG_PORT) || 5432,
-    database: process.env.PG_DATABASE || "gbr",
-    user: process.env.PG_USER || "gbr_user",
-    password: process.env.PG_PASSWORD || "6!qZe@8.gwZ,F?Y",
-    ssl: { rejectUnauthorized: false }
-});
+import pool from '@/lib/db';
 
 const INDUSTRIES = [
     "agriculture-and-allied-activities", "business-services", "community-personal-and-social-services",

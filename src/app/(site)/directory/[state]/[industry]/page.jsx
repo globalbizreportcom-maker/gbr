@@ -15,24 +15,23 @@ export default async function IndustryDirectoryPage({ params, searchParams }) {
     let apiData = null;
 
     try {
-        // Axios GET request configured to support Next.js server-side caching
-        const response = await apiUrl.get(
-            `/state/directory/${state}/${industry}`,
-            {
-                params: {
-                    page: currentPage
-                },
-                // CRITICAL: Tells Next.js to cache this background request for 60 seconds
-                config: {
-                    fetchOptions: {
-                        next: { revalidate: 60 }
-                    }
-                }
-            }
-        );
+        // 2. Build a clean string URL
+        const url = `https://backend.globalbizreport.com/state/directory/${state}/${industry}?page=${currentPage}`;
 
-        // Axios automatically parses JSON data into response.data
-        apiData = response.data;
+        // 3. Native fetch correctly utilizes the next-revalidate object config
+        const response = await fetch(url, {
+            next: { revalidate: 60 }
+        });
+
+        if (!response.ok) {
+            if (response.status === 404) {
+                notFound();
+            }
+            throw new Error(`Backend pipeline returned status: ${response.status}`);
+        }
+
+        // 4. Extract data smoothly
+        apiData = await response.json();
 
     } catch (error) {
         console.error("👉 FRONTEND FETCH EXCEPTION DETECTED:", error);
