@@ -9,6 +9,17 @@ export const dynamic = "force-dynamic";
 
 const BACKEND_API_BASE = "https://backend.globalbizreport.com";
 
+
+const formatDate = (dateString) => {
+    if (!dateString) return "N/A";
+    const date = new Date(dateString);
+    if (isNaN(date.getTime())) return dateString;
+
+    // en-GB inherently uses day/month/year
+    return date.toLocaleDateString('en-GB');
+};
+
+
 // ─── GENERATE CURRENT DATE STRING FOR SEO ────────────────────────
 const currentDateStr = new Date().toLocaleDateString('en-GB', {
     day: 'numeric',
@@ -95,7 +106,7 @@ const CompanyPage = async ({ params }) => {
     // Safe helper execution safeguards if data is missing or loading
     const companyName = companyData?.companyname || "Company";
     const stateCode = companyData?.companystatecode || "";
-    const incorporationDate = companyData?.companyregistrationdate_date || "";
+    const incorporationDate = formatDate(companyData?.companyregistrationdate_date) || "";
     const cinNumber = companyData?.cin || "";
 
     // Construct the JSON-LD object dynamically
@@ -114,7 +125,7 @@ const CompanyPage = async ({ params }) => {
             "addressRegion": companyData?.companystatecode,
             "addressCountry": "IN"
         },
-        "foundingDate": companyData?.companyregistrationdate_date, // e.g., "2024-01-15"
+        "foundingDate": formatDate(companyData?.companyregistrationdate_date), // e.g., "2024-01-15"
         "url": `https://www.globalbizreport.com/${companyName}/${cin}/${country}/${stateCode}/company-business-financial-credit-report`
     };
 
@@ -247,7 +258,7 @@ const CompanyPage = async ({ params }) => {
                                 <div className="space-y-2 sm:space-y-3">
                                     {[
                                         ["Company Name", companyData?.companyname],
-                                        ["Incorporation Date", companyData?.companyregistrationdate_date],
+                                        ["Incorporation Date", formatDate(companyData?.companyregistrationdate_date)],
                                         ["Industrial Classification", companyData?.companyindustrialclassification],
                                         ["Indian/Foreign", companyData && companyData['CompanyIndian/Foreign Company'] || 'Indian'],
                                         ["Paid-up Capital", companyData?.paidupcapital],
@@ -381,7 +392,7 @@ const CompanyPage = async ({ params }) => {
                             <p className="leading-relaxed">
                                 <span className="font-medium">{companyData?.companyname}</span>,
                                 incorporated on{" "}
-                                <span className="font-medium">{companyData?.companyregistrationdate_date}</span>,
+                                <span className="font-medium">{formatDate(companyData?.companyregistrationdate_date)}</span>,
                                 is a <span className="font-medium">{companyData?.companycategory}</span> operating under the{" "}
                                 <span className="font-medium">{companyData?.companysubcategory}</span> category. Legally registered as a{" "}
                                 <span className="font-medium">{companyData?.companyclass}</span>, the company falls under the jurisdiction of the
