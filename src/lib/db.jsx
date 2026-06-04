@@ -9,9 +9,9 @@ const poolConfig = {
     database: process.env.PG_DATABASE || "gbr",
     user: process.env.PG_USER || "gbr_user",
     password: process.env.PG_PASSWORD || "6!qZe@8.gwZ,F?Y",
-    max: 20,                          // Crucial limit for lakhs of requests
-    idleTimeoutMillis: 30000,          // Close inactive connections after 30s
-    connectionTimeoutMillis: 5000,     // Fail quickly if connection hangs
+    // max: 20,                          // Crucial limit for lakhs of requests
+    idleTimeoutMillis: 0,          // Close inactive connections after 30s
+    connectionTimeoutMillis: 0,     // Fail quickly if connection hangs
     // 👇 ADD THIS BLOCK TO FORCE ENCRYPTION
     ssl: {
         rejectUnauthorized: false // Allows self-signed certificates used by remote hosts
