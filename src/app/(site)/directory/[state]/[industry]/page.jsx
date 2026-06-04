@@ -42,7 +42,7 @@ export default async function IndustryDirectoryPage({ params, searchParams }) {
             notFound();
         }
 
-        // Fallback layout initialization preventing rendering loop crashes
+        // Fallback layout initialization preventing  rendering loop crashes
         apiData = { companies: [], totalPages: 1, dbStateName: state, dbIndustryName: industry };
     }
 
