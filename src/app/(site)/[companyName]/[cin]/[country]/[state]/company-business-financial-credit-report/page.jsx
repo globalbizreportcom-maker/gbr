@@ -10,8 +10,7 @@ import Link from "next/link";
 import LatestUpdates from "@/components/LatestUpdates";
 export const dynamic = "force-dynamic";
 
-const BACKEND_API_BASE = "https://backend.globalbizreport.com";
-
+const BACKEND_API_BASE = process.env.NEXT_PUBLIC_API_URL || "https://backend.globalbizreport.com";
 
 const formatDate = (dateString) => {
     if (!dateString) return "N/A";
@@ -146,6 +145,7 @@ const CompanyPage = async ({ params }) => {
     // FIXED: Corrected string template parameter interpolation formatting for maps iframe
     const mapSearchQuery = encodeURIComponent(`${companyName} ${stateCode} India`);
     const iframeSrc = `https://maps.google.com/maps?q=${mapSearchQuery}&t=&z=14&ie=UTF8&iwloc=&output=embed`;
+
 
     function generateCompanyInsights(incDate, state) {
         const birthYear = new Date(companyData?.companyregistrationdate_date).getFullYear();
