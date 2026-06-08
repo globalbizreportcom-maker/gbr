@@ -173,7 +173,7 @@ export default function PrivacyPolicy() {
                         <p className="text-md text-gray-600">
                             Please read the{" "}
                             <a
-                                href="https://www.globalbizreport.com/terms"
+                                href="/terms"
                                 className="text-primary underline font-medium"
                                 target="_blank"
                             >

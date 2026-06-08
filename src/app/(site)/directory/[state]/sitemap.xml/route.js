@@ -14,7 +14,6 @@ const INDUSTRIES = [
 
 export async function GET(request, { params }) {
     const { state } = await params;
-    const domain = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.globalbizreport.com';
 
     let xmlUrls = [];
 
@@ -22,7 +21,7 @@ export async function GET(request, { params }) {
         // 1. Loop over industries to crawl structural pagination nodes
         for (const industry of INDUSTRIES) {
             // Ping your backend API to fetch pagination limits for this partition matrix
-            const response = await fetch(`https://backend.globalbizreport.com/state/directory/${state}/${industry}?page=1`, {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/state/directory/${state}/${industry}?page=1`, {
                 next: { revalidate: 86400 } // Cache API metadata check for 24 hours
             });
 
@@ -34,7 +33,7 @@ export async function GET(request, { params }) {
                 for (let i = 1; i <= totalPages; i++) {
                     xmlUrls.push(`
     <url>
-        <loc>${domain}/directory/${state}/${industry}?page=${i}</loc>
+        <loc>${process.env.NEXT_PUBLIC_SITE_URL}/directory/${state}/${industry}?page=${i}</loc>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>`);

@@ -164,8 +164,6 @@
 
 import { NextResponse } from "next/server";
 
-const BACKEND_URL = "https://backend.globalbizreport.com/companies-directory";
-const BASE_URL = "https://www.globalbizreport.com";
 const URLS_PER_SITEMAP = 2000;
 
 // Protects the raw XML fields from breaking if corporate data contains special symbols
@@ -221,7 +219,7 @@ export async function GET(req, context) {
 
         // FIX: Revalidate response every 12 hours instead of using no-store.
         // This removes direct database strain when Googlebot crawls multiple chunks in parallel.
-        const res = await fetch(`${BACKEND_URL}?lastId=${lastId}&perPage=${URLS_PER_SITEMAP}`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}?lastId=${lastId}&perPage=${URLS_PER_SITEMAP}`, {
             next: { revalidate: 43200 }
         });
 
@@ -242,7 +240,7 @@ export async function GET(req, context) {
             const country = cleanUrlSegment(c.CompanyIndian?.["Foreign Company"] || c["CompanyIndian/Foreign Company"] || 'india', "lowercase");
             const state = cleanUrlSegment(c.companystatecode, "lowercase");
 
-            const fullPath = `${BASE_URL}/${name}/${cin}/${country}/${state}/company-business-financial-credit-report`;
+            const fullPath = `${process.env.NEXT_PUBLIC_SITE_URL}/${name}/${cin}/${country}/${state}/company-business-financial-credit-report`;
 
             const recordDate = c.updatedAt || c.last_modified;
             const finalLastMod = recordDate ? new Date(recordDate).toISOString().split('T')[0] : generalizedToday;

@@ -102,7 +102,7 @@ export default function DedicatedCompany() {
 
                 if (data) {
                     const res = await fetch(
-                        `https://backend.globalbizreport.com/api/company-details?cin=${companyId}`,
+                        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/company-details?cin=${companyId}`,
                         { cache: "no-store" }
                     );
 

@@ -51,7 +51,7 @@ export default function ConfidenceBuilderSection() {
                 <div className="flex items-center gap-2 font-semibold text-slate-700">
                     <ShieldCheck className="w-5 h-5 text-blue-600 flex-shrink-0" />
                     <h1 className='text-xs md:text-sm'>
-                        Strictly Confidential
+                        Secure & Confidential
                     </h1>
                 </div>
             </div>

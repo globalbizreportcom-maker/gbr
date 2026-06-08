@@ -1,7 +1,6 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { cleanUrlSegment } from '@/utils/slugify';
-// Import your raw base URL string (e.g., 'https://backend.globalbizreport.com' or your remote API domain)
 import { apiUrl } from '@/api/api';
 import { ArrowRight, Building2 } from 'lucide-react';
 
@@ -16,7 +15,7 @@ export default async function IndustryDirectoryPage({ params, searchParams }) {
 
     try {
         // 2. Build a clean string URL
-        const url = `https://backend.globalbizreport.com/state/directory/${state}/${industry}?page=${currentPage}`;
+        const url = `${process.env.NEXT_PUBLIC_API_BASE_URL}/state/directory/${state}/${industry}?page=${currentPage}`;
 
         // 3. Native fetch correctly utilizes the next-revalidate object config
         const response = await fetch(url, {

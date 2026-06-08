@@ -36,7 +36,6 @@ const SLUG_TO_INDUSTRY_MAP = {
 
 export async function GET(req, { params }) {
     const { stateSitemap } = await params;
-    const DOMAIN = "https://www.globalbizreport.com"; // Replace with your production domain
     const LIMIT = 100;
 
     // Validate that the request matches the pattern: sitemap-[state].xml
@@ -52,7 +51,7 @@ export async function GET(req, { params }) {
         let xmlUrls = '';
 
         // 1. Add the main parent state hub link
-        xmlUrls += `  <url>\n    <loc>${DOMAIN}/directory/${stateSlug}</loc>\n    <changefreq>daily</changefreq>\n    <priority>0.8</priority>\n  </url>\n`;
+        xmlUrls += `  <url>\n    <loc>${process.env.NEXT_PUBLIC_SITE_URL}/directory/${stateSlug}</loc>\n    <changefreq>daily</changefreq>\n    <priority>0.8</priority>\n  </url>\n`;
 
         // 2. Loop through all 19 industries to find dynamic pagination limits
         for (const indSlug of INDUSTRIES) {
@@ -74,7 +73,7 @@ export async function GET(req, { params }) {
             // 3. Generate individual leaf pagination links that point to your custom lists
             for (let page = 1; page <= totalPages; page++) {
                 xmlUrls += `  <url>\n`;
-                xmlUrls += `    <loc>${DOMAIN}/directory/${stateSlug}/${indSlug}?page=${page}</loc>\n`;
+                xmlUrls += `    <loc>${process.env.NEXT_PUBLIC_SITE_URL}/directory/${stateSlug}/${indSlug}?page=${page}</loc>\n`;
                 xmlUrls += `    <changefreq>daily</changefreq>\n`;
                 xmlUrls += `    <priority>0.7</priority>\n`;
                 xmlUrls += `  </url>\n`;

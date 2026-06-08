@@ -6,6 +6,7 @@ import dynamic from "next/dynamic";
 import { useRouter, useSearchParams } from "next/navigation";
 import { FaArrowRight } from "react-icons/fa";
 import { Country, State, City } from "country-state-city";
+import { apiUrl } from "@/api/api";
 
 const Select = dynamic(() => import("react-select"), { ssr: false });
 
@@ -65,7 +66,7 @@ export default function CompanySearch() {
         try {
             setLoading(true);
             const params = { company: companyVal, country: countryVal, state: stateVal || "", page: pageNumber, perPage: 20 };
-            const res = await axios.get("https://backend.globalbizreport.com/api/companies", { params, signal });
+            const res = await apiUrl.get("/api/companies", { params, signal });
             setResults(res.data.rows);
             setTotalPages(res.data.totalPages);
             setPage(res.data.page);
