@@ -39,7 +39,7 @@ export async function generateMetadata({ params }) {
     }
 
     try {
-        const apiUrl = `${process.env.NEXT_PUBLIC_API_BASE_URL || 'https://backend.globalbizreport.com'}/api/company-details?cin=${cin}`;
+        const apiUrl = `https://backend.globalbizreport.com/api/company-details?cin=${cin}`;
         const res = await fetch(apiUrl, { cache: "no-store" });
         const result = await res.json();
         if (res.ok && result.data?.postgres) {
@@ -89,7 +89,7 @@ const CompanyPage = async ({ params }) => {
 
     // 2. Execute Data Fetching
     try {
-        const apiUrl = `${process.env.NEXT_PUBLIC_API_BASE_URL || 'https://backend.globalbizreport.com'}/api/company-details?cin=${cin}`;
+        const apiUrl = `https://backend.globalbizreport.com/api/company-details?cin=${cin}`;
         const res = await fetch(apiUrl, { cache: "no-store" });
         const result = await res.json();
 
