@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import { cleanUrlSegment } from '@/utils/slugify';
 import { apiUrl } from '@/api/api';
 import { ArrowRight, Building2 } from 'lucide-react';
+import axios from 'axios';
 
 export default async function IndustryDirectoryPage({ params, searchParams }) {
     const { state, industry } = await params;
@@ -14,6 +15,10 @@ export default async function IndustryDirectoryPage({ params, searchParams }) {
     let apiData = null;
 
     try {
+        const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+        if (!baseUrl) {
+            throw new Error("CRITICAL ERROR: NEXT_PUBLIC_API_BASE_URL environment variable is missing.");
+        }
         // 2. Build a clean string URL
         const url = `${process.env.NEXT_PUBLIC_API_BASE_URL}/state/directory/${state}/${industry}?page=${currentPage}`;
 

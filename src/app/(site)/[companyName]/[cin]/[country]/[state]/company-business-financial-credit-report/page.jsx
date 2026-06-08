@@ -1,3 +1,5 @@
+
+
 import EditedCompany from "@/components/EditedCompany";
 import SelfReportButton from "@/components/SelfReportButton";
 import ClaimButton from "@/components/buttons/ClaimButton";
@@ -30,26 +32,23 @@ export async function generateMetadata({ params }) {
     const { cin } = await params;
     let companyData = null;
 
-    try {
-        // Query the 'companies' table directly matching your old Express backend logic
-        const queryText = `
-            SELECT companyname, companystatecode 
-            FROM companies 
-            WHERE cin = $1 
-            LIMIT 1
-        `;
-
-        const result = await pool.query(queryText, [cin]);
-
-        // Mimic the target data structure from your previous backend object
-        if (result.rows && result.rows.length > 0) {
-            companyData = result.rows[0];
-        }
-    } catch (err) {
-        console.error("Error fetching company metadata directly from Postgres:", err);
+    // 1. Build and validate API string safely
+    const baseApiUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+    if (!baseApiUrl) {
+        console.error("❌ CRITICAL PRODUCTION ALERT: NEXT_PUBLIC_API_BASE_URL is missing in environment variables.");
     }
 
-    // Safely extract names and fallback exactly like your original implementation
+    try {
+        const apiUrl = `${process.env.NEXT_PUBLIC_API_BASE_URL || 'https://backend.globalbizreport.com'}/api/company-details?cin=${cin}`;
+        const res = await fetch(apiUrl, { cache: "no-store" });
+        const result = await res.json();
+        if (res.ok && result.data?.postgres) {
+            companyData = result.data.postgres;
+        }
+    } catch (err) {
+        console.log("Error fetching company metadata:", err);
+    }
+
     const companyName = companyData?.companyname || "Company Report";
     const stateSlug = cleanUrlSegment(companyData?.companystatecode || "na");
     const nameSlug = cleanUrlSegment(companyName);
@@ -82,6 +81,12 @@ const CompanyPage = async ({ params }) => {
     let chainLinks = { previous: null, next: null };
     let fetchSuccess = false;
 
+    // 1. Build and validate API string safely
+    const baseApiUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+    if (!baseApiUrl) {
+        console.error("❌ CRITICAL PRODUCTION ALERT: NEXT_PUBLIC_API_BASE_URL is missing in environment variables.");
+    }
+
     // 2. Execute Data Fetching
     try {
         const apiUrl = `${process.env.NEXT_PUBLIC_API_BASE_URL || 'https://backend.globalbizreport.com'}/api/company-details?cin=${cin}`;
@@ -98,9 +103,6 @@ const CompanyPage = async ({ params }) => {
     } catch (err) {
         console.log("Error fetching company data:", err);
     }
-
-    console.log(process.env.NEXT_PUBLIC_API_BASE_URL);
-
 
     // 3. Conditional evaluation guards right after data load finishes
     if (fetchSuccess && !companyData) {
