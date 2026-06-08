@@ -27,7 +27,7 @@ const currentDateStr = new Date().toLocaleDateString('en-GB', {
     year: 'numeric'
 });
 
-// 2. Wrap your fetch utility. Next.js will automatically de-duplicate this across metadata and components!
+// 2. Wrap your fetch utility. Next.js will automatically de-duplicate this a cross metadata and components!
 const getCompanyDetails = cache(async (cin) => {
     try {
         const apiUrl = `https://backend.globalbizreport.com/api/company-details?cin=${cin}`;
