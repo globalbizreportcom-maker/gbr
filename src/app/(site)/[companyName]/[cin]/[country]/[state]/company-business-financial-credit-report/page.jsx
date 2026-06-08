@@ -186,7 +186,7 @@ const CompanyPage = async ({ params }) => {
                 <div className="grid grid-cols-1 xl:grid-cols-12 gap-6 items-start max-w-7xl mx-auto px-0 sm:px-6 lg:px-4 py-6">
                     {/* LEFT MAIN PROFILE CONTENT BLOCK (Takes 8 of 12 columns) */}
 
-                    <main className="xl:col-span-8 bg-white rounded-2xl overflow-hidden p-4 sm:p-6 lg:p-2">
+                    <main className="xl:col-span-12 bg-white rounded-2xl overflow-hidden p-4 sm:p-6 lg:p-2">
                         <div className="bg-white rounded-lg p-2 sm:p-6 lg:p-2">
 
                             <nav className="mb-6 flex items-center space-x-2 text-xs font-medium tracking-wide uppercase text-slate-400">
@@ -366,10 +366,9 @@ const CompanyPage = async ({ params }) => {
                     </main>
 
                     {/* RIGHT SIDEBAR ACTIONS & FEED PANEL (Takes 4 of 12 columns) */}
-                    <aside className="xl:col-span-4 w-full space-y-6">
-                        {/* Simply pass the companyData down as a prop */}
+                    {/* <aside className="xl:col-span-4 w-full space-y-6">
                         <LatestUpdates companyData={companyData} />
-                    </aside>
+                    </aside> */}
 
 
                 </div>
