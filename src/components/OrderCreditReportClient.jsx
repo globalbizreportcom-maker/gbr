@@ -9,6 +9,7 @@ import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import Testimonials from "./Testimonials";
 import Image from "next/image";
+import ConfidenceBuilderSection from "./ConfidenceBuilderSection";
 
 
 
@@ -99,12 +100,12 @@ const OrderCreditReportClient = () => {
                     </div>
                 </div> */}
 
-                <div className="relative overflow-hidden rounded-2xl h-auto md:h-auto  bg-cover bg-center">
+                <div className="relative overflow-hidden rounded-2xl h-auto md:h-[560px] 2xl:h-[520px]">
                     {/* Dark Overlay to ensure readability */}
                     <div className="absolute inset-0 bg-[#0F172A] z-0"></div>
 
                     {/* Content Container */}
-                    <div className="relative z-10 flex flex-col py-4 md:py-8 px-4 md:px-6">
+                    <div className="relative z-10 flex flex-col py-4 md:py-8 px-4 md:px-6 ">
                         {/* Headline Section */}
                         <h1 className="text-2xl md:text-3xl lg:text-4xl font-[800] md:font-extrabold text-gray-200 leading-tight">
 
@@ -178,7 +179,12 @@ const OrderCreditReportClient = () => {
                                 </div>
                             ))}
                         </div>
+
+                        <div className="relative z-10 flex flex-col py-4 md:py-0 px-0 md:px-2">
+                            <ConfidenceBuilderSection />
+                        </div>
                     </div>
+
                 </div>
 
                 {/* Order Form Section */}

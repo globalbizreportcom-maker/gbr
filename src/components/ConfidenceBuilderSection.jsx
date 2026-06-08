@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { ShieldCheck, Activity } from 'lucide-react';
 
-export default function CompactTrustBar() {
+export default function ConfidenceBuilderSection() {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [fade, setFade] = useState(true);
 
@@ -34,20 +34,25 @@ export default function CompactTrustBar() {
     }, [activities.length]);
 
     return (
-        <div className="max-w-xl mx-auto my-6 bg-white border border-slate-200 rounded-xl p-5 shadow-sm text-slate-800">
+        <div className="w-full bg-white border border-slate-200 rounded-xl p-4 md:p-5 shadow-sm text-slate-800 relative z-10">
 
             {/* Top Row: Clean, Spaced Trust Badges */}
             <div className="flex items-center justify-between gap-4 pb-4 border-b border-slate-100 text-sm">
                 <div className="flex items-center gap-2 font-semibold text-slate-700">
                     <span className="flex items-center justify-center w-5 h-5 rounded-full bg-emerald-50 text-emerald-600 font-bold text-xs">
-                        ✓
+                        <Activity className="w-5 h-5 text-green-600 flex-shrink-0" />
+
                     </span>
-                    220+ Countries Covered
+                    <h1 className='text-xs md:text-sm'>
+                        Live Updates
+                    </h1>
                 </div>
 
                 <div className="flex items-center gap-2 font-semibold text-slate-700">
                     <ShieldCheck className="w-5 h-5 text-blue-600 flex-shrink-0" />
-                    Strictly Confidential
+                    <h1 className='text-xs md:text-sm'>
+                        Strictly Confidential
+                    </h1>
                 </div>
             </div>
 
@@ -55,15 +60,14 @@ export default function CompactTrustBar() {
             <div className="mt-4 bg-slate-50 border border-slate-200/60 rounded-lg p-3 flex items-center gap-3">
                 {/* Live Pulsing Indicator */}
                 <span className="relative flex h-2 w-2 flex-shrink-0">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
                 </span>
 
                 {/* Ticker Content */}
                 <div className="flex items-center gap-2 text-xs text-slate-600 w-full overflow-hidden">
-                    <Activity className="w-3.5 h-3.5 text-slate-400 flex-shrink-0" />
                     <span
-                        className={`font-medium transition-opacity duration-500 line-clamp-1 ${fade ? 'opacity-100' : 'opacity-0'
+                        className={`font-medium transition-opacity duration-500  md:line-clamp-1 ${fade ? 'opacity-100' : 'opacity-0'
                             }`}
                     >
                         {activities[currentIndex]}
