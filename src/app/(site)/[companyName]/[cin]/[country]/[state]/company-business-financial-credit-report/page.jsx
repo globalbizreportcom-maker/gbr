@@ -74,11 +74,8 @@ const CompanyPage = async ({ params }) => {
 
     // 2. Execute Data Fetching
     try {
-
         const result = await getCompanyDetails(cin); // Hits the API
 
-
-        // if (res.ok && result.data) {
         if (result && result.data) {
             companyData = result.data.postgres;
             editedCompany = result.data.editedCompany;
@@ -90,8 +87,8 @@ const CompanyPage = async ({ params }) => {
         console.log("Error fetching company data:", err);
     }
 
-    // 3. Conditional evaluation guards right after data load finishes
-    if (fetchSuccess && !companyData.companyName) {
+    // 3. FIXED: Changed 'companyData.companyName' to 'companyData.companyname'
+    if (fetchSuccess && (!companyData || !companyData.companyname)) {
         return (
             <div className="text-center text-gray-600 py-10 mt-20 min-h-screen flex flex-col items-center justify-center gap-4">
                 <p>No company records found for the requested CIN.</p>
@@ -107,6 +104,7 @@ const CompanyPage = async ({ params }) => {
     // 4. Safe data maps built exclusively when data exists
     const companyName = companyData?.companyname || "Company";
     const stateCode = companyData?.companystatecode || "";
+    // FIXED: Changed to match your exact JSON property: 'companyregistrationdate_date'
     const incorporationDate = formatDate(companyData?.companyregistrationdate_date);
     const cinNumber = companyData?.cin || "";
 
@@ -132,11 +130,10 @@ const CompanyPage = async ({ params }) => {
         "url": `https://www.globalbizreport.com/${nameSlug}/${cin}/${country || 'india'}/${stateSlug}/company-business-financial-credit-report`
     };
 
-    // FIXED: Corrected string template parameter interpolation formatting for maps iframe
     const mapSearchQuery = encodeURIComponent(`${companyName} ${stateCode} India`);
     const iframeSrc = `https://maps.google.com/maps?q=${mapSearchQuery}&t=&z=14&ie=UTF8&iwloc=&output=embed`;
 
-
+    // FIXED: Patched property pointer inside the string generator function
     function generateCompanyInsights(incDate, state) {
         const birthYear = new Date(companyData?.companyregistrationdate_date).getFullYear();
         if (isNaN(birthYear)) return `${companyName} is an active corporate entity registered in ${state || 'India'}.`;
@@ -151,14 +148,16 @@ const CompanyPage = async ({ params }) => {
         const year = targetCin.substring(11, 15);
         const type = targetCin.substring(15, 18) === 'PTC' ? 'Private Limited Company' : 'Public Limited Company';
 
-        // The title has been wrapped in asterisks for bold formatting
         return ` Based on its corporate identifier ${targetCin}, this entity is classified as an ${isListed} ${type} established in the year ${year}.`;
     }
-    // Helper functions to generate URLs for the next/prev links
+
     const getChainUrl = (co) => {
         if (!co) return "#";
         return `/${cleanUrlSegment(co.companyname)}/${co.cin}/india/${cleanUrlSegment(co.companystatecode)}/company-business-financial-credit-report`;
     };
+
+    console.log(companyData);
+
 
     return (
         <>
