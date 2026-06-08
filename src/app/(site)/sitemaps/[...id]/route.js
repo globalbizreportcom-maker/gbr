@@ -219,7 +219,7 @@ export async function GET(req, context) {
 
         // FIX: Revalidate response every 12 hours instead of using no-store.
         // This removes direct database strain when Googlebot crawls multiple chunks in parallel.
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}?lastId=${lastId}&perPage=${URLS_PER_SITEMAP}`, {
+        const res = await fetch(`https://backend.globalbizreport.com/?lastId=${lastId}&perPage=${URLS_PER_SITEMAP}`, {
             next: { revalidate: 43200 }
         });
 
@@ -240,7 +240,7 @@ export async function GET(req, context) {
             const country = cleanUrlSegment(c.CompanyIndian?.["Foreign Company"] || c["CompanyIndian/Foreign Company"] || 'india', "lowercase");
             const state = cleanUrlSegment(c.companystatecode, "lowercase");
 
-            const fullPath = `${process.env.NEXT_PUBLIC_SITE_URL}/${name}/${cin}/${country}/${state}/company-business-financial-credit-report`;
+            const fullPath = `https://www.globalbizreport.com/${name}/${cin}/${country}/${state}/company-business-financial-credit-report`;
 
             const recordDate = c.updatedAt || c.last_modified;
             const finalLastMod = recordDate ? new Date(recordDate).toISOString().split('T')[0] : generalizedToday;

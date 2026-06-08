@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 
 export async function GET() {
     // Dynamically uses your public site URL, falling back to localhost for local testing
+    const domain = 'https://www.globalbizreport.com';
 
     const staticPaths = [
         "/",
@@ -26,7 +27,7 @@ export async function GET() {
 
     staticPaths.forEach((path) => {
         // Formats the absolute URL cleanly without breaking double slashes
-        const absoluteUrl = `${process.env.NEXT_PUBLIC_SITE_URL.replace(/\/$/, '')}${path}`;
+        const absoluteUrl = `${domain.replace(/\/$/, '')}${path}`;
 
         xml += `  <url>\n`;
         xml += `    <loc>${absoluteUrl}</loc>\n`;

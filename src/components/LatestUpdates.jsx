@@ -7,7 +7,7 @@ export default async function LatestUpdates({ companyData }) {
 
     try {
         // Post the company dataset down to avoid hitting Postgres a second time
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/company-news`, {
+        const res = await fetch(`https://backend.globalbizreport.com/api/company-news`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"

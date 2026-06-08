@@ -32,12 +32,6 @@ export async function generateMetadata({ params }) {
     const { cin } = await params;
     let companyData = null;
 
-    // 1. Build and validate API string safely
-    const baseApiUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
-    if (!baseApiUrl) {
-        console.error("❌ CRITICAL PRODUCTION ALERT: NEXT_PUBLIC_API_BASE_URL is missing in environment variables.");
-    }
-
     try {
         const apiUrl = `https://backend.globalbizreport.com/api/company-details?cin=${cin}`;
         const res = await fetch(apiUrl, { cache: "no-store" });
@@ -54,7 +48,7 @@ export async function generateMetadata({ params }) {
     const nameSlug = cleanUrlSegment(companyName);
 
     // Dynamic absolute target construction matching your routing tree
-    const canonicalUrl = `${process.env.NEXT_PUBLIC_SITE_URL}/${nameSlug}/${cin}/india/${stateSlug}/company-business-financial-credit-report`;
+    const canonicalUrl = `https://www.globalbizreport.com/${nameSlug}/${cin}/india/${stateSlug}/company-business-financial-credit-report`;
 
     return {
         title: companyData ? `${companyName} | GBR` : "Company Report | GBR",
@@ -80,12 +74,6 @@ const CompanyPage = async ({ params }) => {
     let claimedCompany = null;
     let chainLinks = { previous: null, next: null };
     let fetchSuccess = false;
-
-    // 1. Build and validate API string safely
-    const baseApiUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
-    if (!baseApiUrl) {
-        console.error("❌ CRITICAL PRODUCTION ALERT: NEXT_PUBLIC_API_BASE_URL is missing in environment variables.");
-    }
 
     // 2. Execute Data Fetching
     try {
@@ -143,7 +131,7 @@ const CompanyPage = async ({ params }) => {
             "addressCountry": "IN"
         },
         "foundingDate": incorporationDate,
-        "url": `${process.env.NEXT_PUBLIC_SITE_URL}/${nameSlug}/${cin}/${country || 'india'}/${stateSlug}/company-business-financial-credit-report`
+        "url": `https://www.globalbizreport.com/${nameSlug}/${cin}/${country || 'india'}/${stateSlug}/company-business-financial-credit-report`
     };
 
     // FIXED: Corrected string template parameter interpolation formatting for maps iframe

@@ -15,12 +15,9 @@ export default async function IndustryDirectoryPage({ params, searchParams }) {
     let apiData = null;
 
     try {
-        const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
-        if (!baseUrl) {
-            throw new Error("CRITICAL ERROR: NEXT_PUBLIC_API_BASE_URL environment variable is missing.");
-        }
+
         // 2. Build a clean string URL
-        const url = `${process.env.NEXT_PUBLIC_API_BASE_URL}/state/directory/${state}/${industry}?page=${currentPage}`;
+        const url = `https://backend.globalbizreport.com/state/directory/${state}/${industry}?page=${currentPage}`;
 
         // 3. Native fetch correctly utilizes the next-revalidate object config
         const response = await fetch(url, {

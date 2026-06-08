@@ -74,7 +74,7 @@ export async function GET() {
     const stateSlug = cleanUrlSegment(state);
     return `
     <sitemap>
-        <loc>${process.env.NEXT_PUBLIC_SITE_URL}/directory/${stateSlug}/sitemap.xml</loc>
+        <loc>https://www.globalbizreport.com/directory/${stateSlug}/sitemap.xml</loc>
     </sitemap>`;
   }).join('');
 
@@ -82,7 +82,7 @@ export async function GET() {
   const sitemapIndexXml = `<?xml version="1.0" encoding="UTF-8"?>
 <sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <sitemap>
-        <loc>${process.env.NEXT_PUBLIC_SITE_URL}/sitemaps/static.xml</loc>
+        <loc>https://www.globalbizreport.com/sitemaps/static.xml</loc>
     </sitemap>
     ${xmlItems}
 </sitemapindex>`;
