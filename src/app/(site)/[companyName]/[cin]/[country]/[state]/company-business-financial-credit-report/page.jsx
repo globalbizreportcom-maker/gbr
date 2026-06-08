@@ -58,24 +58,6 @@ export async function generateMetadata({ params }) {
     };
 }
 
-//     const companyName = companyData?.companyname || "Company Report";
-//     const stateSlug = cleanUrlSegment(companyData?.companystatecode || "na");
-//     const nameSlug = cleanUrlSegment(companyName);
-
-//     // Dynamic absolute target construction matching your routing tree
-//     const canonicalUrl = `https://www.globalbizreport.com/${nameSlug}/${cin}/india/${stateSlug}/company-business-financial-credit-report`;
-
-//     return {
-//         title: companyData ? `${companyName} | GBR` : "Company Report | GBR",
-//         description: companyData
-//             ? `Check ${companyName}'s financial profile and order a detailed company report. Last updated: ${currentDateStr}.`
-//             : `Check company profile information and order a comprehensive company report. Last updated: ${currentDateStr}.`,
-//         alternates: {
-//             canonical: canonicalUrl,
-//         }
-//     };
-// }
-
 const CompanyPage = async ({ params }) => {
     // 1. Await parameters cleanly first
     const { cin, country } = await params;
@@ -92,16 +74,12 @@ const CompanyPage = async ({ params }) => {
 
     // 2. Execute Data Fetching
     try {
-        // const apiUrl = `https://backend.globalbizreport.com/api/company-details?cin=${cin}`;
-        // const res = await fetch(apiUrl, { cache: "no-store" });
-        // const result = await res.json();
 
         const result = await getCompanyDetails(cin); // Hits the API
 
 
         // if (res.ok && result.data) {
-        if (result.data) {
-
+        if (result && result.data) {
             companyData = result.data.postgres;
             editedCompany = result.data.editedCompany;
             claimedCompany = result.claimedCompany;
@@ -113,7 +91,7 @@ const CompanyPage = async ({ params }) => {
     }
 
     // 3. Conditional evaluation guards right after data load finishes
-    if (fetchSuccess && !companyData) {
+    if (fetchSuccess && !companyData.companyName) {
         return (
             <div className="text-center text-gray-600 py-10 mt-20 min-h-screen flex flex-col items-center justify-center gap-4">
                 <p>No company records found for the requested CIN.</p>
