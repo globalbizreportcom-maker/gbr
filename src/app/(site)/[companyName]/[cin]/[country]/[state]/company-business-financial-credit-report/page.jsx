@@ -9,7 +9,7 @@ import { FaArrowRight, FaCheckCircle, FaFile, FaLocationArrow, FaShoppingCart } 
 import Link from "next/link";
 import LatestUpdates from "@/components/LatestUpdates";
 export const dynamic = "force-dynamic";
-
+import pool from "@/lib/db";
 
 const formatDate = (dateString) => {
     if (!dateString) return "N/A";
@@ -24,12 +24,6 @@ const currentDateStr = new Date().toLocaleDateString('en-GB', {
     year: 'numeric'
 });
 
-console.log(
-    process.env.NEXT_PUBLIC_API_BASE_URL,
-    process.env.NEXT_PUBLIC_ADMIN_BASE_URL,
-    process.env.NEXT_PUBLIC_SITE_URL
-);
-
 
 // ─── NEXT.JS SEARCH ENGINE OVERRIDES (TITLE, DESCRIPTION & CANONICAL) ───
 export async function generateMetadata({ params }) {
@@ -37,16 +31,25 @@ export async function generateMetadata({ params }) {
     let companyData = null;
 
     try {
-        const apiUrl = `${process.env.NEXT_PUBLIC_API_BASE_URL || 'https://backend.globalbizreport.com'}/api/company-details?cin=${cin}`;
-        const res = await fetch(apiUrl, { cache: "no-store" });
-        const result = await res.json();
-        if (res.ok && result.data?.postgres) {
-            companyData = result.data.postgres;
+        // Query the 'companies' table directly matching your old Express backend logic
+        const queryText = `
+            SELECT companyname, companystatecode 
+            FROM companies 
+            WHERE cin = $1 
+            LIMIT 1
+        `;
+
+        const result = await pool.query(queryText, [cin]);
+
+        // Mimic the target data structure from your previous backend object
+        if (result.rows && result.rows.length > 0) {
+            companyData = result.rows[0];
         }
     } catch (err) {
-        console.log("Error fetching company metadata:", err);
+        console.error("Error fetching company metadata directly from Postgres:", err);
     }
 
+    // Safely extract names and fallback exactly like your original implementation
     const companyName = companyData?.companyname || "Company Report";
     const stateSlug = cleanUrlSegment(companyData?.companystatecode || "na");
     const nameSlug = cleanUrlSegment(companyName);
@@ -95,6 +98,9 @@ const CompanyPage = async ({ params }) => {
     } catch (err) {
         console.log("Error fetching company data:", err);
     }
+
+    console.log(process.env.NEXT_PUBLIC_API_BASE_URL);
+
 
     // 3. Conditional evaluation guards right after data load finishes
     if (fetchSuccess && !companyData) {
