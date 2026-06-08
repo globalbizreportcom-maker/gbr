@@ -73,7 +73,7 @@ export default function CompanySearch() {
 
     const normalize = (str) => str?.toLowerCase().trim();
 
-    // ------------------- Helper Functions -------------------
+    // ------------------- Helper Functions --- ----------------
     const fetchCountries = async () => {
         try {
             const countryOptions = Country.getAllCountries().map((c) => ({
