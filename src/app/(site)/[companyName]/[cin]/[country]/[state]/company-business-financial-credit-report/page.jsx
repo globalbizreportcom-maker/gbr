@@ -12,6 +12,7 @@ import Link from "next/link";
 import LatestUpdates from "@/components/LatestUpdates";
 export const dynamic = "force-dynamic";
 import pool from "@/lib/db";
+import { cache } from "react";
 
 const formatDate = (dateString) => {
     if (!dateString) return "N/A";
