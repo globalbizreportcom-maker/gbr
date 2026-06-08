@@ -1,4 +1,4 @@
-name: Deploy Frontend to VPS (Zero-Downtime)
+name: Deploy Frontend to VPS (Prebuilt)
 
 on:
   push: 
@@ -25,13 +25,25 @@ jobs:
       - name: Archive build for transfer
         run: |
           tar -czf frontend-build.tar.gz \
-            package.json \
-            package-lock.json \
-            public \
-            .next \
-            next.config.mjs \
-            node_modules
+          package.json \
+          package-lock.json \
+          public \
+          .next \
+          next.config.mjs \
+          node_modules
 
+      - name: Deploy over SSH
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.PORT }}
+          script: |
+            cd /var/www/frontend
+            # Remove old files
+            rm -rf .next public node_modules package.json package-lock.json next.config.mjs
+          
       - name: Copy build to server
         uses: appleboy/scp-action@v0.1.6
         with:
@@ -40,9 +52,9 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           port: ${{ secrets.PORT }}
           source: "frontend-build.tar.gz"
-          target: "/var/www/" # Uploads to the parent directory
+          target: "/var/www/frontend/"
 
-      - name: Deploy over SSH (Zero-Downtime Release)
+      - name: Extract build on server & start PM2
         uses: appleboy/ssh-action@v0.1.10
         with:
           host: ${{ secrets.HOST }}
@@ -50,98 +62,11 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           port: ${{ secrets.PORT }}
           script: |
-            cd /var/www
-            
-            # 1. Create a completely unique directory using a Linux timestamp
-            DEPLOY_DIR="frontend_release_$(date +%s)"
-            mkdir -p $DEPLOY_DIR
-            
-            # 2. Extract the archive into this brand new directory
-            tar -xzf frontend-build.tar.gz -C $DEPLOY_DIR
+            cd /var/www/frontend
+            tar -xzf frontend-build.tar.gz
             rm frontend-build.tar.gz
-            
-            # 3. Seamlessly point PM2 to the new directory. 
-            # If the app is already running, 'pm2 reload' updates it live with 0ms downtime.
-            # If it's the first time deploying, it falls back to 'pm2 start' inside the new folder.
-            pm2 reload frontend || pm2 start npm --name "frontend" --cwd "/var/www/$DEPLOY_DIR" -- start
+            pm2 restart frontend || pm2 start npm --name "frontend" -- start
             pm2 save
-            
-            # 4. Housekeeping: Automatically delete old release folders older than 3 days
-            # This keeps your VPS hard drive from filling up over time.
-            find /var/www/ -maxdepth 1 -type d -name "frontend_release_*" -mtime +3 -exec rm -rf {} +
-
-
-            
-
-# name: Deploy Frontend to VPS (Prebuilt)
-
-# on:
-#   push: 
-#     branches: [ "main" ]
-
-# jobs: 
-#   deploy:
-#     runs-on: ubuntu-latest
-#     steps:
-#       - name: Checkout code 
-#         uses: actions/checkout@v3
-
-#       - name: Setup Node.js
-#         uses: actions/setup-node@v3
-#         with:
-#           node-version: '20'
-
-#       - name: Install dependencies
-#         run: npm install --legacy-peer-deps 
- 
-#       - name: Build Next.js app
-#         run: npm run build
- 
-#       - name: Archive build for transfer
-#         run: |
-#           tar -czf frontend-build.tar.gz \
-#           package.json \
-#           package-lock.json \
-#           public \
-#           .next \
-#           next.config.mjs \
-#           node_modules
-
-#       - name: Deploy over SSH
-#         uses: appleboy/ssh-action@v0.1.10
-#         with:
-#           host: ${{ secrets.HOST }}
-#           username: ${{ secrets.USERNAME }}
-#           key: ${{ secrets.SSH_KEY }}
-#           port: ${{ secrets.PORT }}
-#           script: |
-#             cd /var/www/frontend
-#             # Remove old files
-#             rm -rf .next public node_modules package.json package-lock.json next.config.mjs
-          
-#       - name: Copy build to server
-#         uses: appleboy/scp-action@v0.1.6
-#         with:
-#           host: ${{ secrets.HOST }}
-#           username: ${{ secrets.USERNAME }}
-#           key: ${{ secrets.SSH_KEY }}
-#           port: ${{ secrets.PORT }}
-#           source: "frontend-build.tar.gz"
-#           target: "/var/www/frontend/"
-
-#       - name: Extract build on server & start PM2
-#         uses: appleboy/ssh-action@v0.1.10
-#         with:
-#           host: ${{ secrets.HOST }}
-#           username: ${{ secrets.USERNAME }}
-#           key: ${{ secrets.SSH_KEY }}
-#           port: ${{ secrets.PORT }}
-#           script: |
-#             cd /var/www/frontend
-#             tar -xzf frontend-build.tar.gz
-#             rm frontend-build.tar.gz
-#             pm2 restart frontend || pm2 start npm --name "frontend" -- start
-#             pm2 save
 
 
 # name: Deploy Frontend to VPS (Prebuilt &  Safe)
