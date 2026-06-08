@@ -26,40 +26,54 @@ const currentDateStr = new Date().toLocaleDateString('en-GB', {
     year: 'numeric'
 });
 
+// 2. Wrap your fetch utility. Next.js will automatically de-duplicate this across metadata and components!
+const getCompanyDetails = cache(async (cin) => {
+    try {
+        const apiUrl = `https://backend.globalbizreport.com/api/company-details?cin=${cin}`;
+        const res = await fetch(apiUrl, { cache: "no-store" });
+        if (!res.ok) return null;
+        return await res.json();
+    } catch (err) {
+        console.error("Fetch failure:", err);
+        return null;
+    }
+});
+
 
 // ─── NEXT.JS SEARCH ENGINE OVERRIDES (TITLE, DESCRIPTION & CANONICAL) ───
 export async function generateMetadata({ params }) {
     const { cin } = await params;
-    let companyData = null;
+    const result = await getCompanyDetails(cin); // Hits the API
+    const companyData = result?.data?.postgres;
 
-    try {
-        const apiUrl = `https://backend.globalbizreport.com/api/company-details?cin=${cin}`;
-        const res = await fetch(apiUrl, { cache: "no-store" });
-        const result = await res.json();
-        if (res.ok && result.data?.postgres) {
-            companyData = result.data.postgres;
-        }
-    } catch (err) {
-        console.log("Error fetching company metadata:", err);
-    }
-
-    const companyName = companyData?.companyname || "Company Report";
-    const stateSlug = cleanUrlSegment(companyData?.companystatecode || "na");
-    const nameSlug = cleanUrlSegment(companyName);
-
-    // Dynamic absolute target construction matching your routing tree
-    const canonicalUrl = `https://www.globalbizreport.com/${nameSlug}/${cin}/india/${stateSlug}/company-business-financial-credit-report`;
+    // Move your dynamic date generation inside the request scope so it stays safe
+    const currentDateStr = new Date().toLocaleDateString('en-GB', {
+        day: 'numeric', month: 'short', year: 'numeric'
+    });
 
     return {
-        title: companyData ? `${companyName} | GBR` : "Company Report | GBR",
-        description: companyData
-            ? `Check ${companyName}'s financial profile and order a detailed company report. Last updated: ${currentDateStr}.`
-            : `Check company profile information and order a comprehensive company report. Last updated: ${currentDateStr}.`,
-        alternates: {
-            canonical: canonicalUrl,
-        }
+        title: companyData ? `${companyData.companyname} | GBR` : "Company Report | GBR",
+        description: `Last updated: ${currentDateStr}`
     };
 }
+
+//     const companyName = companyData?.companyname || "Company Report";
+//     const stateSlug = cleanUrlSegment(companyData?.companystatecode || "na");
+//     const nameSlug = cleanUrlSegment(companyName);
+
+//     // Dynamic absolute target construction matching your routing tree
+//     const canonicalUrl = `https://www.globalbizreport.com/${nameSlug}/${cin}/india/${stateSlug}/company-business-financial-credit-report`;
+
+//     return {
+//         title: companyData ? `${companyName} | GBR` : "Company Report | GBR",
+//         description: companyData
+//             ? `Check ${companyName}'s financial profile and order a detailed company report. Last updated: ${currentDateStr}.`
+//             : `Check company profile information and order a comprehensive company report. Last updated: ${currentDateStr}.`,
+//         alternates: {
+//             canonical: canonicalUrl,
+//         }
+//     };
+// }
 
 const CompanyPage = async ({ params }) => {
     // 1. Await parameters cleanly first
@@ -77,11 +91,16 @@ const CompanyPage = async ({ params }) => {
 
     // 2. Execute Data Fetching
     try {
-        const apiUrl = `https://backend.globalbizreport.com/api/company-details?cin=${cin}`;
-        const res = await fetch(apiUrl, { cache: "no-store" });
-        const result = await res.json();
+        // const apiUrl = `https://backend.globalbizreport.com/api/company-details?cin=${cin}`;
+        // const res = await fetch(apiUrl, { cache: "no-store" });
+        // const result = await res.json();
 
-        if (res.ok && result.data) {
+        const result = await getCompanyDetails(cin); // Hits the API
+
+
+        // if (res.ok && result.data) {
+        if (result.data) {
+
             companyData = result.data.postgres;
             editedCompany = result.data.editedCompany;
             claimedCompany = result.claimedCompany;
