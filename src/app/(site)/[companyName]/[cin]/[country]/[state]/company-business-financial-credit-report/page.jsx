@@ -35,7 +35,7 @@ const getCompanyDetails = cache(async (cin) => {
         if (!res.ok) return null;
         return await res.json();
     } catch (err) {
-        console.error("Fetch failure:", err);
+        console.log("Fetch failure:", err);
         return null;
     }
 });
