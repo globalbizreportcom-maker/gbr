@@ -41,7 +41,7 @@ const getCompanyDetails = cache(async (cin) => {
 });
 
 
-// ─── NEXT.JS SEARCH ENGINE OVERRIDES (TITLE, DESCRIPTION & CANONICAL) ───
+// ─── NEXT.JS SEARCH ENGINE OVERRIDES (TITLE, DESCRIPTION & CANONI CAL) ───
 export async function generateMetadata({ params }) {
     const { cin } = await params;
     const result = await getCompanyDetails(cin); // Hits the API
