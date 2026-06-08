@@ -4,7 +4,7 @@ import { cleanUrlSegment } from '@/utils/slugify';
 import { ChevronRight, Landmark, Map, Database, ArrowRight } from "lucide-react";
 
 const states = [
-    "Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chhattisgarh",
+    "Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chandigarh",
     "Goa", "Gujarat", "Haryana", "Himachal Pradesh", "Jharkhand",
     "Karnataka", "Kerala", "Madhya Pradesh", "Maharashtra", "Manipur",
     "Meghalaya", "Mizoram", "Nagaland", "Odisha", "Punjab",

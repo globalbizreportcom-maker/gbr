@@ -58,7 +58,7 @@ import { NextResponse } from 'next/server';
 import { cleanUrlSegment } from '@/utils/slugify';
 
 const STATES = [
-  "Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chhattisgarh",
+  "Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chandigarh",
   "Goa", "Gujarat", "Haryana", "Himachal Pradesh", "Jharkhand",
   "Karnataka", "Kerala", "Madhya Pradesh", "Maharashtra", "Manipur",
   "Meghalaya", "Mizoram", "Nagaland", "Odisha", "Punjab",
