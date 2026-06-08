@@ -24,19 +24,21 @@ const currentDateStr = new Date().toLocaleDateString('en-GB', {
     year: 'numeric'
 });
 
+console.log(
+    process.env.NEXT_PUBLIC_API_BASE_URL,
+    process.env.NEXT_PUBLIC_ADMIN_BASE_URL,
+    process.env.NEXT_PUBLIC_SITE_URL
+);
+
+
 // ─── NEXT.JS SEARCH ENGINE OVERRIDES (TITLE, DESCRIPTION & CANONICAL) ───
 export async function generateMetadata({ params }) {
     const { cin } = await params;
     let companyData = null;
 
     try {
-        const res = await fetch(
-            `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/company-details?cin=${cin}`,
-            {
-                cache: "no-store",
-                // next: { revalidate: 2592000 } // Keep the 24-hour cache guard active!
-            },
-        );
+        const apiUrl = `${process.env.NEXT_PUBLIC_API_BASE_URL || 'https://backend.globalbizreport.com'}/api/company-details?cin=${cin}`;
+        const res = await fetch(apiUrl, { cache: "no-store" });
         const result = await res.json();
         if (res.ok && result.data?.postgres) {
             companyData = result.data.postgres;
@@ -79,13 +81,8 @@ const CompanyPage = async ({ params }) => {
 
     // 2. Execute Data Fetching
     try {
-        const res = await fetch(
-            `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/company-details?cin=${cin}`,
-            {
-                cache: "no-store",
-                // next: { revalidate: 2592000 } // Keep the 24-hour cache guard active!
-            },
-        );
+        const apiUrl = `${process.env.NEXT_PUBLIC_API_BASE_URL || 'https://backend.globalbizreport.com'}/api/company-details?cin=${cin}`;
+        const res = await fetch(apiUrl, { cache: "no-store" });
         const result = await res.json();
 
         if (res.ok && result.data) {
