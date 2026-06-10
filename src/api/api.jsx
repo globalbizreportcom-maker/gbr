@@ -3,7 +3,7 @@ import axios from "axios";
 // dev
 export const apiUrl = axios.create({
     baseURL: 'https://backend.globalbizreport.com', // Expres s backend
-    withCredentials: true,            //  include cookies automatically
+    withCredentials: true,            //  include cookies automatic ally
 });
 
 export const adminUrl = axios.create({
