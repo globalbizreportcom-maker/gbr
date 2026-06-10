@@ -156,8 +156,6 @@ const CompanyPage = async ({ params }) => {
         return `/${cleanUrlSegment(co.companyname)}/${co.cin}/india/${cleanUrlSegment(co.companystatecode)}/company-business-financial-credit-report`;
     };
 
-    console.log(companyData);
-
 
     return (
         <>

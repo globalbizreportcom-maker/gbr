@@ -44,7 +44,7 @@ const Footer = () => {
         { name: 'About', href: '/about' },
         { name: 'Services', href: '/services' },
         { name: 'Pricing', href: '/pricing' },
-        // { name: 'Company Directory', href: '/company-directory/india' },
+        { name: 'Directory', href: '/directory' },
         { name: 'Contact', href: '/contact' },
     ];
 

@@ -1,3 +1,6 @@
+// src\app\(site)\directory\[state]\page.jsx
+
+
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { cleanUrlSegment } from '@/utils/slugify';

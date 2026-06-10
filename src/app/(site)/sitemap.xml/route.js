@@ -69,7 +69,6 @@ const STATES = [
 ];
 
 export async function GET() {
-
   const xmlItems = STATES.map(state => {
     const stateSlug = cleanUrlSegment(state);
     return `
@@ -78,7 +77,6 @@ export async function GET() {
     </sitemap>`;
   }).join('');
 
-  // 2. Wrap BOTH your static map link and dynamic items inside the root index mapping node [cite: 1652]
   const sitemapIndexXml = `<?xml version="1.0" encoding="UTF-8"?>
 <sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <sitemap>
@@ -94,5 +92,3 @@ export async function GET() {
     }
   });
 }
-
-
