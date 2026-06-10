@@ -456,8 +456,8 @@ const CompanyPage = async ({ params }) => {
 
                 <div className="fixed bottom-0 left-0 w-full bg-gray-600 text-white p-4 flex justify-center xl:justify-end items-center shadow-lg z-50">
                     <div className="rounded-md px-2  text-base font-medium flex items-center gap-2">
-                        <FaFile className="h-5 w-5" />
-                        <ClientPurchaseButton companyData={companyData} label="Order Business Credit Report" bgColor="gray" />
+                        <FaFile className="h-5 w-5 text-yellow-100" />
+                        <ClientPurchaseButton companyData={companyData} label="Order Business Credit Report" bgColor="yellow" text="black" />
                     </div>
                 </div>
 

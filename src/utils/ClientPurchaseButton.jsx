@@ -4,7 +4,7 @@
 import { useRouter } from "next/navigation";
 import { FaLock } from "react-icons/fa";
 
-const ClientPurchaseButton = ({ companyData, label, bgColor = 'orange', overlay = 99999, btnSize = '' }) => {
+const ClientPurchaseButton = ({ companyData, label, bgColor = 'orange', overlay = 99999, btnSize = '', text = '' }) => {
     const router = useRouter();
 
     const handlePurchaseReport = () => {
@@ -74,7 +74,7 @@ const ClientPurchaseButton = ({ companyData, label, bgColor = 'orange', overlay 
     return (
         <button
             onClick={handlePurchaseReport}
-            className={`z-${overlay} cursor-pointer flex items-center text-sm md:text-md gap-2 bg-${bgColor}-500 px-4 py-1 lg:py-2 rounded-md hover:bg-${bgColor}-600 transition shadow-lg`}
+            className={`z-${overlay} cursor-pointer flex items-center text-sm md:text-md gap-2 bg-${bgColor}-500 px-4 py-1 lg:py-2 rounded-md hover:bg-${bgColor}-600 text-${text} transition shadow-lg`}
         >
             {/* <FaLock /> */}
             {label}

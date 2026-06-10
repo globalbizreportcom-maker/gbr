@@ -102,7 +102,7 @@ const OrderCreditReportClient = () => {
 
                 <div className="relative overflow-hidden rounded-2xl h-auto md:h-[560px] 2xl:h-[520px]">
                     {/* Dark Overlay to ensure readability */}
-                    <div className="absolute inset-0 bg-[#0F172A] z-0"></div>
+                    <div className="absolute inset-0 bg-[#081d2be6] z-0"></div>
 
                     {/* Content Container */}
                     <div className="relative z-10 flex flex-col py-4 md:py-8 px-4 md:px-6 ">
@@ -122,21 +122,16 @@ const OrderCreditReportClient = () => {
                             <div className="relative py-4 md:p-4 rounded-xl overflow-hidden">
                                 <ul className="relative text-left text-base md:text-lg list-disc pl-2 space-y-4 text-gray-300">
 
-
-                                    {
-                                        [
-                                            'Verify Buyers, Suppliers, Vendors & Business Partners',
-                                            'Assess Financial Strength, Creditworthiness & Risk',
-                                            'Make Informed Business Decisions with Confidence'
-                                        ].map((item, idx) => (
-                                            <li key={idx} className="flex items-start md:items-center gap-4">
-                                                <FaCheckCircle className="text-indigo-400 text-lg flex-shrink-0 mt-1" />
-                                                <span className={`${idx === 2 && 'hidden md:block'} text-base md:text-base text-gray-200 leading-snug`}>
-                                                    {item}
-                                                </span>
-                                            </li>
-                                        ))}
-
+                                    <li className={` flex items-start md:items-center gap-4`}>
+                                        <FaCheckCircle className="text-indigo-400 text-lg flex-shrink-0 mt-1" />
+                                        Verify Buyers, Suppliers, Vendors & Business Partners
+                                    </li>
+                                    <li className="flex flex-row items-start gap-4">
+                                        <FaCheckCircle className="text-indigo-400 text-lg flex-shrink-0 mt-1" />
+                                        <span>
+                                            Company Due Diligence & Verification Reports in <span className="font-bold text-white">220+ Countries</span>
+                                        </span>
+                                    </li>
                                 </ul>
                             </div>
                         </div>
@@ -145,7 +140,7 @@ const OrderCreditReportClient = () => {
                         <div className="flex flex-col md:hidden justify-start mt-2 mb-4">
                             <button
                                 onClick={handleScrollToForm}
-                                className="flex items-center justify-center cursor-pointer font-bold px-8 py-3 rounded-lg bg-indigo-600 text-white gap-2"
+                                className="btn flex items-center justify-center cursor-pointer shadow-none font-bold px-8 py-3 rounded-lg btn-primary gap-2"
                             >
                                 Order Report Now <FaChevronRight />
                             </button>
@@ -154,10 +149,10 @@ const OrderCreditReportClient = () => {
                         {/* Trust Badges / Info List */}
                         <div className="flex flex-col justify-between items-start gap-5 mt-2 text-gray-300">
                             {[
-                                {
-                                    text: (<>Company Due Diligence & Verification Reports in  <span className="font-bold text-white">220+ Countries</span></>),
-                                    icon: <FaFilePdf className="text-gray-300 text-xl shrink-0" />
-                                },
+                                // {
+                                //     text: (<>Company Due Diligence & Verification Reports in  <span className="font-bold text-white">220+ Countries</span></>),
+                                //     icon: <FaFilePdf className="text-gray-300 text-xl shrink-0" />
+                                // },
                                 {
                                     text: (<>Trusted by <span className="font-bold text-white">20,000+ Global Companies</span></>),
                                     icon: <FaUserAlt className="text-gray-300 text-xl shrink-0" />
@@ -172,7 +167,7 @@ const OrderCreditReportClient = () => {
                 } */}
                             ].map((item, idx) => (
                                 <div key={idx} className="flex flex-row gap-4 items-center md:items-center">
-                                    {item.icon}
+                                    {/* {item.icon} */}
                                     < span className="text-base md:text-base text-gray-300 leading-snug" >
                                         {item.text}
                                     </span>

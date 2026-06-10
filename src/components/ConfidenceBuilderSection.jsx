@@ -34,7 +34,7 @@ export default function ConfidenceBuilderSection() {
     }, [activities.length]);
 
     return (
-        <div className="w-full bg-white border border-slate-200 rounded-xl p-4 md:p-5 shadow-sm text-slate-800 relative z-10">
+        <div className="w-full bg-gray-200 border border-slate-200 rounded-xl p-4 md:p-5 shadow-sm text-slate-800 relative z-10">
 
             {/* Top Row: Clean, Spaced Trust Badges */}
             <div className="flex items-center justify-between gap-4 pb-4 border-b border-slate-100 text-sm">
