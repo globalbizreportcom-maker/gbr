@@ -7,6 +7,6 @@ export const apiUrl = axios.create({
 });
 
 export const adminUrl = axios.create({
-    baseURL: 'https://backend.globalbizreport.com/admin', // your admin backend
+    baseURL: 'https://backend.globalbizreport.com/admin', // your  admin backend
     withCredentials: true,                   //  include cookie s
 });
