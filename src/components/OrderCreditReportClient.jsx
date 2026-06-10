@@ -131,7 +131,7 @@ const OrderCreditReportClient = () => {
                                         ].map((item, idx) => (
                                             <li key={idx} className="flex items-start md:items-center gap-4">
                                                 <FaCheckCircle className="text-indigo-400 text-lg flex-shrink-0 mt-1" />
-                                                <span className="text-base md:text-base text-gray-200 leading-snug">
+                                                <span className={`${idx === 2 && 'hidden md:block'} text-base md:text-base text-gray-200 leading-snug`}>
                                                     {item}
                                                 </span>
                                             </li>
