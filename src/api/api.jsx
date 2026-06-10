@@ -2,7 +2,7 @@ import axios from "axios";
 
 // dev
 export const apiUrl = axios.create({
-    baseURL: 'https://backend.globalbizreport.com', // Expres s backend
+    baseURL: 'https://backend.globalbizreport.com', // Exp  res s backend
     withCredentials: true,            //  include cookies automatic ally
 });
 
